@@ -1,0 +1,282 @@
+[
+  {
+    "title": "卷积与图像分类",
+    "slug": "cv-01-image-classification",
+    "description": "理解CNN在图像分类中的核心原理",
+    "content": "# 图像分类与CNN\n\n## 图像分类任务\n将输入图像分配到预定义的类别中，是计算机视觉最基础的任务。\n\n## 从全连接到卷积\n图像数据具有空间结构，全连接层忽略了这种结构。卷积层通过局部连接和参数共享提取空间特征。\n\n```python\nimport numpy as np\n\ndef conv2d(image, kernel):\n    h, w = image.shape\n    kh, kw = kernel.shape\n    out = np.zeros((h-kh+1, w-kw+1))\n    for i in range(out.shape[0]):\n        for j in range(out.shape[1]):\n            out[i, j] = np.sum(image[i:i+kh, j:j+kw] * kernel)\n    return out\n```\n\n## 分类Pipeline\nInput -> Conv+ReLU -> Pool -> Flatten -> FC -> Softmax\n\n卷积层提取层次化特征：浅层边缘、深层语义。",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "cv",
+    "section": "图像分类基础",
+    "starter_code": "import numpy as np\n\ndef conv2d(image, kernel):\n    h, w = image.shape\n    kh, kw = kernel.shape\n    out = np.zeros((h-kh+1, w-kw+1))\n    for i in range(out.shape[0]):\n        for j in range(out.shape[1]):\n            pass\n    return out",
+    "solution_code": "import numpy as np\n\ndef conv2d(image, kernel):\n    h, w = image.shape\n    kh, kw = kernel.shape\n    out = np.zeros((h-kh+1, w-kw+1))\n    for i in range(out.shape[0]):\n        for j in range(out.shape[1]):\n            out[i, j] = np.sum(image[i:i+kh, j:j+kw] * kernel)\n    return out",
+    "test_cases": [
+      {
+        "input": "import numpy as np; conv2d(np.ones((5,5)), np.ones((3,3)))",
+        "expected_output": "[[9. 9. 9.]\n [9. 9. 9.]\n [9. 9. 9.]]",
+        "description": "全1卷积核输出全9"
+      },
+      {
+        "input": "import numpy as np; conv2d(np.array([[1,2],[3,4]]), np.ones((2,2)))",
+        "expected_output": "[[10.]]",
+        "description": "2x2卷积输出10"
+      }
+    ],
+    "hint": "卷积核滑动窗口计算点积",
+    "prerequisites": []
+  },
+  {
+    "title": "CIFAR-10图像分类实战",
+    "slug": "cv-02-cifar10",
+    "description": "使用CIFAR-10数据集实践图像分类",
+    "content": "# CIFAR-10图像分类实战\n\n## 数据集\n10个类别，60000张32x32彩色图像。\n\n## 预处理\n归一化使训练更稳定，独热编码表示类别。\n\n```python\nimport numpy as np\n\ndef normalize(images):\n    mean = np.mean(images, axis=(0,1,2), keepdims=True)\n    std = np.std(images, axis=(0,1,2), keepdims=True)\n    return (images - mean) / (std + 1e-8)\n\ndef one_hot(labels, num_classes=10):\n    oh = np.zeros((len(labels), num_classes))\n    oh[np.arange(len(labels)), labels] = 1\n    return oh\n```",
+    "order": 2,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "cv",
+    "section": "图像分类基础",
+    "starter_code": "import numpy as np\n\ndef normalize(images):\n    mean = np.mean(images, axis=(0,1,2), keepdims=True)\n    std = np.std(images, axis=(0,1,2), keepdims=True)\n    pass\n\ndef one_hot(labels, num_classes=10):\n    pass",
+    "solution_code": "import numpy as np\n\ndef normalize(images):\n    mean = np.mean(images, axis=(0,1,2), keepdims=True)\n    std = np.std(images, axis=(0,1,2), keepdims=True)\n    return (images - mean) / (std + 1e-8)\n\ndef one_hot(labels, num_classes=10):\n    oh = np.zeros((len(labels), num_classes))\n    oh[np.arange(len(labels)), labels] = 1\n    return oh",
+    "test_cases": [
+      {
+        "input": "import numpy as np; tuple(normalize(np.ones((2,2,2,3))).shape)",
+        "expected_output": "(2, 2, 2, 3)",
+        "description": "归一化保持形状"
+      },
+      {
+        "input": "import numpy as np; one_hot(np.array([0,2,5]), 10)[2].tolist()",
+        "expected_output": "[0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0]",
+        "description": "索引5的独热编码"
+      }
+    ],
+    "hint": "均值方差计算时保持维度以便广播",
+    "prerequisites": [
+      "cv-01-image-classification"
+    ]
+  },
+  {
+    "title": "经典CNN架构",
+    "slug": "cv-03-classic-cnn",
+    "description": "LeNet、AlexNet、VGG经典架构",
+    "content": "# 经典CNN架构\n\n## LeNet-5 (1998)\nConv(6@5x5) -> Pool -> Conv(16@5x5) -> Pool -> FC -> Softmax\n\n## AlexNet (2012)\n5卷积层+3全连接层，ReLU激活，Dropout正则化，ImageNet突破。\n\n## VGGNet (2014)\n统一3x3卷积核，架构简洁规范。\n\n```python\nimport numpy as np\n\ndef confusion_matrix(y_pred, y_true, num_classes=10):\n    pred = np.argmax(y_pred, axis=1)\n    true = np.argmax(y_true, axis=1) if y_true.ndim > 1 else y_true\n    cm = np.zeros((num_classes, num_classes), dtype=int)\n    for t, p in zip(true, pred):\n        cm[t, p] += 1\n    return cm\n```",
+    "order": 3,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "cv",
+    "section": "图像分类基础",
+    "starter_code": "import numpy as np\n\ndef confusion_matrix(y_pred, y_true, num_classes=10):\n    pred = np.argmax(y_pred, axis=1)\n    true = np.argmax(y_true, axis=1) if y_true.ndim > 1 else y_true\n    cm = np.zeros((num_classes, num_classes), dtype=int)\n    for t, p in zip(true, pred):\n        pass\n    return cm",
+    "solution_code": "import numpy as np\n\ndef confusion_matrix(y_pred, y_true, num_classes=10):\n    pred = np.argmax(y_pred, axis=1)\n    true = np.argmax(y_true, axis=1) if y_true.ndim > 1 else y_true\n    cm = np.zeros((num_classes, num_classes), dtype=int)\n    for t, p in zip(true, pred):\n        cm[t, p] += 1\n    return cm",
+    "test_cases": [
+      {
+        "input": "import numpy as np; confusion_matrix(np.array([[0.7,0.3],[0.2,0.8]]), np.array([[1,0],[0,1]]), 2).tolist()",
+        "expected_output": "[[0, 1], [0, 1]]",
+        "description": "2类混淆矩阵"
+      },
+      {
+        "input": "import numpy as np; np.diag(confusion_matrix(np.array([[0.9,0.1],[0.1,0.9]]), np.array([[1,0],[0,1]]), 2)).tolist()",
+        "expected_output": "[0, 1]",
+        "description": "对角线上正确分类"
+      }
+    ],
+    "hint": "混淆矩阵行=真实类，列=预测类",
+    "prerequisites": [
+      "cv-02-cifar10"
+    ]
+  },
+  {
+    "title": "目标检测基础",
+    "slug": "cv-04-object-detection",
+    "description": "IoU和NMS核心概念",
+    "content": "# 目标检测基础\n\n## 任务\n识别物体类别并定位位置（边界框）。\n\n## IoU\n交并比衡量检测准确度。\n\n```python\nimport numpy as np\n\ndef compute_iou(box1, box2):\n    x1 = max(box1[0], box2[0])\n    y1 = max(box1[1], box2[1])\n    x2 = min(box1[2], box2[2])\n    y2 = min(box1[3], box2[3])\n    inter = max(0, x2 - x1) * max(0, y2 - y1)\n    area1 = (box1[2]-box1[0]) * (box1[3]-box1[1])\n    area2 = (box2[2]-box2[0]) * (box2[3]-box2[1])\n    union = area1 + area2 - inter\n    return inter / union if union > 0 else 0.0\n```",
+    "order": 4,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "cv",
+    "section": "目标检测",
+    "starter_code": "import numpy as np\n\ndef compute_iou(box1, box2):\n    x1 = max(box1[0], box2[0])\n    y1 = max(box1[1], box2[1])\n    x2 = min(box1[2], box2[2])\n    y2 = min(box1[3], box2[3])\n    inter = max(0, x2 - x1) * max(0, y2 - y1)\n    pass",
+    "solution_code": "import numpy as np\n\ndef compute_iou(box1, box2):\n    x1 = max(box1[0], box2[0])\n    y1 = max(box1[1], box2[1])\n    x2 = min(box1[2], box2[2])\n    y2 = min(box1[3], box2[3])\n    inter = max(0, x2 - x1) * max(0, y2 - y1)\n    area1 = (box1[2]-box1[0]) * (box1[3]-box1[1])\n    area2 = (box2[2]-box2[0]) * (box2[3]-box2[1])\n    union = area1 + area2 - inter\n    return inter / union if union > 0 else 0.0",
+    "test_cases": [
+      {
+        "input": "import numpy as np; compute_iou([0,0,2,2], [1,1,3,3])",
+        "expected_output": "0.14285714285714285",
+        "description": "部分重叠IoU"
+      },
+      {
+        "input": "import numpy as np; compute_iou([0,0,2,2], [0,0,2,2])",
+        "expected_output": "1.0",
+        "description": "完全重叠IoU=1"
+      }
+    ],
+    "hint": "注意交集面积可能为0",
+    "prerequisites": []
+  },
+  {
+    "title": "YOLO目标检测",
+    "slug": "cv-05-yolo",
+    "description": "单阶段目标检测YOLO原理",
+    "content": "# YOLO目标检测\n\n## 核心思想\n一次前向传播同时预测类别和位置。\n\n## 网格预测\n图像划分SxS网格，每个网格预测B个边界框。\n\n```python\nimport numpy as np\n\ndef yolo_iou(box1, box2):\n    b1x1 = box1[0] - box1[2]/2\n    b1y1 = box1[1] - box1[3]/2\n    b1x2 = box1[0] + box1[2]/2\n    b1y2 = box1[1] + box1[3]/2\n    b2x1 = box2[0] - box2[2]/2\n    b2y1 = box2[1] - box2[3]/2\n    b2x2 = box2[0] + box2[2]/2\n    b2y2 = box2[1] + box2[3]/2\n    x1 = max(b1x1, b2x1); y1 = max(b1y1, b2y1)\n    x2 = min(b1x2, b2x2); y2 = min(b1y2, b2y2)\n    inter = max(0, x2-x1) * max(0, y2-y1)\n    area1, area2 = box1[2]*box1[3], box2[2]*box2[3]\n    return inter / (area1 + area2 - inter + 1e-6)\n```",
+    "order": 5,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "cv",
+    "section": "目标检测",
+    "starter_code": "import numpy as np\n\ndef yolo_iou(box1, box2):\n    b1x1 = box1[0] - box1[2]/2\n    b1y1 = box1[1] - box1[3]/2\n    b1x2 = box1[0] + box1[2]/2\n    b1y2 = box1[1] + box1[3]/2\n    pass",
+    "solution_code": "import numpy as np\n\ndef yolo_iou(box1, box2):\n    b1x1 = box1[0] - box1[2]/2\n    b1y1 = box1[1] - box1[3]/2\n    b1x2 = box1[0] + box1[2]/2\n    b1y2 = box1[1] + box1[3]/2\n    b2x1 = box2[0] - box2[2]/2\n    b2y1 = box2[1] - box2[3]/2\n    b2x2 = box2[0] + box2[2]/2\n    b2y2 = box2[1] + box2[3]/2\n    x1 = max(b1x1, b2x1); y1 = max(b1y1, b2y1)\n    x2 = min(b1x2, b2x2); y2 = min(b1y2, b2y2)\n    inter = max(0, x2-x1) * max(0, y2-y1)\n    area1, area2 = box1[2]*box1[3], box2[2]*box2[3]\n    return inter / (area1 + area2 - inter + 1e-6)",
+    "test_cases": [
+      {
+        "input": "import numpy as np; yolo_iou([0.5,0.5,1,1], [0.5,0.5,1,1])",
+        "expected_output": "1.0",
+        "description": "完全重叠"
+      },
+      {
+        "input": "import numpy as np; yolo_iou([0,0,1,1], [1,1,1,1])",
+        "expected_output": "0.0",
+        "description": "不相交为0"
+      }
+    ],
+    "hint": "YOLO框格式为(x_center, y_center, width, height)",
+    "prerequisites": [
+      "cv-04-object-detection"
+    ]
+  },
+  {
+    "title": "Faster R-CNN",
+    "slug": "cv-06-faster-rcnn",
+    "description": "两阶段目标检测Faster R-CNN",
+    "content": "# Faster R-CNN\n\n## 两阶段架构\n- RPN生成候选区域\n- 对候选区域分类+回归\n\n## 锚框生成\n在不同位置预定义多尺度锚框。\n\n```python\nimport numpy as np\n\ndef generate_anchors(base_size=16, ratios=[0.5,1,2], scales=[8,16,32]):\n    anchors = []\n    for ratio in ratios:\n        w = base_size * np.sqrt(ratio)\n        h = base_size / np.sqrt(ratio)\n        for scale in scales:\n            anchors.append([-w*scale/2, -h*scale/2, w*scale/2, h*scale/2])\n    return np.array(anchors)\n```",
+    "order": 6,
+    "difficulty": "advanced",
+    "xp_reward": 30,
+    "track": "cv",
+    "section": "目标检测",
+    "starter_code": "import numpy as np\n\ndef generate_anchors(base_size=16, ratios=[0.5,1,2], scales=[8,16,32]):\n    anchors = []\n    for ratio in ratios:\n        w = base_size * np.sqrt(ratio)\n        h = base_size / np.sqrt(ratio)\n        for scale in scales:\n            pass\n    return np.array(anchors)",
+    "solution_code": "import numpy as np\n\ndef generate_anchors(base_size=16, ratios=[0.5,1,2], scales=[8,16,32]):\n    anchors = []\n    for ratio in ratios:\n        w = base_size * np.sqrt(ratio)\n        h = base_size / np.sqrt(ratio)\n        for scale in scales:\n            anchors.append([-w*scale/2, -h*scale/2, w*scale/2, h*scale/2])\n    return np.array(anchors)",
+    "test_cases": [
+      {
+        "input": "import numpy as np; len(generate_anchors())",
+        "expected_output": "9",
+        "description": "3x3=9个锚框"
+      },
+      {
+        "input": "import numpy as np; generate_anchors().shape[1]",
+        "expected_output": "4",
+        "description": "每个框4个坐标"
+      }
+    ],
+    "hint": "锚框以(0,0)为中心",
+    "prerequisites": [
+      "cv-05-yolo"
+    ]
+  },
+  {
+    "title": "图像分割基础",
+    "slug": "cv-07-segmentation",
+    "description": "语义分割与评价指标",
+    "content": "# 图像分割\n\n## 语义分割\n为每个像素分配类别标签。\n\n## 评价指标\n- PA: 像素准确率\n- mIoU: 平均交并比\n- Dice系数\n\n```python\nimport numpy as np\n\ndef pixel_accuracy(pred, true):\n    return np.mean(pred == true)\n\ndef mean_iou(pred, true, num_classes):\n    ious = []\n    for c in range(num_classes):\n        p = (pred == c)\n        t = (true == c)\n        inter = np.logical_and(p, t).sum()\n        union = np.logical_or(p, t).sum()\n        if union > 0:\n            ious.append(inter / union)\n    return np.mean(ious)\n```",
+    "order": 7,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "cv",
+    "section": "高级视觉",
+    "starter_code": "import numpy as np\n\ndef pixel_accuracy(pred, true):\n    pass\n\ndef mean_iou(pred, true, num_classes):\n    pass",
+    "solution_code": "import numpy as np\n\ndef pixel_accuracy(pred, true):\n    return np.mean(pred == true)\n\ndef mean_iou(pred, true, num_classes):\n    ious = []\n    for c in range(num_classes):\n        p = (pred == c)\n        t = (true == c)\n        inter = np.logical_and(p, t).sum()\n        union = np.logical_or(p, t).sum()\n        if union > 0:\n            ious.append(inter / union)\n    return np.mean(ious)",
+    "test_cases": [
+      {
+        "input": "import numpy as np; pixel_accuracy(np.array([0,0,1,1]), np.array([0,1,1,1]))",
+        "expected_output": "0.75",
+        "description": "像素准确率75%"
+      },
+      {
+        "input": "import numpy as np; mean_iou(np.array([0,1]), np.array([0,1]), 2)",
+        "expected_output": "1.0",
+        "description": "完全匹配mIoU=1"
+      }
+    ],
+    "hint": "mIoU对每个类别独立计算再平均",
+    "prerequisites": []
+  },
+  {
+    "title": "人脸识别与FaceNet",
+    "slug": "cv-08-face-recognition",
+    "description": "人脸识别与三元组损失",
+    "content": "# 人脸识别\n\n## 流程\n检测 -> 对齐 -> 特征提取 -> 比对\n\n## 三元组损失\nL = max(d(A,P) - d(A,N) + alpha, 0)\n让同类距离小于异类。\n\n```python\nimport numpy as np\n\ndef triplet_loss(anchor, positive, negative, alpha=0.2):\n    pos_dist = np.sum((anchor - positive) ** 2)\n    neg_dist = np.sum((anchor - negative) ** 2)\n    return max(pos_dist - neg_dist + alpha, 0)\n\ndef cosine_similarity(v1, v2):\n    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-8)\n```",
+    "order": 8,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "cv",
+    "section": "高级视觉",
+    "starter_code": "import numpy as np\n\ndef triplet_loss(anchor, positive, negative, alpha=0.2):\n    pos_dist = np.sum((anchor - positive) ** 2)\n    neg_dist = np.sum((anchor - negative) ** 2)\n    pass\n\ndef cosine_similarity(v1, v2):\n    pass",
+    "solution_code": "import numpy as np\n\ndef triplet_loss(anchor, positive, negative, alpha=0.2):\n    pos_dist = np.sum((anchor - positive) ** 2)\n    neg_dist = np.sum((anchor - negative) ** 2)\n    return max(pos_dist - neg_dist + alpha, 0)\n\ndef cosine_similarity(v1, v2):\n    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-8)",
+    "test_cases": [
+      {
+        "input": "import numpy as np; triplet_loss(np.array([1,0]), np.array([0.9,0.1]), np.array([0,1]))",
+        "expected_output": "0",
+        "description": "同类距离近，损失为0"
+      },
+      {
+        "input": "import numpy as np; cosine_similarity(np.array([1,0]), np.array([1,0]))",
+        "expected_output": "1.0",
+        "description": "相同向量相似度1"
+      }
+    ],
+    "hint": "三元组让同类距离 < 异类距离",
+    "prerequisites": []
+  },
+  {
+    "title": "数据增强技术",
+    "slug": "cv-09-data-augmentation",
+    "description": "常用数据增强方法",
+    "content": "# 数据增强\n\n## 为什么需要\n扩大训练集、提高泛化能力、减少过拟合。\n\n## 常用方法\n- 几何：翻转、旋转、缩放\n- 颜色：亮度、对比度调整\n- 噪声：高斯噪声、Cutout\n\n```python\nimport numpy as np\n\ndef random_flip(image):\n    if np.random.random() > 0.5:\n        return image[:, ::-1, :]\n    return image\n\ndef add_gaussian_noise(image, std=0.05):\n    noise = np.random.randn(*image.shape) * std\n    return np.clip(image + noise, 0, 1)\n```",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "cv",
+    "section": "高级视觉",
+    "starter_code": "import numpy as np\n\ndef random_flip(image):\n    if np.random.random() > 0.5:\n        pass\n    return image\n\ndef add_gaussian_noise(image, std=0.05):\n    pass",
+    "solution_code": "import numpy as np\n\ndef random_flip(image):\n    if np.random.random() > 0.5:\n        return image[:, ::-1, :]\n    return image\n\ndef add_gaussian_noise(image, std=0.05):\n    noise = np.random.randn(*image.shape) * std\n    return np.clip(image + noise, 0, 1)",
+    "test_cases": [
+      {
+        "input": "import numpy as np; random_flip(np.ones((2,3,1))).shape",
+        "expected_output": "(2, 3, 1)",
+        "description": "翻转保持形状"
+      },
+      {
+        "input": "import numpy as np; float(np.max(add_gaussian_noise(np.ones((2,2)), 0))) <= 1.0",
+        "expected_output": "True",
+        "description": "噪声裁剪到[0,1]"
+      }
+    ],
+    "hint": "测试时不做数据增强",
+    "prerequisites": []
+  },
+  {
+    "title": "迁移学习实战",
+    "slug": "cv-10-transfer-learning",
+    "description": "使用预训练模型迁移学习",
+    "content": "# 迁移学习实战\n\n## 概念\n将预训练模型应用到新任务。\n\n## 策略\n- 特征提取：冻结骨干\n- 微调：低学习率更新全部\n\n```python\nimport numpy as np\n\ndef softmax(x):\n    exp = np.exp(x - np.max(x, axis=1, keepdims=True))\n    return exp / np.sum(exp, axis=1, keepdims=True)\n\ndef cross_entropy(probs, labels):\n    n = len(labels)\n    return -np.mean(np.log(probs[np.arange(n), labels] + 1e-8))\n```",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "cv",
+    "section": "高级视觉",
+    "starter_code": "import numpy as np\n\ndef softmax(x):\n    pass\n\ndef cross_entropy(probs, labels):\n    pass",
+    "solution_code": "import numpy as np\n\ndef softmax(x):\n    exp = np.exp(x - np.max(x, axis=1, keepdims=True))\n    return exp / np.sum(exp, axis=1, keepdims=True)\n\ndef cross_entropy(probs, labels):\n    n = len(labels)\n    return -np.mean(np.log(probs[np.arange(n), labels] + 1e-8))",
+    "test_cases": [
+      {
+        "input": "import numpy as np; np.sum(softmax(np.array([[1.0, 2.0]])))",
+        "expected_output": "1.0",
+        "description": "Softmax输出和为1"
+      },
+      {
+        "input": "import numpy as np; cross_entropy(np.array([[0.9,0.1],[0.2,0.8]]), np.array([0,1]))",
+        "expected_output": "0.164252033486018",
+        "description": "交叉熵计算"
+      }
+    ],
+    "hint": "迁移学习中特征提取器可冻结",
+    "prerequisites": [
+      "cv-03-classic-cnn"
+    ]
+  }
+]

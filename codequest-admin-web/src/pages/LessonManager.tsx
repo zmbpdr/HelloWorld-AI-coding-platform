@@ -1,0 +1,267 @@
+import { useEffect, useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Table, Button, Space, Tag, Drawer, Form, Input, Select, InputNumber, Switch, App, Popconfirm } from 'antd'
+import { PlusOutlined, EditOutlined, DeleteOutlined, FilterOutlined } from '@ant-design/icons'
+import { getLessons, createLesson, updateLesson, deleteLesson, togglePublishLesson } from '../api/admin'
+
+interface LessonItem {
+  id: number
+  title: string
+  slug: string
+  language_id: number
+  language_name?: string
+  difficulty: string
+  is_active: boolean
+  order: number
+  created_at: string
+}
+
+const LANGUAGE_NAMES: Record<number, string> = {
+  1: 'Python', 2: 'JavaScript', 3: 'Java', 4: 'C++', 5: 'Go',
+  6: 'Rust', 7: 'TypeScript', 8: 'SQL', 9: 'Ruby', 10: 'Swift',
+  11: 'Kotlin', 12: 'PHP', 13: 'Shell', 14: 'Lua',
+}
+
+export default function LessonManager() {
+  const { message } = App.useApp()
+  const [lessons, setLessons] = useState<LessonItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [editingLesson, setEditingLesson] = useState<LessonItem | null>(null)
+  const [form] = Form.useForm()
+  const navigate = useNavigate()
+
+  // 筛选状态
+  const [filterLang, setFilterLang] = useState<number | undefined>(undefined)
+  const [filterDifficulty, setFilterDifficulty] = useState<string | undefined>(undefined)
+  const [filterActive, setFilterActive] = useState<boolean | undefined>(undefined)
+
+  const fetchLessons = async () => {
+    try {
+      setLoading(true)
+      const res = await getLessons()
+      setLessons(res.items ?? [])
+    } catch {
+      message.error('获取课程列表失败')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchLessons()
+  }, [])
+
+  // 客户端筛选
+  const filteredLessons = useMemo(() => {
+    return lessons.filter((item) => {
+      if (filterLang !== undefined && item.language_id !== filterLang) return false
+      if (filterDifficulty && item.difficulty !== filterDifficulty) return false
+      if (filterActive !== undefined && item.is_active !== filterActive) return false
+      return true
+    })
+  }, [lessons, filterLang, filterDifficulty, filterActive])
+
+  const handleAdd = () => {
+    setEditingLesson(null)
+    form.resetFields()
+    setDrawerOpen(true)
+  }
+
+  const handleEdit = (record: LessonItem) => {
+    setEditingLesson(record)
+    form.setFieldsValue(record)
+    setDrawerOpen(true)
+  }
+
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields()
+      if (editingLesson) {
+        await updateLesson(editingLesson.id, values)
+        message.success('更新成功')
+      } else {
+        await createLesson(values)
+        message.success('创建成功')
+      }
+      setDrawerOpen(false)
+      fetchLessons()
+    } catch (err: any) {
+      if (err?.errorFields) return  // Ant Design validation error, form already shows inline errors
+      message.error('操作失败')
+    }
+  }
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteLesson(id)
+      message.success('删除成功')
+      fetchLessons()
+    } catch {
+      message.error('删除失败')
+    }
+  }
+
+  const handleTogglePublish = async (id: number) => {
+    try {
+      await togglePublishLesson(id)
+      message.success('操作成功')
+      fetchLessons()
+    } catch {
+      message.error('操作失败')
+    }
+  }
+
+  const columns = [
+    { title: 'ID', dataIndex: 'id', key: 'id', width: 60 },
+    { title: '标题', dataIndex: 'title', key: 'title' },
+    {
+      title: '语言',
+      dataIndex: 'language_id',
+      key: 'language',
+      width: 100,
+      render: (id: number) => <Tag>{LANGUAGE_NAMES[id] ?? id}</Tag>,
+    },
+    {
+      title: '难度',
+      dataIndex: 'difficulty',
+      key: 'difficulty',
+      width: 80,
+      render: (d: string) => {
+        const colorMap: Record<string, string> = { beginner: 'green', intermediate: 'orange', advanced: 'red' }
+        const labelMap: Record<string, string> = { beginner: '入门', intermediate: '进阶', advanced: '高级' }
+        return <Tag color={colorMap[d] ?? 'default'}>{labelMap[d] ?? d}</Tag>
+      },
+    },
+    {
+      title: '发布状态',
+      dataIndex: 'is_active',
+      key: 'is_active',
+      width: 100,
+      render: (active: boolean, record: LessonItem) => (
+        <Switch
+          checked={active}
+          onChange={() => handleTogglePublish(record.id)}
+          checkedChildren="已发布"
+          unCheckedChildren="未发布"
+        />
+      ),
+    },
+    { title: '排序', dataIndex: 'order', key: 'order', width: 60 },
+    {
+      title: '操作',
+      key: 'action',
+      width: 200,
+      render: (_: unknown, record: LessonItem) => (
+        <Space>
+          <Button type="link" icon={<EditOutlined />} onClick={() => navigate(`/lessons/${record.id}/edit`)}>
+            编辑详情
+          </Button>
+          <Popconfirm title="确定删除该课程？" onConfirm={() => handleDelete(record.id)}>
+            <Button type="link" danger icon={<DeleteOutlined />}>删除</Button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ]
+
+  return (
+    <div>
+      {/* 顶部栏 */}
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+        <h2 style={{ margin: 0 }}>课程管理</h2>
+        <Space>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>新增课程</Button>
+        </Space>
+      </div>
+
+      {/* 筛选栏 */}
+      <div style={{ marginBottom: 16, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+        <FilterOutlined style={{ color: '#94a3b8' }} />
+        <Select
+          placeholder="全部语言"
+          allowClear
+          style={{ width: 130 }}
+          value={filterLang}
+          onChange={setFilterLang}
+        >
+          {Object.entries(LANGUAGE_NAMES).map(([id, name]) => (
+            <Select.Option key={id} value={Number(id)}>{name}</Select.Option>
+          ))}
+        </Select>
+        <Select
+          placeholder="全部难度"
+          allowClear
+          style={{ width: 120 }}
+          value={filterDifficulty}
+          onChange={setFilterDifficulty}
+        >
+          <Select.Option value="beginner">入门</Select.Option>
+          <Select.Option value="intermediate">进阶</Select.Option>
+          <Select.Option value="advanced">高级</Select.Option>
+        </Select>
+        <Select
+          placeholder="全部状态"
+          allowClear
+          style={{ width: 120 }}
+          value={filterActive}
+          onChange={setFilterActive}
+        >
+          <Select.Option value={true}>已发布</Select.Option>
+          <Select.Option value={false}>未发布</Select.Option>
+        </Select>
+        <span style={{ fontSize: 12, color: '#94a3b8', marginLeft: 8 }}>
+          共 {filteredLessons.length} 条
+        </span>
+      </div>
+
+      <Table
+        columns={columns}
+        dataSource={filteredLessons}
+        rowKey="id"
+        loading={loading}
+        pagination={{ pageSize: 10, showSizeChanger: false }}
+      />
+
+      {/* 新增/编辑抽屉 */}
+      <Drawer
+        title={editingLesson ? '编辑课程' : '新增课程'}
+        size="default"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        extra={
+          <Button type="primary" onClick={handleSubmit}>保存</Button>
+        }
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item name="title" label="标题" rules={[{ required: true, message: '请输入标题' }]}>
+            <Input placeholder="课程标题" />
+          </Form.Item>
+          <Form.Item name="slug" label="Slug" rules={[{ required: true, message: '请输入 Slug' }]}>
+            <Input placeholder="course-slug" />
+          </Form.Item>
+          <Form.Item name="language_id" label="语言" rules={[{ required: true, message: '请选择语言' }]}>
+            <Select placeholder="选择编程语言">
+              {Object.entries(LANGUAGE_NAMES).map(([id, name]) => (
+                <Select.Option key={id} value={Number(id)}>{name}</Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="difficulty" label="难度" rules={[{ required: true, message: '请选择难度' }]}>
+            <Select placeholder="选择难度">
+              <Select.Option value="beginner">入门</Select.Option>
+              <Select.Option value="intermediate">进阶</Select.Option>
+              <Select.Option value="advanced">高级</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item name="order" label="排序">
+            <InputNumber min={0} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item name="is_active" label="发布" valuePropName="checked">
+            <Switch />
+          </Form.Item>
+        </Form>
+      </Drawer>
+    </div>
+  )
+}

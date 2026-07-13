@@ -1,0 +1,531 @@
+[
+  {
+    "title": "Hello World",
+    "slug": "kotlin-01-hello-world",
+    "description": "学习Kotlin基本语法，编写你的第一个程序",
+    "content": "# Hello World - 你的第一个Kotlin程序\n\n## 什么是Kotlin？\nKotlin是由JetBrains开发的现代编程语言，运行在JVM上，兼具简洁性与安全性。它是Android官方推荐的开发语言，也广泛用于服务端开发。\n\n## main函数\nKotlin程序的入口是 `main` 函数：\n\n```kotlin\nfun main() {\n    println(\"Hello, World!\")\n}\n```\n\n- `fun` 关键字用于声明函数\n- `println()` 用于输出一行文字到控制台\n- 语句末尾不需要分号\n\n## REPL\nKotlin提供了交互式Shell（REPL），可以直接输入表达式并立即看到结果，非常适合学习和实验。\n\n## 函数与返回值\n在编程闯关中，我们通过函数来组织代码。Kotlin使用 `fun` 定义函数，用 `: Type` 声明返回类型：\n\n```kotlin\nfun hello(): String {\n    return \"Hello, World!\"\n}\n```\n\n如果函数体是单个表达式，还可以用更简洁的写法：\n\n```kotlin\nfun hello(): String = \"Hello, World!\"\n```\n\n## 练习\n请编写一个函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fun hello(): String {\n    // 在这里编写你的代码\n    return \"\"\n}",
+    "solution_code": "fun hello(): String {\n    return \"Hello, World!\"\n}",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      },
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 return 语句返回字符串 \"Hello, World!\""
+  },
+  {
+    "title": "变量与类型",
+    "slug": "kotlin-02-variables",
+    "description": "学习val/var、类型推断和基本数据类型",
+    "content": "# 变量与类型\n\n## val 与 var\nKotlin有两种变量声明方式：\n\n- `val`（value）— 只读变量，赋值后不可修改，类似于Java的final\n- `var`（variable）— 可变变量，可以重新赋值\n\n```kotlin\nval name = \"Kotlin\"  // 只读，不可重新赋值\nvar count = 0        // 可变，可以重新赋值\ncount = 1            // OK\n```\n\n**最佳实践：优先使用 `val`，只在需要修改时才用 `var`。**\n\n## 类型推断\nKotlin具有强大的类型推断能力，通常不需要显式声明类型：\n\n```kotlin\nval message = \"Hello\"   // 推断为 String\nval year = 2024         // 推断为 Int\nval pi = 3.14           // 推断为 Double\n```\n\n需要时也可以显式声明：\n\n```kotlin\nval age: Int = 25\nval price: Double = 9.99\n```\n\n## 基本数据类型\n- `Int` — 整数（32位）\n- `Long` — 长整数（64位），用 `L` 后缀：`100L`\n- `Double` — 双精度浮点数\n- `Float` — 单精度浮点数，用 `f` 后缀：`3.14f`\n- `Boolean` — 布尔值（`true` / `false`）\n- `String` — 字符串\n- `Char` — 单个字符，用单引号：`'A'`\n\n## 类型转换\nKotlin中数值类型不会自动转换，需要显式调用转换函数：\n\n```kotlin\nval i: Int = 10\nval d: Double = i.toDouble()  // 10.0\nval s: String = i.toString()  // \"10\"\n```\n\n## 练习\n编写函数 `greet(name: String)`，返回 `\"你好, {name}!\"`。\n编写函数 `addAsInt(a: String, b: String)`，将两个数字字符串转为整数后相加并返回结果。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fun greet(name: String): String {\n    // 返回问候语\n    return \"\"\n}\n\nfun addAsInt(a: String, b: String): Int {\n    // 将两个数字字符串转为整数后相加\n    return 0\n}",
+    "solution_code": "fun greet(name: String): String {\n    return \"你好, $name!\"\n}\n\nfun addAsInt(a: String, b: String): Int {\n    return a.toInt() + b.toInt()\n}",
+    "test_cases": [
+      {
+        "input": "greet(\"Alice\")",
+        "expected_output": "你好, Alice!",
+        "description": "greet(\"Alice\") 应返回 你好, Alice!"
+      },
+      {
+        "input": "greet(\"Bob\")",
+        "expected_output": "你好, Bob!",
+        "description": "greet(\"Bob\") 应返回 你好, Bob!"
+      },
+      {
+        "input": "addAsInt(\"10\", \"20\")",
+        "expected_output": "30",
+        "description": "addAsInt(\"10\", \"20\") 应返回 30"
+      },
+      {
+        "input": "addAsInt(\"5\", \"3\")",
+        "expected_output": "8",
+        "description": "addAsInt(\"5\", \"3\") 应返回 8"
+      }
+    ],
+    "hint": "使用 $变量名 进行字符串插值，使用 toInt() 将字符串转为整数"
+  },
+  {
+    "title": "字符串与集合",
+    "slug": "kotlin-03-strings-collections",
+    "description": "学习字符串模板、List、Set和Map",
+    "content": "# 字符串与集合\n\n## 字符串模板\nKotlin支持在字符串中嵌入变量和表达式：\n\n```kotlin\nval name = \"World\"\nprintln(\"Hello, $name!\")           // Hello, World!\nprintln(\"Length: ${name.length}\")    // Length: 5\n```\n\n- `$变量名` — 直接插入变量值\n- `${表达式}` — 插入任意表达式的结果\n\n## 原始字符串\n用三个引号包裹，保留格式和换行：\n\n```kotlin\nval text = \"\"\"\n    第一行\n    第二行\n\"\"\".trimIndent()\n```\n\n## List（列表）\nKotlin的List分为只读和可变两种：\n\n```kotlin\nval nums = listOf(1, 2, 3)           // 只读List\nval mutable = mutableListOf(1, 2)    // 可变List\nmutable.add(3)                       // 添加元素\n```\n\n常用操作：\n```kotlin\nnums.size          // 3\nnums[0]            // 1\nnums.contains(2)   // true\nnums.sum()         // 6\n```\n\n## Set（集合）\nSet存储不重复的元素：\n\n```kotlin\nval set = setOf(1, 2, 2, 3)  // {1, 2, 3}\nset.contains(2)              // true\n```\n\n## Map（映射）\nMap存储键值对：\n\n```kotlin\nval map = mapOf(\"a\" to 1, \"b\" to 2)\nmap[\"a\"]          // 1\nmap[\"c\"]          // null（键不存在返回null）\nmap.containsKey(\"b\")  // true\n```\n\n## 练习\n编写函数 `buildGreeting(name: String, age: Int)`，返回 `\"{name}今年{age}岁\"`。\n编写函数 `sumList(nums: List<Int>)`，返回列表中所有整数的和。",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fun buildGreeting(name: String, age: Int): String {\n    // 返回格式化的问候语\n    return \"\"\n}\n\nfun sumList(nums: List<Int>): Int {\n    // 返回列表中所有整数的和\n    return 0\n}",
+    "solution_code": "fun buildGreeting(name: String, age: Int): String {\n    return \"$name今年${age}岁\"\n}\n\nfun sumList(nums: List<Int>): Int {\n    return nums.sum()\n}",
+    "test_cases": [
+      {
+        "input": "buildGreeting(\"小明\", 18)",
+        "expected_output": "小明今年18岁",
+        "description": "buildGreeting(\"小明\", 18) 应返回 小明今年18岁"
+      },
+      {
+        "input": "buildGreeting(\"Alice\", 25)",
+        "expected_output": "Alice今年25岁",
+        "description": "buildGreeting(\"Alice\", 25) 应返回 Alice今年25岁"
+      },
+      {
+        "input": "sumList(listOf(1, 2, 3))",
+        "expected_output": "6",
+        "description": "sumList(listOf(1,2,3)) 应返回 6"
+      },
+      {
+        "input": "sumList(listOf(10, 20, 30, 40))",
+        "expected_output": "100",
+        "description": "sumList(listOf(10,20,30,40)) 应返回 100"
+      }
+    ],
+    "hint": "字符串模板用 $变量名 或 ${表达式}，列表求和用 sum() 函数"
+  },
+  {
+    "title": "控制流",
+    "slug": "kotlin-04-control-flow",
+    "description": "学习if表达式、when、for和while循环",
+    "content": "# 控制流\n\n## if 表达式\nKotlin的 `if` 是表达式，有返回值：\n\n```kotlin\nval max = if (a > b) a else b\n```\n\n也可以写成多行形式：\n\n```kotlin\nval result = if (score >= 60) {\n    \"及格\"\n} else {\n    \"不及格\"\n}\n```\n\n## when 表达式\nKotlin用 `when` 替代Java的 `switch`，更加强大：\n\n```kotlin\nwhen (x) {\n    0 -> \"零\"\n    1, 2, 3 -> \"小\"\n    in 4..10 -> \"中\"\n    else -> \"大\"\n}\n```\n\n`when` 也可以不加参数，作为更灵活的if-else链：\n\n```kotlin\nwhen {\n    score >= 90 -> \"优秀\"\n    score >= 60 -> \"及格\"\n    else -> \"不及格\"\n}\n```\n\n## for 循环\n```kotlin\nfor (i in 1..5) { }       // 1到5，包含5\nfor (i in 1 until 5) { }  // 1到4，不包含5\nfor (i in 5 downTo 1) { } // 5到1，倒序\nfor (i in 1..10 step 2) { } // 1,3,5,7,9\n```\n\n遍历集合：\n```kotlin\nfor (item in listOf(\"a\", \"b\", \"c\")) {\n    println(item)\n}\n```\n\n## while 循环\n```kotlin\nvar i = 0\nwhile (i < 5) {\n    i++\n}\n```\n\n## 练习\n编写函数 `grade(score: Int)`，根据分数返回等级：90及以上\"优秀\"，60及以上\"及格\"，否则\"不及格\"。\n编写函数 `fizzBuzz(n: Int)`，返回1到n的FizzBuzz结果列表：3的倍数替换为\"Fizz\"，5的倍数替换为\"Buzz\"，15的倍数替换为\"FizzBuzz\"，其余为数字字符串。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fun grade(score: Int): String {\n    // 根据分数返回等级\n    return \"\"\n}\n\nfun fizzBuzz(n: Int): List<String> {\n    // 返回1到n的FizzBuzz结果列表\n    return emptyList()\n}",
+    "solution_code": "fun grade(score: Int): String {\n    return when {\n        score >= 90 -> \"优秀\"\n        score >= 60 -> \"及格\"\n        else -> \"不及格\"\n    }\n}\n\nfun fizzBuzz(n: Int): List<String> {\n    return (1..n).map { i ->\n        when {\n            i % 15 == 0 -> \"FizzBuzz\"\n            i % 3 == 0 -> \"Fizz\"\n            i % 5 == 0 -> \"Buzz\"\n            else -> i.toString()\n        }\n    }\n}",
+    "test_cases": [
+      {
+        "input": "grade(95)",
+        "expected_output": "优秀",
+        "description": "grade(95) 应返回 优秀"
+      },
+      {
+        "input": "grade(75)",
+        "expected_output": "及格",
+        "description": "grade(75) 应返回 及格"
+      },
+      {
+        "input": "grade(45)",
+        "expected_output": "不及格",
+        "description": "grade(45) 应返回 不及格"
+      },
+      {
+        "input": "fizzBuzz(5)",
+        "expected_output": "[1, 2, Fizz, 4, Buzz]",
+        "description": "fizzBuzz(5) 应返回 [1, 2, Fizz, 4, Buzz]"
+      },
+      {
+        "input": "fizzBuzz(15)",
+        "expected_output": "[1, 2, Fizz, 4, Buzz, Fizz, 7, 8, Fizz, Buzz, 11, Fizz, 13, 14, FizzBuzz]",
+        "description": "fizzBuzz(15) 应返回正确结果"
+      }
+    ],
+    "hint": "when 可以不带参数使用，配合条件表达式；用 map 函数将范围转换为列表"
+  },
+  {
+    "title": "函数",
+    "slug": "kotlin-05-functions",
+    "description": "学习默认参数、命名参数、变长参数和扩展函数",
+    "content": "# 函数\n\n## 函数基础\nKotlin用 `fun` 关键字定义函数：\n\n```kotlin\nfun add(a: Int, b: Int): Int {\n    return a + b\n}\n```\n\n单表达式函数可以简写：\n\n```kotlin\nfun add(a: Int, b: Int): Int = a + b\n```\n\n## 默认参数\n函数参数可以有默认值，调用时可省略：\n\n```kotlin\nfun greet(name: String, greeting: String = \"Hello\"): String {\n    return \"$greeting, $name!\"\n}\n\ngreet(\"Alice\")              // Hello, Alice!\ngreet(\"Alice\", \"Hi\")        // Hi, Alice!\n```\n\n## 命名参数\n调用函数时可以指定参数名，提高可读性，也可以跳过有默认值的参数：\n\n```kotlin\nfun createUser(name: String, age: Int = 0, city: String = \"\"): String {\n    return \"$name, $age, $city\"\n}\n\ncreateUser(name = \"Bob\", city = \"Beijing\")  // age使用默认值0\n```\n\n## 变长参数\n使用 `vararg` 关键字，函数可以接受任意数量的参数：\n\n```kotlin\nfun sum(vararg numbers: Int): Int {\n    return numbers.sum()\n}\n\nsum(1, 2, 3)     // 6\nsum(1, 2, 3, 4)  // 10\n```\n\n## 扩展函数\n扩展函数可以为已有类添加新方法，而不修改原始类：\n\n```kotlin\nfun String.addExclamation(): String {\n    return this + \"!\"\n}\n\n\"Hello\".addExclamation()  // Hello!\n```\n\n`this` 指代接收者对象（即调用该扩展函数的对象）。\n\n## 练习\n编写函数 `power(base: Int, exponent: Int = 2)`，计算base的exponent次方（使用循环实现）。\n编写扩展函数 `String.shout()`，将字符串转为大写并加上三个感叹号。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fun power(base: Int, exponent: Int = 2): Int {\n    // 计算 base 的 exponent 次方\n    return 0\n}\n\nfun String.shout(): String {\n    // 将字符串转为大写并加上三个感叹号\n    return \"\"\n}",
+    "solution_code": "fun power(base: Int, exponent: Int = 2): Int {\n    var result = 1\n    for (i in 1..exponent) {\n        result *= base\n    }\n    return result\n}\n\nfun String.shout(): String {\n    return this.uppercase() + \"!!!\"\n}",
+    "test_cases": [
+      {
+        "input": "power(2)",
+        "expected_output": "4",
+        "description": "power(2) 使用默认指数2，应返回4"
+      },
+      {
+        "input": "power(2, 3)",
+        "expected_output": "8",
+        "description": "power(2, 3) 应返回8"
+      },
+      {
+        "input": "power(3, 4)",
+        "expected_output": "81",
+        "description": "power(3, 4) 应返回81"
+      },
+      {
+        "input": "\"hello\".shout()",
+        "expected_output": "HELLO!!!",
+        "description": "\"hello\".shout() 应返回 HELLO!!!"
+      },
+      {
+        "input": "\"kotlin\".shout()",
+        "expected_output": "KOTLIN!!!",
+        "description": "\"kotlin\".shout() 应返回 KOTLIN!!!"
+      }
+    ],
+    "hint": "默认参数直接在参数列表中赋值；扩展函数用 fun 类型.函数名() 定义"
+  },
+  {
+    "title": "空安全",
+    "slug": "kotlin-06-null-safety",
+    "description": "学习可空类型、安全调用操作符、Elvis操作符和非空断言",
+    "content": "# 空安全\n\n## 可空类型\nKotlin的类型系统区分可空与不可空类型，在编译期就防止空指针异常：\n\n```kotlin\nvar name: String = \"Kotlin\"  // 不可空，不能赋值为null\nvar nickname: String? = null  // 可空，用 ? 标记\n```\n\n## 安全调用操作符 ?.\n对可空类型使用 `?.`，如果对象为null则返回null而不抛出异常：\n\n```kotlin\nval len = nickname?.length  // 如果nickname为null，len也为null\n```\n\n## Elvis操作符 ?:\n`?:` 提供默认值，当左侧为null时使用右侧的值：\n\n```kotlin\nval len = nickname?.length ?: 0  // 如果nickname为null，len为0\n```\n\n## 非空断言 !!\n`!!` 将可空类型转为非空类型，如果为null则抛出NullPointerException：\n\n```kotlin\nval len = nickname!!.length  // 确定不为null时使用，否则崩溃\n```\n\n**谨慎使用 `!!`，只在确定值不为null时使用。**\n\n## let 函数\n`let` 常与安全调用配合，只在对象非null时执行代码块：\n\n```kotlin\nnickname?.let {\n    println(\"昵称长度: ${it.length}\")\n}\n```\n\n`it` 是lambda的隐式参数，代表非空的nickname值。\n\n## 练习\n编写函数 `safeLength(s: String?)`，返回字符串长度，如果为null则返回0。\n编写函数 `greetOrNull(name: String?)`，如果name不为null返回 `\"Hello, {name}!\"`，否则返回 `\"Hello, Guest!\"`。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fun safeLength(s: String?): Int {\n    // 返回字符串长度，null则返回0\n    return 0\n}\n\nfun greetOrNull(name: String?): String {\n    // name不为null返回问候，否则返回 Hello, Guest!\n    return \"\"\n}",
+    "solution_code": "fun safeLength(s: String?): Int {\n    return s?.length ?: 0\n}\n\nfun greetOrNull(name: String?): String {\n    return name?.let { \"Hello, $it!\" } ?: \"Hello, Guest!\"\n}",
+    "test_cases": [
+      {
+        "input": "safeLength(\"Kotlin\")",
+        "expected_output": "6",
+        "description": "safeLength(\"Kotlin\") 应返回6"
+      },
+      {
+        "input": "safeLength(null)",
+        "expected_output": "0",
+        "description": "safeLength(null) 应返回0"
+      },
+      {
+        "input": "safeLength(\"\")",
+        "expected_output": "0",
+        "description": "safeLength(\"\") 应返回0"
+      },
+      {
+        "input": "greetOrNull(\"Alice\")",
+        "expected_output": "Hello, Alice!",
+        "description": "greetOrNull(\"Alice\") 应返回 Hello, Alice!"
+      },
+      {
+        "input": "greetOrNull(null)",
+        "expected_output": "Hello, Guest!",
+        "description": "greetOrNull(null) 应返回 Hello, Guest!"
+      }
+    ],
+    "hint": "使用 ?. 安全调用和 ?: Elvis操作符处理null情况"
+  },
+  {
+    "title": "类与对象",
+    "slug": "kotlin-07-classes",
+    "description": "学习class、构造函数、init块和数据类",
+    "content": "# 类与对象\n\n## 定义类\nKotlin用 `class` 关键字定义类：\n\n```kotlin\nclass Person(val name: String, val age: Int)\n```\n\n在主构造函数参数前加 `val` 或 `var`，会自动创建对应属性。\n\n## 主构造函数与init块\n主构造函数不能包含代码，初始化逻辑放在 `init` 块中：\n\n```kotlin\nclass User(val name: String) {\n    init {\n        println(\"用户 $name 已创建\")\n    }\n}\n```\n\n## 次构造函数\n用 `constructor` 关键字定义额外的构造函数，必须委托给主构造函数：\n\n```kotlin\nclass User(val name: String, val age: Int) {\n    constructor(name: String) : this(name, 0)\n}\n```\n\n## 创建对象\nKotlin不需要 `new` 关键字：\n\n```kotlin\nval person = Person(\"Alice\", 25)\nprintln(person.name)  // Alice\n```\n\n## 数据类\n用 `data class` 定义专门用于存储数据的类，自动生成 `equals()`、`hashCode()`、`toString()`、`copy()` 等方法：\n\n```kotlin\ndata class Point(val x: Int, val y: Int)\n\nval p1 = Point(1, 2)\nval p2 = Point(1, 2)\np1 == p2          // true（值相等）\np1.toString()     // Point(x=1, y=2)\np1.copy(x = 10)   // Point(x=10, y=2)\n```\n\n## 练习\n定义数据类 `Student(val name: String, val score: Int)`，编写函数 `studentInfo(student: Student)`，返回 `\"{name}: {score}分\"`。\n编写函数 `improveScore(student: Student, bonus: Int)`，返回一个分数增加了bonus的新Student对象。",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "data class Student(val name: String, val score: Int)\n\nfun studentInfo(student: Student): String {\n    // 返回学生信息字符串\n    return \"\"\n}\n\nfun improveScore(student: Student, bonus: Int): Student {\n    // 返回分数增加bonus后的新Student\n    return student\n}",
+    "solution_code": "data class Student(val name: String, val score: Int)\n\nfun studentInfo(student: Student): String {\n    return \"${student.name}: ${student.score}分\"\n}\n\nfun improveScore(student: Student, bonus: Int): Student {\n    return student.copy(score = student.score + bonus)\n}",
+    "test_cases": [
+      {
+        "input": "studentInfo(Student(\"小明\", 85))",
+        "expected_output": "小明: 85分",
+        "description": "studentInfo(Student(\"小明\", 85)) 应返回 小明: 85分"
+      },
+      {
+        "input": "studentInfo(Student(\"Alice\", 92))",
+        "expected_output": "Alice: 92分",
+        "description": "studentInfo(Student(\"Alice\", 92)) 应返回 Alice: 92分"
+      },
+      {
+        "input": "improveScore(Student(\"小明\", 85), 10).score",
+        "expected_output": "95",
+        "description": "improveScore后分数应为95"
+      },
+      {
+        "input": "improveScore(Student(\"小明\", 85), 10).name",
+        "expected_output": "小明",
+        "description": "improveScore后name不变"
+      }
+    ],
+    "hint": "数据类用 data class 定义，copy() 方法可以修改部分属性创建新对象"
+  },
+  {
+    "title": "继承与接口",
+    "slug": "kotlin-08-inheritance",
+    "description": "学习open/abstract/interface和重写",
+    "content": "# 继承与接口\n\n## open 类\nKotlin的类默认是 `final` 的，不可被继承。需要用 `open` 修饰才允许继承：\n\n```kotlin\nopen class Animal(val name: String) {\n    open fun sound(): String = \"...\"\n}\n\nclass Dog(name: String) : Animal(name) {\n    override fun sound(): String = \"汪汪\"\n}\n```\n\n- 父类需要 `open` 修饰\n- 可重写的方法也需要 `open` 修饰\n- 子类用 `override` 关键字重写方法\n\n## 抽象类\n用 `abstract` 定义的类可以包含抽象方法（没有实现），子类必须实现：\n\n```kotlin\nabstract class Shape {\n    abstract fun area(): Double\n}\n\nclass Circle(val radius: Double) : Shape() {\n    override fun area(): Double = Math.PI * radius * radius\n}\n```\n\n## 接口\n接口用 `interface` 定义，可以包含抽象方法和默认实现：\n\n```kotlin\ninterface Drawable {\n    fun draw(): String\n    fun description(): String = \"图形\"\n}\n\nclass Square : Drawable {\n    override fun draw(): String = \"绘制正方形\"\n}\n```\n\n一个类可以实现多个接口：\n\n```kotlin\nclass SmartSquare : Drawable, Comparable<Square> {\n    override fun draw(): String = \"正方形\"\n    override fun compareTo(other: Square): Int = 0\n}\n```\n\n## 练习\n定义抽象类 `Shape`，包含抽象方法 `area(): Double`。\n定义类 `Rectangle(val width: Double, val height: Double)` 继承 Shape，实现 area 方法。\n定义类 `Circle(val radius: Double)` 继承 Shape，实现 area 方法。\n编写函数 `shapeArea(shape: Shape)`，返回形状的面积（保留整数部分）。",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "abstract class Shape {\n    abstract fun area(): Double\n}\n\nclass Rectangle(val width: Double, val height: Double) : Shape() {\n    // 实现 area 方法\n    override fun area(): Double = 0.0\n}\n\nclass Circle(val radius: Double) : Shape() {\n    // 实现 area 方法\n    override fun area(): Double = 0.0\n}\n\nfun shapeArea(shape: Shape): Int {\n    // 返回面积的整数部分\n    return 0\n}",
+    "solution_code": "abstract class Shape {\n    abstract fun area(): Double\n}\n\nclass Rectangle(val width: Double, val height: Double) : Shape() {\n    override fun area(): Double = width * height\n}\n\nclass Circle(val radius: Double) : Shape() {\n    override fun area(): Double = Math.PI * radius * radius\n}\n\nfun shapeArea(shape: Shape): Int {\n    return shape.area().toInt()\n}",
+    "test_cases": [
+      {
+        "input": "shapeArea(Rectangle(3.0, 4.0))",
+        "expected_output": "12",
+        "description": "3x4矩形面积应为12"
+      },
+      {
+        "input": "shapeArea(Rectangle(5.0, 2.0))",
+        "expected_output": "10",
+        "description": "5x2矩形面积应为10"
+      },
+      {
+        "input": "shapeArea(Circle(1.0))",
+        "expected_output": "3",
+        "description": "半径1的圆面积整数部分约为3"
+      }
+    ],
+    "hint": "矩形面积 = 宽 × 高，圆面积 = π × r²，使用 toInt() 取整数部分"
+  },
+  {
+    "title": "属性与委托",
+    "slug": "kotlin-09-delegation",
+    "description": "学习属性委托、lazy和observable",
+    "content": "# 属性与委托\n\n## 自定义 getter/setter\nKotlin属性可以自定义getter和setter：\n\n```kotlin\nclass User(name: String) {\n    var name: String = name\n        set(value) {\n            field = value.trim()\n        }\n}\n```\n\n`field` 是幕后字段（backing field），只能在getter/setter中访问。\n\n## 属性委托\nKotlin支持将属性的getter/setter委托给另一个对象，使用 `by` 关键字：\n\n```kotlin\nclass Example {\n    val lazyValue: String by LazyDelegate()\n}\n```\n\n委托对象需要实现 `ReadOnlyProperty` 或 `ReadWriteProperty` 接口。\n\n## lazy 委托\n`lazy` 是最常用的委托，属性在首次访问时才初始化：\n\n```kotlin\nval heavyData: String by lazy {\n    println(\"正在计算...\")\n    \"结果\"\n}\n// 第一次访问 heavyData 时才执行lambda\n```\n\nlazy是线程安全的（默认 `LazyThreadSafetyMode.SYNCHRONIZED`）。\n\n## observable 委托\n`Delegates.observable` 在属性值变化时执行回调：\n\n```kotlin\nimport kotlin.properties.Delegates\n\nvar score: Int by Delegates.observable(0) { _, old, new ->\n    println(\"分数从 $old 变为 $new\")\n}\n```\n\n`Delegates.vetoable` 可以在变化前进行否决：\n\n```kotlin\nvar positive: Int by Delegates.vetoable(0) { _, _, new ->\n    new >= 0  // 只允许非负值\n}\n```\n\n## Map 委托\n可以用Map来委托属性，常用于解析JSON等场景：\n\n```kotlin\nclass User(map: Map<String, Any?>) {\n    val name: String by map\n    val age: Int by map\n}\n```\n\n## 练习\n编写函数 `createLazyGreeting()`，返回一个lazy属性，首次访问时返回 `\"Hello, Kotlin!\"`。\n编写函数 `createPositiveCounter()`，使用vetoable委托创建一个只允许非负整数的属性，初始值为0。",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "fun createLazyGreeting(): Lazy<String> {\n    // 返回一个lazy属性\n    return lazy { \"\" }\n}\n\nimport kotlin.properties.Delegates\n\nfun createPositiveCounter(): kotlin.properties.ReadWriteProperty<Any?, Int> {\n    // 使用vetoable委托创建只允许非负整数的属性\n    return Delegates.observable(0) { _, _, _ -> }\n}",
+    "solution_code": "fun createLazyGreeting(): Lazy<String> {\n    return lazy { \"Hello, Kotlin!\" }\n}\n\nimport kotlin.properties.Delegates\n\nfun createPositiveCounter(): kotlin.properties.ReadWriteProperty<Any?, Int> {\n    return Delegates.vetoable(0) { _, _, new -> new >= 0 }\n}",
+    "test_cases": [
+      {
+        "input": "createLazyGreeting().value",
+        "expected_output": "Hello, Kotlin!",
+        "description": "lazy属性的值应为 Hello, Kotlin!"
+      },
+      {
+        "input": "run { val counter = createPositiveCounter(); counter.getValue(this, ::counter); counter.setValue(this, ::counter, 5); counter.getValue(this, ::counter) }",
+        "expected_output": "5",
+        "description": "设置正数5应成功"
+      }
+    ],
+    "hint": "lazy { } 延迟初始化，Delegates.vetoable(初始值) { 否决条件 }"
+  },
+  {
+    "title": "高阶函数",
+    "slug": "kotlin-10-higher-order-functions",
+    "description": "学习函数类型、lambda表达式和inline/noinline",
+    "content": "# 高阶函数\n\n## 函数类型\nKotlin支持函数类型，用 `(参数类型) -> 返回类型` 表示：\n\n```kotlin\nval double: (Int) -> Int = { x -> x * 2 }\nval greet: (String) -> String = { name -> \"Hello, $name\" }\n```\n\n## 高阶函数\n高阶函数是以函数作为参数或返回值的函数：\n\n```kotlin\nfun operate(a: Int, b: Int, operation: (Int, Int) -> Int): Int {\n    return operation(a, b)\n}\n\noperate(3, 4) { x, y -> x + y }  // 7\noperate(3, 4) { x, y -> x * y }  // 12\n```\n\n## Lambda表达式\nLambda是匿名函数的简写：\n\n```kotlin\n{ x: Int, y: Int -> x + y }\n```\n\n如果lambda是最后一个参数，可以放在括号外面：\n\n```kotlin\nlist.filter { it > 3 }  // 等同于 list.filter({ it > 3 })\n```\n\n`it` 是单参数lambda的隐式参数名。\n\n## 常用集合高阶函数\n```kotlin\nval nums = listOf(1, 2, 3, 4, 5)\nnums.filter { it > 3 }        // [4, 5]\nnums.map { it * 2 }           // [2, 4, 6, 8, 10]\nnums.reduce { acc, n -> acc + n }  // 15\nnums.any { it > 4 }           // true\nnums.all { it > 0 }           // true\nnums.find { it > 3 }          // 4\nnums.groupBy { it % 2 }       // {1=[1,3,5], 0=[2,4]}\n```\n\n## inline 关键字\n用 `inline` 修饰高阶函数，编译器会将函数体内联到调用处，消除lambda的运行时开销：\n\n```kotlin\ninline fun <T> withLock(lock: Lock, action: () -> T): T {\n    lock.lock()\n    try { return action() } finally { lock.unlock() }\n}\n```\n\n`noinline` 可以阻止特定lambda参数被内联：\n\n```kotlin\ninline fun foo(inlined: () -> Unit, noinline notInlined: () -> Unit) { ... }\n```\n\n## 练习\n编写高阶函数 `applyOperation(a: Int, b: Int, op: (Int, Int) -> Int)`，将op应用于a和b。\n编写函数 `transformList(nums: List<Int>)`，返回列表中偶数的平方列表。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "fun applyOperation(a: Int, b: Int, op: (Int, Int) -> Int): Int {\n    // 将op应用于a和b\n    return 0\n}\n\nfun transformList(nums: List<Int>): List<Int> {\n    // 返回列表中偶数的平方列表\n    return emptyList()\n}",
+    "solution_code": "fun applyOperation(a: Int, b: Int, op: (Int, Int) -> Int): Int {\n    return op(a, b)\n}\n\nfun transformList(nums: List<Int>): List<Int> {\n    return nums.filter { it % 2 == 0 }.map { it * it }\n}",
+    "test_cases": [
+      {
+        "input": "applyOperation(3, 4) { a, b -> a + b }",
+        "expected_output": "7",
+        "description": "3+4=7"
+      },
+      {
+        "input": "applyOperation(3, 4) { a, b -> a * b }",
+        "expected_output": "12",
+        "description": "3*4=12"
+      },
+      {
+        "input": "transformList(listOf(1, 2, 3, 4))",
+        "expected_output": "[4, 16]",
+        "description": "偶数2和4的平方为[4, 16]"
+      },
+      {
+        "input": "transformList(listOf(1, 3, 5))",
+        "expected_output": "[]",
+        "description": "没有偶数时返回空列表"
+      }
+    ],
+    "hint": "高阶函数直接调用传入的函数参数；用 filter 筛选偶数，map 做平方变换"
+  },
+  {
+    "title": "泛型",
+    "slug": "kotlin-11-generics",
+    "description": "学习泛型类/函数、协变/逆变和星投影",
+    "content": "# 泛型\n\n## 泛型类\n泛型让类和函数可以处理多种类型：\n\n```kotlin\nclass Box<T>(val value: T)\n\nval stringBox = Box(\"Hello\")   // Box<String>\nval intBox = Box(42)           // Box<Int>\n```\n\n## 泛型函数\n函数也可以有类型参数：\n\n```kotlin\nfun <T> singletonList(item: T): List<T> {\n    return listOf(item)\n}\n\nsingletonList(1)      // List<Int>\nsingletonList(\"Hi\")   // List<String>\n```\n\n## 泛型约束\n用 `where` 或 `:` 限制类型参数的范围：\n\n```kotlin\nfun <T : Comparable<T>> maxOf(a: T, b: T): T {\n    return if (a >= b) a else b\n}\n```\n\n## 协变（out）\n`out` 声明类型参数是协变的，只能出现在输出位置（返回值）：\n\n```kotlin\nclass Producer<out T>(val value: T)\n\nval p: Producer<Any> = Producer(\"Hello\")  // OK，String是Any的子类型\n```\n\n## 逆变（in）\n`in` 声明类型参数是逆变的，只能出现在输入位置（参数）：\n\n```kotlin\ninterface Consumer<in T> {\n    fun consume(item: T)\n}\n\nval c: Consumer<String> = object : Consumer<Any> {\n    override fun consume(item: Any) {}\n}  // OK\n```\n\n## 星投影\n当不确定泛型类型参数时，可以使用星投影 `*`：\n\n```kotlin\nfun printList(list: List<*>) {\n    list.forEach { println(it) }  // it的类型是Any?\n}\n```\n\n## 练习\n编写泛型函数 `firstOrNull(list: List<T>)`，返回列表的第一个元素，空列表返回null。\n编写泛型函数 `areEqual(a: T, b: T)`，判断两个值是否相等（要求T实现了Equals）。",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "fun <T> firstOrNull(list: List<T>): T? {\n    // 返回列表第一个元素，空列表返回null\n    return null\n}\n\nfun <T> areEqual(a: T, b: T): Boolean {\n    // 判断两个值是否相等\n    return false\n}",
+    "solution_code": "fun <T> firstOrNull(list: List<T>): T? {\n    return list.firstOrNull()\n}\n\nfun <T> areEqual(a: T, b: T): Boolean {\n    return a == b\n}",
+    "test_cases": [
+      {
+        "input": "firstOrNull(listOf(1, 2, 3))",
+        "expected_output": "1",
+        "description": "非空列表返回第一个元素"
+      },
+      {
+        "input": "firstOrNull(emptyList<Int>())",
+        "expected_output": "null",
+        "description": "空列表返回null"
+      },
+      {
+        "input": "firstOrNull(listOf(\"a\", \"b\"))",
+        "expected_output": "a",
+        "description": "字符串列表返回第一个"
+      },
+      {
+        "input": "areEqual(1, 1)",
+        "expected_output": "true",
+        "description": "1和1相等"
+      },
+      {
+        "input": "areEqual(\"hello\", \"world\")",
+        "expected_output": "false",
+        "description": "hello和world不相等"
+      }
+    ],
+    "hint": "List自带 firstOrNull() 方法；Kotlin的 == 默认调用 equals() 进行值比较"
+  },
+  {
+    "title": "异常与注解",
+    "slug": "kotlin-12-exceptions-annotations",
+    "description": "学习try/catch/finally和自定义注解",
+    "content": "# 异常与注解\n\n## try/catch/finally\nKotlin的异常处理与Java类似，但 `try` 是表达式，有返回值：\n\n```kotlin\nval result = try {\n    parseInt(input)\n} catch (e: NumberFormatException) {\n    0\n} finally {\n    println(\"处理完成\")\n}\n```\n\n- `try` 块包含可能抛出异常的代码\n- `catch` 块处理特定类型的异常\n- `finally` 块无论是否异常都会执行\n\n## 抛出异常\n使用 `throw` 关键字抛出异常：\n\n```kotlin\nfun divide(a: Int, b: Int): Int {\n    if (b == 0) throw IllegalArgumentException(\"除数不能为零\")\n    return a / b\n}\n```\n\nKotlin没有checked exception，不需要在函数签名中声明可能抛出的异常。\n\n## 自定义异常\n```kotlin\nclass ValidationException(message: String) : Exception(message)\n```\n\n## 注解\n注解是给代码添加元数据的方式。Kotlin内置了常用注解：\n\n- `@Deprecated` — 标记已废弃的API\n- `@Suppress` — 抑制编译器警告\n- `@JvmName` — 指定Java调用的方法名\n- `@JvmStatic` — 生成Java静态方法\n- `@JvmOverloads` — 生成Java重载方法\n\n## 自定义注解\n使用 `annotation class` 定义注解：\n\n```kotlin\n@Target(AnnotationTarget.FUNCTION)\n@Retention(AnnotationRetention.RUNTIME)\nannotation class Log(val message: String = \"\")\n\n@Log(\"用户登录\")\nfun login() { ... }\n```\n\n- `@Target` 指定注解可以用在哪里\n- `@Retention` 指定注解的保留策略（SOURCE/BINARY/RUNTIME）\n\n## 练习\n编写函数 `safeDivide(a: Int, b: Int)`，当b为0时返回0而不是抛出异常。\n编写函数 `parseIntOrDefault(s: String, default: Int)`，尝试将字符串转为整数，失败时返回默认值。",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "fun safeDivide(a: Int, b: Int): Int {\n    // b为0时返回0，否则返回a/b\n    return 0\n}\n\nfun parseIntOrDefault(s: String, default: Int): Int {\n    // 尝试将字符串转为整数，失败时返回默认值\n    return 0\n}",
+    "solution_code": "fun safeDivide(a: Int, b: Int): Int {\n    return try {\n        a / b\n    } catch (e: ArithmeticException) {\n        0\n    }\n}\n\nfun parseIntOrDefault(s: String, default: Int): Int {\n    return try {\n        s.toInt()\n    } catch (e: NumberFormatException) {\n        default\n    }\n}",
+    "test_cases": [
+      {
+        "input": "safeDivide(10, 2)",
+        "expected_output": "5",
+        "description": "10/2=5"
+      },
+      {
+        "input": "safeDivide(10, 0)",
+        "expected_output": "0",
+        "description": "除以0时返回0"
+      },
+      {
+        "input": "safeDivide(7, 3)",
+        "expected_output": "2",
+        "description": "7/3=2（整数除法）"
+      },
+      {
+        "input": "parseIntOrDefault(\"42\", 0)",
+        "expected_output": "42",
+        "description": "有效数字字符串返回42"
+      },
+      {
+        "input": "parseIntOrDefault(\"abc\", -1)",
+        "expected_output": "-1",
+        "description": "无效字符串返回默认值-1"
+      }
+    ],
+    "hint": "try是表达式可以直接返回值；catch捕获特定异常类型"
+  },
+  {
+    "title": "协程",
+    "slug": "kotlin-13-coroutines",
+    "description": "学习suspend、launch/async、Flow和Channel",
+    "content": "# 协程\n\n## 什么是协程？\n协程是Kotlin的轻量级并发方案，可以像写同步代码一样实现异步操作。协程挂起时不阻塞线程，效率远高于传统线程。\n\n## suspend 函数\n`suspend` 关键字标记可挂起的函数，只能在协程或另一个suspend函数中调用：\n\n```kotlin\nsuspend fun fetchData(): String {\n    delay(1000)  // 挂起1秒，不阻塞线程\n    return \"数据\"\n}\n```\n\n## launch 与 async\n- `launch` — 启动一个协程，不返回结果（返回Job）\n- `async` — 启动一个协程，返回结果（返回Deferred<T>）\n\n```kotlin\nval job = launch {\n    delay(500)\n    println(\"完成\")\n}\n\nval deferred = async {\n    delay(500)\n    42\n}\nval result = deferred.await()  // 42\n```\n\n## Flow\nFlow是协程的冷数据流，类似响应式流：\n\n```kotlin\nfun simpleFlow(): Flow<Int> = flow {\n    for (i in 1..3) {\n        emit(i)  // 发射值\n    }\n}\n\n// 收集\nsimpleFlow().collect { value ->\n    println(value)\n}\n```\n\nFlow的操作符：\n- `map` — 变换每个值\n- `filter` — 过滤值\n- `take` — 取前n个值\n- `collect` — 终端操作，收集所有值\n\n## Channel\nChannel是协程间通信的管道：\n\n```kotlin\nval channel = Channel<Int>()\nlaunch {\n    channel.send(1)\n    channel.send(2)\n    channel.close()\n}\nlaunch {\n    for (value in channel) {\n        println(value)\n    }\n}\n```\n\n## 练习\n编写函数 `createFlow()`，返回一个发射1到5的Flow<Int>。\n编写suspend函数 `sumFlow(flow: Flow<Int>)`，收集Flow中所有值并返回它们的和。",
+    "order": 13,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "import kotlinx.coroutines.flow.Flow\nimport kotlinx.coroutines.flow.flow\nimport kotlinx.coroutines.flow.toList\n\nfun createFlow(): Flow<Int> {\n    // 返回一个发射1到5的Flow\n    return flow { }\n}\n\nsuspend fun sumFlow(flow: Flow<Int>): Int {\n    // 收集Flow中所有值并返回和\n    return 0\n}",
+    "solution_code": "import kotlinx.coroutines.flow.Flow\nimport kotlinx.coroutines.flow.flow\nimport kotlinx.coroutines.flow.toList\n\nfun createFlow(): Flow<Int> {\n    return flow {\n        for (i in 1..5) {\n            emit(i)\n        }\n    }\n}\n\nsuspend fun sumFlow(flow: Flow<Int>): Int {\n    return flow.toList().sum()\n}",
+    "test_cases": [
+      {
+        "input": "createFlow().toList()",
+        "expected_output": "[1, 2, 3, 4, 5]",
+        "description": "createFlow应发射1到5"
+      },
+      {
+        "input": "sumFlow(createFlow())",
+        "expected_output": "15",
+        "description": "1+2+3+4+5=15"
+      }
+    ],
+    "hint": "flow { emit(value) } 创建Flow，toList() 收集为列表，sum() 求和"
+  },
+  {
+    "title": "与Java互操作",
+    "slug": "kotlin-14-java-interop",
+    "description": "学习调用Java代码、@JvmName和平台类型",
+    "content": "# 与Java互操作\n\n## Kotlin调用Java\nKotlin与Java完全互操作，可以直接调用Java类和方法：\n\n```kotlin\n// Java: public class JavaUtil { public static String hello() { return \"Hi\"; } }\nval msg = JavaUtil.hello()  // 直接调用Java静态方法\n```\n\n## 平台类型\nJava中的引用可能为null，但Java没有标记可空性。Kotlin将其视为**平台类型**，既可当作可空也可当作不可空：\n\n```kotlin\n// Java: public String getName() { return null; }\nval name: String = javaObj.name     // 可能NPE！\nval safeName: String? = javaObj.name // 安全处理\n```\n\n**最佳实践：从Java接收的值统一当作可空类型处理。**\n\n## @JvmName\n`@JvmName` 改变Kotlin代码在Java中暴露的名字：\n\n```kotlin\n@JvmName(\"getFormattedName\")\nfun getName(): String = \"Alice\"\n```\n\nJava中调用：`getFormattedName()` 而不是 `getName()`。\n\n## @JvmStatic\n在伴生对象中标记方法，使其在Java中可以作为静态方法调用：\n\n```kotlin\nclass Utils {\n    companion object {\n        @JvmStatic\n        fun helper() { ... }\n    }\n}\n```\n\nJava中：`Utils.helper()` 而不是 `Utils.Companion.helper()`。\n\n## @JvmOverloads\n为有默认参数的函数生成Java重载方法：\n\n```kotlin\n@JvmOverloads\nfun greet(name: String, greeting: String = \"Hello\"): String {\n    return \"$greeting, $name!\"\n}\n```\n\nJava中可以调用 `greet(\"Alice\")` 或 `greet(\"Alice\", \"Hi\")`。\n\n## @JvmField\n将属性暴露为Java字段而非getter/setter：\n\n```kotlin\nclass Config {\n    @JvmField\n    val version = 1\n}\n```\n\nJava中：`config.version` 而不是 `config.getVersion()`。\n\n## 练习\n编写函数 `safeJavaString(value: String?)`，模拟处理Java返回的可空字符串：如果为null返回\"unknown\"，否则返回原值的大写形式。\n编写带 `@JvmName(\"calculateSum\")` 注解的函数 `sum(a: Int, b: Int)`，返回两数之和。",
+    "order": 14,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "// 模拟 Java 互操作：平台类型处理\n@file:JvmName(\"PlatformUtils\")\n\n// TODO: 处理来自 Java 的平台类型（可能为 null）\nfun processJavaValue(value: String?): String {\n    // 使用安全调用和 Elvis 操作符\n    return \"\"\n}\n\n// TODO: 使用 @JvmOverloads 提供默认参数\n@JvmOverloads\nfun buildUrl(base: String, path: String = \"/\", port: Int = 80): String {\n    return \"\"\n}",
+    "solution_code": "@file:JvmName(\"PlatformUtils\")\n\nfun processJavaValue(value: String?): String {\n    return value?.trim()?.uppercase() ?: \"<null>\"\n}\n\n@JvmOverloads\nfun buildUrl(base: String, path: String = \"/\", port: Int = 80): String {\n    return \"http://:\"\n}",
+    "test_cases": [
+      {
+        "input": "processJavaValue(\"hello\")",
+        "expected_output": "HELLO",
+        "description": "非null平台类型应正常处理"
+      },
+      {
+        "input": "processJavaValue(null)",
+        "expected_output": "<null>",
+        "description": "null平台类型应返回安全默认值"
+      },
+      {
+        "input": "processJavaValue(\"  kotlin  \")",
+        "expected_output": "KOTLIN",
+        "description": "应trim后转大写"
+      },
+      {
+        "input": "buildUrl(\"example.com\")",
+        "expected_output": "http://example.com:80/",
+        "description": "@JvmOverloads默认参数应生效"
+      },
+      {
+        "input": "buildUrl(\"localhost\", \"/api\", 8080)",
+        "expected_output": "http://localhost:8080/api",
+        "description": "重载参数应正确构建URL"
+      }
+    ],
+    "hint": "用 ?. 安全调用和 ?: Elvis操作符处理平台类型的null；@JvmName 放在函数声明前"
+  },
+  {
+    "title": "Android基础",
+    "slug": "kotlin-15-android",
+    "description": "学习Activity、View和ViewModel基础",
+    "content": "# Android基础\n\n## Activity\nActivity是Android应用的核心组件，代表一个屏幕界面：\n\n```kotlin\nclass MainActivity : AppCompatActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContentView(R.layout.activity_main)\n    }\n}\n```\n\nActivity生命周期关键方法：\n- `onCreate()` — 创建时调用，初始化界面\n- `onStart()` — 即将可见\n- `onResume()` — 获得焦点，可与用户交互\n- `onPause()` — 失去焦点\n- `onStop()` — 不再可见\n- `onDestroy()` — 销毁前调用\n\n## View\nView是所有UI组件的基类。Kotlin提供了视图绑定（View Binding）简化视图访问：\n\n```kotlin\n// 传统方式\nval textView = findViewById<TextView>(R.id.textView)\ntextView.text = \"Hello\"\n\n// View Binding方式\nval binding = ActivityMainBinding.inflate(layoutInflater)\nbinding.textView.text = \"Hello\"\n```\n\n常用View操作：\n- `textView.text = \"内容\"` — 设置文字\n- `button.setOnClickListener { }` — 设置点击监听\n- `view.visibility = View.GONE` — 隐藏视图\n\n## ViewModel\nViewModel用于存储和管理与UI相关的数据，在配置变更（如旋转屏幕）时不会丢失：\n\n```kotlin\nclass CounterViewModel : ViewModel() {\n    private val _count = MutableLiveData(0)\n    val count: LiveData<Int> = _count\n\n    fun increment() {\n        _count.value = (_count.value ?: 0) + 1\n    }\n}\n```\n\n在Activity中使用：\n\n```kotlin\nval viewModel: CounterViewModel by viewModels()\nviewModel.count.observe(this) { count ->\n    textView.text = count.toString()\n}\n```\n\n## 练习\n编写一个模拟ViewModel的类 `SimpleCounter`，包含私有计数器和公开方法：\n- `increment()` — 计数器加1\n- `decrement()` — 计数器减1\n- `getCount()` — 返回当前计数值\n编写函数 `simulateClicks(counter: SimpleCounter, clicks: List<String>)`，根据列表中的\"+\"和\"-\"操作计数器，返回最终值。",
+    "order": 15,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "// 模拟 Android ViewModel 模式\n\n// TODO: 实现 LiveData 风格的观察者模式\nclass LiveData<T>(private var value: T) {\n    private val observers = mutableListOf<(T) -> Unit>()\n\n    fun observe(observer: (T) -> Unit) {\n        // 注册观察者并立即通知当前值\n    }\n\n    fun setValue(newValue: T) {\n        // 更新值并通知所有观察者\n    }\n\n    fun getValue(): T = value\n}",
+    "solution_code": "class LiveData<T>(private var value: T) {\n    private val observers = mutableListOf<(T) -> Unit>()\n\n    fun observe(observer: (T) -> Unit) {\n        observers.add(observer)\n        observer(value)\n    }\n\n    fun setValue(newValue: T) {\n        value = newValue\n        observers.forEach { it(value) }\n    }\n\n    fun getValue(): T = value\n}",
+    "test_cases": [
+      {
+        "input": "run { val ld = LiveData(0); val results = mutableListOf<Int>(); ld.observe { results.add(it) }; ld.setValue(5); ld.setValue(10); results.joinToString(\",\") }",
+        "expected_output": "0,5,10",
+        "description": "LiveData观察者应收到所有更新"
+      },
+      {
+        "input": "run { val ld = LiveData(\"init\"); val results = mutableListOf<String>(); ld.observe { results.add(it) }; ld.setValue(\"updated\"); results.joinToString(\",\") }",
+        "expected_output": "init,updated",
+        "description": "observe后应收到初始值和更新值"
+      }
+    ],
+    "hint": "SimpleCounter用var维护内部状态，simulateClicks遍历列表用when判断操作"
+  },
+  {
+    "title": "综合项目：天气查询App",
+    "slug": "kotlin-16-weather-app",
+    "description": "综合运用所学知识，构建一个天气查询应用",
+    "content": "# 综合项目：天气查询App\n\n恭喜你来到最后一关！我们将综合运用前面所学的Kotlin知识，构建一个天气查询应用的核心逻辑。\n\n## 项目概述\n我们将实现一个简化的天气查询系统，包含：\n- 数据类表示天气信息\n- 模拟数据源（Map存储城市天气）\n- 查询与过滤功能\n- 统计与排序功能\n\n## 涉及知识点回顾\n- **数据类** — 定义Weather数据结构\n- **空安全** — 处理城市不存在的情况\n- **集合操作** — filter、map、sortedBy等\n- **高阶函数** — 灵活的查询条件\n- **密封类** — 表示查询结果状态\n\n## 密封类\n密封类（sealed class）限制子类只能在同一文件中定义，适合表示有限的状态集合：\n\n```kotlin\nsealed class Result {\n    data class Success(val data: String) : Result()\n    data class Error(val message: String) : Result()\n}\n```\n\n配合 `when` 使用时，编译器会检查是否覆盖所有情况。\n\n## 练习\n定义数据类 `Weather(val city: String, val temp: Int, val condition: String)`。\n定义密封类 `WeatherResult`，包含 `Success(weather: Weather)` 和 `NotFound(cityName: String)` 两个子类。\n\n编写函数 `queryWeather(city: String, data: Map<String, Weather>)`，在城市存在时返回 `WeatherResult.Success`，否则返回 `WeatherResult.NotFound`。\n\n编写函数 `findWarmCities(weathers: List<Weather>, minTemp: Int)`，返回温度不低于minTemp的城市名列表，按温度从高到低排序。",
+    "order": 16,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "data class Weather(val city: String, val temp: Int, val condition: String)\n\nsealed class WeatherResult {\n    data class Success(val weather: Weather) : WeatherResult()\n    data class NotFound(val cityName: String) : WeatherResult()\n}\n\nfun queryWeather(city: String, data: Map<String, Weather>): WeatherResult {\n    // 查询城市天气，存在返回Success，否则返回NotFound\n    return WeatherResult.NotFound(city)\n}\n\nfun findWarmCities(weathers: List<Weather>, minTemp: Int): List<String> {\n    // 返回温度不低于minTemp的城市名，按温度降序排列\n    return emptyList()\n}",
+    "solution_code": "data class Weather(val city: String, val temp: Int, val condition: String)\n\nsealed class WeatherResult {\n    data class Success(val weather: Weather) : WeatherResult()\n    data class NotFound(val cityName: String) : WeatherResult()\n}\n\nfun queryWeather(city: String, data: Map<String, Weather>): WeatherResult {\n    val weather = data[city]\n    return if (weather != null) {\n        WeatherResult.Success(weather)\n    } else {\n        WeatherResult.NotFound(city)\n    }\n}\n\nfun findWarmCities(weathers: List<Weather>, minTemp: Int): List<String> {\n    return weathers\n        .filter { it.temp >= minTemp }\n        .sortedByDescending { it.temp }\n        .map { it.city }\n}",
+    "test_cases": [
+      {
+        "input": "queryWeather(\"Beijing\", mapOf(\"Beijing\" to Weather(\"Beijing\", 25, \"晴\"))).toString()",
+        "expected_output": "Success(weather=Weather(city=Beijing, temp=25, condition=晴))",
+        "description": "查询存在的城市返回Success"
+      },
+      {
+        "input": "queryWeather(\"Shanghai\", emptyMap()).toString()",
+        "expected_output": "NotFound(cityName=Shanghai)",
+        "description": "查询不存在的城市返回NotFound"
+      },
+      {
+        "input": "findWarmCities(listOf(Weather(\"A\", 30, \"晴\"), Weather(\"B\", 15, \"阴\"), Weather(\"C\", 25, \"多云\")), 20)",
+        "expected_output": "[A, C]",
+        "description": "温度>=20的城市按温度降序为A(30),C(25)"
+      },
+      {
+        "input": "findWarmCities(listOf(Weather(\"X\", 10, \"雨\")), 20)",
+        "expected_output": "[]",
+        "description": "没有城市满足温度条件时返回空列表"
+      }
+    ],
+    "hint": "用Map的[]运算符查询，结果为可空类型；filter筛选、sortedByDescending排序、map提取城市名"
+  }
+]

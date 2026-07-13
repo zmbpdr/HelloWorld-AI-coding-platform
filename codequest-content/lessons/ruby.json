@@ -1,0 +1,481 @@
+[
+  {
+    "title": "Hello World",
+    "slug": "ruby-01-hello-world",
+    "description": "学习Ruby基本语法，编写你的第一个程序",
+    "content": "# Hello World - 你的第一个Ruby程序\n\n## 什么是Ruby？\nRuby是一门面向对象的动态编程语言，由松本行弘（Matz）于1995年创建。它的设计哲学是\"让程序员感到快乐\"，强调代码的可读性和简洁性。Ruby中有一个核心理念：**一切皆对象**。你可以把Ruby的世界想象成一个巨大的社交网络，数字 `1`、字符串 `\"hello\"`、甚至 `nil`（空值）都是这个网络中的\"公民\"，每个公民都有自己的能力和方法。\n\n## irb — 交互式Ruby\nRuby自带一个交互式命令行工具 `irb`（Interactive Ruby），就像一个即时对话的聊天室，你输入一行代码，它立刻给你回应：\n\n```ruby\nirb(main):001:0> 1 + 2\n=> 3\nirb(main):002:0> \"hello\".length\n=> 5\n```\n\n## puts 与返回值\n`puts` 是Ruby中最常用的输出方法，它将内容打印到屏幕并返回 `nil`：\n\n```ruby\nputs \"Hello, World!\"  # 打印并返回 nil\n```\n\n在编程闯关中，我们通过**方法**来组织代码。方法使用 `def` 关键字定义，最后一行表达式的值就是返回值（不需要写 `return`，当然写了也可以）：\n\n```ruby\ndef hello\n  \"Hello, World!\"\nend\n```\n\n## 练习\n请编写一个方法 `hello`，返回字符串 `\"Hello, World!\"`。\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "def hello\n  # 在这里编写你的代码\nend",
+    "solution_code": "def hello\n  \"Hello, World!\"\nend",
+    "test_cases": [
+      {
+        "input": "hello",
+        "expected_output": "Hello, World!",
+        "description": "hello 应返回 Hello, World!"
+      }
+    ],
+    "hint": "Ruby方法默认返回最后一行表达式的值，直接写字符串即可"
+  },
+  {
+    "title": "变量与类型",
+    "slug": "ruby-02-variables",
+    "description": "学习Ruby的动态类型、nil和符号Symbol",
+    "content": "# 变量与类型\n\n## 动态类型\nRuby是动态类型语言，变量不需要声明类型，赋什么值就是什么类型。你可以把变量想象成一个\"万能盒子\"，今天装苹果，明天装橙子，盒子本身不限制内容：\n\n```ruby\nx = 42        # x 是整数\nx = \"hello\"   # 现在x是字符串了，完全没问题\n```\n\n## 基本数据类型\n```ruby\n42              # Integer（整数）\n3.14            # Float（浮点数）\n\"hello\"         # String（字符串）\ntrue / false    # TrueClass / FalseClass\nnil             # NilClass（空值）\n:ruby           # Symbol（符号）\n```\n\n## nil — Ruby的\"空\"\n`nil` 表示\"什么都没有\"，类似于其他语言的 `null`。但记住，在Ruby中 **nil也是一个对象**！它有自己的方法：\n\n```ruby\nnil.nil?    # => true\n42.nil?     # => false\n```\n\n## Symbol（符号）\n符号是Ruby的特色类型，以冒号开头。你可以把符号想象成\"身份证号\"——它代表一个唯一的名字，比字符串更轻量、比较更快：\n\n```ruby\n:name == :name    # true，同一个符号\n\"name\" == \"name\"  # true，但每次创建了新的字符串对象\n```\n\n## 练习\n编写方法 `describe_type(value)`，返回值的类型描述字符串。如果值是 `nil` 返回 `\"这是空值\"`，如果是整数返回 `\"这是整数\"`，如果是字符串返回 `\"这是字符串\"`，否则返回 `\"其他类型\"`。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "def describe_type(value)\n  # 在这里编写你的代码\nend",
+    "solution_code": "def describe_type(value)\n  if value.nil?\n    \"这是空值\"\n  elsif value.is_a?(Integer)\n    \"这是整数\"\n  elsif value.is_a?(String)\n    \"这是字符串\"\n  else\n    \"其他类型\"\n  end\nend",
+    "test_cases": [
+      {
+        "input": "describe_type(nil)",
+        "expected_output": "这是空值",
+        "description": "describe_type(nil) 应返回 '这是空值'"
+      },
+      {
+        "input": "describe_type(42)",
+        "expected_output": "这是整数",
+        "description": "describe_type(42) 应返回 '这是整数'"
+      },
+      {
+        "input": "describe_type(\"hello\")",
+        "expected_output": "这是字符串",
+        "description": "describe_type('hello') 应返回 '这是字符串'"
+      },
+      {
+        "input": "describe_type(3.14)",
+        "expected_output": "其他类型",
+        "description": "describe_type(3.14) 应返回 '其他类型'"
+      }
+    ],
+    "hint": "使用 nil? 方法检查nil，使用 is_a? 方法检查类型"
+  },
+  {
+    "title": "字符串与数组",
+    "slug": "ruby-03-strings-arrays",
+    "description": "学习字符串插值、常用方法和Enumerable模块",
+    "content": "# 字符串与数组\n\n## 字符串插值\nRuby使用 `#{}` 在双引号字符串中插入表达式，这比拼接字符串优雅得多：\n\n```ruby\nname = \"Ruby\"\n\"Hello, #{name}!\"       # => \"Hello, Ruby!\"\n\"2 + 3 = #{2 + 3}\"      # => \"2 + 3 = 5\"\n```\n\n注意：单引号字符串不支持插值，`'Hello, #{name}'` 会原样输出。\n\n## 字符串常用方法\n```ruby\n\"hello\".upcase       # => \"HELLO\"\n\"HELLO\".downcase     # => \"hello\"\n\"hello world\".capitalize  # => \"Hello world\"\n\"hello\".reverse      # => \"olleh\"\n\"hello\".length       # => 5\n\"hello world\".split  # => [\"hello\", \"world\"]\n```\n\n## 数组\n数组是有序集合，可以存放任意类型的元素：\n\n```ruby\nfruits = [\"apple\", \"banana\", \"cherry\"]\nfruits[0]        # => \"apple\"\nfruits[-1]       # => \"cherry\"（负索引从末尾开始）\nfruits << \"date\"  # 追加元素\n```\n\n## Enumerable模块 — Ruby的超级武器\nEnumerable是Ruby最强大的模块，只要一个类实现了 `each` 方法，就可以混入Enumerable获得几十个实用方法。你可以把它想象成\"万能瑞士军刀\"——只要你有刀柄（each），就能装上各种工具：\n\n```ruby\n[1, 2, 3, 4, 5].map { |n| n * 2 }       # => [2, 4, 6, 8, 10]\n[1, 2, 3, 4, 5].select { |n| n.even? }  # => [2, 4]\n[1, 2, 3, 4, 5].reduce { |sum, n| sum + n }  # => 15\n```\n\n## 练习\n编写方法 `transform_strings(words)`，接收一个字符串数组，将每个字符串转为大写并反转，返回新数组。",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "def transform_strings(words)\n  # 将每个字符串转为大写并反转\nend",
+    "solution_code": "def transform_strings(words)\n  words.map { |word| word.upcase.reverse }\nend",
+    "test_cases": [
+      {
+        "input": "transform_strings([\"hello\", \"world\"])",
+        "expected_output": "[\"OLLEH\", \"DLROW\"]",
+        "description": "transform_strings 应将字符串大写并反转"
+      },
+      {
+        "input": "transform_strings([\"ruby\"])",
+        "expected_output": "[\"YBUR\"]",
+        "description": "transform_strings([\"ruby\"]) 应返回 [\"YBUR\"]"
+      },
+      {
+        "input": "transform_strings([])",
+        "expected_output": "[]",
+        "description": "空数组应返回空数组"
+      }
+    ],
+    "hint": "使用 map 方法遍历数组，链式调用 upcase 和 reverse"
+  },
+  {
+    "title": "哈希与范围",
+    "slug": "ruby-04-hashes-ranges",
+    "description": "学习Hash、Range和迭代",
+    "content": "# 哈希与范围\n\n## Hash（哈希）\n哈希是键值对的集合，就像一本字典——通过\"词条\"（键）快速找到\"释义\"（值）：\n\n```ruby\nperson = { name: \"Alice\", age: 25, city: \"Beijing\" }\nperson[:name]    # => \"Alice\"\nperson[:age]     # => 25\n\n# 旧语法（箭头式）\nperson2 = { :name => \"Bob\", :age => 30 }\n```\n\n### 哈希常用方法\n```ruby\nperson.keys       # => [:name, :age, :city]\nperson.values     # => [\"Alice\", 25, \"Beijing\"]\nperson.has_key?(:name)  # => true\nperson.merge(age: 26)   # 合并返回新哈希\n```\n\n### 哈希迭代\n```ruby\nperson.each do |key, value|\n  puts \"#{key}: #{value}\"\nend\n```\n\n## Range（范围）\n范围表示一个区间，用 `..`（包含结尾）或 `...`（不包含结尾）创建：\n\n```ruby\n1..5      # 包含5：1, 2, 3, 4, 5\n1...5     # 不包含5：1, 2, 3, 4\n'a'..'e'  # 字符范围：a, b, c, d, e\n```\n\n范围常与数组方法配合使用：\n```ruby\n(1..5).to_a        # => [1, 2, 3, 4, 5]\n(1..10).select(&:even?)  # => [2, 4, 6, 8, 10]\n```\n\n## 练习\n编写方法 `filter_hash(data, min_value)`，接收一个哈希和一个最小值，返回值大于等于 min_value 的键值对组成的新哈希。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "def filter_hash(data, min_value)\n  # 返回值大于等于 min_value 的键值对\nend",
+    "solution_code": "def filter_hash(data, min_value)\n  data.select { |key, value| value >= min_value }\nend",
+    "test_cases": [
+      {
+        "input": "filter_hash({a: 10, b: 5, c: 20}, 10)",
+        "expected_output": "{:a=>10, :c=>20}",
+        "description": "filter_hash 应过滤出值大于等于10的键值对"
+      },
+      {
+        "input": "filter_hash({x: 1, y: 2, z: 3}, 5)",
+        "expected_output": "{}",
+        "description": "所有值都小于5时应返回空哈希"
+      },
+      {
+        "input": "filter_hash({a: 100, b: 200}, 50)",
+        "expected_output": "{:a=>100, :b=>200}",
+        "description": "所有值都满足时应返回全部键值对"
+      }
+    ],
+    "hint": "Hash 也有 select 方法，块接收两个参数 key 和 value"
+  },
+  {
+    "title": "控制流",
+    "slug": "ruby-05-control-flow",
+    "description": "学习if/unless/case、while/until和循环",
+    "content": "# 控制流\n\n## if / elsif / else\nRuby的条件判断和其他语言类似，但更加优雅：\n\n```ruby\nif score >= 90\n  \"优秀\"\nelsif score >= 60\n  \"及格\"\nelse\n  \"不及格\"\nend\n```\n\n## unless — 反向的if\n`unless` 是Ruby的特色语法，表示\"除非\"，等价于 `if not`：\n\n```ruby\nunless user.nil?\n  puts \"欢迎, #{user.name}\"\nend\n# 等价于：if !user.nil?\n```\n\n## case 语句\n`case` 用于多条件分支，比多个elsif更清晰：\n\n```ruby\ncase status\nwhen :active   then \"活跃\"\nwhen :inactive then \"未激活\"\nwhen :banned   then \"已封禁\"\nelse \"未知状态\"\nend\n```\n\n## while / until\n```ruby\n# while：当条件为真时执行\ni = 0\nwhile i < 5\n  puts i\n  i += 1\nend\n\n# until：直到条件为真时停止（while的反面）\ni = 0\nuntil i >= 5\n  puts i\n  i += 1\nend\n```\n\n## 循环的修饰语法\nRuby支持将条件放在后面，让代码更简洁：\n\n```ruby\nputs \"hello\" while false   # 不会执行\nputs \"hello\" if true       # 会执行\n```\n\n## 练习\n编写方法 `fizzbuzz(n)`，对数字n返回对应字符串：能被3和5整除返回 `\"FizzBuzz\"`，只能被3整除返回 `\"Fizz\"`，只能被5整除返回 `\"Buzz\"`，否则返回数字本身的字符串形式。",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "def fizzbuzz(n)\n  # 实现 FizzBuzz 逻辑\nend",
+    "solution_code": "def fizzbuzz(n)\n  if n % 15 == 0\n    \"FizzBuzz\"\n  elsif n % 3 == 0\n    \"Fizz\"\n  elsif n % 5 == 0\n    \"Buzz\"\n  else\n    n.to_s\n  end\nend",
+    "test_cases": [
+      {
+        "input": "fizzbuzz(15)",
+        "expected_output": "FizzBuzz",
+        "description": "15能被3和5整除，应返回FizzBuzz"
+      },
+      {
+        "input": "fizzbuzz(9)",
+        "expected_output": "Fizz",
+        "description": "9能被3整除，应返回Fizz"
+      },
+      {
+        "input": "fizzbuzz(10)",
+        "expected_output": "Buzz",
+        "description": "10能被5整除，应返回Buzz"
+      },
+      {
+        "input": "fizzbuzz(7)",
+        "expected_output": "7",
+        "description": "7不能被3或5整除，应返回'7'"
+      }
+    ],
+    "hint": "先判断同时被3和5整除的情况（即被15整除），再分别判断"
+  },
+  {
+    "title": "方法与块",
+    "slug": "ruby-06-methods-blocks",
+    "description": "学习def、yield、Proc和Lambda",
+    "content": "# 方法与块\n\n## 方法定义\nRuby使用 `def` 定义方法，方法名习惯使用蛇形命名法（snake_case）：\n\n```ruby\ndef greet(name)\n  \"Hello, #{name}!\"\nend\n\ndef add(a, b)\n  a + b  # 最后一行自动返回\nend\n```\n\n### 默认参数与关键字参数\n```ruby\ndef greet(name = \"World\")\n  \"Hello, #{name}!\"\nend\n\ndef create_user(name:, age:)\n  \"#{name}, #{age}岁\"\nend\n```\n\n## 块（Block）— Ruby的灵魂\n块是Ruby最独特的特性。你可以把块想象成一个\"可折叠的指令清单\"——你把清单交给方法，方法在合适的时机打开清单执行里面的指令。块不是对象，但它是Ruby中最灵活的代码组织方式：\n\n```ruby\n[1, 2, 3].each { |n| puts n }\n\n# 多行块用 do...end\n[1, 2, 3].each do |n|\n  puts n\n  puts n * 2\nend\n```\n\n## yield — 让出控制权\n`yield` 在方法中调用传入的块：\n\n```ruby\ndef run_twice\n  yield\n  yield\nend\n\nrun_twice { puts \"Hi!\" }  # 打印两次 Hi!\n```\n\n## Proc 与 Lambda\n块不是对象，但可以用 `Proc` 把块变成对象。Proc和Lambda的区别在于：Lambda检查参数数量且return只从自身返回，而Proc不检查参数且return会从外层方法返回：\n\n```ruby\nmy_proc = Proc.new { |x| x * 2 }\nmy_proc.call(5)  # => 10\n\nmy_lambda = ->(x) { x * 2 }\nmy_lambda.call(5)  # => 10\n```\n\n## 练习\n编写方法 `transform(array)`，接收一个数组和一个块，对数组中每个元素执行块中的操作并返回新数组。再编写方法 `double_all(nums)` 调用 `transform`，将数组中每个元素乘以2。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "def transform(array)\n  # 对每个元素执行块操作，返回新数组\nend\n\ndef double_all(nums)\n  # 调用 transform，将每个元素乘以2\nend",
+    "solution_code": "def transform(array)\n  result = []\n  array.each { |item| result << yield(item) }\n  result\nend\n\ndef double_all(nums)\n  transform(nums) { |n| n * 2 }\nend",
+    "test_cases": [
+      {
+        "input": "double_all([1, 2, 3])",
+        "expected_output": "[2, 4, 6]",
+        "description": "double_all 应将每个元素乘以2"
+      },
+      {
+        "input": "double_all([0])",
+        "expected_output": "[0]",
+        "description": "double_all([0]) 应返回 [0]"
+      },
+      {
+        "input": "double_all([])",
+        "expected_output": "[]",
+        "description": "空数组应返回空数组"
+      }
+    ],
+    "hint": "在 transform 中使用 yield(item) 调用块，在 double_all 中传入 { |n| n * 2 } 块"
+  },
+  {
+    "title": "类与对象",
+    "slug": "ruby-07-classes",
+    "description": "学习class、initialize和attr_accessor",
+    "content": "# 类与对象\n\n## 定义类\nRuby是纯面向对象语言，一切皆对象。类是对象的\"蓝图\"，对象是类的\"实例\"。就像建筑图纸和实际建筑的关系——图纸定义了结构，每栋建筑都是按图纸建造的具体实例：\n\n```ruby\nclass Dog\n  def initialize(name, breed)\n    @name = name\n    @breed = breed\n  end\n\n  def bark\n    \"#{@name} says: Woof!\"\n  end\nend\n\ndog = Dog.new(\"Rex\", \"German Shepherd\")\ndog.bark  # => \"Rex says: Woof!\"\n```\n\n## 实例变量\n以 `@` 开头的变量是实例变量，属于对象本身，不同对象各自持有独立的实例变量。\n\n## attr_accessor — 自动生成读写方法\n手动写getter/setter太繁琐，Ruby提供了快捷方式：\n\n```ruby\nclass Person\n  attr_accessor :name, :age    # 自动生成 getter 和 setter\n  attr_reader :id              # 只生成 getter\n  attr_writer :email           # 只生成 setter\n\n  def initialize(name, age)\n    @name = name\n    @age = age\n  end\nend\n\np = Person.new(\"Alice\", 25)\np.name       # => \"Alice\"\np.name = \"Bob\"\np.age = 26\n```\n\n## self 关键字\n在方法内部，`self` 指向当前对象：\n\n```ruby\nclass Person\n  attr_accessor :name\n\n  def introduce\n    \"My name is #{self.name}\"\n  end\nend\n```\n\n## 练习\n创建一个 `BankAccount` 类，包含 `owner`（户主名）和 `balance`（余额，默认为0）。实现 `deposit(amount)` 存款方法、`withdraw(amount)` 取款方法（余额不足时返回 `\"余额不足\"`），以及 `check_balance` 方法返回 `\"#{owner}的余额: #{balance}元\"`。",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "class BankAccount\n  # 定义属性\n\n  def initialize(owner)\n    # 初始化\n  end\n\n  def deposit(amount)\n    # 存款\n  end\n\n  def withdraw(amount)\n    # 取款，余额不足返回 \"余额不足\"\n  end\n\n  def check_balance\n    # 返回余额信息字符串\n  end\nend",
+    "solution_code": "class BankAccount\n  attr_accessor :owner, :balance\n\n  def initialize(owner)\n    @owner = owner\n    @balance = 0\n  end\n\n  def deposit(amount)\n    @balance += amount\n  end\n\n  def withdraw(amount)\n    if amount > @balance\n      \"余额不足\"\n    else\n      @balance -= amount\n    end\n  end\n\n  def check_balance\n    \"#{owner}的余额: #{balance}元\"\n  end\nend",
+    "test_cases": [
+      {
+        "input": "acc = BankAccount.new(\"张三\"); acc.deposit(100); acc.check_balance",
+        "expected_output": "张三的余额: 100元",
+        "description": "存款后应正确显示余额"
+      },
+      {
+        "input": "acc = BankAccount.new(\"李四\"); acc.withdraw(50)",
+        "expected_output": "余额不足",
+        "description": "余额不足时应返回'余额不足'"
+      },
+      {
+        "input": "acc = BankAccount.new(\"王五\"); acc.deposit(200); acc.withdraw(50); acc.balance",
+        "expected_output": "150",
+        "description": "存取款后余额应正确"
+      }
+    ],
+    "hint": "使用 attr_accessor 生成属性的读写方法，在 withdraw 中先判断余额是否充足"
+  },
+  {
+    "title": "模块与混入",
+    "slug": "ruby-08-modules",
+    "description": "学习module、include/extend和命名空间",
+    "content": "# 模块与混入\n\n## 什么是模块？\n模块（Module）是Ruby中组织代码的重要方式，它有两个主要用途：**混入（Mixin）**和**命名空间**。你可以把模块想象成一个\"技能包\"——类可以通过混入获得模块中定义的方法，就像游戏角色装备技能包获得新能力一样。Ruby不支持多继承，但通过模块混入可以达到类似效果。\n\n```ruby\nmodule Greetable\n  def greet\n    \"Hello, I'm #{name}!\"\n  end\nend\n```\n\n## include — 混入实例方法\n`include` 将模块方法变为类的实例方法：\n\n```ruby\nclass Person\n  include Greetable\n  attr_accessor :name\n\n  def initialize(name)\n    @name = name\n  end\nend\n\nPerson.new(\"Alice\").greet  # => \"Hello, I'm Alice!\"\n```\n\n## extend — 混入类方法\n`extend` 将模块方法变为类方法：\n\n```ruby\nmodule ClassMethods\n  def create_default\n    new(\"Default\")\n  end\nend\n\nclass Person\n  extend ClassMethods\n  attr_accessor :name\n\n  def initialize(name)\n    @name = name\n  end\nend\n\nPerson.create_default.name  # => \"Default\"\n```\n\n## 命名空间\n模块还可以用作命名空间，避免类名冲突：\n\n```ruby\nmodule Game\n  class Player\n    def initialize(name)\n      @name = name\n    end\n  end\nend\n\nplayer = Game::Player.new(\"Hero\")\n```\n\n## 练习\n创建模块 `Calculable`，包含方法 `square(n)` 返回n的平方，和 `cube(n)` 返回n的立方。然后创建类 `Calculator`，通过 `include` 混入 `Calculable` 模块，使 `Calculator` 的实例可以调用这两个方法。",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "module Calculable\n  # 定义 square 方法\n\n  # 定义 cube 方法\n\nend\n\nclass Calculator\n  # 混入 Calculable 模块\n\nend",
+    "solution_code": "module Calculable\n  def square(n)\n    n ** 2\n  end\n\n  def cube(n)\n    n ** 3\n  end\nend\n\nclass Calculator\n  include Calculable\nend",
+    "test_cases": [
+      {
+        "input": "Calculator.new.square(5)",
+        "expected_output": "25",
+        "description": "square(5) 应返回 25"
+      },
+      {
+        "input": "Calculator.new.cube(3)",
+        "expected_output": "27",
+        "description": "cube(3) 应返回 27"
+      },
+      {
+        "input": "Calculator.new.square(0)",
+        "expected_output": "0",
+        "description": "square(0) 应返回 0"
+      }
+    ],
+    "hint": "在模块中定义方法，在类中使用 include 混入模块"
+  },
+  {
+    "title": "元编程",
+    "slug": "ruby-09-metaprogramming",
+    "description": "学习define_method、method_missing和eval",
+    "content": "# 元编程\n\n## 什么是元编程？\n元编程是\"编写能编写代码的代码\"——程序在运行时动态地创建或修改自身结构。Ruby的元编程能力极其强大，这也是Rails等框架的基石。你可以把元编程想象成\"给自己做手术的医生\"——程序在运行时可以检查自身、定义新方法、甚至拦截不存在的方法调用。\n\n## define_method — 动态定义方法\n`define_method` 在运行时动态创建方法：\n\n```ruby\nclass Animal\n  [:dog, :cat, :bird].each do |animal|\n    define_method(\"#{animal}_sound\") do\n      case animal\n      when :dog  then \"Woof!\"\n      when :cat  then \"Meow!\"\n      when :bird then \"Tweet!\"\n      end\n    end\n  end\nend\n\nAnimal.new.dog_sound   # => \"Woof!\"\nAnimal.new.cat_sound   # => \"Meow!\"\n```\n\n## method_missing — 捕获未定义方法\n当一个对象收到无法识别的方法调用时，`method_missing` 会被触发：\n\n```ruby\nclass FlexibleObject\n  def method_missing(name, *args)\n    if name.to_s.start_with?(\"say_\")\n      word = name.to_s.sub(\"say_\", \"\")\n      \"#{word}!\"\n    else\n      super  # 交给上层处理\n    end\n  end\n\n  def respond_to_missing?(name, include_private = false)\n    name.to_s.start_with?(\"say_\") || super\n  end\nend\n\nobj = FlexibleObject.new\nobj.say_hello  # => \"hello!\"\n```\n\n## eval — 执行字符串代码\n`eval` 可以将字符串当作Ruby代码执行（注意安全风险）：\n\n```ruby\neval(\"2 + 3\")  # => 5\n```\n\n## 练习\n创建类 `DynamicBuilder`，使用 `define_method` 动态生成方法。实现类方法 `create_method(name, &block)`，调用后为类动态定义一个名为 `name` 的实例方法，方法体为传入的块。然后使用 `create_method(:greet) { \"Hello!\" }` 创建 greet 方法。",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "class DynamicBuilder\n  # 实现 create_method 类方法\n\nend\n\n# 动态创建 greet 方法",
+    "solution_code": "class DynamicBuilder\n  def self.create_method(name, &block)\n    define_method(name, &block)\n  end\nend\n\nDynamicBuilder.create_method(:greet) { \"Hello!\" }",
+    "test_cases": [
+      {
+        "input": "DynamicBuilder.new.greet",
+        "expected_output": "Hello!",
+        "description": "动态创建的 greet 方法应返回 Hello!"
+      }
+    ],
+    "hint": "在类方法中使用 define_method(name, &block) 动态定义实例方法"
+  },
+  {
+    "title": "异常处理",
+    "slug": "ruby-10-exceptions",
+    "description": "学习begin/rescue/ensure和自定义异常",
+    "content": "# 异常处理\n\n## 基本语法\nRuby使用 `begin/rescue/ensure` 结构处理异常，类似于其他语言的 try/catch/finally：\n\n```ruby\nbegin\n  # 可能出错的代码\n  result = 10 / 0\nrescue ZeroDivisionError => e\n  puts \"除零错误: #{e.message}\"\nrescue => e\n  puts \"其他错误: #{e.message}\"\nensure\n  puts \"无论如何都会执行\"\nend\n```\n\n## rescue 的简写\n在方法中可以直接使用 `rescue`，不需要 `begin`：\n\n```ruby\ndef safe_divide(a, b)\n  a / b\nrescue ZeroDivisionError\n  \"不能除以零\"\nend\n```\n\n## raise — 主动抛出异常\n```ruby\ndef set_age(age)\n  raise ArgumentError, \"年龄不能为负数\" if age < 0\n  @age = age\nend\n```\n\n## 自定义异常\n继承 `StandardError` 创建自定义异常类：\n\n```ruby\nclass InsufficientBalanceError < StandardError\n  def initialize(message = \"余额不足\")\n    super(message)\n  end\nend\n\nraise InsufficientBalanceError\nraise InsufficientBalanceError, \"您的余额仅剩10元\"\n```\n\n## ensure 与 retry\n`ensure` 块无论是否异常都会执行，常用于资源清理。`retry` 可以重新执行 `begin` 块：\n\n```ruby\nattempts = 0\nbegin\n  attempts += 1\n  risky_operation\nrescue\n  retry if attempts < 3\n  raise\nend\n```\n\n## 练习\n编写方法 `safe_parse_int(str)`，尝试将字符串转为整数。如果字符串不是合法整数，返回0。编写方法 `divide(a, b)`，如果b为0则抛出自定义异常 `DivisionByZeroError`，否则返回除法结果。",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "class DivisionByZeroError < StandardError\nend\n\ndef safe_parse_int(str)\n  # 尝试转为整数，失败返回0\nend\n\ndef divide(a, b)\n  # b为0时抛出 DivisionByZeroError\nend",
+    "solution_code": "class DivisionByZeroError < StandardError\nend\n\ndef safe_parse_int(str)\n  Integer(str)\nrescue ArgumentError, TypeError\n  0\nend\n\ndef divide(a, b)\n  raise DivisionByZeroError, \"不能除以零\" if b == 0\n  a.to_f / b\nend",
+    "test_cases": [
+      {
+        "input": "safe_parse_int(\"42\")",
+        "expected_output": "42",
+        "description": "合法整数字符串应正确转换"
+      },
+      {
+        "input": "safe_parse_int(\"abc\")",
+        "expected_output": "0",
+        "description": "非法字符串应返回0"
+      },
+      {
+        "input": "safe_parse_int(nil)",
+        "expected_output": "0",
+        "description": "nil应返回0"
+      },
+      {
+        "input": "divide(10, 3).to_f.round(4).to_s",
+        "expected_output": "3.3333",
+        "description": "divide(10,3) 应返回约 3.3333（保留4位小数）"
+      }
+    ],
+    "hint": "使用 Integer() 严格转换，rescue 捕获 ArgumentError 和 TypeError；divide 中用 raise 抛出自定义异常"
+  },
+  {
+    "title": "文件与IO",
+    "slug": "ruby-11-file-io",
+    "description": "学习File类、IO流和序列化",
+    "content": "# 文件与IO\n\n## File 类\nRuby提供了强大的文件操作能力。`File` 类是文件操作的核心：\n\n```ruby\n# 写入文件\nFile.write(\"hello.txt\", \"Hello, Ruby!\")\n\n# 读取文件\ncontent = File.read(\"hello.txt\")\n\n# 追加内容\nFile.open(\"hello.txt\", \"a\") do |f|\n  f.puts \"Another line\"\nend\n\n# 逐行读取\nFile.foreach(\"hello.txt\") do |line|\n  puts line\nend\n```\n\n## 文件信息\n```ruby\nFile.exist?(\"hello.txt\")   # 是否存在\nFile.size(\"hello.txt\")     # 文件大小（字节）\nFile.extname(\"photo.jpg\")  # 扩展名 \".jpg\"\nFile.basename(\"/path/to/file.txt\")  # \"file.txt\"\nFile.dirname(\"/path/to/file.txt\")   # \"/path/to\"\n```\n\n## IO 流\n`IO` 是 `File` 的父类，提供了更通用的输入输出操作。标准输入输出也是IO对象：\n\n```ruby\n$stdout.puts \"输出到标准输出\"\n$stdin.gets    # 从标准输入读取一行\n```\n\n## 序列化\nRuby可以使用 `Marshal` 进行对象序列化：\n\n```ruby\ndata = { name: \"Alice\", scores: [90, 85, 92] }\n\n# 序列化\nserialized = Marshal.dump(data)\n\n# 反序列化\nrestored = Marshal.load(serialized)\n```\n\n## 练习\n编写方法 `count_lines(content)`，接收一个多行字符串，返回行数。编写方法 `word_frequency(content)`，接收一个字符串，返回一个哈希，键为单词（小写），值为出现次数。",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "def count_lines(content)\n  # 返回行数\nend\n\ndef word_frequency(content)\n  # 返回单词频率哈希\nend",
+    "solution_code": "def count_lines(content)\n  content.lines.count\nend\n\ndef word_frequency(content)\n  words = content.downcase.split\n  result = {}\n  words.each do |word|\n    result[word] = result.fetch(word, 0) + 1\n  end\n  result\nend",
+    "test_cases": [
+      {
+        "input": "count_lines(\"line1\\nline2\\nline3\")",
+        "expected_output": "3",
+        "description": "3行文本应返回3"
+      },
+      {
+        "input": "count_lines(\"single line\")",
+        "expected_output": "1",
+        "description": "单行文本应返回1"
+      },
+      {
+        "input": "word_frequency(\"hello world hello\")",
+        "expected_output": "{\"hello\"=>2, \"world\"=>1}",
+        "description": "应正确统计单词频率"
+      },
+      {
+        "input": "word_frequency(\"Ruby ruby RUBY\")",
+        "expected_output": "{\"ruby\"=>3}",
+        "description": "大小写不敏感统计"
+      }
+    ],
+    "hint": "使用 lines 方法获取行数组，使用 downcase 和 split 处理单词，用 fetch 统计频率"
+  },
+  {
+    "title": "正则表达式",
+    "slug": "ruby-12-regex",
+    "description": "学习正则匹配、match、gsub和模式",
+    "content": "# 正则表达式\n\n## 基本匹配\nRuby内置了强大的正则表达式支持，使用 `/模式/` 创建正则对象：\n\n```ruby\n/hello/ =~ \"hello world\"   # => 0（匹配位置）\n/world/ =~ \"hello world\"   # => 6\n/ruby/ =~ \"python\"         # => nil（不匹配）\n```\n\n## match 方法\n`match` 返回 MatchData 对象，包含详细的匹配信息：\n\n```ruby\nm = /(\\d+)-(\\d+)/.match(\"2024-01-15\")\nm[0]      # => \"2024-01\"（完整匹配）\nm[1]      # => \"2024\"（第一个捕获组）\nm[2]      # => \"01\"（第二个捕获组）\n```\n\n## 命名捕获\n```ruby\nm = /(?<year>\\d{4})-(?<month>\\d{2})/.match(\"2024-01-15\")\nm[:year]   # => \"2024\"\nm[:month]  # => \"01\"\n```\n\n## gsub — 全局替换\n`gsub` 使用正则替换字符串中所有匹配：\n\n```ruby\n\"hello world\".gsub(/o/, \"0\")       # => \"hell0 w0rld\"\n\"2024-01-15\".gsub(/\\d/, \"*\")       # => \"****-**-**\"\n\n# 使用块\n\"hello world\".gsub(/\\w+/) { |w| w.upcase }  # => \"HELLO WORLD\"\n```\n\n## 常用模式\n```ruby\n/\\d/     # 数字\n/\\w/     # 单词字符（字母、数字、下划线）\n/\\s/     # 空白字符\n/^/      # 行首\n/$/      # 行尾\n/./      # 任意字符（除换行）\n/a+/     # 一个或多个a\n/a*/     # 零个或多个a\n/a?/     # 零个或一个a\n```\n\n## 练习\n编写方法 `extract_numbers(str)`，从字符串中提取所有连续数字，返回数字字符串数组。编写方法 `mask_email(email)`，将邮箱地址的@前面部分替换为星号（保留最后两个字符），如 `\"test@example.com\"` → `\"**st@example.com\"`。",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "def extract_numbers(str)\n  # 提取所有连续数字\nend\n\ndef mask_email(email)\n  # 遮蔽邮箱@前部分，保留最后两个字符\nend",
+    "solution_code": "def extract_numbers(str)\n  str.scan(/\\d+/)\nend\n\ndef mask_email(email)\n  email.gsub(/(.+)@/) do |match|\n    prefix = match.chop\n    if prefix.length <= 2\n      \"*\" * prefix.length + \"@\"\n    else\n      \"*\" * (prefix.length - 2) + prefix[-2..] + \"@\"\n    end\n  end\nend",
+    "test_cases": [
+      {
+        "input": "extract_numbers(\"abc123def456\")",
+        "expected_output": "[\"123\", \"456\"]",
+        "description": "应提取所有连续数字"
+      },
+      {
+        "input": "extract_numbers(\"no numbers\")",
+        "expected_output": "[]",
+        "description": "无数字时应返回空数组"
+      },
+      {
+        "input": "mask_email(\"test@example.com\")",
+        "expected_output": "**st@example.com",
+        "description": "应遮蔽邮箱前缀，保留最后两个字符"
+      },
+      {
+        "input": "mask_email(\"a@b.com\")",
+        "expected_output": "*@b.com",
+        "description": "短前缀应全部遮蔽"
+      }
+    ],
+    "hint": "使用 scan 方法提取匹配，使用 gsub 配合正则替换邮箱前缀"
+  },
+  {
+    "title": "Gems与Bundler",
+    "slug": "ruby-13-gems-bundler",
+    "description": "学习Gemfile和依赖管理",
+    "content": "# Gems与Bundler\n\n## 什么是Gem？\nGem是Ruby的包（库）管理格式，类似于npm之于Node.js、pip之于Python。每个Gem是一个打包好的Ruby程序或库，可以通过 `gem` 命令安装：\n\n```bash\ngem install rails          # 安装Rails框架\ngem list                  # 查看已安装的Gem\ngem update rails          # 更新指定Gem\n```\n\n## Bundler — 依赖管理器\nBundler是Ruby项目的依赖管理工具，确保每个项目使用正确版本的Gem。你可以把Bundler想象成\"项目专属的仓库管理员\"——它确保项目只使用指定版本的工具，不会因为其他项目升级而受影响：\n\n```bash\ngem install bundler       # 先安装Bundler本身\n```\n\n## Gemfile\n`Gemfile` 是项目的依赖声明文件，放在项目根目录：\n\n```ruby\nsource 'https://rubygems.org'    # Gem来源\n\ngem 'rails', '~> 7.0'            # Rails 7.x版本\ngem 'pg', '>= 1.0'               # PostgreSQL适配器\ngem 'puma', '~> 6.0'             # Web服务器\n\ngroup :development do\n  gem 'pry'                       # 开发环境调试工具\n  gem 'rubocop'                   # 代码检查\nend\n\ngroup :test do\n  gem 'rspec'                     # 测试框架\n  gem 'factory_bot'               # 测试数据工厂\nend\n```\n\n## 版本约束\n```ruby\ngem 'rails', '7.0.0'       # 精确版本\ngem 'rails', '>= 7.0'      # 大于等于7.0\ngem 'rails', '~> 7.0'      # 7.x（兼容更新）\ngem 'rails', '~> 7.0.0'    # 7.0.x（小版本兼容）\n```\n\n## 常用命令\n```bash\nbundle install             # 安装Gemfile中的所有依赖\nbundle update              # 更新所有Gem到最新兼容版本\nbundle exec rake db:migrate  # 在Bundler上下文中执行命令\nbundle outdated            # 检查过时的Gem\n```\n\n## 练习\n编写方法 `parse_gemfile(content)`，解析Gemfile内容字符串，返回一个哈希，键为gem名称（字符串），值为版本约束（字符串，无版本约束则为 `\"any\"`）。",
+    "order": 13,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "def parse_gemfile(content)\n  # 解析Gemfile内容，返回 {gem名 => 版本约束} 哈希\nend",
+    "solution_code": "def parse_gemfile(content)\n  result = {}\n  content.each_line do |line|\n    line = line.strip\n    next unless line.start_with?(\"gem '\") || line.start_with?('gem \"')\n    quote = line[4]\n    parts = line.match(/gem\\s+['\"]([^'\"]+)['\"]\\s*(?:,\\s*['\"]([^'\"]+)['\"])?/)\n    next unless parts\n    name = parts[1]\n    version = parts[2] || \"any\"\n    result[name] = version\n  end\n  result\nend",
+    "test_cases": [
+      {
+        "input": "parse_gemfile(\"gem 'rails', '~> 7.0'\\ngem 'puma'\\ngem 'pg', '>= 1.0'\")",
+        "expected_output": "{\"rails\"=>\"~> 7.0\", \"puma\"=>\"any\", \"pg\"=>\">= 1.0\"}",
+        "description": "应正确解析Gemfile中的gem和版本"
+      },
+      {
+        "input": "parse_gemfile(\"source 'https://rubygems.org'\\ngem 'sinatra'\")",
+        "expected_output": "{\"sinatra\"=>\"any\"}",
+        "description": "应跳过source行，解析无版本的gem"
+      }
+    ],
+    "hint": "逐行解析，用正则匹配 gem '名称' 和可选的版本约束"
+  },
+  {
+    "title": "Web开发",
+    "slug": "ruby-14-web-dev",
+    "description": "学习Sinatra路由和ERB模板",
+    "content": "# Web开发\n\n## Sinatra — 轻量级Web框架\nSinatra是Ruby最流行的轻量级Web框架，用极少的代码就能搭建Web应用。你可以把Sinatra想象成\"迷你厨房\"——麻雀虽小，五脏俱全，足以烹饪出美味的Web应用：\n\n```ruby\nrequire 'sinatra'\n\nget '/' do\n  'Hello, World!'\nend\n\nget '/hello/:name' do\n  \"Hello, #{params[:name]}!\"\nend\n\npost '/users' do\n  \"Created user: #{params[:name]}\"\nend\n```\n\n## 路由\nSinatra支持各种HTTP方法：\n\n```ruby\nget '/items'       # 查看列表\npost '/items'      # 创建\nput '/items/:id'   # 更新\ndelete '/items/:id' # 删除\n```\n\n路由参数通过 `params` 哈希访问：\n```ruby\nget '/users/:id' do\n  \"User ID: #{params[:id]}\"\nend\n```\n\n## ERB模板\nERB（Embedded Ruby）是Ruby内置的模板系统，在HTML中嵌入Ruby代码：\n\n```erb\n<h1><%= @title %></h1>\n<ul>\n<% @items.each do |item| %>\n  <li><%= item %></li>\n<% end %>\n</ul>\n```\n\n- `<%= %>` 输出表达式的值\n- `<% %>` 执行Ruby代码但不输出\n\n## Rails简介\nRails是Ruby最著名的全栈框架，遵循\"约定优于配置\"原则。Rails的核心概念包括：\n- **MVC架构**：Model-View-Controller分层\n- **RESTful路由**：资源导向的URL设计\n- **ActiveRecord**：强大的ORM\n\n## 练习\n编写方法 `build_route(method, path)`，根据HTTP方法和路径构建路由描述字符串，格式为 `\"METHOD /path -> handler\"`。如 `build_route(\"GET\", \"/users\")` 返回 `\"GET /users -> index\"`。规则：GET /resource 返回 `\"index\"`，GET /resource/:id 返回 `\"show\"`，POST /resource 返回 `\"create\"`，PUT /resource/:id 返回 `\"update\"`，DELETE /resource/:id 返回 `\"destroy\"`。",
+    "order": 14,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "def build_route(method, path)\n  # 根据HTTP方法和路径返回路由描述\nend",
+    "solution_code": "def build_route(method, path)\n  handler = case method.upcase\n            when \"GET\"\n              path.include?(\":id\") ? \"show\" : \"index\"\n            when \"POST\"\n              \"create\"\n            when \"PUT\"\n              \"update\"\n            when \"DELETE\"\n              \"destroy\"\n            else\n              \"unknown\"\n            end\n  \"#{method.upcase} #{path} -> #{handler}\"\nend",
+    "test_cases": [
+      {
+        "input": "build_route(\"GET\", \"/users\")",
+        "expected_output": "GET /users -> index",
+        "description": "GET列表路由应映射到index"
+      },
+      {
+        "input": "build_route(\"GET\", \"/users/:id\")",
+        "expected_output": "GET /users/:id -> show",
+        "description": "GET详情路由应映射到show"
+      },
+      {
+        "input": "build_route(\"POST\", \"/users\")",
+        "expected_output": "POST /users -> create",
+        "description": "POST路由应映射到create"
+      },
+      {
+        "input": "build_route(\"DELETE\", \"/users/:id\")",
+        "expected_output": "DELETE /users/:id -> destroy",
+        "description": "DELETE路由应映射到destroy"
+      }
+    ],
+    "hint": "使用case语句匹配HTTP方法，GET需要额外判断路径是否包含:id来区分index和show"
+  },
+  {
+    "title": "数据库",
+    "slug": "ruby-15-database",
+    "description": "学习ActiveRecord、迁移和关联",
+    "content": "# 数据库\n\n## ActiveRecord — Ruby的ORM\nActiveRecord是Rails的核心组件，也是Ruby最强大的ORM（对象关系映射）框架。它将数据库表映射为Ruby类，将行映射为对象，让你用Ruby代码操作数据库而不用写SQL。你可以把ActiveRecord想象成\"翻译官\"——你用Ruby说话，它帮你翻译成SQL与数据库沟通：\n\n```ruby\nclass User < ActiveRecord::Base\nend\n\nUser.all                    # SELECT * FROM users\nUser.find(1)                # SELECT * FROM users WHERE id = 1\nUser.where(age: 25)         # SELECT * FROM users WHERE age = 25\nUser.create(name: \"Alice\")  # INSERT INTO users ...\n```\n\n## 迁移（Migration）\n迁移是数据库的版本控制，用Ruby代码定义数据库结构变更：\n\n```ruby\nclass CreateUsers < ActiveRecord::Migration[7.0]\n  def change\n    create_table :users do |t|\n      t.string :name, null: false\n      t.integer :age\n      t.boolean :active, default: true\n      t.timestamps  # 自动创建 created_at 和 updated_at\n    end\n  end\nend\n```\n\n## 关联\nActiveRecord支持多种关联关系：\n\n```ruby\nclass User < ActiveRecord::Base\n  has_many :posts          # 一对多\n  has_one :profile        # 一对一\nend\n\nclass Post < ActiveRecord::Base\n  belongs_to :user        # 属于\n  has_many :comments      # 一对多\nend\n\nclass Comment < ActiveRecord::Base\n  belongs_to :post\nend\n```\n\n## 验证\n```ruby\nclass User < ActiveRecord::Base\n  validates :name, presence: true\n  validates :email, uniqueness: true\n  validates :age, numericality: { greater_than: 0 }\nend\n```\n\n## 练习\n编写方法 `build_query(table, conditions)`，接收表名（字符串）和条件哈希，构建简单的SQL查询字符串。如 `build_query(\"users\", {name: \"Alice\", age: 25})` 返回 `\"SELECT * FROM users WHERE name = 'Alice' AND age = 25\"`。无条件时不含WHERE子句。",
+    "order": 15,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "def build_query(table, conditions)\n  # 构建SQL查询字符串\nend",
+    "solution_code": "def build_query(table, conditions)\n  if conditions.empty?\n    \"SELECT * FROM #{table}\"\n  else\n    where_clause = conditions.map do |key, value|\n      if value.is_a?(String)\n        \"#{key} = '#{value}'\"\n      else\n        \"#{key} = #{value}\"\n      end\n    end.join(\" AND \")\n    \"SELECT * FROM #{table} WHERE #{where_clause}\"\n  end\nend",
+    "test_cases": [
+      {
+        "input": "build_query(\"users\", {name: \"Alice\", age: 25})",
+        "expected_output": "SELECT * FROM users WHERE name = 'Alice' AND age = 25",
+        "description": "应正确构建带条件的查询"
+      },
+      {
+        "input": "build_query(\"posts\", {})",
+        "expected_output": "SELECT * FROM posts",
+        "description": "无条件时不应包含WHERE子句"
+      },
+      {
+        "input": "build_query(\"users\", {active: true})",
+        "expected_output": "SELECT * FROM users WHERE active = true",
+        "description": "布尔值不应加引号"
+      }
+    ],
+    "hint": "用map遍历条件哈希，字符串值加引号，非字符串值不加引号，用AND连接"
+  },
+  {
+    "title": "综合项目",
+    "slug": "ruby-16-restful-api",
+    "description": "构建一个完整的RESTful API服务",
+    "content": "# 综合项目 — RESTful API服务\n\n## 什么是RESTful API？\nREST（Representational State Transfer）是一种Web服务架构风格，RESTful API通过HTTP方法对资源进行操作：\n\n| HTTP方法 | 路径 | 操作 |\n|---------|------|------|\n| GET | /items | 获取列表 |\n| GET | /items/:id | 获取详情 |\n| POST | /items | 创建 |\n| PUT | /items/:id | 更新 |\n| DELETE | /items/:id | 删除 |\n\n## 项目设计\n我们将构建一个简易的任务管理API，使用纯Ruby实现（不依赖框架），综合运用前面学到的所有知识：类、模块、异常处理、块、哈希等。\n\n## JSON响应格式\nAPI返回JSON格式的数据：\n\n```ruby\nrequire 'json'\n\n{ status: \"success\", data: { id: 1, title: \"学习Ruby\" } }.to_json\n# => \"{\\\"status\\\":\\\"success\\\",\\\"data\\\":{\\\"id\\\":1,\\\"title\\\":\\\"学习Ruby\\\"}}\"\n```\n\n## 项目结构\n```ruby\nclass TaskManager\n  def initialize        # 初始化任务存储\n  def all               # 获取所有任务\n  def find(id)          # 查找单个任务\n  def create(attrs)     # 创建任务\n  def update(id, attrs) # 更新任务\n  def delete(id)        # 删除任务\nend\n```\n\n## 练习\n实现 `TaskManager` 类，管理一个任务列表。每个任务是一个包含 `:id`、`:title`、`:done`（布尔值，默认false）的哈希。`create` 方法自动分配递增的id。`update` 方法合并新属性。`delete` 方法删除指定id的任务并返回被删除的任务哈希，id不存在时返回nil。`find` 方法返回对应id的任务哈希，不存在返回nil。",
+    "order": 16,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "class TaskManager\n  def initialize\n    # 初始化\n  end\n\n  def all\n    # 返回所有任务\n  end\n\n  def find(id)\n    # 查找任务\n  end\n\n  def create(attrs)\n    # 创建任务，自动分配id\n  end\n\n  def update(id, attrs)\n    # 更新任务\n  end\n\n  def delete(id)\n    # 删除任务\n  end\nend",
+    "solution_code": "class TaskManager\n  def initialize\n    @tasks = []\n    @next_id = 1\n  end\n\n  def all\n    @tasks\n  end\n\n  def find(id)\n    @tasks.find { |t| t[:id] == id }\n  end\n\n  def create(attrs)\n    task = { id: @next_id, title: attrs[:title], done: false }\n    @tasks << task\n    @next_id += 1\n    task\n  end\n\n  def update(id, attrs)\n    task = find(id)\n    return nil unless task\n    task.merge!(attrs)\n    task\n  end\n\n  def delete(id)\n    task = find(id)\n    return nil unless task\n    @tasks.delete(task)\n    task\n  end\nend",
+    "test_cases": [
+      {
+        "input": "tm = TaskManager.new; tm.create(title: \"学习Ruby\"); tm.create(title: \"写代码\"); tm.all.length",
+        "expected_output": "2",
+        "description": "创建两个任务后应有2条记录"
+      },
+      {
+        "input": "tm = TaskManager.new; t1 = tm.create(title: \"任务1\"); tm.find(1)[:title]",
+        "expected_output": "任务1",
+        "description": "应能通过id查找任务"
+      },
+      {
+        "input": "tm = TaskManager.new; tm.create(title: \"任务1\"); tm.update(1, {done: true}); tm.find(1)[:done]",
+        "expected_output": "true",
+        "description": "更新后done应为true"
+      },
+      {
+        "input": "tm = TaskManager.new; tm.create(title: \"任务1\"); tm.delete(1); tm.all.length",
+        "expected_output": "0",
+        "description": "删除后任务列表应为空"
+      },
+      {
+        "input": "tm = TaskManager.new; tm.find(999)",
+        "expected_output": "",
+        "description": "查找不存在的id应返回nil"
+      }
+    ],
+    "hint": "用实例变量@tasks存储任务数组，@next_id跟踪下一个id，使用find方法和merge!更新哈希"
+  }
+]

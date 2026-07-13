@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  # 后端 API
+  api:
+    build:
+      context: ./codequest-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://codequest:codequest@db:5432/codequest
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - CORS_ORIGINS=["http://localhost:5173","http://localhost:3000"]
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  # 前端
+  web:
+    build:
+      context: ./codequest-web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  # PostgreSQL 数据库
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=codequest
+      - POSTGRES_PASSWORD=codequest
+      - POSTGRES_DB=codequest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # Ollama 本地大模型
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  ollama_data:

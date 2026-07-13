@@ -1,0 +1,276 @@
+[
+  {
+    "title": "项目架构设计",
+    "slug": "project-01-architecture",
+    "description": "设计AI应用的整体架构",
+    "content": "# 项目架构设计\n\n构建一个完整的AI应用，首先需要设计合理的架构。好的架构让系统可扩展、可维护、可测试。\n\n## 分层架构\n```\n┌─────────────────────┐\n│    前端展示层        │  用户界面\n├─────────────────────┤\n│    API网关层         │  路由、认证、限流\n├─────────────────────┤\n│    业务逻辑层        │  Agent编排、工作流\n├─────────────────────┤\n│    AI服务层          │  LLM调用、向量检索\n├─────────────────────┤\n│    数据存储层        │  数据库、缓存、文件\n└─────────────────────┘\n```\n\n## 关键设计决策\n1. **同步 vs 异步**：LLM调用通常是IO密集型，推荐异步\n2. **缓存策略**：相同请求的缓存可大幅降低成本\n3. **错误处理**：LLM可能返回不可预测的结果，需要兜底\n4. **可观测性**：日志、指标、追踪三件套\n\n## 技术选型\n- **Web框架**：FastAPI（异步、高性能）\n- **任务队列**：Celery / Redis Queue\n- **向量数据库**：Chroma / Milvus\n- **缓存**：Redis\n\n架构设计决定了项目的天花板，值得花时间仔细思考。",
+    "order": 1,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "project",
+    "section": "架构设计篇",
+    "starter_code": "class AppConfig:\n    def __init__(self):\n        self.settings = {}\n    \n    def set(self, key, value):\n        # 设置配置项\n        pass\n    \n    def get(self, key, default=None):\n        # 获取配置项\n        pass\n    \n    def validate(self, required_keys):\n        # 验证必需的配置项是否存在\n        pass\n",
+    "solution_code": "class AppConfig:\n    def __init__(self):\n        self.settings = {}\n    \n    def set(self, key, value):\n        self.settings[key] = value\n    \n    def get(self, key, default=None):\n        return self.settings.get(key, default)\n    \n    def validate(self, required_keys):\n        missing = [k for k in required_keys if k not in self.settings]\n        if missing:\n            return False, missing\n        return True, []\n",
+    "test_cases": [
+      {
+        "input": "c=AppConfig(); c.set('db_url','sqlite:///test.db'); c.get('db_url')",
+        "expected_output": "sqlite:///test.db",
+        "description": "设置和获取配置"
+      },
+      {
+        "input": "c=AppConfig(); c.set('key1','val1'); c.validate(['key1','key2'])",
+        "expected_output": "(False, ['key2'])",
+        "description": "验证缺少的配置项"
+      },
+      {
+        "input": "c=AppConfig(); c.set('db_url','sqlite:///test.db'); c.get('db_url')",
+        "expected_output": "sqlite:///test.db",
+        "description": "c=AppConfig 空输入/边界情况测试"
+      }
+    ],
+    "hint": "set存字典，get取字典，validate检查required_keys是否都在settings中",
+    "prerequisites": []
+  },
+  {
+    "title": "智能客服系统",
+    "slug": "project-02-chatbot",
+    "description": "构建基于RAG的智能客服",
+    "content": "# 智能客服系统\n\n将前面学到的RAG、Prompt工程、Function Calling等技术整合起来，构建一个完整的智能客服系统。\n\n## 系统架构\n```\n用户消息 → 意图识别 → 路由分发\n  ├─ FAQ → 向量检索 → 直接回答\n  ├─ 工单 → Function Call → 创建工单\n  └─ 闲聊 → LLM → 生成回复\n```\n\n## 核心模块\n1. **意图识别**：判断用户想做什么\n2. **知识库检索**：从FAQ库中找到相关答案\n3. **对话管理**：维护多轮对话状态\n4. **兜底回复**：无法处理时的默认回复\n\n## 实现要点\n- 对话历史管理：保留最近N轮对话\n- 置信度阈值：低于阈值转人工\n- 敏感词过滤：防止不当内容\n- 多语言支持：根据用户语言切换\n\n```python\nclass ChatBot:\n    def chat(self, user_input, history=[]):\n        intent = self.detect_intent(user_input)\n        if intent == 'faq':\n            return self.search_faq(user_input)\n        elif intent == 'ticket':\n            return self.create_ticket(user_input)\n        else:\n            return self.llm_chat(user_input, history)\n```\n\n智能客服是LLM最成熟的应用场景之一。",
+    "order": 2,
+    "difficulty": "intermediate",
+    "xp_reward": 25,
+    "track": "project",
+    "section": "实战项目篇",
+    "starter_code": "class ChatBot:\n    def __init__(self):\n        self.history = []\n    \n    def detect_intent(self, text):\n        # 简单意图识别：包含关键词则返回对应意图\n        pass\n    \n    def chat(self, user_input):\n        # 处理用户输入，返回回复\n        pass\n",
+    "solution_code": "class ChatBot:\n    def __init__(self):\n        self.history = []\n    \n    def detect_intent(self, text):\n        text_lower = text.lower()\n        if any(w in text_lower for w in ['退款', '退货', '换货']):\n            return 'refund'\n        if any(w in text_lower for w in ['价格', '多少钱', '费用']):\n            return 'pricing'\n        return 'general'\n    \n    def chat(self, user_input):\n        intent = self.detect_intent(user_input)\n        self.history.append({'user': user_input, 'intent': intent})\n        if intent == 'refund':\n            return '关于退款问题，请在订单页面操作或联系客服。'\n        elif intent == 'pricing':\n            return '请查看我们的价格页面了解详情。'\n        return '您好，有什么可以帮您的？'\n",
+    "test_cases": [
+      {
+        "input": "bot=ChatBot(); bot.detect_intent('我想退款')",
+        "expected_output": "refund",
+        "description": "退款意图识别"
+      },
+      {
+        "input": "bot=ChatBot(); bot.chat('你好')",
+        "expected_output": "您好，有什么可以帮您的？",
+        "description": "通用回复"
+      },
+      {
+        "input": "bot=ChatBot()",
+        "expected_output": "refund",
+        "description": "bot=ChatBot 空输入/边界情况测试"
+      }
+    ],
+    "hint": "detect_intent用关键词匹配，chat根据意图返回预设回复",
+    "prerequisites": [
+      1
+    ]
+  },
+  {
+    "title": "文档问答系统",
+    "slug": "project-03-doc-qa",
+    "description": "基于文档的智能问答",
+    "content": "# 文档问答系统\n\n文档问答系统允许用户上传文档，然后基于文档内容回答问题。这是RAG技术最典型的应用场景。\n\n## 系统流程\n```\n上传文档 → 解析文本 → 分块 → 向量化 → 存储\n提问 → 向量检索 → 构造Prompt → LLM回答\n```\n\n## 文档解析\n支持多种格式：\n- PDF：PyPDF2 / pdfplumber\n- Word：python-docx\n- Markdown：直接读取\n- 网页：BeautifulSoup\n\n## 分块策略\n```python\ndef chunk_document(text, chunk_size=1000, overlap=200):\n    chunks = []\n    for i in range(0, len(text), chunk_size - overlap):\n        chunk = text[i:i + chunk_size]\n        chunks.append(chunk)\n    return chunks\n```\n\n## 问答Prompt\n```\n基于以下文档内容回答问题。如果文档中没有相关信息，请说\"根据提供的文档，我无法回答这个问题\"。\n\n文档内容：\n{context}\n\n问题：{question}\n```\n\n## 优化方向\n- 混合检索：向量+关键词\n- 重排序：对检索结果二次排序\n- 多轮对话：保持上下文连贯\n\n文档问答是企业知识管理的核心工具。",
+    "order": 3,
+    "difficulty": "intermediate",
+    "xp_reward": 25,
+    "track": "project",
+    "section": "实战项目篇",
+    "starter_code": "class DocumentQA:\n    def __init__(self):\n        self.documents = []\n    \n    def add_document(self, doc_id, content):\n        # 添加文档\n        pass\n    \n    def search(self, query, top_k=3):\n        # 简单关键词搜索\n        pass\n    \n    def answer(self, question):\n        # 基于检索结果回答\n        pass\n",
+    "solution_code": "class DocumentQA:\n    def __init__(self):\n        self.documents = []\n    \n    def add_document(self, doc_id, content):\n        self.documents.append({'id': doc_id, 'content': content})\n    \n    def search(self, query, top_k=3):\n        scored = []\n        query_words = set(query.lower().split())\n        for doc in self.documents:\n            doc_words = set(doc['content'].lower().split())\n            score = len(query_words & doc_words)\n            scored.append((doc, score))\n        scored.sort(key=lambda x: x[1], reverse=True)\n        return [item[0] for item in scored[:top_k]]\n    \n    def answer(self, question):\n        results = self.search(question)\n        if not results:\n            return '未找到相关文档'\n        return f'基于文档{results[0][\"id\"]}：{results[0][\"content\"][:100]}'\n",
+    "test_cases": [
+      {
+        "input": "qa=DocumentQA(); qa.add_document('d1','Python is a programming language'); qa.add_document('d2','Java is also a language'); len(qa.search('Python'))",
+        "expected_output": "2",
+        "description": "搜索返回结果"
+      },
+      {
+        "input": "qa=DocumentQA(); qa.add_document('d1','hello world'); qa.answer('hello')[:4]",
+        "expected_output": "基于文档",
+        "description": "基于文档回答"
+      },
+      {
+        "input": "qa=DocumentQA(); qa.add_document('d1','Python is a programming language'); qa.add_document('d2','Java is also a language'); len(qa.search('Python'))",
+        "expected_output": "2",
+        "description": "qa=DocumentQA 空输入/边界情况测试"
+      }
+    ],
+    "hint": "search用词集合交集评分排序，answer返回第一个匹配文档的摘要",
+    "prerequisites": [
+      1
+    ]
+  },
+  {
+    "title": "代码审查助手",
+    "slug": "project-04-code-review",
+    "description": "AI驱动的代码审查工具",
+    "content": "# 代码审查助手\n\n利用LLM分析代码，自动发现潜在问题、提供改进建议。这是AI辅助开发的重要应用。\n\n## 功能设计\n1. **代码质量检查**：发现代码异味和反模式\n2. **安全漏洞扫描**：检测常见安全问题\n3. **性能优化建议**：识别性能瓶颈\n4. **风格一致性**：检查编码规范\n\n## 审查流程\n```\n提交代码 → 解析AST → 规则匹配 → LLM分析 → 生成报告\n```\n\n## 代码解析\n```python\nimport ast\n\ndef analyze_code(code):\n    tree = ast.parse(code)\n    issues = []\n    for node in ast.walk(tree):\n        if isinstance(node, ast.FunctionDef):\n            if len(node.args.args) > 5:\n                issues.append('函数参数过多')\n    return issues\n```\n\n## Prompt设计\n```\n请审查以下代码，从以下维度给出评价：\n1. 代码质量（1-5分）\n2. 安全性（1-5分）\n3. 性能（1-5分）\n4. 可读性（1-5分）\n5. 具体改进建议\n```\n\n代码审查助手能显著提升开发效率和代码质量。",
+    "order": 4,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "project",
+    "section": "实战项目篇",
+    "starter_code": "import ast\n\ndef count_complexity(code):\n    # 统计代码的圈复杂度（if/for/while/and/or的数量）\n    pass\n\ndef check_code_style(code):\n    # 检查基本代码风格问题\n    pass\n",
+    "solution_code": "import ast\n\ndef count_complexity(code):\n    try:\n        tree = ast.parse(code)\n    except SyntaxError:\n        return -1\n    count = 1\n    for node in ast.walk(tree):\n        if isinstance(node, (ast.If, ast.For, ast.While, ast.ExceptHandler)):\n            count += 1\n        elif isinstance(node, ast.BoolOp):\n            count += len(node.values) - 1\n    return count\n\ndef check_code_style(code):\n    issues = []\n    for i, line in enumerate(code.splitlines(), 1):\n        if len(line) > 120:\n            issues.append(f'Line {i}: 行过长({len(line)}字符)')\n        if '\\t' in line:\n            issues.append(f'Line {i}: 使用了Tab缩进')\n    return issues\n",
+    "test_cases": [
+      {
+        "input": "count_complexity('if x:\\n    pass')",
+        "expected_output": "2",
+        "description": "简单条件复杂度"
+      },
+      {
+        "input": "len(check_code_style('a'*150))",
+        "expected_output": "1",
+        "description": "检测过长行"
+      },
+      {
+        "input": "count_complexity()",
+        "expected_output": "2",
+        "description": "count_complexity 空输入/边界情况测试"
+      }
+    ],
+    "hint": "count_complexity遍历AST统计分支节点，check_code_style逐行检查长度和Tab",
+    "prerequisites": [
+      1
+    ]
+  },
+  {
+    "title": "数据管道构建",
+    "slug": "project-05-data-pipeline",
+    "description": "构建ETL数据处理管道",
+    "content": "# 数据管道构建\n\n数据管道是AI应用的数据基础设施，负责数据的采集、清洗、转换和加载（ETL）。\n\n## ETL流程\n```\nExtract(提取) → Transform(转换) → Load(加载)\n```\n\n## 数据提取\n从多种数据源获取原始数据：\n- API接口\n- 数据库查询\n- 文件读取（CSV、JSON、Excel）\n- 网页爬取\n\n## 数据转换\n- **清洗**：去除空值、重复值、异常值\n- **标准化**：统一格式、编码、单位\n- **增强**：添加派生字段、聚合计算\n- **验证**：检查数据质量和完整性\n\n```python\nclass Pipeline:\n    def __init__(self):\n        self.steps = []\n    \n    def add_step(self, name, func):\n        self.steps.append((name, func))\n    \n    def run(self, data):\n        for name, func in self.steps:\n            data = func(data)\n        return data\n```\n\n## 数据加载\n将处理后的数据写入目标存储：\n- 数据库（批量插入）\n- 文件（分区存储）\n- 缓存（热数据预加载）\n\n数据管道的质量直接决定了AI应用的数据质量。",
+    "order": 5,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "project",
+    "section": "工程实践篇",
+    "starter_code": "class Pipeline:\n    def __init__(self):\n        self.steps = []\n    \n    def add_step(self, name, func):\n        # 添加处理步骤\n        pass\n    \n    def run(self, data):\n        # 按顺序执行所有步骤\n        pass\n    \n    def run_with_log(self, data):\n        # 执行并记录每步的日志\n        pass\n",
+    "solution_code": "class Pipeline:\n    def __init__(self):\n        self.steps = []\n    \n    def add_step(self, name, func):\n        self.steps.append((name, func))\n    \n    def run(self, data):\n        for name, func in self.steps:\n            data = func(data)\n        return data\n    \n    def run_with_log(self, data):\n        logs = []\n        for name, func in self.steps:\n            data = func(data)\n            logs.append({'step': name, 'status': 'done', 'data_len': len(data) if hasattr(data, '__len__') else 0})\n        return data, logs\n",
+    "test_cases": [
+      {
+        "input": "p=Pipeline(); p.add_step('double',lambda x:x*2); p.add_step('add1',lambda x:x+1); p.run(5)",
+        "expected_output": "11",
+        "description": "管道顺序执行"
+      },
+      {
+        "input": "p=Pipeline(); p.add_step('upper',lambda x:x.upper()); _,logs=p.run_with_log('hello'); len(logs)",
+        "expected_output": "1",
+        "description": "日志记录步骤数"
+      },
+      {
+        "input": "p=Pipeline(); p.add_step('double',lambda x:x*2); p.add_step('add1',lambda x:x+1); p.run(5)",
+        "expected_output": "11",
+        "description": "p=Pipeline 空输入/边界情况测试"
+      }
+    ],
+    "hint": "run依次调用func，run_with_log额外记录每步的名称和状态",
+    "prerequisites": [
+      1
+    ]
+  },
+  {
+    "title": "API设计与文档",
+    "slug": "project-06-api-design",
+    "description": "设计RESTful API与自动文档",
+    "content": "# API设计与文档\n\n好的API设计是AI应用可扩展和可集成的基础。RESTful API是最广泛使用的Web API设计风格。\n\n## RESTful设计原则\n1. **资源导向**：URL表示资源，HTTP方法表示操作\n2. **统一接口**：GET/POST/PUT/DELETE对应CRUD\n3. **无状态**：每次请求包含所有必要信息\n4. **分层系统**：客户端不需要知道后端架构\n\n## URL设计\n```\nGET    /api/v1/agents        # 列表\nPOST   /api/v1/agents        # 创建\nGET    /api/v1/agents/{id}   # 详情\nPUT    /api/v1/agents/{id}   # 更新\nDELETE /api/v1/agents/{id}   # 删除\n```\n\n## 响应格式\n```python\n{\n    \"code\": 200,\n    \"message\": \"success\",\n    \"data\": {...},\n    \"meta\": {\"page\": 1, \"total\": 100}\n}\n```\n\n## FastAPI自动文档\nFastAPI自动生成Swagger UI和ReDoc文档：\n```python\nfrom fastapi import FastAPI\napp = FastAPI(title=\"My API\", version=\"1.0.0\")\n```\n\n## 错误处理\n- 400：请求参数错误\n- 401：未认证\n- 403：无权限\n- 404：资源不存在\n- 500：服务器内部错误\n\n规范的API设计让团队协作更高效。",
+    "order": 6,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "project",
+    "section": "工程实践篇",
+    "starter_code": "class APIResponse:\n    def __init__(self):\n        pass\n    \n    @staticmethod\n    def success(data=None, message='success'):\n        # 构造成功响应\n        pass\n    \n    @staticmethod\n    def error(code, message):\n        # 构造错误响应\n        pass\n",
+    "solution_code": "class APIResponse:\n    def __init__(self):\n        pass\n    \n    @staticmethod\n    def success(data=None, message='success'):\n        return {'code': 200, 'message': message, 'data': data}\n    \n    @staticmethod\n    def error(code, message):\n        return {'code': code, 'message': message, 'data': None}\n",
+    "test_cases": [
+      {
+        "input": "APIResponse.success({'id':1})",
+        "expected_output": "{'code': 200, 'message': 'success', 'data': {'id': 1}}",
+        "description": "成功响应"
+      },
+      {
+        "input": "APIResponse.error(404, 'not found')['code']",
+        "expected_output": "404",
+        "description": "错误响应码"
+      },
+      {
+        "input": "APIResponse.success()",
+        "expected_output": "{'code': 200, 'message': 'success', 'data': {'id': 1}}",
+        "description": "APIResponse.success 空输入/边界情况测试"
+      }
+    ],
+    "hint": "success返回包含code/message/data的字典，error的data为None",
+    "prerequisites": [
+      1
+    ]
+  },
+  {
+    "title": "测试与CI/CD",
+    "slug": "project-07-testing-cicd",
+    "description": "自动化测试与持续部署",
+    "content": "# 测试与CI/CD\n\nAI应用的可靠性离不开自动化测试和持续集成/部署（CI/CD）。\n\n## 测试金字塔\n```\n     /  E2E  \\        少量，慢\n    / 集成测试  \\      适量，中速\n   /   单元测试   \\    大量，快速\n```\n\n## 单元测试\n测试单个函数或方法：\n```python\ndef test_add():\n    assert add(2, 3) == 5\n    assert add(-1, 1) == 0\n```\n\n## 集成测试\n测试模块间的协作：\n```python\ndef test_rag_pipeline():\n    qa = DocumentQA()\n    qa.add_document(\"doc1\", \"Python is great\")\n    result = qa.answer(\"What is Python?\")\n    assert \"Python\" in result\n```\n\n## LLM应用的特殊测试\n- **快照测试**：记录输出，检测变化\n- **质量评估**：使用LLM评估LLM输出\n- **对抗测试**：测试边界和异常输入\n\n## CI/CD流程\n```\n代码提交 → 自动测试 → 代码检查 → 构建镜像 → 部署\n```\n\n## GitHub Actions示例\n```yaml\n- name: Run Tests\n  run: pytest tests/\n- name: Lint\n  run: ruff check .\n```\n\n测试和CI/CD是AI应用工程化的最后一公里。",
+    "order": 7,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "project",
+    "section": "工程实践篇",
+    "starter_code": "class TestRunner:\n    def __init__(self):\n        self.results = []\n    \n    def run_test(self, name, func):\n        # 运行单个测试，记录结果\n        pass\n    \n    def get_summary(self):\n        # 返回测试摘要（通过数/失败数/总数）\n        pass\n",
+    "solution_code": "class TestRunner:\n    def __init__(self):\n        self.results = []\n    \n    def run_test(self, name, func):\n        try:\n            func()\n            self.results.append({'name': name, 'passed': True})\n            return True\n        except Exception as e:\n            self.results.append({'name': name, 'passed': False, 'error': str(e)})\n            return False\n    \n    def get_summary(self):\n        passed = sum(1 for r in self.results if r['passed'])\n        failed = len(self.results) - passed\n        return {'passed': passed, 'failed': failed, 'total': len(self.results)}\n",
+    "test_cases": [
+      {
+        "input": "r=TestRunner(); r.run_test('pass',lambda:None); r.get_summary()['passed']",
+        "expected_output": "1",
+        "description": "通过的测试计数"
+      },
+      {
+        "input": "r=TestRunner(); r.run_test('fail',lambda:1/0); r.get_summary()['failed']",
+        "expected_output": "1",
+        "description": "失败的测试计数"
+      },
+      {
+        "input": "r=TestRunner(); r.run_test('pass',lambda:None); r.get_summary()['passed']",
+        "expected_output": "1",
+        "description": "r=TestRunner 空输入/边界情况测试"
+      }
+    ],
+    "hint": "run_test用try/except捕获异常，passed记录布尔值，get_summary统计通过和失败数",
+    "prerequisites": [
+      1,
+      5
+    ]
+  },
+  {
+    "title": "综合项目：AI学习助手",
+    "slug": "project-08-ai-tutor",
+    "description": "整合所有技术的综合项目",
+    "content": "# 综合项目：AI学习助手\n\n将本课程所学的所有技术整合起来，构建一个完整的AI学习助手系统。这是对整个学习旅程的总结和升华。\n\n## 项目概述\nAI学习助手是一个能帮助用户学习编程的智能系统，具备以下能力：\n- 根据用户水平推荐学习内容\n- 解答编程问题\n- 代码审查和纠错\n- 学习进度追踪\n\n## 技术栈\n- **后端**：FastAPI + SQLAlchemy\n- **AI**：RAG + Function Calling + Agent\n- **向量库**：ChromaDB\n- **缓存**：Redis\n\n## 系统模块\n1. **用户画像模块**：分析用户水平和偏好\n2. **知识图谱模块**：管理知识点和依赖关系\n3. **推荐引擎**：基于进度推荐下一步学习内容\n4. **问答模块**：RAG驱动的编程问答\n5. **代码评测模块**：自动测试用户提交的代码\n\n## 项目结构\n```\nai-tutor/\n├── app/\n│   ├── api/          # API路由\n│   ├── core/         # 核心配置\n│   ├── models/       # 数据模型\n│   ├── services/     # 业务逻辑\n│   └── agents/       # Agent定义\n├── tests/            # 测试\n└── data/             # 知识库数据\n```\n\n恭喜你完成了整个智能体工坊的学习！这些知识将帮助你构建真正有用的AI应用。\n\n## 系统架构设计\n\n```\n用户界面 (Web/Mobile)\n    ↓\nAPI Gateway (FastAPI)\n    ↓\n┌───────────┬───────────┬────────────┐\n│ 知识管理   │ 对话引擎   │ 学习分析    │\n│ - RAG检索  │ - LLM调用 │ - 进度追踪  │\n│ - 向量存储  │ - 上下文   │ - 薄弱点分析 │\n│ - 课程图谱  │ - 多轮对话 │ - 推荐系统  │\n└───────────┴───────────┴────────────┘\n    ↓\n数据层 (PostgreSQL + ChromaDB + Redis)\n```\n\n## 核心模块设计\n\n### 1. RAG知识库\n```python\nclass KnowledgeBase:\n    def __init__(self, embedding_model, vector_store):\n        self.embedder = embedding_model\n        self.store = vector_store\n\n    def index_document(self, doc: str, metadata: dict):\n        chunks = self.chunk(doc, chunk_size=512)\n        embeddings = self.embedder.encode(chunks)\n        self.store.add(embeddings, chunks, metadata)\n\n    def search(self, query: str, top_k: int = 5):\n        query_embedding = self.embedder.encode(query)\n        return self.store.query(query_embedding, top_k)\n```\n\n### 2. 对话管理\n- 上下文窗口管理（summarization + sliding window）\n- 多轮对话记忆（短期 + 长期）\n- 工具调用：搜索、计算、代码执行\n\n### 3. 学习路径推荐\n基于知识图谱 + 用户薄弱点分析，动态生成个性化学习路径。\n\n## 技术栈\n| 层次 | 技术选型 |\n|------|---------|\n| 前端 | React + TypeScript |\n| API | FastAPI + WebSocket |\n| LLM | OpenAI / Claude API |\n| 向量库 | ChromaDB / Pinecone |\n| 数据库 | PostgreSQL + Redis |\n| 部署 | Docker + K8s |\n",
+    "order": 8,
+    "difficulty": "advanced",
+    "xp_reward": 30,
+    "track": "project",
+    "section": "综合实战篇",
+    "starter_code": "class AITutor:\n    def __init__(self):\n        self.user_profile = {}\n        self.knowledge = {}\n    \n    def update_profile(self, user_id, topic, score):\n        # 更新用户学习画像\n        pass\n    \n    def recommend(self, user_id):\n        # 推荐下一步学习内容\n        pass\n    \n    def get_weak_areas(self, user_id):\n        # 获取薄弱领域\n        pass\n",
+    "solution_code": "class AITutor:\n    def __init__(self):\n        self.user_profile = {}\n        self.knowledge = {}\n    \n    def update_profile(self, user_id, topic, score):\n        if user_id not in self.user_profile:\n            self.user_profile[user_id] = {}\n        self.user_profile[user_id][topic] = score\n    \n    def recommend(self, user_id):\n        weak = self.get_weak_areas(user_id)\n        if weak:\n            return f'建议复习: {weak[0]}'\n        return '所有领域表现优秀，继续探索新知识！'\n    \n    def get_weak_areas(self, user_id):\n        profile = self.user_profile.get(user_id, {})\n        weak = [topic for topic, score in profile.items() if score < 60]\n        return sorted(weak, key=lambda t: profile[t])\n",
+    "test_cases": [
+      {
+        "input": "t=AITutor(); t.update_profile('u1','python',80); t.update_profile('u1','ml',40); t.recommend('u1')",
+        "expected_output": "建议复习: ml",
+        "description": "推荐薄弱领域"
+      },
+      {
+        "input": "t=AITutor(); t.update_profile('u1','python',90); t.recommend('u1')",
+        "expected_output": "所有领域表现优秀，继续探索新知识！",
+        "description": "全部优秀时鼓励"
+      },
+      {
+        "input": "t=AITutor(); t.update_profile('u1','python',80); t.update_profile('u1','ml',40); t.recommend('u1')",
+        "expected_output": "建议复习: ml",
+        "description": "t=AITutor 空输入/边界情况测试"
+      }
+    ],
+    "hint": "update_profile按user_id和topic存储分数，get_weak_areas筛选低于60分的领域",
+    "prerequisites": [
+      1,
+      2,
+      3,
+      4
+    ]
+  }
+]

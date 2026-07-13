@@ -1,0 +1,508 @@
+[
+  {
+    "title": "Hello World",
+    "slug": "lua-01-hello-world",
+    "description": "学习Lua基本语法，编写你的第一个程序",
+    "content": "# Hello World - 你的第一个Lua程序\n\n## 什么是Lua？\nLua是一种轻量级、高效的脚本语言，诞生于1993年的巴西里约热内卢。它的名字在葡萄牙语中意为\"月亮\"。Lua以简洁、可嵌入和高效著称，广泛应用于游戏开发（如Roblox、魔兽世界插件）、嵌入式系统和自动化脚本中。\n\n## 交互模式与脚本模式\nLua可以通过两种方式运行代码：\n- **交互模式**：在终端输入 `lua` 进入REPL，逐行输入代码并立即看到结果\n- **脚本模式**：将代码保存为 `.lua` 文件，通过 `lua script.lua` 运行\n\n## print与输出\n在Lua中，使用 `print()` 函数向控制台输出内容：\n\n```lua\nprint(\"Hello, World!\")\n```\n\n## 函数与返回值\n在编程闯关中，我们通过**函数**来组织代码。Lua使用 `function` 关键字定义函数，使用 `return` 返回结果：\n\n```lua\nfunction hello()\n    return \"Hello, World!\"\nend\n```\n\n注意Lua函数以 `end` 关键字结尾，这是与许多语言不同的地方。\n\n## 注释\nLua中单行注释使用 `--`，多行注释使用 `--[[ ... ]]`：\n\n```lua\n-- 这是单行注释\n--[[\n    这是多行注释\n    可以跨越多行\n]]\n```\n\n## 练习\n请编写一个函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "function hello()\n    -- 在这里编写你的代码\nend",
+    "solution_code": "function hello()\n    return \"Hello, World!\"\nend",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      },
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 return 语句返回字符串 \"Hello, World!\""
+  },
+  {
+    "title": "变量与类型",
+    "slug": "lua-02-variables",
+    "description": "学习Lua变量声明与基本数据类型：nil、boolean、number、string、table",
+    "content": "# 变量与数据类型\n\n## 变量声明\nLua是动态类型语言，变量不需要声明类型。使用 `local` 关键字声明局部变量：\n\n```lua\nlocal name = \"Alice\"     -- 字符串\nlocal age = 25           -- 数字\nlocal is_student = true  -- 布尔值\n```\n\n如果不加 `local`，变量将是全局变量，这在Lua中是一个常见的陷阱，建议始终使用 `local`。\n\n## 基本数据类型\nLua有以下基本数据类型：\n\n- **nil** - 表示\"无值\"，未初始化的变量默认为nil\n- **boolean** - 布尔值，只有 `true` 和 `false` 两个值\n- **number** - 数字类型，Lua 5.3之前只有双精度浮点数，5.3之后区分整数和浮点数\n- **string** - 字符串，可用单引号或双引号\n- **table** - Lua唯一的数据结构，既是数组又是字典\n- **function** - 函数也是一等公民\n\n## nil的特殊性\n在Lua中，`nil` 和 `false` 是仅有的两个\"假值\"，其他所有值（包括0和空字符串）都是\"真值\"：\n\n```lua\nif 0 then print(\"0是真值!\") end    -- 会执行\nif \"\" then print(\"空字符串是真值!\") end -- 会执行\n```\n\n## 字符串连接\nLua使用 `..` 运算符连接字符串：\n\n```lua\nlocal greeting = \"Hello\" .. \", \" .. \"World!\"\n```\n\n## type()函数\n使用 `type()` 可以获取变量的类型名称：\n\n```lua\ntype(42)         -- \"number\"\ntype(\"hello\")    -- \"string\"\ntype(nil)        -- \"nil\"\n```\n\n## 练习\n编写函数 `greet(name)`，返回 `\"你好, {name}!\"` 格式的字符串。\n编写函数 `describe(value)`，返回值的类型名称。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "function greet(name)\n    -- 返回问候语\nend\n\nfunction describe(value)\n    -- 返回值的类型名称\nend",
+    "solution_code": "function greet(name)\n    return \"你好, \" .. name .. \"!\"\nend\n\nfunction describe(value)\n    return type(value)\nend",
+    "test_cases": [
+      {
+        "input": "greet('Alice')",
+        "expected_output": "你好, Alice!",
+        "description": "greet('Alice') 应返回 '你好, Alice!'"
+      },
+      {
+        "input": "greet('Bob')",
+        "expected_output": "你好, Bob!",
+        "description": "greet('Bob') 应返回 '你好, Bob!'"
+      },
+      {
+        "input": "describe(42)",
+        "expected_output": "number",
+        "description": "describe(42) 应返回 'number'"
+      },
+      {
+        "input": "describe('hello')",
+        "expected_output": "string",
+        "description": "describe('hello') 应返回 'string'"
+      },
+      {
+        "input": "describe(nil)",
+        "expected_output": "nil",
+        "description": "describe(nil) 应返回 'nil'"
+      }
+    ],
+    "hint": "使用 .. 连接字符串，使用 type() 获取类型名称"
+  },
+  {
+    "title": "运算符",
+    "slug": "lua-03-operators",
+    "description": "学习Lua的算术运算符、关系运算符、逻辑运算符和字符串连接运算符",
+    "content": "# 运算符\n\n## 算术运算符\nLua支持常见的算术运算符，注意Lua 5.3+区分整数除法 `//` 和浮点除法 `/`：\n\n```lua\n10 + 3    -- 13   加法\n10 - 3    -- 7    减法\n10 * 3    -- 30   乘法\n10 / 3    -- 3.333... 浮点除法\n10 // 3   -- 3    整数除法（Lua 5.3+）\n10 % 3    -- 1    取余\n10 ^ 3    -- 1000 幂运算\n-10       -- -10  一元负号\n```\n\n## 关系运算符\nLua的关系运算符与大多数语言类似，但注意**不等于**使用 `~=`：\n\n```lua\n5 == 5    -- true   等于\n5 ~= 3    -- true   不等于（注意不是 !=）\n5 > 3     -- true   大于\n5 < 3     -- false  小于\n5 >= 5    -- true   大于等于\n5 <= 3    -- false  小于等于\n```\n\n## 逻辑运算符\nLua的逻辑运算符使用英文单词而非符号：\n\n```lua\ntrue and false   -- false\ntrue or false    -- true\nnot true         -- false\n```\n\nLua的逻辑运算符具有短路求值特性：\n- `and` 返回第一个为假的值，否则返回最后一个值\n- `or` 返回第一个为真的值，否则返回最后一个值\n\n```lua\nnil and 5    -- nil\n5 and 10     -- 10\nnil or 5     -- 5\n5 or 10      -- 5\n```\n\n这个特性常用于设置默认值：`local x = input or default`\n\n## 字符串连接运算符\n`..` 用于连接两个字符串：\n\n```lua\n\"Hello\" .. \" \" .. \"World\"  -- \"Hello World\"\n```\n\n## 字符串长度运算符\n`#` 用于获取字符串长度：\n\n```lua\n#\"Hello\"  -- 5\n```\n\n## 练习\n编写函数 `is_even(n)`，判断一个整数是否为偶数。\n编写函数 `clamp(value, min_val, max_val)`，将值限制在[min_val, max_val]范围内。\n## 运算符优先级\n理解运算符的优先级对编写正确的表达式至关重要。当不确定时，使用括号 `()` 明确优先级。\n\n## 常见陷阱\n- 整数除法 vs 浮点除法（不同语言行为不同）\n- 取余运算中负数的处理\n- 比较浮点数时不要用 `==`（精度问题）\n- 逻辑运算符的短路求值特性\n",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "function is_even(n)\n    -- 判断是否为偶数\nend\n\nfunction clamp(value, min_val, max_val)\n    -- 将值限制在 [min_val, max_val] 范围内\nend",
+    "solution_code": "function is_even(n)\n    return n % 2 == 0\nend\n\nfunction clamp(value, min_val, max_val)\n    return math.max(min_val, math.min(value, max_val))\nend",
+    "test_cases": [
+      {
+        "input": "is_even(4)",
+        "expected_output": "true",
+        "description": "is_even(4) 应返回 true"
+      },
+      {
+        "input": "is_even(7)",
+        "expected_output": "false",
+        "description": "is_even(7) 应返回 false"
+      },
+      {
+        "input": "is_even(0)",
+        "expected_output": "true",
+        "description": "is_even(0) 应返回 true"
+      },
+      {
+        "input": "clamp(5, 1, 10)",
+        "expected_output": "5",
+        "description": "clamp(5, 1, 10) 应返回 5"
+      },
+      {
+        "input": "clamp(-3, 0, 10)",
+        "expected_output": "0",
+        "description": "clamp(-3, 0, 10) 应返回 0"
+      },
+      {
+        "input": "clamp(15, 0, 10)",
+        "expected_output": "10",
+        "description": "clamp(15, 0, 10) 应返回 10"
+      }
+    ],
+    "hint": "使用 % 取余判断偶数，使用 math.max 和 math.min 实现clamp"
+  },
+  {
+    "title": "控制流",
+    "slug": "lua-04-control-flow",
+    "description": "学习Lua的条件语句、while循环、repeat循环和for循环",
+    "content": "# 控制流\n\n## 条件语句\nLua使用 `if/elseif/else/end` 结构，每个代码块都以 `end` 结尾：\n\n```lua\nlocal score = 85\nif score >= 90 then\n    print(\"优秀\")\nelseif score >= 60 then\n    print(\"及格\")\nelse\n    print(\"不及格\")\nend\n```\n\n注意Lua中没有switch语句，通常使用if/elseif链或table查找来替代。\n\n## while循环\n`while` 循环在条件为真时重复执行：\n\n```lua\nlocal i = 1\nwhile i <= 5 do\n    print(i)\n    i = i + 1  -- Lua没有 ++ 运算符\nend\n```\n\n## repeat循环\n`repeat...until` 是Lua特有的后测试循环，至少执行一次，直到条件为真时停止：\n\n```lua\nlocal n = 1\nrepeat\n    n = n * 2\nuntil n > 100\n```\n\n注意：`until` 的条件为**真**时退出循环，这与 `while` 相反。\n\n## 数值for循环\n数值for循环用于按步长遍历数值范围：\n\n```lua\nfor i = 1, 10 do        -- 从1到10，步长为1\n    print(i)\nend\n\nfor i = 10, 1, -1 do   -- 从10到1，步长为-1\n    print(i)\nend\n```\n\n## 泛型for循环\n泛型for循环用于遍历迭代器，最常见的是 `pairs` 和 `ipairs`：\n\n```lua\nlocal t = {10, 20, 30}\nfor i, v in ipairs(t) do    -- ipairs遍历数组部分\n    print(i, v)\nend\n\nlocal dict = {name = \"Alice\", age = 25}\nfor k, v in pairs(dict) do  -- pairs遍历所有键值对\n    print(k, v)\nend\n```\n\n## break语句\nLua只支持 `break`，没有 `continue`。可以用if条件模拟continue的效果。\n\n## 练习\n编写函数 `factorial(n)`，计算n的阶乘。\n编写函数 `fizzbuzz(n)`，返回1到n的FizzBuzz结果表：3的倍数为\"Fizz\"，5的倍数为\"Buzz\"，15的倍数为\"FizzBuzz\"，其他为数字本身。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "function factorial(n)\n    -- 计算 n 的阶乘\nend\n\nfunction fizzbuzz(n)\n    -- 返回1到n的FizzBuzz结果表\nend",
+    "solution_code": "function factorial(n)\n    local result = 1\n    for i = 2, n do\n        result = result * i\n    end\n    return result\nend\n\nfunction fizzbuzz(n)\n    local result = {}\n    for i = 1, n do\n        if i % 15 == 0 then\n            result[i] = \"FizzBuzz\"\n        elseif i % 3 == 0 then\n            result[i] = \"Fizz\"\n        elseif i % 5 == 0 then\n            result[i] = \"Buzz\"\n        else\n            result[i] = tostring(i)\n        end\n    end\n    return result\nend",
+    "test_cases": [
+      {
+        "input": "factorial(5)",
+        "expected_output": "120",
+        "description": "factorial(5) 应返回 120"
+      },
+      {
+        "input": "factorial(1)",
+        "expected_output": "1",
+        "description": "factorial(1) 应返回 1"
+      },
+      {
+        "input": "factorial(0)",
+        "expected_output": "1",
+        "description": "factorial(0) 应返回 1"
+      },
+      {
+        "input": "fizzbuzz(5)[3]",
+        "expected_output": "Fizz",
+        "description": "fizzbuzz(5) 第3个元素应为 Fizz"
+      },
+      {
+        "input": "fizzbuzz(15)[15]",
+        "expected_output": "FizzBuzz",
+        "description": "fizzbuzz(15) 第15个元素应为 FizzBuzz"
+      },
+      {
+        "input": "fizzbuzz(5)[2]",
+        "expected_output": "2",
+        "description": "fizzbuzz(5) 第2个元素应为 '2'"
+      }
+    ],
+    "hint": "使用数值for循环计算阶乘，使用if/elseif处理FizzBuzz条件判断"
+  },
+  {
+    "title": "函数",
+    "slug": "lua-05-functions",
+    "description": "学习Lua函数定义、多返回值、可变参数和匿名函数",
+    "content": "# 函数\n\n## 函数定义\nLua使用 `function` 关键字定义函数，函数体以 `end` 结束：\n\n```lua\nfunction add(a, b)\n    return a + b\nend\n\n-- 也可以写成local函数\nlocal function multiply(a, b)\n    return a * b\nend\n```\n\n## 多返回值\nLua函数可以返回多个值，这是Lua的一大特色：\n\n```lua\nfunction swap(a, b)\n    return b, a\nend\n\nlocal x, y = swap(1, 2)  -- x=2, y=1\n```\n\n接收多返回值时，多余的变量被赋为nil，多余的返回值被丢弃。\n\n## 可变参数\n使用 `...` 表示可变参数，通过 `{...}` 收集为table，或用 `select` 获取：\n\n```lua\nfunction sum(...)\n    local total = 0\n    for _, v in ipairs({...}) do\n        total = total + v\n    end\n    return total\nend\n\nsum(1, 2, 3, 4)  -- 10\n```\n\n`select` 函数可以获取可变参数的信息：\n- `select('#', ...)` 返回参数个数\n- `select(n, ...)` 返回从第n个开始的所有参数\n\n## 匿名函数\n函数是一等公民，可以赋值给变量、作为参数传递：\n\n```lua\nlocal double = function(x) return x * 2 end\n-- 等价于\nlocal function double(x) return x * 2 end\n\n-- 作为参数传递\ntable.sort(names, function(a, b) return a < b end)\n```\n\n## 闭包\nLua函数可以捕获外部变量形成闭包：\n\n```lua\nfunction counter()\n    local count = 0\n    return function()\n        count = count + 1\n        return count\n    end\nend\n```\n\n## 练习\n编写函数 `max_min(...)`，接收任意数量的数字参数，返回最大值和最小值。\n编写函数 `make_counter(start)`，返回一个闭包函数，每次调用返回递增的计数值。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "function max_min(...)\n    -- 返回最大值和最小值\nend\n\nfunction make_counter(start)\n    -- 返回一个闭包计数器\nend",
+    "solution_code": "function max_min(...)\n    local args = {...}\n    local max_val = args[1]\n    local min_val = args[1]\n    for _, v in ipairs(args) do\n        if v > max_val then max_val = v end\n        if v < min_val then min_val = v end\n    end\n    return max_val, min_val\nend\n\nfunction make_counter(start)\n    local count = start\n    return function()\n        count = count + 1\n        return count\n    end\nend",
+    "test_cases": [
+      {
+        "input": "(function() local a, b = max_min(3, 1, 4, 1, 5, 9); return a end)()",
+        "expected_output": "9",
+        "description": "max_min(3,1,4,1,5,9) 的最大值应为 9"
+      },
+      {
+        "input": "(function() local a, b = max_min(3, 1, 4, 1, 5, 9); return b end)()",
+        "expected_output": "1",
+        "description": "max_min(3,1,4,1,5,9) 的最小值应为 1"
+      },
+      {
+        "input": "(function() local c = make_counter(0); c(); return c() end)()",
+        "expected_output": "2",
+        "description": "make_counter(0) 第二次调用应返回 2"
+      },
+      {
+        "input": "(function() local c = make_counter(10); return c() end)()",
+        "expected_output": "11",
+        "description": "make_counter(10) 第一次调用应返回 11"
+      }
+    ],
+    "hint": "使用 {...} 收集可变参数，使用闭包捕获局部变量实现计数器"
+  },
+  {
+    "title": "Table基础",
+    "slug": "lua-06-tables",
+    "description": "学习Lua的Table：数组、字典和基本操作",
+    "content": "# Table基础\n\n## Table概述\nTable是Lua中唯一的数据结构，它既是数组又是字典（关联数组）。Table是引用类型，通过构造器 `{}` 创建：\n\n```lua\nlocal t = {}           -- 空表\nlocal arr = {1, 2, 3}  -- 数组风格\nlocal dict = {         -- 字典风格\n    name = \"Alice\",\n    age = 25\n}\n```\n\n## 数组风格\nLua数组的索引从**1**开始，这是Lua的一个重要特点：\n\n```lua\nlocal arr = {10, 20, 30}\nprint(arr[1])   -- 10（不是arr[0]！）\nprint(#arr)     -- 3，#获取数组长度\n```\n\n## 字典风格\n使用字符串键存储键值对：\n\n```lua\nlocal person = {name = \"Alice\", age = 25}\nperson.name          -- \"Alice\"\nperson[\"name\"]       -- \"Alice\"，两种访问方式等价\nperson.email = \"a@b.com\"  -- 添加新字段\n```\n\n## 遍历Table\n- `ipairs` 遍历数组部分（连续整数键从1开始）\n- `pairs` 遍历所有键值对（顺序不确定）\n\n```lua\nfor i, v in ipairs(arr) do print(i, v) end\nfor k, v in pairs(dict) do print(k, v) end\n```\n\n## Table常用操作\n```lua\ntable.insert(t, value)         -- 在末尾插入\ntable.insert(t, pos, value)    -- 在指定位置插入\ntable.remove(t, pos)           -- 移除指定位置\ntable.sort(t)                  -- 排序\ntable.concat(t, sep)           -- 连接为字符串\n```\n\n## 注意事项\n- `#` 运算符只对连续的数组部分有效，中间有nil会导致不确定结果\n- Table是引用类型，赋值不会复制\n- 未定义的键访问返回nil，不会报错\n\n## 练习\n编写函数 `merge_tables(t1, t2)`，将两个字典风格的table合并，t2的键覆盖t1的同名键。\n编写函数 `array_reverse(arr)`，反转一个数组风格的table。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "function merge_tables(t1, t2)\n    -- 合并两个字典，t2覆盖t1的同名键\nend\n\nfunction array_reverse(arr)\n    -- 反转数组\nend",
+    "solution_code": "function merge_tables(t1, t2)\n    local result = {}\n    for k, v in pairs(t1) do\n        result[k] = v\n    end\n    for k, v in pairs(t2) do\n        result[k] = v\n    end\n    return result\nend\n\nfunction array_reverse(arr)\n    local result = {}\n    local n = #arr\n    for i = 1, n do\n        result[i] = arr[n - i + 1]\n    end\n    return result\nend",
+    "test_cases": [
+      {
+        "input": "merge_tables({a=1, b=2}, {b=3, c=4}).a",
+        "expected_output": "1",
+        "description": "合并后 a 应为 1"
+      },
+      {
+        "input": "merge_tables({a=1, b=2}, {b=3, c=4}).b",
+        "expected_output": "3",
+        "description": "合并后 b 应被覆盖为 3"
+      },
+      {
+        "input": "merge_tables({a=1, b=2}, {b=3, c=4}).c",
+        "expected_output": "4",
+        "description": "合并后 c 应为 4"
+      },
+      {
+        "input": "array_reverse({1,2,3})[1]",
+        "expected_output": "3",
+        "description": "反转后第一个元素应为 3"
+      },
+      {
+        "input": "array_reverse({1,2,3})[3]",
+        "expected_output": "1",
+        "description": "反转后第三个元素应为 1"
+      }
+    ],
+    "hint": "使用pairs遍历字典合并，使用双指针或索引计算反转数组"
+  },
+  {
+    "title": "元表与元方法",
+    "slug": "lua-07-metatables",
+    "description": "学习Lua元表机制：__index、__newindex和运算符重载",
+    "content": "# 元表与元方法\n\n## 元表概述\n元表（Metatable）是Lua实现面向对象和运算符重载的核心机制。每个table可以关联一个元表，当Lua对table执行某些操作时，会查找元表中对应的元方法（metamethod）来决定行为。\n\n使用 `setmetatable(t, mt)` 设置元表，`getmetatable(t)` 获取元表。\n\n## __index 元方法\n`__index` 是最常用的元方法，在访问table中不存在的键时触发：\n\n```lua\nlocal prototype = {x = 0, y = 0}\nlocal obj = setmetatable({}, {\n    __index = prototype\n})\nprint(obj.x)  -- 0，从prototype中查找\n```\n\n`__index` 可以是table（直接查找）或函数（自定义查找逻辑）：\n\n```lua\nsetmetatable({}, {\n    __index = function(t, key)\n        return key .. \" not found\"\n    end\n})\n```\n\n## __newindex 元方法\n`__newindex` 在给table中不存在的键赋值时触发：\n\n```lua\nlocal readonly = setmetatable({}, {\n    __newindex = function(t, k, v)\n        error(\"This table is read-only!\")\n    end\n})\n```\n\n## 运算符重载\n通过元方法可以为table定义运算符行为：\n\n| 元方法 | 运算符 |\n|--------|--------|\n| __add | + |\n| __sub | - |\n| __mul | * |\n| __div | / |\n| __eq | == |\n| __lt | < |\n| __le | <= |\n| __tostring | tostring() |\n\n```lua\nlocal Vec2 = {}\nVec2.__index = Vec2\n\nfunction Vec2.new(x, y)\n    return setmetatable({x = x, y = y}, Vec2)\nend\n\nfunction Vec2.__add(a, b)\n    return Vec2.new(a.x + b.x, a.y + b.y)\nend\n\nfunction Vec2.__tostring(v)\n    return \"(\" .. v.x .. \", \" .. v.y .. \")\"\nend\n```\n\n## 练习\n编写函数 `create_vector(x, y)`，创建一个支持加法和tostring的二维向量table。\n编写函数 `create_default(default_value)`，创建一个访问不存在的键时返回默认值的table。",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "function create_vector(x, y)\n    -- 创建支持加法和tostring的二维向量\nend\n\nfunction create_default(default_value)\n    -- 创建访问不存在的键时返回默认值的table\nend",
+    "solution_code": "function create_vector(x, y)\n    local mt = {}\n    mt.__index = mt\n    function mt.__add(a, b)\n        return create_vector(a.x + b.x, a.y + b.y)\n    end\n    function mt.__tostring(v)\n        return \"(\" .. v.x .. \", \" .. v.y .. \")\"\n    end\n    return setmetatable({x = x, y = y}, mt)\nend\n\nfunction create_default(default_value)\n    return setmetatable({}, {\n        __index = function(t, key)\n            return default_value\n        end\n    })\nend",
+    "test_cases": [
+      {
+        "input": "create_vector(1, 2).x",
+        "expected_output": "1",
+        "description": "create_vector(1,2).x 应为 1"
+      },
+      {
+        "input": "(create_vector(1, 2) + create_vector(3, 4)).x",
+        "expected_output": "4",
+        "description": "向量加法后 x 应为 4"
+      },
+      {
+        "input": "(create_vector(1, 2) + create_vector(3, 4)).y",
+        "expected_output": "6",
+        "description": "向量加法后 y 应为 6"
+      },
+      {
+        "input": "tostring(create_vector(1, 2))",
+        "expected_output": "(1, 2)",
+        "description": "tostring 应返回 '(1, 2)'"
+      },
+      {
+        "input": "create_default(42).nonexistent",
+        "expected_output": "42",
+        "description": "访问不存在的键应返回默认值 42"
+      }
+    ],
+    "hint": "使用setmetatable设置__add和__tostring元方法，使用__index实现默认值"
+  },
+  {
+    "title": "面向对象",
+    "slug": "lua-08-oop",
+    "description": "学习Lua的面向对象编程：原型继承、封装和方法调用语法糖",
+    "content": "# 面向对象编程\n\n## Lua的面向对象\nLua没有内置的类（class）概念，但通过元表和语法糖可以实现面向对象编程。Lua采用的是**原型继承**（prototype-based）模式，而非经典的类继承。\n\n## 方法调用语法糖\nLua提供了 `:` 语法糖来简化方法调用，自动将调用者作为第一个参数 `self` 传入：\n\n```lua\n-- 这两种写法等价\nobj:method(arg)\nobj.method(obj, arg)\n```\n\n定义方法时也可以使用 `:` ：\n\n```lua\nfunction obj:method(arg)\n    -- self 自动可用\nend\n-- 等价于\nfunction obj.method(self, arg)\nend\n```\n\n## 创建对象\n使用元表实现对象的创建：\n\n```lua\nlocal Dog = {}\nDog.__index = Dog\n\nfunction Dog.new(name, breed)\n    local obj = setmetatable({}, Dog)\n    obj.name = name\n    obj.breed = breed\n    return obj\nend\n\nfunction Dog:bark()\n    return self.name .. \" says: Woof!\"\nend\n```\n\n## 继承\n通过设置元表的 `__index` 实现继承：\n\n```lua\nlocal GuideDog = setmetatable({}, {__index = Dog})\nGuideDog.__index = GuideDog\n\nfunction GuideDog.new(name)\n    local obj = Dog.new(name, \"Guide\")\n    setmetatable(obj, GuideDog)\n    return obj\nend\n\nfunction GuideDog:guide()\n    return self.name .. \" is guiding the way\"\nend\n```\n\n## 封装\n通过闭包可以实现私有变量：\n\n```lua\nfunction create_bank(initial)\n    local balance = initial  -- 私有变量\n    return {\n        deposit = function(amount) balance = balance + amount end,\n        withdraw = function(amount) balance = balance - amount end,\n        get_balance = function() return balance end\n    }\nend\n```\n\n## 练习\n编写函数 `create_account(owner, balance)`，创建一个银行账户对象，支持 `deposit`、`withdraw` 和 `get_info` 方法。\n`deposit(amount)` 存款并返回新余额。\n`withdraw(amount)` 取款（余额不足返回nil）并返回新余额。\n`get_info()` 返回 `\"{owner}: {balance}\"` 格式的字符串。",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "function create_account(owner, balance)\n    -- 创建银行账户对象\nend",
+    "solution_code": "function create_account(owner, balance)\n    local Account = {}\n    Account.__index = Account\n\n    function Account:deposit(amount)\n        self.balance = self.balance + amount\n        return self.balance\n    end\n\n    function Account:withdraw(amount)\n        if amount > self.balance then\n            return nil\n        end\n        self.balance = self.balance - amount\n        return self.balance\n    end\n\n    function Account:get_info()\n        return self.owner .. \": \" .. self.balance\n    end\n\n    local obj = setmetatable({owner = owner, balance = balance}, Account)\n    return obj\nend",
+    "test_cases": [
+      {
+        "input": "(function() local a = create_account('Alice', 100); a:deposit(50); return a:get_info() end)()",
+        "expected_output": "Alice: 150",
+        "description": "存款后信息应为 'Alice: 150'"
+      },
+      {
+        "input": "(function() local a = create_account('Bob', 100); a:withdraw(30); return a:get_info() end)()",
+        "expected_output": "Bob: 70",
+        "description": "取款后信息应为 'Bob: 70'"
+      },
+      {
+        "input": "(function() local a = create_account('Charlie', 50); return a:withdraw(100) end)()",
+        "expected_output": "nil",
+        "description": "余额不足取款应返回 nil"
+      },
+      {
+        "input": "create_account('Dave', 200):get_info()",
+        "expected_output": "Dave: 200",
+        "description": "初始信息应为 'Dave: 200'"
+      }
+    ],
+    "hint": "使用setmetatable和__index创建对象，使用:语法糖定义方法，self引用对象自身"
+  },
+  {
+    "title": "模块与包",
+    "slug": "lua-09-modules",
+    "description": "学习Lua模块系统：require、module定义和搜索路径",
+    "content": "# 模块与包\n\n## 模块概述\n模块是Lua组织代码的基本方式。一个模块就是一个返回table的Lua文件，table中包含该模块提供的函数和变量。\n\n## 定义模块\n创建模块最简单的方式是定义一个table并返回它：\n\n```lua\n-- mymath.lua\nlocal mymath = {}\n\nfunction mymath.square(x)\n    return x * x\nend\n\nfunction mymath.cube(x)\n    return x * x * x\nend\n\nreturn mymath\n```\n\n## 使用require加载模块\n`require` 是Lua加载模块的标准方式：\n\n```lua\nlocal mymath = require(\"mymath\")\nprint(mymath.square(5))  -- 25\n```\n\n`require` 的特点：\n- 模块只加载一次，后续require返回缓存的同一table\n- 搜索路径由 `package.path` 决定\n- 加载失败会抛出错误\n\n## 模块搜索路径\n`package.path` 定义了Lua搜索模块的路径模板：\n\n```lua\nprint(package.path)\n-- 典型值: ./?.lua;./?/init.lua;/usr/local/share/lua/5.3/?.lua;...\n```\n\n`?` 会被替换为模块名，点号 `.` 会被替换为目录分隔符。\n\n## 模块的高级写法\n使用 `local` 声明模块内部变量，避免污染全局环境：\n\n```lua\nlocal M = {}  -- 模块table\nlocal secret = \"hidden\"  -- 模块私有变量\n\nfunction M.public()\n    return \"this is public\"\nend\n\nreturn M\n```\n\n## package.loaded\n`package.loaded` 表保存已加载的模块缓存。如果需要重新加载模块，可以将其设为nil：\n\n```lua\npackage.loaded.mymath = nil\nlocal mymath = require(\"mymath\")  -- 重新加载\n```\n\n## 练习\n编写函数 `create_string_utils()`，返回一个字符串工具模块table，包含以下方法：\n- `trim(s)` - 去除字符串首尾空白字符\n- `capitalize(s)` - 将字符串首字母大写\n- `reverse_words(s)` - 反转字符串中的单词顺序",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "function create_string_utils()\n    -- 创建字符串工具模块\nend",
+    "solution_code": "function create_string_utils()\n    local M = {}\n\n    function M.trim(s)\n        return s:match(\"^%s*(.-)%s*$\")\n    end\n\n    function M.capitalize(s)\n        return s:sub(1, 1):upper() .. s:sub(2)\n    end\n\n    function M.reverse_words(s)\n        local words = {}\n        for w in s:gmatch(\"%S+\") do\n            table.insert(words, w)\n        end\n        local result = {}\n        for i = #words, 1, -1 do\n            table.insert(result, words[i])\n        end\n        return table.concat(result, \" \")\n    end\n\n    return M\nend",
+    "test_cases": [
+      {
+        "input": "create_string_utils().trim('  hello  ')",
+        "expected_output": "hello",
+        "description": "trim 应去除首尾空白"
+      },
+      {
+        "input": "create_string_utils().capitalize('hello')",
+        "expected_output": "Hello",
+        "description": "capitalize 应将首字母大写"
+      },
+      {
+        "input": "create_string_utils().reverse_words('hello world lua')",
+        "expected_output": "lua world hello",
+        "description": "reverse_words 应反转单词顺序"
+      }
+    ],
+    "hint": "使用Lua模式匹配 %s 匹配空白字符，使用 gmatch 分割单词，使用 table.concat 连接"
+  },
+  {
+    "title": "协程",
+    "slug": "lua-10-coroutines",
+    "description": "学习Lua协程：create、resume、yield和状态机模式",
+    "content": "# 协程\n\n## 协程概述\n协程（coroutine）是Lua的并发机制，与线程不同，协程是协作式多任务的——协程之间通过显式的yield和resume来切换执行权。协程非常轻量，适合实现迭代器、状态机和异步操作。\n\n## 创建与运行\n```lua\nlocal co = coroutine.create(function()\n    print(\"Hello from coroutine!\")\nend)\n\ncoroutine.resume(co)  -- 启动协程\n```\n\n## yield与resume\n`coroutine.yield()` 暂停协程执行，`coroutine.resume()` 恢复执行：\n\n```lua\nlocal co = coroutine.create(function(a, b)\n    local sum = a + b\n    coroutine.yield(sum)        -- 暂停并返回sum\n    return sum * 2              -- 恢复后继续执行\nend)\n\nlocal ok, value = coroutine.resume(co, 3, 5)  -- value = 8\nlocal ok, value2 = coroutine.resume(co)        -- value2 = 16\n```\n\n注意：`resume` 的第一个返回值是布尔值表示是否成功，后续返回值是yield或return的值。\n\n## 协程状态\n协程有三种状态：\n- **suspended** - 挂起（刚创建或yield后）\n- **running** - 正在运行\n- **dead** - 已结束（函数执行完毕或出错）\n\n```lua\ncoroutine.status(co)  -- 查看状态\n```\n\n## coroutine.wrap\n`coroutine.wrap` 创建一个简化版的协程，返回一个函数，调用时自动resume，省去了ok返回值：\n\n```lua\nlocal next_value = coroutine.wrap(function()\n    coroutine.yield(1)\n    coroutine.yield(2)\n    coroutine.yield(3)\nend)\n\nnext_value()  -- 1\nnext_value()  -- 2\nnext_value()  -- 3\n```\n\n## 实现迭代器\n协程非常适合实现复杂的迭代器：\n\n```lua\nfunction range_gen(max)\n    return coroutine.wrap(function()\n        for i = 1, max do\n            coroutine.yield(i)\n        end\n    end)\nend\n\nfor v in range_gen(5) do print(v) end\n```\n\n## 练习\n编写函数 `create_fibonacci()`，返回一个协程包装函数，每次调用返回下一个斐波那契数。\n编写函数 `create_state_machine(states)`，接收一个状态转移表，返回一个协程驱动的状态机函数。",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "function create_fibonacci()\n    -- 返回斐波那契数列生成器\nend\n\nfunction create_state_machine(states)\n    -- 创建状态机\nend",
+    "solution_code": "function create_fibonacci()\n    return coroutine.wrap(function()\n        local a, b = 0, 1\n        while true do\n            coroutine.yield(b)\n            a, b = b, a + b\n        end\n    end)\nend\n\nfunction create_state_machine(states)\n    return coroutine.wrap(function(initial)\n        local current = initial\n        while true do\n            local transitions = states[current]\n            local input = coroutine.yield(current)\n            if transitions and transitions[input] then\n                current = transitions[input]\n            end\n        end\n    end)\nend",
+    "test_cases": [
+      {
+        "input": "(function() local f = create_fibonacci(); f(); f(); f(); f(); f(); return f() end)()",
+        "expected_output": "8",
+        "description": "斐波那契数列第6项应为 8 (1,1,2,3,5,8)"
+      },
+      {
+        "input": "(function() local f = create_fibonacci(); return f() end)()",
+        "expected_output": "1",
+        "description": "斐波那契数列第1项应为 1"
+      },
+      {
+        "input": "(function() local sm = create_state_machine({idle={go='running'}, running={stop='idle'}}); sm('idle'); return sm('go') end)()",
+        "expected_output": "running",
+        "description": "状态机从idle输入go应转到running"
+      },
+      {
+        "input": "(function() local sm = create_state_machine({idle={go='running'}, running={stop='idle'}}); sm('idle'); sm('go'); return sm('stop') end)()",
+        "expected_output": "idle",
+        "description": "状态机从running输入stop应回到idle"
+      }
+    ],
+    "hint": "使用coroutine.wrap创建生成器，yield返回当前值，状态机用yield返回当前状态并接收输入"
+  },
+  {
+    "title": "文件IO",
+    "slug": "lua-11-file-io",
+    "description": "学习Lua文件操作：io.open、读写模式和序列化",
+    "content": "# 文件IO\n\n## io.open\nLua使用 `io.open` 打开文件，返回文件句柄：\n\n```lua\nlocal file, err = io.open(\"test.txt\", \"r\")\nif not file then\n    print(\"打开失败: \" .. (err or \"unknown error\"))\n    return\nend\n```\n\n## 打开模式\n| 模式 | 说明 |\n|------|------|\n| \"r\" | 只读（默认） |\n| \"w\" | 只写（覆盖） |\n| \"a\" | 追加 |\n| \"r+\" | 读写 |\n| \"w+\" | 读写（覆盖） |\n| \"a+\" | 读写（追加） |\n| \"rb\" | 二进制只读 |\n| \"wb\" | 二进制只写 |\n\n## 读取文件\n```lua\nlocal content = file:read(\"*a\")   -- 读取全部内容\nlocal line = file:read(\"*l\")     -- 读取一行（默认）\nlocal line = file:read()         -- 同上\nlocal num = file:read(\"*n\")      -- 读取一个数字\nlocal chars = file:read(5)       -- 读取5个字节\n```\n\n## 写入文件\n```lua\nfile:write(\"Hello, World!\\n\")\nfile:write(42, \" \", 3.14, \"\\n\")\n```\n\n## 关闭文件\n```lua\nfile:close()\n```\n\n建议使用 `assert` 简化错误处理：\n\n```lua\nlocal file = assert(io.open(\"output.txt\", \"w\"))\nfile:write(\"content\")\nfile:close()\n```\n\n## 简化IO\n`io.lines` 返回迭代器，逐行读取文件：\n\n```lua\nfor line in io.lines(\"data.txt\") do\n    print(line)\nend\n```\n\n## 序列化\n将table序列化为Lua代码是一种常见模式：\n\n```lua\nfunction serialize(t)\n    local parts = {}\n    for k, v in pairs(t) do\n        table.insert(parts, tostring(k) .. \"=\" .. tostring(v))\n    end\n    return \"{\" .. table.concat(parts, \",\") .. \"}\"\nend\n```\n\n## 练习\n编写函数 `parse_config(text)`，解析简单的配置文件文本，每行格式为 `key=value`，返回一个字典table。忽略空行和以#开头的注释行。\n编写函数 `serialize_table(t)`，将一个简单的字典table序列化为 `key=value` 格式的多行文本。",
+    "order": 11,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "function parse_config(text)\n    -- 解析 key=value 格式的配置文本\nend\n\nfunction serialize_table(t)\n    -- 将字典序列化为 key=value 格式文本\nend",
+    "solution_code": "function parse_config(text)\n    local result = {}\n    for line in text:gmatch(\"[^\n]+\") do\n        line = line:match(\"^%s*(.-)%s*$\")\n        if line ~= \"\" and line:sub(1, 1) ~= \"#\" then\n            local key, value = line:match(\"([^=]+)=(.+)\")\n            if key and value then\n                key = key:match(\"^%s*(.-)%s*$\")\n                value = value:match(\"^%s*(.-)%s*$\")\n                result[key] = value\n            end\n        end\n    end\n    return result\nend\n\nfunction serialize_table(t)\n    local lines = {}\n    for k, v in pairs(t) do\n        table.insert(lines, tostring(k) .. \"=\" .. tostring(v))\n    end\n    table.sort(lines)\n    return table.concat(lines, \"\\n\")\nend",
+    "test_cases": [
+      {
+        "input": "parse_config('name=Alice\\nage=25').name",
+        "expected_output": "Alice",
+        "description": "解析后 name 应为 Alice"
+      },
+      {
+        "input": "parse_config('name=Alice\\nage=25').age",
+        "expected_output": "25",
+        "description": "解析后 age 应为 25"
+      },
+      {
+        "input": "parse_config('# comment\\nkey=val').key",
+        "expected_output": "val",
+        "description": "应忽略注释行"
+      },
+      {
+        "input": "serialize_table({b='2', a='1'})",
+        "expected_output": "a=1\nb=2",
+        "description": "序列化结果应为排序后的 key=value 格式"
+      }
+    ],
+    "hint": "使用gmatch逐行解析，使用模式匹配提取key和value，序列化时排序保证输出一致"
+  },
+  {
+    "title": "模式匹配",
+    "slug": "lua-12-patterns",
+    "description": "学习Lua模式匹配：string.find、match、gsub和Lua模式语法",
+    "content": "# 模式匹配\n\n## Lua模式 vs 正则表达式\nLua的模式匹配（pattern matching）与正则表达式类似但更简单，它不是完整的正则实现。Lua模式更轻量、更快，但功能也相对有限。\n\n## 基本模式语法\n| 模式 | 匹配 |\n|------|------|\n| . | 任意字符 |\n| %a | 字母 |\n| %d | 数字 |\n| %l | 小写字母 |\n| %u | 大写字母 |\n| %w | 字母和数字 |\n| %s | 空白字符 |\n| %p | 标点符号 |\n| %c | 控制字符 |\n| %% | 百分号本身 |\n\n大写版本表示补集，如 `%A` 匹配非字母字符。\n\n## 修饰符\n| 修饰符 | 含义 |\n|--------|------|\n| * | 0次或多次（贪婪） |\n| + | 1次或多次（贪婪） |\n| - | 0次或多次（非贪婪） |\n| ? | 0次或1次 |\n\n注意：Lua的非贪婪修饰符是 `-` 而非正则中的 `*?`。\n\n## string.find\n`string.find(s, pattern, init, plain)` 查找模式，返回起止位置：\n\n```lua\nstring.find(\"hello world\", \"world\")  -- 7, 11\nstring.find(\"hello world\", \"wor\")    -- 7, 9\n```\n\n## string.match\n`string.match(s, pattern)` 返回匹配的内容而非位置：\n\n```lua\nstring.match(\"2024-01-15\", \"(%d+)-(%d+)-(%d+)\")  -- \"2024\", \"01\", \"15\"\n```\n\n用括号 `()` 创建捕获组。\n\n## string.gsub\n`string.gsub(s, pattern, repl, n)` 替换匹配：\n\n```lua\nstring.gsub(\"hello world\", \"(%w+)\", \"[%1]\")  -- \"[hello] [world]\", 2\n```\n\n`%1`、`%2` 等引用捕获组。第三个返回值是替换次数。\n\n## string.gmatch\n`string.gmatch(s, pattern)` 返回迭代器：\n\n```lua\nfor word in string.gmatch(\"hello world lua\", \"%w+\") do\n    print(word)\nend\n```\n\n## 练习\n编写函数 `extract_numbers(s)`，从字符串中提取所有数字，返回数字字符串的数组。\n编写函数 `template_render(template, data)`，将模板中的 `{{key}}` 替换为data中对应的值。",
+    "order": 12,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "function extract_numbers(s)\n    -- 从字符串中提取所有数字\nend\n\nfunction template_render(template, data)\n    -- 将 {{key}} 替换为 data 中的值\nend",
+    "solution_code": "function extract_numbers(s)\n    local result = {}\n    for num in s:gmatch(\"%d+\") do\n        table.insert(result, num)\n    end\n    return result\nend\n\nfunction template_render(template, data)\n    return template:gsub(\"{{(%w+)}}\", function(key)\n        return tostring(data[key] or \"\")\n    end)\nend",
+    "test_cases": [
+      {
+        "input": "extract_numbers('abc123def456ghi')[1]",
+        "expected_output": "123",
+        "description": "第一个数字应为 123"
+      },
+      {
+        "input": "extract_numbers('abc123def456ghi')[2]",
+        "expected_output": "456",
+        "description": "第二个数字应为 456"
+      },
+      {
+        "input": "extract_numbers('no numbers here')[1]",
+        "expected_output": "nil",
+        "description": "没有数字时数组应为空"
+      },
+      {
+        "input": "template_render('Hello, {{name}}!', {name='Lua'})",
+        "expected_output": "Hello, Lua!",
+        "description": "模板应替换 {{name}} 为 Lua"
+      },
+      {
+        "input": "template_render('{{a}} and {{b}}', {a='cat', b='dog'})",
+        "expected_output": "cat and dog",
+        "description": "模板应替换多个占位符"
+      }
+    ],
+    "hint": "使用gmatch和%d+提取数字，使用gsub和捕获组替换模板占位符"
+  },
+  {
+    "title": "C扩展",
+    "slug": "lua-13-c-api",
+    "description": "学习Lua C API：栈操作、userdata和绑定库基础",
+    "content": "# C扩展\n\n## 为什么需要C扩展\nLua虽然高效，但对于计算密集型任务或需要与系统底层交互的场景，使用C编写扩展模块是最佳选择。C扩展可以：\n- 提升性能关键路径的执行速度\n- 访问操作系统API和第三方C库\n- 创建自定义数据类型（userdata）\n\n## Lua C API基础\nLua通过一个**虚拟栈**与C进行数据交换。所有Lua值都通过栈传递：\n\n```c\n#include <lua.h>\n#include <lauxlib.h>\n#include <lualib.h>\n\n// 一个简单的C函数，接收一个参数并返回一个值\nstatic int l_square(lua_State *L) {\n    double n = luaL_checknumber(L, 1);  // 从栈中获取参数\n    lua_pushnumber(L, n * n);           // 将结果压入栈\n    return 1;                           // 返回值个数\n}\n```\n\n## 栈操作\n常用的栈操作函数：\n\n| 函数 | 说明 |\n|------|------|\n| lua_pushnumber(L, n) | 压入数字 |\n| lua_pushstring(L, s) | 压入字符串 |\n| lua_pushboolean(L, b) | 压入布尔值 |\n| lua_pushnil(L) | 压入nil |\n| luaL_checknumber(L, i) | 检查并获取数字参数 |\n| luaL_checkstring(L, i) | 检查并获取字符串参数 |\n| lua_tonumber(L, i) | 获取数字（不检查） |\n| lua_tostring(L, i) | 获取字符串（不检查） |\n| lua_gettop(L) | 获取栈顶索引（参数个数） |\n\n## 注册模块\n将C函数注册为Lua模块：\n\n```c\nstatic const luaL_Reg mylib[] = {\n    {\"square\", l_square},\n    {NULL, NULL}\n};\n\nint luaopen_mylib(lua_State *L) {\n    luaL_newlib(L, mylib);\n    return 1;\n}\n```\n\n## Userdata\nUserdata是Lua中表示C数据结构的方式，分为两种：\n- **full userdata** - 由Lua管理内存，有独立元表\n- **light userdata** - 只是一个C指针，没有独立元表\n\n```c\n// 创建full userdata\nMyData *data = (MyData *)lua_newuserdata(L, sizeof(MyData));\nluaL_setmetatable(L, \"MyData\");\n```\n\n## 练习\n由于C扩展需要编译环境，本关使用Lua模拟C API的栈操作来理解其原理。\n编写函数 `create_stack()`，模拟一个简单的栈结构，支持 `push(value)`、`pop()`、`peek()` 和 `size()` 方法。",
+    "order": 13,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "function create_stack()\n    -- 创建模拟栈结构\nend",
+    "solution_code": "function create_stack()\n    local Stack = {}\n    Stack.__index = Stack\n\n    function Stack.new()\n        return setmetatable({data = {}}, Stack)\n    end\n\n    function Stack:push(value)\n        table.insert(self.data, value)\n    end\n\n    function Stack:pop()\n        if #self.data == 0 then return nil end\n        return table.remove(self.data)\n    end\n\n    function Stack:peek()\n        if #self.data == 0 then return nil end\n        return self.data[#self.data]\n    end\n\n    function Stack:size()\n        return #self.data\n    end\n\n    return Stack.new()\nend",
+    "test_cases": [
+      {
+        "input": "(function() local s = create_stack(); s:push(1); s:push(2); return s:peek() end)()",
+        "expected_output": "2",
+        "description": "peek 应返回栈顶元素 2"
+      },
+      {
+        "input": "(function() local s = create_stack(); s:push(1); s:push(2); s:pop(); return s:peek() end)()",
+        "expected_output": "1",
+        "description": "pop后 peek 应返回 1"
+      },
+      {
+        "input": "(function() local s = create_stack(); s:push(10); s:push(20); s:push(30); return s:size() end)()",
+        "expected_output": "3",
+        "description": "size 应返回 3"
+      },
+      {
+        "input": "(function() local s = create_stack(); return s:pop() end)()",
+        "expected_output": "nil",
+        "description": "空栈 pop 应返回 nil"
+      }
+    ],
+    "hint": "使用table实现栈，push用table.insert，pop用table.remove，注意空栈处理"
+  },
+  {
+    "title": "综合项目",
+    "slug": "lua-14-game-config-parser",
+    "description": "综合运用所学知识，构建一个游戏配置解析器",
+    "content": "# 综合项目：游戏配置解析器\n\n## 项目背景\n在游戏开发中，配置文件是连接策划和程序的桥梁。一个灵活的配置解析器需要综合运用Lua的多种特性：table操作、模式匹配、元表、面向对象和模块化设计。\n\n## 需求分析\n我们需要构建一个游戏配置解析器，支持以下功能：\n1. 解析类INI格式的配置文本（支持节[section]和键值对）\n2. 支持类型推断（数字、布尔值、字符串）\n3. 支持默认值机制（通过元表__index）\n4. 支持配置合并（多层配置覆盖）\n5. 提供查询接口\n\n## 配置格式示例\n```ini\n[database]\nhost = localhost\nport = 3306\nverbose = true\n\n[game]\ntitle = My Game\nmax_players = 100\ndebug = false\n```\n\n## 涉及的知识点\n- **Table** - 存储解析后的配置数据\n- **模式匹配** - 解析配置文本的节和键值对\n- **元表** - 实现默认值机制\n- **面向对象** - 封装解析器为对象\n- **多返回值** - 查询时返回值和存在性\n- **闭包** - 内部辅助函数\n\n## 类型推断规则\n- 纯数字字符串 → number\n- \"true\"/\"false\" → boolean\n- 其他 → string（去除首尾引号如果有）\n\n## 练习\n编写函数 `create_config_parser(defaults)`，创建一个配置解析器对象，支持以下方法：\n- `parse(text)` - 解析配置文本，返回self以支持链式调用\n- `get(section, key)` - 获取配置值，支持默认值回退\n- `sections()` - 返回所有节名数组",
+    "order": 14,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "function create_config_parser(defaults)\n    -- 创建配置解析器\nend",
+    "solution_code": "function create_config_parser(defaults)\n    defaults = defaults or {}\n    local Parser = {}\n    Parser.__index = Parser\n\n    local function infer_type(value)\n        value = value:match(\"^%s*(.-)%s*$\")\n        if value:match(\"^%d+%.?%d*$\") then\n            return tonumber(value)\n        elseif value == \"true\" then\n            return true\n        elseif value == \"false\" then\n            return false\n        else\n            local s = value:match('^\"(.-)\"$') or value:match(\"^'(.-)'$\") or value\n            return s\n        end\n    end\n\n    function Parser.new()\n        return setmetatable({data = {}}, Parser)\n    end\n\n    function Parser:parse(text)\n        local current_section\n        for line in text:gmatch(\"[^\n]+\") do\n            line = line:match(\"^%s*(.-)%s*$\")\n            if line == \"\" or line:sub(1, 1) == \"#\" then\n                -- skip\n            elseif line:match(\"^%[.-%]$\") then\n                current_section = line:match(\"^%[(.-)%]$\")\n                self.data[current_section] = self.data[current_section] or {}\n            elseif current_section then\n                local key, value = line:match(\"([^=]+)=(.+)\")\n                if key and value then\n                    key = key:match(\"^%s*(.-)%s*$\")\n                    self.data[current_section][key] = infer_type(value)\n                end\n            end\n        end\n        return self\n    end\n\n    function Parser:get(section, key)\n        if self.data[section] and self.data[section][key] ~= nil then\n            return self.data[section][key]\n        elseif defaults[section] and defaults[section][key] ~= nil then\n            return defaults[section][key]\n        end\n        return nil\n    end\n\n    function Parser:sections()\n        local result = {}\n        for k, _ in pairs(self.data) do\n            table.insert(result, k)\n        end\n        table.sort(result)\n        return result\n    end\n\n    return Parser.new()\nend",
+    "test_cases": [
+      {
+        "input": "(function() local p = create_config_parser(); p:parse('[server]\\nhost=localhost\\nport=8080'); return p:get('server', 'host') end)()",
+        "expected_output": "localhost",
+        "description": "解析后应获取到字符串值 localhost"
+      },
+      {
+        "input": "(function() local p = create_config_parser(); p:parse('[server]\\nport=8080'); return p:get('server', 'port') end)()",
+        "expected_output": "8080",
+        "description": "解析后应获取到数字值 8080"
+      },
+      {
+        "input": "(function() local p = create_config_parser(); p:parse('[server]\\ndebug=true'); return p:get('server', 'debug') end)()",
+        "expected_output": "true",
+        "description": "解析后应获取到布尔值 true"
+      },
+      {
+        "input": "(function() local p = create_config_parser({server={timeout=30}}); p:parse('[server]\\nport=8080'); return p:get('server', 'timeout') end)()",
+        "expected_output": "30",
+        "description": "未配置的值应回退到默认值 30"
+      },
+      {
+        "input": "(function() local p = create_config_parser(); p:parse('[alpha]\\n[beta]\\n[gamma]'); local s = p:sections(); return table.concat(s, ',') end)()",
+        "expected_output": "alpha,beta,gamma",
+        "description": "sections 应返回排序后的节名列表"
+      }
+    ],
+    "hint": "使用gmatch逐行解析，用模式匹配提取节名和键值对，用元表或直接查找实现默认值回退"
+  }
+]

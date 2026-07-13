@@ -1,0 +1,295 @@
+[
+  {
+    "title": "文本清洗与分词",
+    "slug": "nlp-01-text-cleaning",
+    "description": "学习文本预处理的基本步骤：清洗、归一化、中英文分词，为后续NLP任务打下基础。",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "nlp",
+    "section": "文本预处理",
+    "content": "# 文本清洗与分词\n\n## 为什么需要文本预处理\n\n原始文本数据充满了\"噪声\"：HTML标签、特殊符号、大小写混用、停用词等。文本预处理是NLP流水线的第一步，其质量直接影响下游模型的表现。\n\n## 文本清洗步骤\n\n### 1. 去除噪声\n```python\nimport re\n\ndef clean_text(text):\n    # 去除HTML标签\n    text = re.sub(r'<[^>]+>', '', text)\n    # 去除URL\n    text = re.sub(r'http\\S+|www\\.\\S+', '', text)\n    # 去除特殊字符，保留字母、数字和中文\n    text = re.sub(r'[^\\w\\s\\u4e00-\\u9fff]', '', text)\n    # 合并多余空白\n    text = re.sub(r'\\s+', ' ', text).strip()\n    return text\n```\n\n### 2. 大小写转换\n英文NLP中通常将所有文本转为小写，以缩小编码空间：\n\n```python\ntext = text.lower()\n```\n\n### 3. 停用词去除\n停用词（Stop Words）如\"的\"、\"是\"、\"the\"、\"is\"等高频但对语义贡献小的词，通常在特征提取时被移除。\n\n## 分词\n\n分词（Tokenization）是将连续文本切分为离散语义单元的过程。\n\n### 英文分词\n英文以空格和标点作为天然分隔符，较为简单：\n\n```python\ndef english_tokenize(text):\n    from nltk.tokenize import word_tokenize\n    return word_tokenize(text)\n\n# 简单版\ndef simple_english_tokenize(text):\n    return re.findall(r'\\b\\w+\\b', text.lower())\n```\n\n### 中文分词\n中文没有天然分隔符，分词难度更大。常用工具：\n- jieba（结巴分词）：最流行的中文分词库\n- pkuseg：北大分词工具\n- HanLP：功能全面的NLP工具包\n\n```python\nimport jieba\n\ndef chinese_tokenize(text):\n    return list(jieba.cut(text))\n```\n\n## 分词粒度\n\n- **词级别分词**：按词典切分，如 \"自然语言处理\" → [\"自然语言\", \"处理\"]\n- **字级别分词**：逐字切分，如 \"自然语言处理\" → [\"自\", \"然\", \"语\", \"言\", \"处\", \"理\"]\n- **子词级别分词**（BPE/WordPiece）：将罕见词分解为常见子词\n\n现代大模型通常使用子词级别分词，在编码效率和覆盖率之间取得平衡。",
+    "starter_code": "import re\n\ndef clean_text(text):\n    \"\"\"\n    实现文本清洗函数\n    1. 去除HTML标签 <...>\n    2. 去除URL\n    3. 去除特殊字符（保留字母、数字、中文）\n    4. 合并多余空白\n    \"\"\"\n    # TODO: 实现清洗逻辑\n    pass\n\ndef simple_tokenize(text):\n    \"\"\"\n    简单英文分词：按单词边界切分，转为小写\n    \"\"\"\n    # TODO: 实现分词逻辑\n    pass\n\ndef count_words(text):\n    \"\"\"\n    返回文本中的有效单词数（清洗后）\n    \"\"\"\n    # TODO: 清洗后统计词数\n    pass",
+    "solution_code": "import re\n\ndef clean_text(text):\n    text = re.sub(r'<[^>]+>', '', text)\n    text = re.sub(r'http\\S+|www\\.\\S+', '', text)\n    text = re.sub(r'[^\\w\\s\\u4e00-\\u9fff]', '', text)\n    text = re.sub(r'\\s+', ' ', text).strip()\n    return text\n\ndef simple_tokenize(text):\n    text = text.lower()\n    tokens = re.findall(r'\\b\\w+\\b', text)\n    return tokens\n\ndef count_words(text):\n    cleaned = clean_text(text)\n    tokens = simple_tokenize(cleaned)\n    return len(tokens)\n\nif __name__ == \"__main__\":\n    sample = \"<p>Hello World! Visit https://example.com.</p>\"\n    print(\"Cleaned:\", clean_text(sample))\n    print(\"Tokens:\", simple_tokenize(sample))\n    print(\"Word count:\", count_words(sample))",
+    "test_cases": [
+      {
+        "input": "clean_text_sol('<p>Hello World!</p>')",
+        "expected_output": "Hello World",
+        "description": "清洗HTML标签"
+      },
+      {
+        "input": "simple_tokenize_sol('Hello World! How are you?')",
+        "expected_output": "['hello', 'world', 'how', 'are', 'you']",
+        "description": "英文分词并转小写"
+      },
+      {
+        "input": "count_words_sol('The quick brown fox')",
+        "expected_output": "4",
+        "description": "正确统计单词数"
+      }
+    ],
+    "hint": "正则 r'<[^>]+>' 匹配HTML标签。r'\\b\\w+\\b' 匹配单词边界。中文范围 \\u4e00-\\u9fff。",
+    "prerequisites": []
+  },
+  {
+    "title": "BPE与WordPiece子词分词",
+    "slug": "nlp-02-subword",
+    "description": "深入理解BPE和WordPiece子词分词算法，它们是BERT和GPT等大模型的标准分词方式。",
+    "order": 2,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "nlp",
+    "section": "文本预处理",
+    "content": "# BPE与WordPiece子词分词\n\n## 子词分词的动机\n\n传统分词方法面临两个极端：\n- **词级别分词**：词典无法穷举，OOV（Out-of-Vocabulary）问题严重\n- **字级别分词**：序列过长，语义信息稀疏\n\n子词分词（Subword Tokenization）是折中方案：将罕见词拆分为常见子词单元。\n\n## BPE（Byte Pair Encoding）\n\nBPE最早是数据压缩算法，Sennrich等人将其用于NMT。\n\n### 算法步骤\n1. 将所有单词分解为字符\n2. 统计所有**相邻字符对**的出现频率\n3. 合并频率最高的字符对，将其加入词典\n4. 重复步骤2-3，直到达到目标词表大小\n\n```python\nfrom collections import Counter\n\ndef get_stats(vocab):\n    \"\"\"统计相邻符号对的频率\"\"\"\n    pairs = Counter()\n    for word, freq in vocab.items():\n        symbols = word.split()\n        for i in range(len(symbols) - 1):\n            pairs[(symbols[i], symbols[i + 1])] += freq\n    return pairs\n\ndef merge_vocab(pair, vocab_in):\n    \"\"\"合并指定的符号对\"\"\"\n    bigram = ' '.join(pair)\n    replacement = ''.join(pair)\n    vocab_out = {}\n    for word, freq in vocab_in.items():\n        new_word = word.replace(bigram, replacement)\n        vocab_out[new_word] = freq\n    return vocab_out\n```\n\n### BPE示例\n初始词表：`{'l o w': 5, 'l o w e r': 2, 'w i d e r': 3}`\n- 第1次合并 `e r` → `er`（最高频：lower和wider各2次）\n- 迭代多次后，常见子词如 `ing`、`tion` 被自动发现\n\n## WordPiece\n\nBERT使用的WordPiece与BPE类似，但用**最大似然**而非频率来选择合并：\n\n$$\\text{score} = \\frac{\\log P(\\text{token}_1, \\text{token}_2)}{\\log P(\\text{token}_1) + \\log P(\\text{token}_2)}$$\n\nWordPiece倾向于选择那些\"联合概率远大于边缘概率乘积\"的合并。\n\n## Unigram Language Model\n\nSentencePiece中使用的Unigram方法：\n- 从大词表开始，通过EM算法迭代删除贡献最小的子词\n- 支持直接对原始文本建模，无需预分词\n\n## 实际应用\n\n| 模型 | 分词方法 | 词表大小 |\n|------|---------|----------|\n| BERT | WordPiece | 30,522 |\n| GPT-2 | BPE | 50,257 |\n| LLaMA | BPE (SentencePiece) | 32,000 |\n| T5 | SentencePiece | 32,128 |",
+    "starter_code": "from collections import Counter\n\ndef get_pair_stats(vocab):\n    \"\"\"\n    统计词表中所有相邻符号对的频率\n    vocab: {'l o w': 5, 'l o w e r': 2, ...}\n    return: Counter({('l','o'): 7, ('o','w'): 7, ...})\n    \"\"\"\n    # TODO: 统计相邻符号对频率\n    pass\n\ndef merge_pair(vocab, pair):\n    \"\"\"\n    将指定的pair合并为一个符号\n    vocab: 当前词表\n    pair: 要合并的符号对，如 ('e', 'r')\n    \"\"\"\n    # TODO: 实现合并逻辑\n    pass\n\ndef bpe_encode(word, merges):\n    \"\"\"\n    使用学到的合并规则对单词进行BPE编码\n    word: \"lower\"\n    merges: [('e','r'), ('o','w'), ...] 合并顺序列表\n    \"\"\"\n    # TODO: 按顺序应用合并规则\n    pass",
+    "solution_code": "from collections import Counter\n\ndef get_pair_stats(vocab):\n    pairs = Counter()\n    for word, freq in vocab.items():\n        symbols = word.split()\n        for i in range(len(symbols) - 1):\n            pairs[(symbols[i], symbols[i + 1])] += freq\n    return pairs\n\ndef merge_pair(vocab, pair):\n    bigram = ' '.join(pair)\n    replacement = ''.join(pair)\n    new_vocab = {}\n    for word, freq in vocab.items():\n        new_word = word.replace(bigram, replacement)\n        new_vocab[new_word] = freq\n    return new_vocab\n\ndef bpe_encode(word, merges):\n    symbols = list(word)\n    for pair in merges:\n        i = 0\n        while i < len(symbols) - 1:\n            if (symbols[i], symbols[i + 1]) == pair:\n                symbols[i] = symbols[i] + symbols[i + 1]\n                symbols.pop(i + 1)\n            else:\n                i += 1\n    return symbols\n\nif __name__ == \"__main__\":\n    vocab = {\n        'l o w': 5,\n        'l o w e r': 2,\n        'w i d e r': 3,\n        'n e w e r': 6\n    }\n    stats = get_pair_stats(vocab)\n    print(\"Pair frequencies:\", stats.most_common(5))\n    best_pair = stats.most_common(1)[0][0]\n    print(\"Best pair:\", best_pair)\n    new_vocab = merge_pair(vocab, best_pair)\n    print(\"After merge:\", new_vocab)\n    \n    merges = [('e', 'r'), ('o', 'w')]\n    print(\"BPE encode 'lower':\", bpe_encode(\"lower\", merges))",
+    "test_cases": [
+      {
+        "input": "sorted(bpe_stats({'l o w': 5, 'l o w e r': 2})[('l', 'o')])",
+        "expected_output": "7",
+        "description": "统计('l','o')对的频率应为5+2=7"
+      },
+      {
+        "input": "bpe_merge_sol({'l o w': 5, 'l o w e r': 2}, ('e', 'r')).get('l o w er', -1)",
+        "expected_output": "2",
+        "description": "合并('e','r')后'lower'变成'low er'"
+      }
+    ],
+    "hint": "BPE合并时注意字符串中的空格分隔：pair用 ' '.join(pair) 匹配，替换为 ''.join(pair)。",
+    "prerequisites": [
+      "nlp-01-text-cleaning"
+    ]
+  },
+  {
+    "title": "TF-IDF与文本向量化",
+    "slug": "nlp-03-tfidf",
+    "description": "学习TF-IDF算法原理，将文本转换为特征向量，搭建一个简单的文本分类器。",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "nlp",
+    "section": "文本预处理",
+    "content": "# TF-IDF与文本向量化\n\n## 从文本到数字\n\n机器学习模型处理的是数字矩阵，而文本是字符序列。**文本向量化**将文本映射到数值向量空间。\n\n## 词袋模型（Bag of Words）\n\n最简单的文本向量化方法：统计每个词在文档中出现的次数。\n\n问题：高频词（如\"the\"、\"是\"）主导了向量，但它们对语义贡献很小。\n\n## TF-IDF\n\nTF-IDF（Term Frequency-Inverse Document Frequency）是一种加权方案，它给\"在本文档中频繁出现、但在整个语料库中罕见\"的词赋以高权重。\n\n### TF（词频）\n$$\\text{TF}(t, d) = \\frac{\\text{词}t\\text{在文档}d\\text{中的出现次数}}{\\text{文档}d\\text{的总词数}}$$\n\n### IDF（逆文档频率）\n$$\\text{IDF}(t) = \\log\\frac{N}{\\text{包含词}t\\text{的文档数} + 1} + 1$$\n\n### TF-IDF\n$$\\text{TF-IDF}(t, d) = \\text{TF}(t, d) \\times \\text{IDF}(t)$$\n\n```python\nimport numpy as np\nfrom collections import Counter\nfrom math import log\n\nclass TFIDFVectorizer:\n    def __init__(self):\n        self.vocab = {}\n        self.idf = {}\n\n    def fit(self, documents):\n        N = len(documents)\n        doc_freq = Counter()\n        for doc in documents:\n            unique_words = set(doc.split())\n            doc_freq.update(unique_words)\n        self.vocab = {word: idx for idx, word in enumerate(doc_freq.keys())}\n        self.idf = {word: log(N / (freq + 1)) + 1\n                     for word, freq in doc_freq.items()}\n\n    def transform(self, documents):\n        n_features = len(self.vocab)\n        matrix = np.zeros((len(documents), n_features))\n        for i, doc in enumerate(documents):\n            word_counts = Counter(doc.split())\n            total_words = sum(word_counts.values())\n            for word, count in word_counts.items():\n                if word in self.vocab:\n                    tf = count / total_words\n                    matrix[i, self.vocab[word]] = tf * self.idf[word]\n        return matrix\n```\n\n## 余弦相似度\n\nTF-IDF向量常用于计算文档相似度，标准度量是余弦相似度：\n\n$$\\text{cosine}(A, B) = \\frac{A \\cdot B}{\\|A\\| \\|B\\|}$$\n\n## 局限性\n\nTF-IDF是**词袋模型**，忽略了词序信息和上下文语义。\"我爱北京\"和\"北京爱我\"的TF-IDF向量完全相同——这正是Word2Vec等分布式表示方法的用武之地。",
+    "starter_code": "import numpy as np\nfrom collections import Counter\nfrom math import log\n\nclass SimpleTFIDF:\n    def __init__(self):\n        self.vocab_ = {}\n        self.idf_ = {}\n\n    def fit(self, documents):\n        \"\"\"\n        从文档集合学习词汇表和IDF值\n        documents: ['this is doc1', 'this is doc2', ...]\n        \"\"\"\n        # TODO: 构建词汇表；计算每个词的IDF\n        pass\n\n    def transform(self, documents):\n        \"\"\"\n        将文档集合转换为TF-IDF矩阵\n        return: (n_docs, n_features) numpy数组\n        \"\"\"\n        # TODO: 实现TF-IDF变换\n        pass\n\n    def cosine_similarity(self, vec_a, vec_b):\n        \"\"\"\n        计算两个向量的余弦相似度\n        \"\"\"\n        # TODO: dot(a, b) / (||a|| * ||b||)\n        pass",
+    "solution_code": "import numpy as np\nfrom collections import Counter\nfrom math import log\n\nclass SimpleTFIDF:\n    def __init__(self):\n        self.vocab_ = {}\n        self.idf_ = {}\n\n    def fit(self, documents):\n        N = len(documents)\n        df = Counter()\n        for doc in documents:\n            unique = set(doc.lower().split())\n            df.update(unique)\n        self.vocab_ = {word: i for i, word in enumerate(sorted(df.keys()))}\n        for word, freq in df.items():\n            self.idf_[word] = log(N / (freq + 1)) + 1.0\n\n    def transform(self, documents):\n        n_features = len(self.vocab_)\n        matrix = np.zeros((len(documents), n_features))\n        for i, doc in enumerate(documents):\n            words = doc.lower().split()\n            counts = Counter(words)\n            total = len(words)\n            for word, cnt in counts.items():\n                if word in self.vocab_:\n                    tf = cnt / total\n                    matrix[i, self.vocab_[word]] = tf * self.idf_[word]\n        return matrix\n\n    def cosine_similarity(self, vec_a, vec_b):\n        dot = np.dot(vec_a, vec_b)\n        norm_a = np.linalg.norm(vec_a)\n        norm_b = np.linalg.norm(vec_b)\n        if norm_a == 0 or norm_b == 0:\n            return 0.0\n        return dot / (norm_a * norm_b)\n\nif __name__ == \"__main__\":\n    docs = [\n        \"machine learning is great\",\n        \"deep learning is powerful\",\n        \"machine learning and deep learning\"\n    ]\n    tfidf = SimpleTFIDF()\n    tfidf.fit(docs)\n    X = tfidf.transform(docs)\n    print(\"TF-IDF matrix shape:\", X.shape)\n    print(\"Similarity doc1-doc2:\", tfidf.cosine_similarity(X[0], X[1]))\n    print(\"Similarity doc1-doc3:\", tfidf.cosine_similarity(X[0], X[2]))",
+    "test_cases": [
+      {
+        "input": "SimpleTFIDF().cosine_similarity(np.array([1, 0, 1]), np.array([1, 0, 1]))",
+        "expected_output": "1.0",
+        "description": "相同向量的余弦相似度应为1.0"
+      },
+      {
+        "input": "SimpleTFIDF().cosine_similarity(np.array([1, 0]), np.array([0, 1]))",
+        "expected_output": "0.0",
+        "description": "正交向量的余弦相似度应为0.0"
+      }
+    ],
+    "hint": "IDF公式: log(N / (df + 1)) + 1。TF = count / total。余弦相似度 = dot(a,b) / (||a||*||b||)。",
+    "prerequisites": [
+      "nlp-01-text-cleaning"
+    ]
+  },
+  {
+    "title": "Word2Vec词嵌入",
+    "slug": "nlp-04-word2vec",
+    "description": "理解Word2Vec的CBOW和Skip-Gram两种架构，掌握静态词嵌入的训练和推理方法。",
+    "order": 4,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "nlp",
+    "section": "词嵌入与Transformer",
+    "content": "# Word2Vec词嵌入\n\n## 分布式表示\n\n传统One-Hot编码的维度等于词表大小（通常数万），向量稀疏且无语义信息。Word2Vec（Mikolov et al., 2013）开创性地将词映射到低维（通常100-300维）稠密向量空间，使语义相近的词在向量空间中距离也近。\n\n## 两种架构\n\n### CBOW（Continuous Bag of Words）\n**给定上下文 → 预测中心词**\n\n示例：\"The cat sits on the mat\"\n- 上下文窗口(2): [\"The\", \"cat\", \"on\", \"the\"]\n- 预测目标: \"sits\"\n\nCBOW将上下文词的嵌入取平均，通过线性变换和Softmax预测中心词。\n\n### Skip-Gram\n**给定中心词 → 预测上下文**\n\n与CBOW相反：给定\"sits\"，预测周围的词[\"The\", \"cat\", \"on\", \"the\"]。\n\nSkip-Gram在小数据集上表现更好，对罕见词也更友好。\n\n```python\nimport numpy as np\n\ndef softmax(x):\n    exp_x = np.exp(x - np.max(x))\n    return exp_x / np.sum(exp_x)\n\nclass SkipGram:\n    def __init__(self, vocab_size, embedding_dim):\n        # 中心词嵌入矩阵 (输入)\n        self.W_in = np.random.randn(vocab_size, embedding_dim) * 0.01\n        # 上下文词嵌入矩阵 (输出)\n        self.W_out = np.random.randn(embedding_dim, vocab_size) * 0.01\n\n    def forward(self, center_word_idx):\n        # 查表：中心词的嵌入向量\n        self.h = self.W_in[center_word_idx]  # (embedding_dim,)\n        # 预测所有词的得分\n        self.scores = np.dot(self.h, self.W_out)  # (vocab_size,)\n        self.probs = softmax(self.scores)\n        return self.probs\n```\n\n## 关键优化技术\n\n### 负采样（Negative Sampling）\n直接对整个词表做Softmax计算量太大。负采样将多分类问题转化为二分类：\n$$\\log \\sigma(v_{w_O} \\cdot v_{w_I}) + \\sum_{i=1}^{k} \\mathbb{E}_{w_i \\sim P_n} \\log \\sigma(-v_{w_i} \\cdot v_{w_I})$$\n\n只更新正样本和少量负样本的权重。\n\n### 层次Softmax\n用Huffman树组织词表，将Softmax计算从O(V)降为O(log V)。\n\n## 词类比\n\nWord2Vec展现出惊人的语义算术性质：\n- King - Man + Woman ≈ Queen\n- Paris - France + Italy ≈ Rome",
+    "starter_code": "import numpy as np\n\ndef softmax(x):\n    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)\n\nclass SimpleWord2Vec:\n    def __init__(self, vocab_size, embedding_dim, lr=0.01):\n        self.lr = lr\n        # TODO: 初始化输入嵌入矩阵W_in (vocab_size, embedding_dim)\n        # TODO: 初始化输出嵌入矩阵W_out (embedding_dim, vocab_size)\n\n    def forward(self, center_idx):\n        \"\"\"\n        前向传播：查表 → 点积 → softmax\n        \"\"\"\n        # TODO: 实现前向传播\n        pass\n\n    def train_step(self, center_idx, context_idx):\n        \"\"\"\n        反向传播一步：使用交叉熵损失\n        center_idx: 中心词索引\n        context_idx: 上下文词索引\n        \"\"\"\n        # TODO: 实现训练步骤\n        pass\n\n    def get_embedding(self, word_idx):\n        \"\"\"返回某个词的词嵌入向量\"\"\"\n        # TODO\n        pass",
+    "solution_code": "import numpy as np\n\ndef softmax(x):\n    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)\n\nclass SimpleWord2Vec:\n    def __init__(self, vocab_size, embedding_dim, lr=0.01):\n        self.lr = lr\n        self.W_in = np.random.randn(vocab_size, embedding_dim) * 0.01\n        self.W_out = np.random.randn(embedding_dim, vocab_size) * 0.01\n\n    def forward(self, center_idx):\n        self.h = self.W_in[center_idx]\n        self.scores = np.dot(self.h, self.W_out)\n        self.probs = softmax(self.scores)\n        return self.probs\n\n    def train_step(self, center_idx, context_idx):\n        probs = self.forward(center_idx)\n        # Cross-entropy gradient\n        d_scores = probs.copy()\n        d_scores[context_idx] -= 1\n        # Gradients\n        d_W_out = np.outer(self.h, d_scores)\n        d_h = np.dot(self.W_out, d_scores)\n        # Update\n        self.W_out -= self.lr * d_W_out\n        self.W_in[center_idx] -= self.lr * d_h\n\n    def get_embedding(self, word_idx):\n        return self.W_in[word_idx]\n\n    def similarity(self, idx_a, idx_b):\n        emb_a = self.get_embedding(idx_a)\n        emb_b = self.get_embedding(idx_b)\n        return np.dot(emb_a, emb_b) / (np.linalg.norm(emb_a) * np.linalg.norm(emb_b))\n\nif __name__ == \"__main__\":\n    # Simple test\n    model = SimpleWord2Vec(10, 5, lr=0.1)\n    for _ in range(100):\n        model.train_step(0, 1)\n    emb = model.get_embedding(0)\n    print(\"Embedding shape:\", emb.shape)\n    print(\"Similarity:\", model.similarity(0, 1))",
+    "test_cases": [
+      {
+        "input": "word2vec_forward(5, np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype=np.float64)).shape",
+        "expected_output": "(3,)",
+        "description": "给定3维嵌入维度，get_embedding应返回(3,)向量"
+      },
+      {
+        "input": "round(word2vec_sim(np.array([1, 0, 0]), np.array([1, 0, 0])), 3)",
+        "expected_output": "1.0",
+        "description": "相同向量的余弦相似度为1"
+      }
+    ],
+    "hint": "交叉熵损失的梯度：d_scores = probs - one_hot(target)。W_in只更新中心词对应行。",
+    "prerequisites": [
+      "nlp-03-tfidf"
+    ]
+  },
+  {
+    "title": "注意力机制与NLP",
+    "slug": "nlp-05-attention-nlp",
+    "description": "理解注意力机制如何在NLP中建模词间关系，掌握自注意力和多头注意力的计算。",
+    "order": 5,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "nlp",
+    "section": "词嵌入与Transformer",
+    "content": "# 注意力机制与NLP\n\n## 注意力在NLP中的角色\n\n注意力机制允许模型在处理每个词时，动态地关注序列中的其他词，权重反映词与词之间的语义关联。\n\n例如在翻译 \"The cat sat on the mat\" → \"猫坐在垫子上\" 时，生成\"猫\"时注意力应集中在\"cat\"上。\n\n## 自注意力（Self-Attention）的直观理解\n\n自注意力中，同一个序列既提供Query也提供Key和Value：\n- 每个词都要\"询问\"（Query）其他所有词\n- 每个词都要\"应答\"（Key）其他词的询问\n- 根据匹配程度加权聚合\"内容\"（Value）\n\n$$\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V$$\n\n```python\nimport numpy as np\n\ndef softmax(x, axis=-1):\n    exp_x = np.exp(x - np.max(x, axis=axis, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=axis, keepdims=True)\n\ndef self_attention(X, W_Q, W_K, W_V):\n    \"\"\"\n    X: (seq_len, d_model) 输入序列\n    W_Q, W_K, W_V: (d_model, d_k) 投影矩阵\n    \"\"\"\n    Q = np.dot(X, W_Q)  # (seq_len, d_k)\n    K = np.dot(X, W_K)\n    V = np.dot(X, W_V)\n\n    d_k = K.shape[-1]\n    scores = np.dot(Q, K.T) / np.sqrt(d_k)  # (seq_len, seq_len)\n    weights = softmax(scores, axis=-1)       # 注意力矩阵\n    output = np.dot(weights, V)              # (seq_len, d_k)\n    return output, weights\n```\n\n## 注意力权重矩阵解读\n\n一个 (seq_len × seq_len) 的注意力矩阵，第 $i$ 行第 $j$ 列的值表示词 $i$ 对词 $j$ 的关注程度。对角线通常较高（词\"关注自己\"），但也存在有趣的非对角线模式。\n\n## 多头注意力\n\n单头注意力可能只捕捉一种模式（如语法关系），多头注意力同时学习多种模式（语法、语义、指代等）。\n\n## 掩码（Masking）\n\n- **Padding Mask**：防止模型关注填充的 `<pad>` 位置\n- **Causal Mask**（因果掩码）：防止当前位置\"看到\"未来的信息，用于自回归生成（如GPT）\n\n因果掩码是一个上三角矩阵，将未来位置的注意力分数设为 $-\\infty$：\n\n```python\ndef causal_mask(seq_len):\n    mask = np.triu(np.ones((seq_len, seq_len)), k=1) * -1e9\n    return mask\n```",
+    "starter_code": "import numpy as np\n\ndef softmax(x, axis=-1):\n    exp_x = np.exp(x - np.max(x, axis=axis, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=axis, keepdims=True)\n\ndef single_head_attention(Q, K, V, mask=None):\n    \"\"\"\n    实现单头缩放点积注意力\n    Q, K, V: (seq_len, d_k)\n    mask: (seq_len, seq_len) 可选掩码\n    return: output (seq_len, d_k), weights (seq_len, seq_len)\n    \"\"\"\n    # TODO: scores = Q @ K^T / sqrt(d_k)\n    # TODO: 应用mask (if mask is not None: scores += mask)\n    # TODO: weights = softmax(scores)\n    # TODO: output = weights @ V\n    pass\n\ndef causal_mask(seq_len):\n    \"\"\"\n    生成因果掩码（上三角为-inf）\n    \"\"\"\n    # TODO\n    pass",
+    "solution_code": "import numpy as np\n\ndef softmax(x, axis=-1):\n    exp_x = np.exp(x - np.max(x, axis=axis, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=axis, keepdims=True)\n\ndef single_head_attention(Q, K, V, mask=None):\n    d_k = K.shape[-1]\n    scores = np.dot(Q, K.T) / np.sqrt(d_k)\n    if mask is not None:\n        scores = scores + mask\n    weights = softmax(scores, axis=-1)\n    output = np.dot(weights, V)\n    return output, weights\n\ndef causal_mask(seq_len):\n    mask = np.triu(np.ones((seq_len, seq_len)), k=1) * -1e9\n    return mask\n\ndef compute_attention_scores(text_tokens, d_model=64):\n    \"\"\"模拟注意力计算并返回注意力矩阵\"\"\"\n    n = len(text_tokens)\n    X = np.random.randn(n, d_model) * 0.02\n    WQ = np.random.randn(d_model, d_model) * 0.02\n    WK = np.random.randn(d_model, d_model) * 0.02\n    WV = np.random.randn(d_model, d_model) * 0.02\n    Q = np.dot(X, WQ)\n    K = np.dot(X, WK)\n    V = np.dot(X, WV)\n    scores = np.dot(Q, K.T) / np.sqrt(d_model)\n    weights = softmax(scores, axis=-1)\n    return weights\n\nif __name__ == \"__main__\":\n    seq_len, d_k = 5, 64\n    Q = np.random.randn(seq_len, d_k)\n    K = np.random.randn(seq_len, d_k)\n    V = np.random.randn(seq_len, d_k)\n    out, w = single_head_attention(Q, K, V, causal_mask(seq_len))\n    print(\"Output shape:\", out.shape)\n    print(\"Is causal (upper tri zero)?\", np.all(w[1:, 0] > 0))",
+    "test_cases": [
+      {
+        "input": "causal_mask_tf(3).tolist()",
+        "expected_output": "[[0.0, -1000000000.0, -1000000000.0], [0.0, 0.0, -1000000000.0], [0.0, 0.0, 0.0]]",
+        "description": "因果掩码上三角为-inf，其余为0"
+      },
+      {
+        "input": "attn_nlp_sol(np.ones((4, 32)), np.ones((4, 32)), np.ones((4, 32)))[1].shape",
+        "expected_output": "(4, 4)",
+        "description": "注意力权重矩阵应为(seq_len, seq_len)"
+      }
+    ],
+    "hint": "np.triu(k=1)生成上三角矩阵（不包括对角线）。掩码处设为-1e9，经过softmax后权重趋近0。",
+    "prerequisites": [
+      "nlp-04-word2vec"
+    ]
+  },
+  {
+    "title": "BERT原理与理解",
+    "slug": "nlp-06-bert",
+    "description": "深入理解BERT的预训练任务（MLM和NSP）、双向上下文建模，以及模型架构。",
+    "order": 6,
+    "difficulty": "advanced",
+    "xp_reward": 30,
+    "track": "nlp",
+    "section": "词嵌入与Transformer",
+    "content": "# BERT原理与理解\n\n## BERT的核心理念\n\nBERT（Bidirectional Encoder Representations from Transformers）由Google在2018年提出，核心创新是**双向上下文建模**。\n\n之前的模型（如GPT）是单向的（从左到右），而BERT同时利用左右两侧的上下文。\"银行\"在\"去银行存钱\"和\"坐在河银行\"中含义不同，双向上下文能更好地消歧。\n\n## BERT架构\n\nBERT使用的是Transformer编码器堆叠：\n- BERT-base: 12层编码器, 768隐藏维度, 12注意力头, 110M参数\n- BERT-large: 24层编码器, 1024隐藏维度, 16注意力头, 340M参数\n\n```python\nimport numpy as np\n\nclass BertEmbeddings:\n    def __init__(self, vocab_size, max_len, hidden_size):\n        self.token_embeddings = np.random.randn(vocab_size, hidden_size) * 0.02\n        self.position_embeddings = np.random.randn(max_len, hidden_size) * 0.02\n        self.segment_embeddings = np.random.randn(2, hidden_size) * 0.02\n        self.layer_norm = lambda x, eps=1e-12: (x - np.mean(x)) / (np.std(x) + eps)\n\n    def forward(self, input_ids, token_type_ids):\n        tok_emb = self.token_embeddings[input_ids]\n        pos_emb = self.position_embeddings[:len(input_ids)]\n        seg_emb = self.segment_embeddings[token_type_ids]\n        embeddings = tok_emb + pos_emb + seg_emb\n        return self.layer_norm(embeddings)\n```\n\nBERT输入 = Token嵌入 + 位置嵌入 + 段落嵌入\n\n## 预训练任务\n\n### Masked Language Model (MLM)\n随机遮盖输入中15%的token：\n- 80% 用 [MASK] 替换\n- 10% 用随机词替换\n- 10% 保持原词不变\n\n模型需要根据上下文预测被遮盖的词。这迫使BERT学习深层的双向语义理解。\n\n### Next Sentence Prediction (NSP)\n给定两个句子A和B，判断B是否是A的下一句（50%正例，50%负例）。训练BERT理解句子间关系。\n\n（注：后续研究如RoBERTa发现NSP并非必要。）\n\n## BERT的特殊Token\n\n- `[CLS]`：分类token，放在句首，其最终隐状态用于分类任务\n- `[SEP]`：分隔token，用于分隔两个句子\n- `[MASK]`：在MLM预训练中遮盖的token\n\n## BERT的局限\n\n- 不能用于文本生成（非自回归模型）\n- 输入长度限制（通常512 tokens）\n- 预训练成本极高",
+    "starter_code": "import numpy as np\n\ndef create_mlm_labels(tokens, mask_prob=0.15):\n    \"\"\"\n    为BERT的Masked LM任务生成标签\n    tokens: ['我', '爱', '自然', '语言', '处理']\n    mask_prob: 遮盖概率\n    \n    返回:\n      masked_tokens: 随机遮盖后的token序列\n      labels: -100表示不计算loss，否则为原始token ID\n    \"\"\"\n    # TODO: 随机选择15%的位置进行遮盖\n    # TODO: 其中80%替换为[MASK]，10%随机替换，10%保持原词\n    pass\n\ndef bert_pooling(hidden_states, pooling='cls'):\n    \"\"\"\n    从BERT隐藏状态提取句向量\n    hidden_states: (seq_len, hidden_size)\n    pooling: 'cls' - 取[CLS]位置, 'mean' - 取所有token平均\n    \"\"\"\n    # TODO: 实现两种池化策略\n    pass",
+    "solution_code": "import numpy as np\n\ndef create_mlm_labels(tokens, mask_prob=0.15):\n    MASK_ID = 103  # [MASK]\n    tokens = list(tokens)\n    labels = [-100] * len(tokens)\n    masked_tokens = tokens[:]\n    \n    n_mask = max(1, int(len(tokens) * mask_prob))\n    mask_indices = np.random.choice(len(tokens), n_mask, replace=False)\n    \n    for idx in mask_indices:\n        labels[idx] = idx  # store original token id\n        rand = np.random.random()\n        if rand < 0.8:\n            masked_tokens[idx] = '[MASK]'\n        elif rand < 0.9:\n            masked_tokens[idx] = tokens[np.random.randint(0, len(tokens))]\n        # else: keep original\n    \n    return masked_tokens, labels\n\ndef bert_pooling(hidden_states, pooling='cls'):\n    if pooling == 'cls':\n        return hidden_states[0]\n    elif pooling == 'mean':\n        return np.mean(hidden_states, axis=0)\n    else:\n        raise ValueError(f\"Unknown pooling: {pooling}\")\n\nif __name__ == \"__main__\":\n    tokens = ['[CLS]', '我', '爱', '自然', '语言', '处理', '[SEP]']\n    masked, labels = create_mlm_labels(tokens)\n    print(\"Masked:\", masked)\n    print(\"Labels:\", [l for l in labels if l != -100])\n    hid = np.random.randn(7, 768)\n    print(\"CLS vector shape:\", bert_pooling(hid, 'cls').shape)\n    print(\"Mean vector shape:\", bert_pooling(hid, 'mean').shape)",
+    "test_cases": [
+      {
+        "input": "len(create_mlm_labels_tf(['a','b','c','d','e','f','g','h','i','j'])[1])",
+        "expected_output": "10",
+        "description": "标签列表长度应与输入相同"
+      },
+      {
+        "input": "create_mlm_labels_tf(['a'])[1] == [-100]",
+        "expected_output": "True",
+        "description": "只有一个token时至少遮盖1个（即100%遮盖率，但最少1个）"
+      }
+    ],
+    "hint": "MLM遮盖：先随机选15%位置 → 80%概率替换为[MASK]，10%随机替换，10%保留原词。标签中-100表示忽略该位置的损失。",
+    "prerequisites": [
+      "nlp-05-attention-nlp"
+    ]
+  },
+  {
+    "title": "文本分类微调",
+    "slug": "nlp-07-text-classification",
+    "description": "学习如何使用预训练BERT模型进行文本分类微调，包括数据处理、训练和评估。",
+    "order": 7,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "nlp",
+    "section": "词嵌入与Transformer",
+    "content": "# 文本分类微调\n\n## 微调（Fine-tuning）范式\n\nBERT的预训练是无监督的，学到的是通用语言知识。微调阶段在特定任务（如文本分类）的标注数据上继续训练，将通用知识适配到具体任务。\n\n## 文本分类的微调流程\n\n### 1. 数据准备\n```python\ndef prepare_data(texts, labels, tokenizer, max_len=128):\n    \"\"\"准备分类训练数据\"\"\"\n    input_ids = []\n    attention_masks = []\n    for text in texts:\n        # 添加 [CLS] 和 [SEP]\n        encoded = tokenizer.encode(\n            text,\n            max_length=max_len,\n            padding='max_length',\n            truncation=True\n        )\n        input_ids.append(encoded['input_ids'])\n        attention_masks.append(encoded['attention_mask'])\n    return np.array(input_ids), np.array(attention_masks), np.array(labels)\n```\n\n### 2. 模型结构\n在BERT编码器之上添加分类头：\n\n```python\nimport numpy as np\n\nclass BertForSequenceClassification:\n    def __init__(self, bert, num_classes):\n        self.bert = bert  # 预训练的BERT\n        # 分类头\n        self.classifier = np.random.randn(768, num_classes) * 0.02\n        self.bias = np.zeros(num_classes)\n\n    def forward(self, input_ids, attention_mask):\n        # 取 [CLS] token的隐状态\n        cls_embedding = self.bert(input_ids, attention_mask)[0][:, 0, :]\n        # 分类\n        logits = np.dot(cls_embedding, self.classifier) + self.bias\n        return logits\n```\n\n### 3. 训练\n```python\ndef train_step(model, batch, labels, optimizer='adam', lr=2e-5):\n    \"\"\"\n    微调的一个关键实践：使用较小的学习率（通常是2e-5 ~ 5e-5）\n    BERT论文推荐: 2e-5 或 3e-5 或 5e-5\n    \"\"\"\n    logits = model.forward(batch)\n    loss = softmax_cross_entropy(logits, labels)\n    # 反向传播\n    gradients = compute_gradients(loss)\n    model.apply_gradients(gradients, lr)\n    return loss\n```\n\n## 微调最佳实践\n\n1. **学习率**：2e-5 ~ 5e-5，太大可能毁掉预训练知识（\"灾难性遗忘\"）\n2. **Epoch数**：通常2-4个epoch足够，太少欠拟合，太多过拟合\n3. **Batch Size**：16或32\n4. **长文本处理**：截断（取前512 tokens）、滑动窗口、分层聚合\n5. **分层学习率**：底层用更小的学习率，顶层用稍大的学习率\n\n## 评估指标\n\n- **准确率（Accuracy）**：预测正确的比例，适用于类别平衡\n- **F1 Score**：精确率和召回率的调和平均，适用于类别不平衡\n- **混淆矩阵**：可视化各类别的预测分布\n\n```python\ndef compute_metrics(y_true, y_pred):\n    accuracy = np.mean(y_true == y_pred)\n    return {'accuracy': accuracy}\n```",
+    "starter_code": "import numpy as np\n\ndef softmax_cross_entropy(logits, labels):\n    \"\"\"\n    计算Softmax交叉熵损失\n    logits: (batch_size, num_classes)\n    labels: (batch_size,) 整数标签\n    \"\"\"\n    # TODO: softmax + 交叉熵\n    pass\n\ndef classification_accuracy(logits, labels):\n    \"\"\"\n    计算分类准确率\n    logits: (batch_size, num_classes)\n    labels: (batch_size,)\n    \"\"\"\n    # TODO: argmax + compare\n    pass\n\ndef prepare_batch(texts, labels, vocab, max_len=128):\n    \"\"\"\n    将文本批次转换为模型输入\n    texts: 文本列表\n    labels: 标签列表\n    vocab: 词表字典\n    返回: input_ids, attention_mask, labels\n    \"\"\"\n    # TODO: 实现批处理逻辑\n    pass",
+    "solution_code": "import numpy as np\n\ndef softmax_cross_entropy(logits, labels):\n    logits_max = logits - np.max(logits, axis=1, keepdims=True)\n    exp_logits = np.exp(logits_max)\n    probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)\n    n = len(labels)\n    loss = -np.sum(np.log(probs[np.arange(n), labels] + 1e-10)) / n\n    return loss\n\ndef classification_accuracy(logits, labels):\n    preds = np.argmax(logits, axis=1)\n    return np.mean(preds == labels)\n\ndef prepare_batch(texts, labels, vocab, max_len=128):\n    n = len(texts)\n    input_ids = np.zeros((n, max_len), dtype=np.int32)\n    attention_mask = np.zeros((n, max_len), dtype=np.int32)\n    for i, text in enumerate(texts):\n        tokens = text.split()[:max_len - 2]\n        ids = [vocab.get(token, vocab.get('[UNK]', 1)) for token in tokens]\n        ids = [vocab['[CLS]']] + ids + [vocab['[SEP]']]\n        seq_len = min(len(ids), max_len)\n        input_ids[i, :seq_len] = ids[:seq_len]\n        attention_mask[i, :seq_len] = 1\n    return np.array(input_ids), np.array(attention_mask), np.array(labels)\n\nif __name__ == \"__main__\":\n    logits = np.array([[2.0, 1.0, 0.1], [0.5, 2.5, 0.3]])\n    labels = np.array([0, 1])\n    loss = softmax_cross_entropy(logits, labels)\n    acc = classification_accuracy(logits, labels)\n    print(f\"Loss: {loss:.4f}, Accuracy: {acc:.4f}\")",
+    "test_cases": [
+      {
+        "input": "classification_accuracy_tf(np.array([[10, 1], [1, 10]]), np.array([0, 1]))",
+        "expected_output": "1.0",
+        "description": "完美预测的准确率应为1.0"
+      },
+      {
+        "input": "classification_accuracy_tf(np.array([[1, 10], [10, 1]]), np.array([0, 1]))",
+        "expected_output": "0.0",
+        "description": "全错预测的准确率应为0.0"
+      }
+    ],
+    "hint": "交叉熵：先计算softmax概率，再取-ln(p[正确类别])的平均值。数值稳定版：logits减max后再exp。",
+    "prerequisites": [
+      "nlp-06-bert"
+    ]
+  },
+  {
+    "title": "GPT生成式模型",
+    "slug": "nlp-08-gpt-generation",
+    "description": "理解GPT自回归生成原理，实现文本生成的采样策略（贪心、温度采样、Top-k、Top-p）。",
+    "order": 8,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "nlp",
+    "section": "大模型应用",
+    "content": "# GPT生成式模型\n\n## 自回归生成\n\nGPT（Generative Pre-trained Transformer）系列模型是单向（自回归）语言模型：给定前文，预测下一个token。生成时逐token地采样，直到产生终止符。\n\n## 训练 vs 推理\n\n- **训练**：给定完整序列，计算每个位置预测下一个token的损失\n- **推理（生成）**：从起始token开始，每次预测下一个token并拼接回输入，重复直到到达最大长度或生成终止符\n\n```python\nimport numpy as np\n\ndef autoregressive_generate(model, prompt_ids, max_new_tokens=50, eos_token_id=2):\n    \"\"\"自回归文本生成\"\"\"\n    generated = list(prompt_ids)\n    for _ in range(max_new_tokens):\n        # 获取模型对下一个token的预测\n        logits = model.forward(generated)  # (1, seq_len, vocab_size)\n        next_logits = logits[0, -1, :]     # 取最后一个位置的预测\n        # 采样\n        next_token = sample_token(next_logits, temperature=0.8)\n        generated.append(next_token)\n        if next_token == eos_token_id:\n            break\n    return generated\n```\n\n## 采样策略\n\n### 贪心解码（Greedy）\n每次取概率最大的token。优点是确定性强，缺点是生成内容单调重复。\n\n```python\ndef greedy_sample(logits):\n    return np.argmax(logits)\n```\n\n### 温度采样（Temperature Sampling）\n$$P(x_i) = \\frac{\\exp(z_i / T)}{\\sum_j \\exp(z_j / T)}$$\n\n- $T = 1$：原始分布\n- $T > 1$：分布更平坦，生成更随机多样\n- $T < 1$：分布更尖锐，生成更确定保守\n\n### Top-k 采样\n只保留概率最高的k个token，对其重新归一化后采样。\n\n### Top-p（核采样 / Nucleus Sampling）\n保留累积概率达到p的最小token集合。相比Top-k，它能根据分布的\"形状\"自适应选择token数。\n\n```python\ndef top_p_sample(logits, p=0.9, temperature=1.0):\n    logits = logits / temperature\n    probs = np.exp(logits - np.max(logits))\n    probs /= np.sum(probs)\n    sorted_indices = np.argsort(logits)[::-1]\n    cumulative_probs = np.cumsum(probs[sorted_indices])\n    cutoff_idx = np.searchsorted(cumulative_probs, p) + 1\n    keep_indices = sorted_indices[:cutoff_idx]\n    probs_filtered = np.zeros_like(probs)\n    probs_filtered[keep_indices] = probs[keep_indices]\n    probs_filtered /= np.sum(probs_filtered)\n    return np.random.choice(len(probs_filtered), p=probs_filtered)\n```",
+    "starter_code": "import numpy as np\n\ndef softmax(logits, temperature=1.0):\n    \"\"\"带温度的softmax\"\"\"\n    logits = logits / temperature\n    exp_x = np.exp(logits - np.max(logits))\n    return exp_x / np.sum(exp_x)\n\ndef greedy_sample(logits):\n    \"\"\"贪心采样：取最大logit对应的token\"\"\"\n    # TODO: 返回argmax\n    pass\n\ndef top_k_sample(logits, k=50, temperature=1.0):\n    \"\"\"\n    Top-k采样\n    1. 取logits最大的k个\n    2. 应用temperature\n    3. 重新归一化后采样\n    \"\"\"\n    # TODO: 实现Top-k采样\n    pass\n\ndef generate_text(model, prompt, tokenizer, max_len=50, strategy='greedy'):\n    \"\"\"\n    实现文本生成循环\n    model: 有forward方法的语言模型\n    prompt: 起始文本\n    tokenizer: encode/decode方法\n    max_len: 最大生成长度\n    strategy: 'greedy' | 'top_k' | 'top_p'\n    \"\"\"\n    # TODO: 实现自回归生成\n    pass",
+    "solution_code": "import numpy as np\n\ndef softmax(logits, temperature=1.0):\n    logits = logits / temperature\n    exp_x = np.exp(logits - np.max(logits, axis=-1, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)\n\ndef greedy_sample(logits):\n    return int(np.argmax(logits))\n\ndef top_k_sample(logits, k=50, temperature=1.0):\n    probs = softmax(logits, temperature)\n    # 只保留Top-k\n    top_k_indices = np.argsort(logits)[::-1][:k]\n    probs_filtered = np.zeros_like(probs)\n    probs_filtered[top_k_indices] = probs[top_k_indices]\n    probs_filtered /= np.sum(probs_filtered)\n    return int(np.random.choice(len(probs_filtered), p=probs_filtered))\n\ndef top_p_sample(logits, p=0.9, temperature=1.0):\n    probs = softmax(logits, temperature)\n    sorted_idx = np.argsort(probs)[::-1]\n    cumulative = np.cumsum(probs[sorted_idx])\n    cutoff = np.searchsorted(cumulative, p) + 1\n    keep = sorted_idx[:cutoff]\n    probs_filt = np.zeros_like(probs)\n    probs_filt[keep] = probs[keep]\n    probs_filt /= np.sum(probs_filt)\n    return int(np.random.choice(len(probs_filt), p=probs_filt))\n\nclass SimpleGPT:\n    def __init__(self, vocab_size):\n        self.vocab_size = vocab_size\n    def forward(self, ids):\n        return np.random.randn(1, len(ids), self.vocab_size)\n\ndef generate_text(model, prompt_ids, token_to_str, max_len=50, strategy='greedy'):\n    generated = list(prompt_ids)\n    for _ in range(max_len):\n        logits = model.forward(generated)[0, -1, :]\n        if strategy == 'greedy':\n            next_token = greedy_sample(logits)\n        elif strategy == 'top_k':\n            next_token = top_k_sample(logits, k=50)\n        elif strategy == 'top_p':\n            next_token = top_p_sample(logits, p=0.9)\n        else:\n            next_token = greedy_sample(logits)\n        generated.append(next_token)\n        if next_token == 2:  # EOS\n            break\n    return generated\n\nif __name__ == \"__main__\":\n    logits = np.array([0.5, 2.0, 1.0, 0.3, 0.1])\n    print(\"Greedy:\", greedy_sample(logits))\n    print(\"Top-k(k=3):\", top_k_sample(logits, k=3))\n    print(\"Top-p(p=0.9):\", top_p_sample(logits, p=0.9))",
+    "test_cases": [
+      {
+        "input": "greedy_sample_tf(np.array([1, 5, 3, 2, 4]))",
+        "expected_output": "1",
+        "description": "贪心应选择最大值索引（第2个，索引1）"
+      },
+      {
+        "input": "0 <= top_k_sample_tf(np.array([1.0, 5.0, 3.0, 2.0, 4.0]), k=3) < 5",
+        "expected_output": "True",
+        "description": "Top-k采样结果应在有效范围内"
+      }
+    ],
+    "hint": "贪心直接用argmax。Top-k先softmax，将非top-k的概率置0后重新归一化。Temperature在softmax前除以。",
+    "prerequisites": [
+      "nlp-05-attention-nlp"
+    ]
+  },
+  {
+    "title": "LoRA微调",
+    "slug": "nlp-09-lora",
+    "description": "掌握LoRA（Low-Rank Adaptation）低秩微调技术，理解如何以极少的参数高效微调大模型。",
+    "order": 9,
+    "difficulty": "expert",
+    "xp_reward": 30,
+    "track": "nlp",
+    "section": "大模型应用",
+    "content": "# LoRA低秩微调\n\n## 全量微调的困境\n\n大语言模型（如LLaMA-7B有70亿参数）的全量微调需要巨大的GPU内存和计算资源。例如，全量微调一个7B模型需要约56GB显存（仅模型参数）。LoRA通过低秩分解大幅降低微调成本。\n\n## LoRA核心思想\n\nLoRA（Low-Rank Adaptation, Hu et al., 2021）假设预训练权重 $W_0$ 的更新 $\\Delta W$ 是**低秩**的：\n\n$$\\Delta W = BA$$\n\n其中 $B \\in \\mathbb{R}^{d \\times r}$，$A \\in \\mathbb{R}^{r \\times k}$，且秩 $r \\ll \\min(d, k)$。\n\n前向传播变为：\n$$h = W_0 x + \\Delta W x = W_0 x + BA x$$\n\n$$h = W_0 x + \\alpha \\cdot BA x$$\n\n其中 $\\alpha$ 是缩放因子（通常设为 $r$ 的倍数）。\n\n```python\nimport numpy as np\n\nclass LoRALayer:\n    def __init__(self, in_features, out_features, rank=8, alpha=16):\n        self.W0 = np.random.randn(out_features, in_features) * 0.02  # 冻结的预训练权重\n        self.A = np.random.randn(rank, in_features) * 0.02            # 可训练\n        self.B = np.zeros((out_features, rank))                        # 可训练，初始化为0\n        self.alpha = alpha\n        self.rank = rank\n        self.scaling = alpha / rank\n\n    def forward(self, x):\n        # W0 @ x + (alpha / r) * B @ A @ x\n        base_output = np.dot(x, self.W0.T)\n        lora_output = self.scaling * np.dot(np.dot(x, self.A.T), self.B.T)\n        return base_output + lora_output\n```\n\n## 为什么LoRA有效\n\n1. **低秩假设**：模型权重更新确实集中在一个低秩子空间内（被实证验证）\n2. **只训练$A, B$**：$W_0$冻结，训练参数数量从 $d \\times k$ 降为 $r \\times (d + k)$。例如 $r=8$ 时，参数量减少到原来的 $\\frac{8(d+k)}{dk}$\n3. **可插拔性**：不同任务的LoRA权重可以单独保存和切换\n\n## LoRA实践配置\n\n| 参数 | 推荐值 | 说明 |\n|------|--------|------|\n| rank (r) | 8-64 | 秩越大容量越高，但参数也更多 |\n| alpha | 16-32 | 缩放因子，与rank配合 |\n| target_modules | q_proj, v_proj | 通常只对注意力层的Q和V投影应用 |\n| lora_dropout | 0.05-0.1 | 轻微的dropout用于正则化 |\n\n## QLoRA\n\nQLoRA将LoRA与4bit量化结合，使在单个消费级GPU（如RTX 3090 24GB）上微调65B模型成为可能。",
+    "starter_code": "import numpy as np\n\nclass LoRALinear:\n    def __init__(self, in_features, out_features, rank=8, alpha=16):\n        \"\"\"\n        实现LoRA线性层\n        in_features: 输入维度\n        out_features: 输出维度\n        rank: 低秩分解的秩\n        alpha: 缩放因子\n        \"\"\"\n        # TODO: 初始化W0（冻结）, A（可训练）, B（可训练）\n        pass\n\n    def forward(self, x):\n        \"\"\"\n        返回: W0 @ x + (alpha / rank) * B @ A @ x\n        \"\"\"\n        # TODO: 实现前向传播\n        pass\n\n    def get_delta_w(self):\n        \"\"\"返回LoRA权重更新矩阵 B @ A\"\"\"\n        # TODO: 返回B @ A\n        pass\n\n    def trainable_parameters(self):\n        \"\"\"返回可训练参数的数量\"\"\"\n        # TODO: 计算 A.size + B.size\n        pass",
+    "solution_code": "import numpy as np\n\nclass LoRALinear:\n    def __init__(self, in_features, out_features, rank=8, alpha=16):\n        self.W0 = np.random.randn(out_features, in_features) * 0.02\n        self.A = np.random.randn(rank, in_features) * 0.02\n        self.B = np.zeros((out_features, rank))\n        self.rank = rank\n        self.alpha = alpha\n        self.scaling = alpha / rank\n\n    def forward(self, x):\n        base = np.dot(x, self.W0.T)\n        lora = self.scaling * np.dot(np.dot(x, self.A.T), self.B.T)\n        return base + lora\n\n    def get_delta_w(self):\n        return np.dot(self.B, self.A)\n\n    def trainable_parameters(self):\n        return self.A.size + self.B.size\n\n    def merge_weights(self):\n        \"\"\"将LoRA权重合并回原始权重（部署用）\"\"\"\n        self.W0 += self.scaling * self.get_delta_w()\n        self.A = np.zeros_like(self.A)\n        self.B = np.zeros_like(self.B)\n\nif __name__ == \"__main__\":\n    in_f, out_f = 1024, 4096\n    original_params = in_f * out_f\n    lora = LoRALinear(in_f, out_f, rank=8)\n    print(f\"Original parameters: {original_params:,}\")\n    print(f\"LoRA trainable: {lora.trainable_parameters():,}\")\n    print(f\"Compression: {original_params / lora.trainable_parameters():.1f}x fewer\")\n    x = np.random.randn(4, in_f)\n    y = lora.forward(x)\n    print(f\"Output shape: {y.shape}\")",
+    "test_cases": [
+      {
+        "input": "lora_trainable_params(100, 200, 8)",
+        "expected_output": "2400",
+        "description": "LoRA A(8×100)+B(200×8)=800+1600=2400可训练参数"
+      },
+      {
+        "input": "100 * 200 / lora_trainable_params(100, 200, 8) > 5",
+        "expected_output": "True",
+        "description": "LoRA参数量应远少于原始参数量的1/5"
+      }
+    ],
+    "hint": "A的形状是 (rank, in_features)，B的形状是 (out_features, rank)。ΔW = B @ A 是低秩矩阵。alpha/r 是缩放因子。",
+    "prerequisites": [
+      "nlp-07-text-classification"
+    ]
+  },
+  {
+    "title": "RAG检索增强生成",
+    "slug": "nlp-10-rag",
+    "description": "掌握RAG（Retrieval-Augmented Generation）的原理，搭建一个简单的检索+生成系统。",
+    "order": 10,
+    "difficulty": "expert",
+    "xp_reward": 30,
+    "track": "nlp",
+    "section": "大模型应用",
+    "content": "# RAG检索增强生成\n\n## 为什么需要RAG\n\n大模型的知识固化为训练时的数据。RAG（Retrieval-Augmented Generation）通过从外部知识库中检索相关信息并注入到生成过程中，实现：\n- 使用最新信息\n- 减少幻觉（Hallucination）\n- 引用来源，可验证\n\n## RAG流程\n\n```\n用户问题 → 检索（从知识库找相关文档） → 增强（将检索结果嵌入Prompt） → 生成（LLM基于Prompt生成回答）\n```\n\n### 1. 检索（Retrieval）\n\n将文档切分为块（Chunk），编码为向量存入向量数据库。用户查询也编码为向量，通过相似度搜索找到最相关的文档块。\n\n```python\nimport numpy as np\n\nclass SimpleVectorStore:\n    def __init__(self):\n        self.documents = []\n        self.embeddings = []\n\n    def add(self, documents, embeddings):\n        self.documents.extend(documents)\n        self.embeddings.extend(embeddings)\n\n    def search(self, query_embedding, top_k=3):\n        scores = [np.dot(query_embedding, emb) for emb in self.embeddings]\n        top_indices = np.argsort(scores)[::-1][:top_k]\n        return [self.documents[i] for i in top_indices]\n```\n\n### 2. 增强（Augmentation）\n\n将检索结果格式化为Prompt的一部分：\n\n```python\ndef build_rag_prompt(query, retrieved_docs):\n    context = \"\\n---\\n\".join(retrieved_docs)\n    prompt = f\"\"\"请根据以下参考信息回答问题。\n\n参考信息：\n{context}\n\n问题：{query}\n\n回答：\"\"\"\n    return prompt\n```\n\n### 3. 生成（Generation）\n\nLLM基于增强后的Prompt生成最终回答。\n\n## 文档分块策略\n\n合理的分块（Chunking）是RAG性能的关键：\n- **固定大小分块**：每个块N个token，有重叠\n- **语义分块**：根据段落、章节等自然边界\n- **递归分块**：按分隔符层级递归分割\n\n```python\ndef chunk_text(text, chunk_size=256, overlap=50):\n    \"\"\"固定大小的滑动窗口分块\"\"\"\n    words = text.split()\n    chunks = []\n    start = 0\n    while start < len(words):\n        chunk = ' '.join(words[start:start + chunk_size])\n        chunks.append(chunk)\n        start += chunk_size - overlap\n    return chunks\n```\n\n## RAG vs 微调\n\n| 维度 | RAG | 微调 |\n|------|-----|------|\n| 知识更新 | 实时（更新向量库即可） | 需重新训练 |\n| 可解释性 | 高（可追溯来源） | 低（黑盒） |\n| 成本 | 低（无需训练） | 高（需GPU训练） |\n| 适用场景 | 知识密集型问答 | 风格/格式适配 |",
+    "starter_code": "import numpy as np\nfrom math import sqrt\n\nclass SimpleVectorStore:\n    def __init__(self):\n        self.documents = []\n        self.embeddings = []\n\n    def add(self, documents, embeddings):\n        \"\"\"添加文档和对应的嵌入向量\"\"\"\n        # TODO: 存储文档和嵌入\n        pass\n\n    def search(self, query_embedding, top_k=3):\n        \"\"\"\n        返回与查询最相似的top_k个文档\n        使用余弦相似度\n        \"\"\"\n        # TODO: 计算相似度并返回top-k\n        pass\n\ndef chunk_text(text, chunk_size=256, overlap=50):\n    \"\"\"\n    将文本分割为有重叠的块\n    \"\"\"\n    # TODO: 实现滑动窗口分块\n    pass\n\ndef build_rag_prompt(query, retrieved_docs):\n    \"\"\"\n    构建RAG的提示词模板\n    \"\"\"\n    # TODO: 组装Prompt\n    pass",
+    "solution_code": "import numpy as np\nfrom math import sqrt\n\nclass SimpleVectorStore:\n    def __init__(self):\n        self.documents = []\n        self.embeddings = []\n\n    def add(self, documents, embeddings):\n        self.documents.extend(documents)\n        self.embeddings.extend(embeddings)\n\n    def search(self, query_embedding, top_k=3):\n        scores = []\n        for emb in self.embeddings:\n            dot = np.dot(query_embedding, emb)\n            norm_q = np.linalg.norm(query_embedding)\n            norm_e = np.linalg.norm(emb)\n            sim = dot / (norm_q * norm_e + 1e-8)\n            scores.append(sim)\n        top_indices = np.argsort(scores)[::-1][:top_k]\n        return [self.documents[i] for i in top_indices]\n\ndef chunk_text(text, chunk_size=256, overlap=50):\n    words = text.split()\n    chunks = []\n    start = 0\n    while start < len(words):\n        chunk = ' '.join(words[start:start + chunk_size])\n        chunks.append(chunk)\n        start += chunk_size - overlap\n        if start >= len(words):\n            break\n    return chunks\n\ndef build_rag_prompt(query, retrieved_docs):\n    context = \"\\n---\\n\".join(retrieved_docs)\n    prompt = f\"\"\"请根据以下参考信息回答问题。如果参考信息中没有相关内容，请说明\"无法从给定信息中找到答案\"。\n\n参考信息：\n{context}\n\n问题：{query}\n\n回答：\"\"\"\n    return prompt\n\nif __name__ == \"__main__\":\n    store = SimpleVectorStore()\n    docs = [\"Python is a programming language.\",\n            \"Python is used for machine learning.\",\n            \"JavaScript is for web development.\"]\n    embs = [np.random.randn(128) for _ in docs]\n    store.add(docs, embs)\n    query_emb = embs[0]\n    results = store.search(query_emb, top_k=2)\n    print(\"Search results:\", results)\n    \n    text = \"A \" + \"very \" * 200 + \"long text.\"\n    chunks = chunk_text(text, chunk_size=50, overlap=10)\n    print(\"Number of chunks:\", len(chunks))\n    print(\"RAG prompt:\", build_rag_prompt(\"What is Python?\", [\"Python is great.\"]))",
+    "test_cases": [
+      {
+        "input": "len(chunk_text_tf('a b c d e f g h i j', 3, 1))",
+        "expected_output": "5",
+        "description": "滑动窗口分块数验证"
+      },
+      {
+        "input": "'参考信息' in build_rag_prompt_tf('test', ['doc1'])",
+        "expected_output": "True",
+        "description": "RAG Prompt应包含'参考信息'部分"
+      }
+    ],
+    "hint": "余弦相似度 = dot(a,b) / (||a||*||b||)。分块：start += chunk_size - overlap。Prompt中嵌入检索到的文档。",
+    "prerequisites": [
+      "nlp-08-gpt-generation"
+    ]
+  }
+]

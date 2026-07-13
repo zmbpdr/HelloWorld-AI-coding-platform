@@ -1,0 +1,663 @@
+[
+  {
+    "title": "Hello World",
+    "slug": "go-01-hello-world",
+    "description": "学习Go语言基本结构，编写你的第一个程序",
+    "content": "# Hello World - 你的第一个Go程序\n\n## 什么是Go？\nGo（又称Golang）是Google开发的一门开源编程语言，以简洁、高效、并发性强著称。Go语言的设计哲学是\"少即是多\"，语法简洁，编译速度快，天生支持并发。\n\n## 包（Package）\n每个Go程序都由包组成。程序从 `main` 包开始执行：\n\n```go\npackage main\n```\n\n## main函数\n`main` 函数是程序的入口点，每个可执行的Go程序必须有 `main` 函数：\n\n```go\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}\n```\n\n## fmt包\n`fmt` 包是Go标准库中最常用的包之一，提供格式化输入输出功能：\n\n```go\nimport \"fmt\"\n\nfmt.Println(\"Hello, World!\")  // 输出并换行\nfmt.Printf(\"Name: %s\\n\", \"Go\") // 格式化输出\n```\n\n## 函数与返回值\n在编程闯关中，我们通过函数来组织代码。Go使用 `func` 关键字定义函数，使用 `return` 返回结果：\n\n```go\nfunc hello() string {\n    return \"Hello, World!\"\n}\n```\n\n注意函数签名中声明了返回类型 `string`，这是Go的静态类型特性。\n\n## 练习\n请编写一个函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func hello() string {\n\t// 在这里编写你的代码\n\treturn \"\"\n}",
+    "solution_code": "func hello() string {\n\treturn \"Hello, World!\"\n}",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      },
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 return 语句返回字符串 \"Hello, World!\""
+  },
+  {
+    "title": "变量与常量",
+    "slug": "go-02-variables",
+    "description": "学习Go语言的变量声明、常量和类型推断",
+    "content": "# 变量与常量\n\n## 变量声明\nGo是静态类型语言，声明变量有多种方式：\n\n```go\n// 使用 var 关键字\nvar name string = \"Go\"\nvar age int = 15\n\n// 类型推断，省略类型\nvar language = \"Go\"\n\n// 短变量声明（最常用，只能在函数内使用）\ncountry := \"China\"\nyear := 2009\n```\n\n## 常量\n常量使用 `const` 关键字声明，值在编译时确定，不能修改：\n\n```go\nconst Pi = 3.14159\nconst Greeting string = \"Hello\"\n```\n\n## 多变量声明\nGo支持同时声明多个变量：\n\n```go\nvar x, y int = 1, 2\na, b := \"hello\", 42\n\n// 批量声明\nvar (\n    width  = 100\n    height = 200\n)\n```\n\n## 注意事项\n- 短变量声明 `:=` 只能在函数内部使用\n- 声明的变量必须使用，否则编译错误\n- 常量不能使用 `:=` 声明\n\n## 练习\n编写函数 `greet(name string) string`，返回 `\"你好, {name}!\"` 格式的字符串。\n编写函数 `add(a int, b int) int`，返回两个整数的和。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func greet(name string) string {\n\t// 返回问候语\n\treturn \"\"\n}\n\nfunc add(a int, b int) int {\n\t// 返回两个整数的和\n\treturn 0\n}",
+    "solution_code": "func greet(name string) string {\n\treturn \"你好, \" + name + \"!\"\n}\n\nfunc add(a int, b int) int {\n\treturn a + b\n}",
+    "test_cases": [
+      {
+        "input": "greet(\"Alice\")",
+        "expected_output": "你好, Alice!",
+        "description": "greet(\"Alice\") 应返回 '你好, Alice!'"
+      },
+      {
+        "input": "add(10, 20)",
+        "expected_output": "30",
+        "description": "add(10, 20) 应返回 30"
+      }
+    ],
+    "hint": "字符串拼接使用 + 运算符，整数相加直接用 +"
+  },
+  {
+    "title": "数据类型",
+    "slug": "go-03-data-types",
+    "description": "学习Go语言的基本数据类型和零值机制",
+    "content": "# 数据类型\n\n## 基本数据类型\nGo语言提供了丰富的内置数据类型：\n\n### 整数类型\n```go\nvar a int     = 42      // 平台相关整数，最常用\nvar b int8    = 127     // 8位整数\nvar c int64   = 999999  // 64位整数\nvar d uint    = 42      // 无符号整数\n```\n\n### 浮点类型\n```go\nvar pi float64 = 3.14159  // 64位浮点数\nvar f  float32 = 1.5      // 32位浮点数\n```\n\n### 字符串与布尔\n```go\nvar s string = \"Hello, Go\"  // 字符串\nvar b bool   = true         // 布尔值\n```\n\n## 零值\nGo中声明但未赋值的变量会自动获得零值，这是Go的重要特性：\n\n| 类型 | 零值 |\n|------|------|\n| int  | 0 |\n| float64 | 0.0 |\n| string | \"\" (空字符串) |\n| bool | false |\n\n## 类型转换\nGo没有隐式类型转换，必须显式转换：\n\n```go\nvar i int = 42\nvar f float64 = float64(i)  // int -> float64\nvar s string = string(65)   // 65 -> \"A\" (rune转换)\n```\n\n## 练习\n编写函数 `zeroValue() string`，返回int类型的零值对应的字符串表示（即 `\"0\"`）。\n编写函数 `convertToInt(f float64) int`，将浮点数转为整数（截断小数部分）。",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func zeroValue() string {\n\t// 返回 int 零值的字符串表示\n\treturn \"\"\n}\n\nfunc convertToInt(f float64) int {\n\t// 将浮点数转为整数\n\treturn 0\n}",
+    "solution_code": "func zeroValue() string {\n\tvar i int\n\treturn fmt.Sprintf(\"%d\", i)\n}\n\nfunc convertToInt(f float64) int {\n\treturn int(f)\n}",
+    "test_cases": [
+      {
+        "input": "zeroValue()",
+        "expected_output": "0",
+        "description": "zeroValue() 应返回 '0'"
+      },
+      {
+        "input": "convertToInt(3.7)",
+        "expected_output": "3",
+        "description": "convertToInt(3.7) 应返回 3"
+      },
+      {
+        "input": "convertToInt(9.2)",
+        "expected_output": "9",
+        "description": "convertToInt(9.2) 应返回 9"
+      }
+    ],
+    "hint": "int 的零值是 0；使用 int() 进行显式类型转换会截断小数"
+  },
+  {
+    "title": "控制流",
+    "slug": "go-04-control-flow",
+    "description": "学习Go语言的if/for/switch和range遍历",
+    "content": "# 控制流\n\n## if 语句\nGo的 `if` 语句不需要小括号包裹条件，但大括号是必须的：\n\n```go\nif x > 0 {\n    fmt.Println(\"正数\")\n} else if x < 0 {\n    fmt.Println(\"负数\")\n} else {\n    fmt.Println(\"零\")\n}\n\n// if 可以带初始化语句\nif err := doSomething(); err != nil {\n    fmt.Println(\"出错:\", err)\n}\n```\n\n## for 循环\nGo只有 `for` 一种循环，但功能强大：\n\n```go\n// 经典 for\nfor i := 0; i < 10; i++ {\n    fmt.Println(i)\n}\n\n// 类似 while\ncount := 0\nfor count < 5 {\n    count++\n}\n\n// 无限循环\nfor {\n    // 永远执行\n}\n```\n\n## range 遍历\n`range` 用于遍历切片、映射、字符串等：\n\n```go\nnums := []int{1, 2, 3}\nfor index, value := range nums {\n    fmt.Println(index, value)\n}\n// 只需要值时用 _ 忽略索引\nfor _, value := range nums {\n    fmt.Println(value)\n}\n```\n\n## switch 语句\nGo的 `switch` 默认不穿透，不需要 break：\n\n```go\nswitch day {\ncase \"Monday\":\n    fmt.Println(\"周一\")\ncase \"Friday\":\n    fmt.Println(\"周五\")\ndefault:\n    fmt.Println(\"其他\")\n}\n```\n\n## 练习\n编写函数 `gradeScore(score int) string`，根据分数返回等级：90及以上返回\"优秀\"，80-89返回\"良好\"，60-79返回\"及格\"，60以下返回\"不及格\"。\n编写函数 `sumRange(n int) int`，返回1到n所有整数的和。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func gradeScore(score int) string {\n\t// 根据分数返回等级\n\treturn \"\"\n}\n\nfunc sumRange(n int) int {\n\t// 返回 1 到 n 的整数和\n\treturn 0\n}",
+    "solution_code": "func gradeScore(score int) string {\n\tif score >= 90 {\n\t\treturn \"优秀\"\n\t} else if score >= 80 {\n\t\treturn \"良好\"\n\t} else if score >= 60 {\n\t\treturn \"及格\"\n\t} else {\n\t\treturn \"不及格\"\n\t}\n}\n\nfunc sumRange(n int) int {\n\tsum := 0\n\tfor i := 1; i <= n; i++ {\n\t\tsum += i\n\t}\n\treturn sum\n}",
+    "test_cases": [
+      {
+        "input": "gradeScore(95)",
+        "expected_output": "优秀",
+        "description": "gradeScore(95) 应返回 '优秀'"
+      },
+      {
+        "input": "gradeScore(85)",
+        "expected_output": "良好",
+        "description": "gradeScore(85) 应返回 '良好'"
+      },
+      {
+        "input": "gradeScore(60)",
+        "expected_output": "及格",
+        "description": "gradeScore(60) 应返回 '及格'"
+      },
+      {
+        "input": "sumRange(10)",
+        "expected_output": "55",
+        "description": "sumRange(10) 应返回 55"
+      }
+    ],
+    "hint": "if/else if 从高分到低分依次判断；for循环累加1到n"
+  },
+  {
+    "title": "函数",
+    "slug": "go-05-functions",
+    "description": "学习Go函数的多返回值、命名返回值和变长参数",
+    "content": "# 函数\n\n## 函数定义\nGo函数使用 `func` 关键字定义，参数和返回值都需要指定类型：\n\n```go\nfunc add(a int, b int) int {\n    return a + b\n}\n\n// 相同类型的参数可以合并类型声明\nfunc multiply(a, b int) int {\n    return a * b\n}\n```\n\n## 多返回值\nGo函数可以返回多个值，这是Go的特色功能，常用于返回结果和错误：\n\n```go\nfunc divide(a, b float64) (float64, error) {\n    if b == 0 {\n        return 0, errors.New(\"除数不能为零\")\n    }\n    return a / b, nil\n}\n```\n\n## 命名返回值\n可以给返回值命名，使代码更清晰，并可以使用裸return：\n\n```go\nfunc swap(a, b int) (first, second int) {\n    first = b\n    second = a\n    return  // 裸return，自动返回命名变量\n}\n```\n\n## 变长参数\n使用 `...` 表示变长参数，函数内部接收为切片：\n\n```go\nfunc sum(nums ...int) int {\n    total := 0\n    for _, n := range nums {\n        total += n\n    }\n    return total\n}\n\nsum(1, 2, 3)     // 6\nsum(1, 2, 3, 4)  // 10\n```\n\n## 练习\n编写函数 `swap(a, b int) (int, int)`，交换两个整数并返回。\n编写函数 `sumAll(nums ...int) int`，返回所有参数的和。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func swap(a, b int) (int, int) {\n\t// 交换两个整数\n\treturn 0, 0\n}\n\nfunc sumAll(nums ...int) int {\n\t// 返回所有参数的和\n\treturn 0\n}",
+    "solution_code": "func swap(a, b int) (int, int) {\n\treturn b, a\n}\n\nfunc sumAll(nums ...int) int {\n\ttotal := 0\n\tfor _, n := range nums {\n\t\ttotal += n\n\t}\n\treturn total\n}",
+    "test_cases": [
+      {
+        "input": "swap(1, 2)",
+        "expected_output": "(2,1)",
+        "description": "swap(1, 2) 应返回 (2,1)"
+      },
+      {
+        "input": "sumAll(1, 2, 3)",
+        "expected_output": "6",
+        "description": "sumAll(1, 2, 3) 应返回 6"
+      },
+      {
+        "input": "sumAll(10, 20, 30, 40)",
+        "expected_output": "100",
+        "description": "sumAll(10, 20, 30, 40) 应返回 100"
+      }
+    ],
+    "hint": "swap直接返回 b, a 即可；sumAll使用 range 遍历变长参数"
+  },
+  {
+    "title": "数组与切片",
+    "slug": "go-06-arrays-slices",
+    "description": "学习Go语言的数组、切片创建、追加和拷贝",
+    "content": "# 数组与切片\n\n## 数组\n数组是固定长度的同类型元素序列：\n\n```go\nvar a [5]int              // 长度为5的int数组，零值为 [0,0,0,0,0]\nb := [3]string{\"Go\", \"Rust\", \"C\"}  // 声明并初始化\n```\n\n数组长度是类型的一部分，`[3]int` 和 `[5]int` 是不同类型。实际开发中数组使用较少，更多使用切片。\n\n## 切片（Slice）\n切片是动态长度的引用类型，是Go中最常用的数据结构之一：\n\n```go\n// 创建切片\nnums := []int{1, 2, 3}           // 字面量创建\ns := make([]int, 5)              // make创建，长度5\ns2 := make([]int, 3, 10)         // 长度3，容量10\n```\n\n## append 追加\n使用 `append` 向切片追加元素：\n\n```go\nnums := []int{1, 2, 3}\nnums = append(nums, 4)        // [1, 2, 3, 4]\nnums = append(nums, 5, 6)    // [1, 2, 3, 4, 5, 6]\n```\n\n注意：`append` 可能返回新的切片，必须接收返回值。\n\n## 切片操作\n```go\nnums := []int{1, 2, 3, 4, 5}\nnums[1:3]   // [2, 3]  左闭右开\nnums[:3]    // [1, 2, 3]\nnums[2:]    // [3, 4, 5]\n```\n\n## copy 拷贝\n```go\nsrc := []int{1, 2, 3}\ndst := make([]int, len(src))\ncopy(dst, src)  // 将src拷贝到dst\n```\n\n## len 和 cap\n- `len(s)` 返回切片长度（当前元素个数）\n- `cap(s)` 返回切片容量（底层数组长度）\n\n## 练习\n编写函数 `filterEven(nums []int) []int`，返回切片中所有偶数组成的新切片。\n编写函数 `sumSlice(nums []int) int`，返回切片所有元素的和。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func filterEven(nums []int) []int {\n\t// 返回所有偶数\n\treturn nil\n}\n\nfunc sumSlice(nums []int) int {\n\t// 返回切片元素之和\n\treturn 0\n}",
+    "solution_code": "func filterEven(nums []int) []int {\n\tvar result []int\n\tfor _, n := range nums {\n\t\tif n%2 == 0 {\n\t\t\tresult = append(result, n)\n\t\t}\n\t}\n\treturn result\n}\n\nfunc sumSlice(nums []int) int {\n\tsum := 0\n\tfor _, n := range nums {\n\t\tsum += n\n\t}\n\treturn sum\n}",
+    "test_cases": [
+      {
+        "input": "filterEven([]int{1,2,3,4,5,6})",
+        "expected_output": "[2 4 6]",
+        "description": "filterEven([]int{1,2,3,4,5,6}) 应返回 [2 4 6]"
+      },
+      {
+        "input": "sumSlice([]int{1,2,3,4,5})",
+        "expected_output": "15",
+        "description": "sumSlice([]int{1,2,3,4,5}) 应返回 15"
+      }
+    ],
+    "hint": "使用 append 向结果切片追加元素；使用 range 遍历切片求和"
+  },
+  {
+    "title": "Map",
+    "slug": "go-07-maps",
+    "description": "学习Go语言的Map创建、增删改查和判断键是否存在",
+    "content": "# Map\n\n## 什么是Map？\nMap是键值对（key-value）的无序集合，类似于其他语言的字典或哈希表。Go中Map是引用类型。\n\n## 创建Map\n```go\n// 字面量创建\nages := map[string]int{\n    \"Alice\": 30,\n    \"Bob\":   25,\n}\n\n// make创建\nscores := make(map[string]int)\n```\n\n## 增删改查\n```go\nscores := make(map[string]int)\n\n// 增/改\nscores[\"Alice\"] = 95\nscores[\"Bob\"] = 87\n\n// 查\nscore := scores[\"Alice\"]  // 95\n\n// 删\ndelete(scores, \"Bob\")\n```\n\n## 判断键是否存在\n通过双值接收模式判断键是否存在：\n\n```go\nvalue, ok := scores[\"Alice\"]\nif ok {\n    fmt.Println(\"Alice的分数:\", value)\n} else {\n    fmt.Println(\"Alice不存在\")\n}\n```\n\n如果键不存在，`ok` 为 `false`，`value` 为值类型的零值。\n\n## 遍历Map\n```go\nfor key, value := range scores {\n    fmt.Println(key, value)\n}\n```\n\n注意：Map遍历顺序是不确定的。\n\n## 练习\n编写函数 `wordCount(s string) map[string]int`，统计字符串中每个单词出现的次数（单词以空格分隔）。\n编写函数 `getValue(m map[string]int, key string) int`，获取Map中key对应的值，如果key不存在则返回0。",
+    "order": 7,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func wordCount(s string) map[string]int {\n\t// 统计每个单词出现次数\n\treturn nil\n}\n\nfunc getValue(m map[string]int, key string) int {\n\t// 获取key对应的值，不存在返回0\n\treturn 0\n}",
+    "solution_code": "import \"strings\"\n\nfunc wordCount(s string) map[string]int {\n\tresult := make(map[string]int)\n\twords := strings.Fields(s)\n\tfor _, word := range words {\n\t\tresult[word]++\n\t}\n\treturn result\n}\n\nfunc getValue(m map[string]int, key string) int {\n\tvalue, ok := m[key]\n\tif ok {\n\t\treturn value\n\t}\n\treturn 0\n}",
+    "test_cases": [
+      {
+        "input": "wordCount(\"hello world hello\")",
+        "expected_output": "map[hello:2 world:1]",
+        "description": "wordCount(\"hello world hello\") 应返回 map[hello:2 world:1]"
+      },
+      {
+        "input": "getValue(map[string]int{\"a\": 1, \"b\": 2}, \"a\")",
+        "expected_output": "1",
+        "description": "getValue 返回存在的key的值"
+      },
+      {
+        "input": "getValue(map[string]int{\"a\": 1, \"b\": 2}, \"c\")",
+        "expected_output": "0",
+        "description": "getValue 不存在的key返回0"
+      }
+    ],
+    "hint": "使用 strings.Fields 按空格分割字符串；使用 value, ok 模式判断键是否存在"
+  },
+  {
+    "title": "结构体",
+    "slug": "go-08-structs",
+    "description": "学习Go语言结构体定义、初始化、方法和嵌入类型",
+    "content": "# 结构体\n\n## 定义结构体\n结构体是Go中组织数据的主要方式，类似于其他语言的类：\n\n```go\ntype Person struct {\n    Name string\n    Age  int\n}\n```\n\n## 初始化结构体\n```go\n// 字段名初始化（推荐）\np1 := Person{Name: \"Alice\", Age: 30}\n\n// 按顺序初始化\np2 := Person{\"Bob\", 25}\n\n// 零值初始化\nvar p3 Person  // Name=\"\", Age=0\n\n// 使用 new（返回指针）\np4 := new(Person)  // *Person 类型\n```\n\n## 访问字段\n使用点号 `.` 访问字段，指针也可以直接用点号访问（Go自动解引用）：\n\n```go\nfmt.Println(p1.Name)  // Alice\np1.Age = 31           // 修改字段\n```\n\n## 方法\nGo可以为结构体定义方法，通过接收者（receiver）绑定：\n\n```go\nfunc (p Person) Greet() string {\n    return \"你好, 我是\" + p.Name\n}\n\n// 指针接收者可以修改结构体\nfunc (p *Person) Birthday() {\n    p.Age++\n}\n```\n\n## 嵌入类型\nGo通过嵌入实现类似继承的效果：\n\n```go\ntype Employee struct {\n    Person      // 嵌入Person\n    Company string\n}\n\ne := Employee{Person: Person{Name: \"Alice\"}, Company: \"Google\"}\nfmt.Println(e.Name)  // 可以直接访问嵌入类型的字段\n```\n\n## 练习\n编写结构体 `Rectangle`，包含 `Width` 和 `Height` 两个 float64 字段，并为其实现 `Area() float64` 方法计算面积。",
+    "order": 8,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "type Rectangle struct {\n\tWidth  float64\n\tHeight float64\n}\n\nfunc (r Rectangle) Area() float64 {\n\t// 计算矩形面积\n\treturn 0\n}",
+    "solution_code": "type Rectangle struct {\n\tWidth  float64\n\tHeight float64\n}\n\nfunc (r Rectangle) Area() float64 {\n\treturn r.Width * r.Height\n}",
+    "test_cases": [
+      {
+        "input": "Rectangle{Width: 3, Height: 4}.Area()",
+        "expected_output": "12",
+        "description": "宽3高4的矩形面积应为12"
+      },
+      {
+        "input": "Rectangle{Width: 5.5, Height: 2}.Area()",
+        "expected_output": "11",
+        "description": "宽5.5高2的矩形面积应为11"
+      }
+    ],
+    "hint": "面积 = 宽 × 高，使用 r.Width * r.Height"
+  },
+  {
+    "title": "指针",
+    "slug": "go-09-pointers",
+    "description": "学习Go语言的取址、解引用和指针接收者",
+    "content": "# 指针\n\n## 什么是指针？\n指针是存储变量内存地址的变量。Go的指针比C/C++更安全，不支持指针运算。\n\n## 取址与解引用\n```go\nx := 42\np := &x      // & 取址，p 是 *int 类型，存储 x 的地址\nfmt.Println(p)   // 输出地址，如 0xc0000b2008\nfmt.Println(*p)  // * 解引用，输出 42\n\n*p = 100         // 通过指针修改值\nfmt.Println(x)   // 100，x 的值被修改了\n```\n\n## 指针的零值\n指针的零值是 `nil`，表示不指向任何变量：\n\n```go\nvar p *int  // nil\nif p != nil {\n    fmt.Println(*p)\n}\n```\n\n## 指针接收者\n当需要在方法中修改结构体时，使用指针接收者：\n\n```go\ntype Counter struct {\n    count int\n}\n\n// 值接收者 - 修改的是副本，不影响原始值\nfunc (c Counter) IncrWrong() {\n    c.count++  // 无效！\n}\n\n// 指针接收者 - 修改原始值\nfunc (c *Counter) Incr() {\n    c.count++  // 有效！\n}\n```\n\n## new 函数\n`new(T)` 分配零值内存并返回指针：\n\n```go\np := new(int)   // *int 类型，值为 0\n*p = 42\n```\n\n## 何时使用指针？\n- 需要修改原始值时\n- 结构体较大时，避免拷贝开销\n- 需要表示\"空值\"时（nil）\n\n## 练习\n编写函数 `swapByPointer(a, b *int)`，通过指针交换两个整数的值。\n编写结构体 `Counter`，包含 `Value int` 字段，实现 `Increment()` 方法（指针接收者）使 Value 加1，以及 `GetValue() int` 方法返回当前值。",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "func swapByPointer(a, b *int) {\n\t// 通过指针交换两个整数的值\n}\n\ntype Counter struct {\n\tValue int\n}\n\nfunc (c *Counter) Increment() {\n\t// 使 Value 加 1\n}\n\nfunc (c *Counter) GetValue() int {\n\t// 返回当前值\n\treturn 0\n}",
+    "solution_code": "func swapByPointer(a, b *int) {\n\ttemp := *a\n\t*a = *b\n\t*b = temp\n}\n\ntype Counter struct {\n\tValue int\n}\n\nfunc (c *Counter) Increment() {\n\tc.Value++\n}\n\nfunc (c *Counter) GetValue() int {\n\treturn c.Value\n}",
+    "test_cases": [
+      {
+        "input": "func() string { a, b := 1, 2; swapByPointer(&a, &b); return fmt.Sprintf(\"%d,%d\", a, b) }()",
+        "expected_output": "2,1",
+        "description": "swapByPointer 应交换两个变量的值"
+      },
+      {
+        "input": "func() string { c := Counter{Value: 0}; c.Increment(); c.Increment(); return fmt.Sprintf(\"%d\", c.GetValue()) }()",
+        "expected_output": "2",
+        "description": "Counter Increment 两次后 GetValue 应返回 2"
+      }
+    ],
+    "hint": "交换需要临时变量保存值；Counter 使用指针接收者才能修改 Value"
+  },
+  {
+    "title": "接口",
+    "slug": "go-10-interfaces",
+    "description": "学习Go语言的隐式接口实现、类型断言和空接口",
+    "content": "# 接口\n\n## 什么是接口？\n接口定义了一组方法签名，任何实现了这些方法的类型都自动满足该接口。Go的接口是**隐式实现**的，不需要 `implements` 关键字。\n\n## 定义接口\n```go\ntype Speaker interface {\n    Speak() string\n}\n```\n\n## 隐式实现\n只要类型实现了接口的所有方法，就自动满足该接口：\n\n```go\ntype Dog struct{ Name string }\n\nfunc (d Dog) Speak() string {\n    return d.Name + \" says: Woof!\"\n}\n\n// Dog 自动实现了 Speaker 接口\nvar s Speaker = Dog{Name: \"Rex\"}\nfmt.Println(s.Speak())  // Rex says: Woof!\n```\n\n## 类型断言\n通过类型断言获取接口背后的具体类型：\n\n```go\nvar s Speaker = Dog{Name: \"Rex\"}\n\n// 直接断言\ndog := s.(Dog)  // 如果不是Dog会panic\n\n// 安全断言\ndog, ok := s.(Dog)  // ok为true表示断言成功\nif ok {\n    fmt.Println(\"是Dog:\", dog.Name)\n}\n```\n\n## 类型选择\n```go\nswitch v := s.(type) {\ncase Dog:\n    fmt.Println(\"Dog:\", v.Name)\ncase Cat:\n    fmt.Println(\"Cat:\", v.Name)\ndefault:\n    fmt.Println(\"未知类型\")\n}\n```\n\n## 空接口\n`interface{}`（Go 1.18+ 可写为 `any`）没有任何方法，所有类型都满足空接口：\n\n```go\nfunc printAny(v interface{}) {\n    fmt.Println(v)\n}\nprintAny(42)\nprintAny(\"hello\")\n```\n\n## 练习\n定义接口 `Shape`，包含 `Area() float64` 方法。为 `Circle`（半径 radius float64）和 `Rectangle`（宽高 float64）实现该接口。\n编写函数 `shapeArea(s Shape) float64`，返回任意形状的面积。",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "type Shape interface {\n\tArea() float64\n}\n\ntype Circle struct {\n\tRadius float64\n}\n\ntype Rectangle struct {\n\tWidth  float64\n\tHeight float64\n}\n\nfunc (c Circle) Area() float64 {\n\t// 计算圆面积\n\treturn 0\n}\n\nfunc (r Rectangle) Area() float64 {\n\t// 计算矩形面积\n\treturn 0\n}\n\nfunc shapeArea(s Shape) float64 {\n\t// 返回形状的面积\n\treturn 0\n}",
+    "solution_code": "import \"math\"\n\ntype Shape interface {\n\tArea() float64\n}\n\ntype Circle struct {\n\tRadius float64\n}\n\ntype Rectangle struct {\n\tWidth  float64\n\tHeight float64\n}\n\nfunc (c Circle) Area() float64 {\n\treturn math.Pi * c.Radius * c.Radius\n}\n\nfunc (r Rectangle) Area() float64 {\n\treturn r.Width * r.Height\n}\n\nfunc shapeArea(s Shape) float64 {\n\treturn s.Area()\n}",
+    "test_cases": [
+      {
+        "input": "Rectangle{Width: 3, Height: 4}.Area()",
+        "expected_output": "12",
+        "description": "矩形面积应为12"
+      },
+      {
+        "input": "shapeArea(Rectangle{Width: 5, Height: 6})",
+        "expected_output": "30",
+        "description": "shapeArea 返回矩形面积30"
+      },
+      {
+        "input": "shapeArea(Circle{Radius: 1})",
+        "expected_output": "3.141592653589793",
+        "description": "shapeArea 返回半径1的圆面积"
+      }
+    ],
+    "hint": "圆面积 = π × r²，使用 math.Pi；接口变量直接调用方法即可"
+  },
+  {
+    "title": "错误处理",
+    "slug": "go-11-error-handling",
+    "description": "学习Go语言的error接口、自定义错误和panic/recover",
+    "content": "# 错误处理\n\n## error 接口\nGo不使用 try/catch，而是通过 `error` 接口处理错误。`error` 是一个内置接口：\n\n```go\ntype error interface {\n    Error() string\n}\n```\n\n## 基本错误处理\nGo函数通常返回结果和错误，调用者负责检查：\n\n```go\nresult, err := doSomething()\nif err != nil {\n    // 处理错误\n    fmt.Println(\"出错:\", err)\n    return\n}\n// 使用 result\n```\n\n## 创建错误\n```go\nimport \"errors\"\nimport \"fmt\"\n\n// errors.New\nerr := errors.New(\"文件不存在\")\n\n// fmt.Errorf（支持格式化）\nerr := fmt.Errorf(\"文件 %s 不存在\", filename)\n```\n\n## 自定义错误\n通过实现 `Error() string` 方法创建自定义错误类型：\n\n```go\ntype DivisionError struct {\n    Dividend float64\n    Divisor  float64\n}\n\nfunc (e *DivisionError) Error() string {\n    return fmt.Sprintf(\"不能将 %.2f 除以 %.2f\", e.Dividend, e.Divisor)\n}\n```\n\n## panic 和 recover\n`panic` 用于不可恢复的严重错误，`recover` 用于捕获 panic：\n\n```go\n// 触发panic\npanic(\"严重错误！\")\n\n// 捕获panic（必须在defer中调用）\ndefer func() {\n    if r := recover(); r != nil {\n        fmt.Println(\"恢复:\", r)\n    }\n}()\n```\n\n一般原则：**能用error就不用panic**。\n\n## 练习\n编写函数 `safeDivide(a, b float64) (float64, error)`，当b为0时返回错误，否则返回a/b。\n编写函数 `parsePositiveInt(s string) (int, error)`，将字符串转为正整数，如果转换失败或结果<=0则返回错误。",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "func safeDivide(a, b float64) (float64, error) {\n\t// 安全除法，b为0时返回错误\n\treturn 0, nil\n}\n\nfunc parsePositiveInt(s string) (int, error) {\n\t// 将字符串转为正整数\n\treturn 0, nil\n}",
+    "solution_code": "import (\n\t\"errors\"\n\t\"strconv\"\n)\n\nfunc safeDivide(a, b float64) (float64, error) {\n\tif b == 0 {\n\t\treturn 0, errors.New(\"除数不能为零\")\n\t}\n\treturn a / b, nil\n}\n\nfunc parsePositiveInt(s string) (int, error) {\n\tn, err := strconv.Atoi(s)\n\tif err != nil {\n\t\treturn 0, fmt.Errorf(\"无法解析: %s\", s)\n\t}\n\tif n <= 0 {\n\t\treturn 0, errors.New(\"结果不是正整数\")\n\t}\n\treturn n, nil\n}",
+    "test_cases": [
+      {
+        "input": "func() string { r, e := safeDivide(10, 2); if e != nil { return e.Error() }; return fmt.Sprintf(\"%.1f\", r) }()",
+        "expected_output": "5.0",
+        "description": "safeDivide(10, 2) 应返回 5.0"
+      },
+      {
+        "input": "func() string { _, e := safeDivide(10, 0); if e != nil { return e.Error() }; return \"\" }()",
+        "expected_output": "除数不能为零",
+        "description": "safeDivide(10, 0) 应返回错误"
+      },
+      {
+        "input": "func() string { n, e := parsePositiveInt(\"42\"); if e != nil { return e.Error() }; return fmt.Sprintf(\"%d\", n) }()",
+        "expected_output": "42",
+        "description": "parsePositiveInt(\"42\") 应返回 42"
+      },
+      {
+        "input": "func() string { _, e := parsePositiveInt(\"-5\"); if e != nil { return e.Error() }; return \"\" }()",
+        "expected_output": "结果不是正整数",
+        "description": "parsePositiveInt(\"-5\") 应返回错误"
+      }
+    ],
+    "hint": "使用 errors.New 创建错误；使用 strconv.Atoi 转换字符串为整数"
+  },
+  {
+    "title": "并发基础",
+    "slug": "go-12-concurrency-basics",
+    "description": "学习Goroutine、Channel和select",
+    "content": "# 并发基础\n\n## Goroutine\nGoroutine 是Go的轻量级线程，使用 `go` 关键字启动：\n\n```go\n// 启动一个goroutine\ngo func() {\n    fmt.Println(\"并发执行\")\n}()\n\nfmt.Println(\"主goroutine\")\n```\n\nGoroutine 非常轻量，可以轻松创建数百万个。但要注意：主goroutine退出后，所有goroutine都会终止。\n\n## Channel\nChannel 是goroutine之间通信的管道，遵循\"不要通过共享内存来通信，而要通过通信来共享内存\"的理念：\n\n```go\n// 创建channel\nch := make(chan string)\n\n// 发送数据（在goroutine中）\ngo func() {\n    ch <- \"Hello\"  // 发送到channel\n}()\n\n// 接收数据\nmsg := <-ch      // 从channel接收\nfmt.Println(msg) // Hello\n```\n\n## 缓冲Channel\n```go\nch := make(chan int, 3)  // 缓冲区大小为3\nch <- 1  // 不阻塞（缓冲区未满）\nch <- 2\nch <- 3\n// ch <- 4  // 阻塞！缓冲区已满\n```\n\n## select 语句\n`select` 同时监听多个channel，类似switch但用于channel操作：\n\n```go\nselect {\ncase msg := <-ch1:\n    fmt.Println(\"收到ch1:\", msg)\ncase msg := <-ch2:\n    fmt.Println(\"收到ch2:\", msg)\ncase <-time.After(time.Second):\n    fmt.Println(\"超时\")\n}\n```\n\n## 关闭Channel\n```go\nch := make(chan int, 3)\nch <- 1\nch <- 2\nclose(ch)  // 关闭channel\n\n// 遍历已关闭的channel\nfor v := range ch {\n    fmt.Println(v)  // 1, 2\n}\n```\n\n## 练习\n编写函数 `sumConcurrent(nums []int) int`，将切片分成两部分，用两个goroutine分别求和，通过channel汇总结果。",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "func sumConcurrent(nums []int) int {\n\t// 使用两个goroutine分别求和，通过channel汇总\n\treturn 0\n}",
+    "solution_code": "func sumConcurrent(nums []int) int {\n\tif len(nums) == 0 {\n\t\treturn 0\n\t}\n\tmid := len(nums) / 2\n\tch := make(chan int, 2)\n\n\tgo func() {\n\t\tsum := 0\n\t\tfor _, n := range nums[:mid] {\n\t\t\tsum += n\n\t\t}\n\t\tch <- sum\n\t}()\n\n\tgo func() {\n\t\tsum := 0\n\t\tfor _, n := range nums[mid:] {\n\t\t\tsum += n\n\t\t}\n\t\tch <- sum\n\t}()\n\n\ttotal := <-ch + <-ch\n\treturn total\n}",
+    "test_cases": [
+      {
+        "input": "sumConcurrent([]int{1,2,3,4,5,6,7,8,9,10})",
+        "expected_output": "55",
+        "description": "1到10的和应为55"
+      },
+      {
+        "input": "sumConcurrent([]int{10,20,30})",
+        "expected_output": "60",
+        "description": "10+20+30应为60"
+      },
+      {
+        "input": "sumConcurrent([]int{})",
+        "expected_output": "0",
+        "description": "空切片应返回0"
+      }
+    ],
+    "hint": "将切片分成两半，启动两个goroutine分别求和，通过channel发送结果，主goroutine接收并相加"
+  },
+  {
+    "title": "并发模式",
+    "slug": "go-13-concurrency-patterns",
+    "description": "学习Worker Pool、扇出扇入和Context",
+    "content": "# 并发模式\n\n## Worker Pool（工作池）\nWorker Pool模式限制并发goroutine数量，避免资源耗尽：\n\n```go\nfunc worker(id int, jobs <-chan int, results chan<- int) {\n    for j := range jobs {\n        results <- j * 2  // 处理任务\n    }\n}\n\n// 创建Worker Pool\njobs := make(chan int, 100)\nresults := make(chan int, 100)\nfor w := 1; w <= 3; w++ {\n    go worker(w, jobs, results)\n}\n```\n\n## 扇出扇入（Fan-out/Fan-in）\n扇出：将工作分配给多个goroutine并行处理。\n扇入：将多个goroutine的结果合并到一个channel。\n\n```go\n// 扇出：启动多个goroutine\nch1 := process(data)\nch2 := process(data)\nch3 := process(data)\n\n// 扇入：合并结果\nmerged := merge(ch1, ch2, ch3)\n```\n\n## Context\nContext用于控制goroutine的生命周期，支持取消、超时和传值：\n\n```go\n// 创建可取消的context\nctx, cancel := context.WithCancel(context.Background())\ndefer cancel()\n\n// 带超时的context\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)\ndefer cancel()\n\n// 在goroutine中检查取消\nselect {\ncase <-ctx.Done():\n    return ctx.Err()\ncase result := <-ch:\n    return result\n}\n```\n\n## Pipeline（管道）\n将处理步骤串联，每步由goroutine完成：\n\n```go\ngenerate -> process -> filter -> collect\n```\n\n## 练习\n编写函数 `processWithWorkers(tasks []int, workerCount int) []int`，使用Worker Pool模式处理任务（每个任务返回 task*2），返回结果切片。",
+    "order": 13,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "func processWithWorkers(tasks []int, workerCount int) []int {\n\t// 使用Worker Pool处理任务，每个任务返回 task*2\n\treturn nil\n}",
+    "solution_code": "func processWithWorkers(tasks []int, workerCount int) []int {\n\tjobs := make(chan int, len(tasks))\n\tresults := make(chan int, len(tasks))\n\n\t// 启动worker\n\tfor w := 0; w < workerCount; w++ {\n\t\tgo func() {\n\t\t\tfor task := range jobs {\n\t\t\t\tresults <- task * 2\n\t\t\t}\n\t\t}()\n\t}\n\n\t// 发送任务\n\tfor _, task := range tasks {\n\t\tjobs <- task\n\t}\n\tclose(jobs)\n\n\t// 收集结果\n\tvar output []int\n\tfor i := 0; i < len(tasks); i++ {\n\t\toutput = append(output, <-results)\n\t}\n\treturn output\n}",
+    "test_cases": [
+      {
+        "input": "func() string { r := processWithWorkers([]int{1,2,3,4,5}, 3); sort.Ints(r); return fmt.Sprintf(\"%v\", r) }()",
+        "expected_output": "[2 4 6 8 10]",
+        "description": "处理 [1,2,3,4,5] 应返回 [2,4,6,8,10]"
+      },
+      {
+        "input": "func() string { r := processWithWorkers([]int{10,20}, 2); sort.Ints(r); return fmt.Sprintf(\"%v\", r) }()",
+        "expected_output": "[20 40]",
+        "description": "处理 [10,20] 应返回 [20,40]"
+      }
+    ],
+    "hint": "创建jobs和results两个channel，启动workerCount个goroutine从jobs读取任务，将结果发送到results"
+  },
+  {
+    "title": "标准库",
+    "slug": "go-14-stdlib",
+    "description": "学习Go标准库中的os/io/net/http和文件操作",
+    "content": "# 标准库\n\nGo拥有强大的标准库，覆盖了大部分常用功能，这是Go的一大优势。\n\n## os 包\n`os` 包提供操作系统功能：\n\n```go\n// 环境变量\nhome := os.Getenv(\"HOME\")\nos.Setenv(\"MY_VAR\", \"value\")\n\n// 文件操作\nfile, err := os.Create(\"test.txt\")    // 创建文件\nfile, err := os.Open(\"test.txt\")      // 打开文件（只读）\nos.Remove(\"test.txt\")                  // 删除文件\nos.Mkdir(\"dir\", 0755)                  // 创建目录\n```\n\n## io 包\n`io` 包提供I/O原语接口：\n\n```go\n// 读取全部内容\ndata, err := io.ReadAll(reader)\n\n// 拷贝\nwritten, err := io.Copy(dst, src)\n\n// ioutil（Go 1.16前）\ndata, err := os.ReadFile(\"test.txt\")   // Go 1.16+\nos.WriteFile(\"test.txt\", data, 0644)   // Go 1.16+\n```\n\n## strings 包\n```go\nstrings.Contains(\"hello\", \"ell\")  // true\nstrings.Split(\"a,b,c\", \",\")       // [a b c]\nstrings.Join([]string{\"a\",\"b\"}, \"-\") // a-b\nstrings.ToUpper(\"hello\")            // HELLO\nstrings.TrimSpace(\"  hi  \")         // hi\n```\n\n## strconv 包\n```go\nstrconv.Itoa(42)          // \"42\"  int转string\nstrconv.Atoi(\"42\")        // 42, error  string转int\nstrconv.FormatFloat(3.14, 'f', 2, 64)  // \"3.14\"\n```\n\n## net/http 包\n```go\n// 简单HTTP服务器\nhttp.HandleFunc(\"/\", func(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(w, \"Hello!\")\n})\nhttp.ListenAndServe(\":8080\", nil)\n```\n\n## 练习\n编写函数 `processString(s string) string`，将字符串转为大写并去除首尾空格。\n编写函数 `joinWithComma(items []string) string`，将字符串切片用逗号连接。",
+    "order": 14,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "func processString(s string) string {\n\t// 转为大写并去除首尾空格\n\treturn \"\"\n}\n\nfunc joinWithComma(items []string) string {\n\t// 用逗号连接字符串切片\n\treturn \"\"\n}",
+    "solution_code": "import \"strings\"\n\nfunc processString(s string) string {\n\treturn strings.ToUpper(strings.TrimSpace(s))\n}\n\nfunc joinWithComma(items []string) string {\n\treturn strings.Join(items, \",\")\n}",
+    "test_cases": [
+      {
+        "input": "processString(\"  hello  \")",
+        "expected_output": "HELLO",
+        "description": "processString 应转为大写并去除空格"
+      },
+      {
+        "input": "processString(\"  Go Language  \")",
+        "expected_output": "GO LANGUAGE",
+        "description": "processString 应正确处理多个单词"
+      },
+      {
+        "input": "joinWithComma([]string{\"apple\", \"banana\", \"cherry\"})",
+        "expected_output": "apple,banana,cherry",
+        "description": "joinWithComma 应用逗号连接"
+      }
+    ],
+    "hint": "使用 strings.ToUpper、strings.TrimSpace、strings.Join"
+  },
+  {
+    "title": "反射与unsafe",
+    "slug": "go-15-reflection",
+    "description": "学习reflect包的类型检查和值操作",
+    "content": "# 反射与unsafe\n\n## 什么是反射？\n反射允许程序在运行时检查类型信息、操作变量。Go的 `reflect` 包提供了反射能力，常用于框架和通用库的开发。\n\n## reflect.Type\n获取类型信息：\n\n```go\nvar x float64 = 3.14\nt := reflect.TypeOf(x)     // float64\nfmt.Println(t.Name())       // float64\nfmt.Println(t.Kind())       // float64\nfmt.Println(t.Size())       // 8\n```\n\n## reflect.Value\n获取和操作值：\n\n```go\nv := reflect.ValueOf(x)\nfmt.Println(v.Type())      // float64\nfmt.Println(v.Kind())      // float64\nfmt.Println(v.Float())     // 3.14\n\n// 修改值（必须传入指针）\npv := reflect.ValueOf(&x)\npv.Elem().SetFloat(2.71)\nfmt.Println(x)  // 2.71\n```\n\n## Kind 类型\n`Kind` 表示底层类型种类：\n\n| Kind | 说明 |\n|------|------|\n| Bool | 布尔 |\n| Int, Float64 | 数值 |\n| String | 字符串 |\n| Struct | 结构体 |\n| Slice | 切片 |\n| Map | 映射 |\n| Func | 函数 |\n\n## 结构体反射\n```go\nt := reflect.TypeOf(Person{})\nfor i := 0; i < t.NumField(); i++ {\n    field := t.Field(i)\n    fmt.Println(field.Name, field.Type)\n}\n```\n\n## unsafe 包\n`unsafe` 包提供绕过Go类型系统的操作，一般不建议使用：\n\n```go\nimport \"unsafe\"\n\n// 获取变量大小\nsize := unsafe.Sizeof(x)\n\n// 获取结构体字段偏移\noffset := unsafe.Offsetof(s.Field)\n```\n\n## 练习\n编写函数 `getTypeName(v interface{}) string`，返回变量的类型名称。\n编写函数 `getFieldNames(s interface{}) []string`，返回结构体的所有字段名。",
+    "order": 15,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "func getTypeName(v interface{}) string {\n\t// 返回变量的类型名称\n\treturn \"\"\n}\n\nfunc getFieldNames(s interface{}) []string {\n\t// 返回结构体的所有字段名\n\treturn nil\n}",
+    "solution_code": "import \"reflect\"\n\nfunc getTypeName(v interface{}) string {\n\treturn reflect.TypeOf(v).Name()\n}\n\nfunc getFieldNames(s interface{}) []string {\n\tt := reflect.TypeOf(s)\n\tvar names []string\n\tfor i := 0; i < t.NumField(); i++ {\n\t\tnames = append(names, t.Field(i).Name)\n\t}\n\treturn names\n}",
+    "test_cases": [
+      {
+        "input": "getTypeName(42)",
+        "expected_output": "int",
+        "description": "getTypeName(42) 应返回 int"
+      },
+      {
+        "input": "getTypeName(\"hello\")",
+        "expected_output": "string",
+        "description": "getTypeName(\"hello\") 应返回 string"
+      },
+      {
+        "input": "func() string { type Test struct { Name string; Age int }; return fmt.Sprintf(\"%v\", getFieldNames(Test{})) }()",
+        "expected_output": "[Name Age]",
+        "description": "getFieldNames 应返回结构体字段名列表"
+      }
+    ],
+    "hint": "使用 reflect.TypeOf 获取类型，.Name() 获取名称；NumField 和 Field 遍历结构体字段"
+  },
+  {
+    "title": "测试与性能",
+    "slug": "go-16-testing",
+    "description": "学习testing包、表驱动测试和基准测试",
+    "content": "# 测试与性能\n\n## testing 包\nGo内置了测试框架，测试文件以 `_test.go` 结尾，测试函数以 `Test` 开头：\n\n```go\n// math_test.go\npackage math\n\nimport \"testing\"\n\nfunc TestAdd(t *testing.T) {\n    result := Add(2, 3)\n    if result != 5 {\n        t.Errorf(\"Add(2, 3) = %d, want 5\", result)\n    }\n}\n```\n\n运行测试：\n```bash\ngo test ./...           # 运行所有测试\ngo test -v ./...        # 详细输出\ngo test -run TestAdd    # 运行指定测试\n```\n\n## 表驱动测试\nGo推荐使用表驱动测试模式：\n\n```go\nfunc TestAdd(t *testing.T) {\n    tests := []struct {\n        a, b, want int\n    }{\n        {1, 2, 3},\n        {0, 0, 0},\n        {-1, 1, 0},\n    }\n    for _, tt := range tests {\n        got := Add(tt.a, tt.b)\n        if got != tt.want {\n            t.Errorf(\"Add(%d, %d) = %d, want %d\", tt.a, tt.b, got, tt.want)\n        }\n    }\n}\n```\n\n## Benchmark\n基准测试函数以 `Benchmark` 开头：\n\n```go\nfunc BenchmarkAdd(b *testing.B) {\n    for i := 0; i < b.N; i++ {\n        Add(1, 2)\n    }\n}\n```\n\n运行基准测试：\n```bash\ngo test -bench=.\ngo test -bench=. -benchmem  # 包含内存分配信息\n```\n\n## Example 示例测试\n```go\nfunc ExampleHello() {\n    fmt.Println(\"Hello\")\n    // Output: Hello\n}\n```\n\n## 练习\n编写函数 `fibonacci(n int) int`，返回第n个斐波那契数（F(0)=0, F(1)=1）。\n编写函数 `isPalindrome(s string) bool`，判断字符串是否为回文。",
+    "order": 16,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "import \"testing\"\n\n// 被测函数\nfunc add(a, b int) int {\n\treturn a + b\n}\n\n// 编写表驱动测试\nfunc TestAdd(t *testing.T) {\n\t// TODO: 使用 t.Run() 编写测试用例\n}\n\n// 编写基准测试\nfunc BenchmarkAdd(b *testing.B) {\n\t// TODO: 使用 b.N 循环调用 add()\n}",
+    "solution_code": "import \"testing\"\n\nfunc add(a, b int) int {\n\treturn a + b\n}\n\nfunc TestAdd(t *testing.T) {\n\ttests := []struct {\n\t\tname     string\n\t\ta, b     int\n\t\texpected int\n\t}{\n\t\t{\"positive numbers\", 1, 2, 3},\n\t\t{\"zero values\", 0, 0, 0},\n\t\t{\"negative numbers\", -1, -2, -3},\n\t}\n\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tresult := add(tt.a, tt.b)\n\t\t\tif result != tt.expected {\n\t\t\t\tt.Errorf(\"add(%d, %d) = %d, want %d\", tt.a, tt.b, result, tt.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkAdd(b *testing.B) {\n\tfor i := 0; i < b.N; i++ {\n\t\tadd(100, 200)\n\t}\n}",
+    "test_cases": [
+      {
+        "input": "func() string { tests := []struct{ name, a, b, expected int }{{\"pos\", 2, 3, 5}, {\"zero\", 0, 0, 0}, {\"neg\", -1, -2, -3}}; results := make([]string, 0); for _, tt := range tests { r := add(tt.a, tt.b); if r == tt.expected { results = append(results, fmt.Sprintf(\"%s:PASS\", tt.name)) } else { results = append(results, fmt.Sprintf(\"%s:FAIL\", tt.name)) } }; return strings.Join(results, \",\") }()",
+        "expected_output": "pos:PASS,zero:PASS,neg:PASS",
+        "description": "表驱动测试应覆盖正常/零/负数情况"
+      },
+      {
+        "input": "func() string { tests := []string{\"racecar\", \"hello\", \"\"}; results := make([]string, 0); for _, s := range tests { r := isPalindrome(s); if (s == \"racecar\" && r) || (s == \"hello\" && !r) || (s == \"\" && r) { results = append(results, fmt.Sprintf(\"%v:PASS\", s)) } else { results = append(results, fmt.Sprintf(\"%v:FAIL\", s)) } }; return strings.Join(results, \",\") }()",
+        "expected_output": "racecar:PASS,hello:PASS,:PASS",
+        "description": "回文测试应正确处理空字符串和边界情况"
+      }
+    ],
+    "hint": "斐波那契用迭代更高效；回文从两端向中间比较"
+  },
+  {
+    "title": "命令行工具",
+    "slug": "go-17-cli-tools",
+    "description": "学习flag包和命令行工具开发",
+    "content": "# 命令行工具\n\n## flag 包\nGo标准库的 `flag` 包提供命令行参数解析：\n\n```go\n// 定义命令行参数\nname := flag.String(\"name\", \"World\", \"问候对象\")\nage := flag.Int(\"age\", 0, \"年龄\")\nverbose := flag.Bool(\"v\", false, \"详细输出\")\n\n// 也可以绑定到变量\nvar port int\nflag.IntVar(&port, \"port\", 8080, \"端口号\")\n\n// 解析参数\nflag.Parse()\n\nfmt.Printf(\"Hello, %s! Age: %d\\n\", *name, *age)\n```\n\n运行方式：\n```bash\ngo run main.go -name=Alice -age=30 -v\n```\n\n## os.Args\n直接访问原始命令行参数：\n\n```go\n// os.Args[0] 是程序名\n// os.Args[1:] 是参数列表\nargs := os.Args[1:]\n```\n\n## 子命令模式\n```go\nhelloCmd := flag.NewFlagSet(\"hello\", flag.ExitOnError)\nname := helloCmd.String(\"name\", \"World\", \"名字\")\n\nif len(os.Args) < 2 {\n    fmt.Println(\"expected subcommand\")\n    os.Exit(1)\n}\n\nswitch os.Args[1] {\ncase \"hello\":\n    helloCmd.Parse(os.Args[2:])\n    fmt.Printf(\"Hello, %s!\\n\", *name)\n}\n```\n\n## cobra 框架\nCobra是流行的CLI框架，提供子命令、帮助、补全等功能：\n\n```go\nvar rootCmd = &cobra.Command{\n    Use:   \"myapp\",\n    Short: \"My application\",\n    Run: func(cmd *cobra.Command, args []string) {\n        fmt.Println(\"Hello from myapp!\")\n    },\n}\n```\n\n## 练习\n编写函数 `parseArgs(args []string) map[string]string`，解析 `--key=value` 格式的参数为map。\n编写函数 `greetFromArgs(args []string) string`，从参数中查找 `--name` 的值，返回 `\"Hello, {name}!\"`，如果未提供则返回 `\"Hello, World!\"`。",
+    "order": 17,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "func parseArgs(args []string) map[string]string {\n\t// 解析 --key=value 格式参数\n\treturn nil\n}\n\nfunc greetFromArgs(args []string) string {\n\t// 从参数中查找 --name 的值\n\treturn \"\"\n}",
+    "solution_code": "import \"strings\"\n\nfunc parseArgs(args []string) map[string]string {\n\tresult := make(map[string]string)\n\tfor _, arg := range args {\n\t\tif strings.HasPrefix(arg, \"--\") {\n\t\t\tparts := strings.SplitN(arg[2:], \"=\", 2)\n\t\t\tif len(parts) == 2 {\n\t\t\t\tresult[parts[0]] = parts[1]\n\t\t\t}\n\t\t}\n\t}\n\treturn result\n}\n\nfunc greetFromArgs(args []string) string {\n\tparsed := parseArgs(args)\n\tname, ok := parsed[\"name\"]\n\tif !ok {\n\t\tname = \"World\"\n\t}\n\treturn \"Hello, \" + name + \"!\"\n}",
+    "test_cases": [
+      {
+        "input": "func() string { m := parseArgs([]string{\"--name=Alice\", \"--age=30\"}); return fmt.Sprintf(\"%s,%s\", m[\"name\"], m[\"age\"]) }()",
+        "expected_output": "Alice,30",
+        "description": "parseArgs 应正确解析 --key=value"
+      },
+      {
+        "input": "greetFromArgs([]string{\"--name=Bob\"})",
+        "expected_output": "Hello, Bob!",
+        "description": "greetFromArgs 应使用 --name 的值"
+      },
+      {
+        "input": "greetFromArgs([]string{})",
+        "expected_output": "Hello, World!",
+        "description": "greetFromArgs 无参数时使用默认值"
+      }
+    ],
+    "hint": "使用 strings.HasPrefix 检查 -- 前缀，strings.SplitN 分割键值"
+  },
+  {
+    "title": "HTTP服务",
+    "slug": "go-18-http-server",
+    "description": "学习net/http、路由和中间件",
+    "content": "# HTTP服务\n\n## 基本HTTP服务器\nGo标准库 `net/http` 提供了强大的HTTP服务能力：\n\n```go\nhttp.HandleFunc(\"/\", func(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(w, \"Hello, World!\")\n})\n\nhttp.HandleFunc(\"/api\", func(w http.ResponseWriter, r *http.Request) {\n    w.Header().Set(\"Content-Type\", \"application/json\")\n    fmt.Fprintf(w, `{\"message\": \"API response\"}`)\n})\n\nhttp.ListenAndServe(\":8080\", nil)\n```\n\n## 请求处理\n`http.Request` 包含请求的所有信息：\n\n```go\nfunc handler(w http.ResponseWriter, r *http.Request) {\n    method := r.Method          // GET, POST, etc.\n    path := r.URL.Path          // 请求路径\n    query := r.URL.Query()      // 查询参数\n    header := r.Header          // 请求头\n    body := r.Body              // 请求体\n}\n```\n\n## 中间件\n中间件是在请求处理前后执行通用逻辑的函数：\n\n```go\nfunc loggingMiddleware(next http.Handler) http.Handler {\n    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n        start := time.Now()\n        next.ServeHTTP(w, r)\n        log.Printf(\"%s %s %v\", r.Method, r.URL.Path, time.Since(start))\n    })\n}\n```\n\n## 路由器\n标准库的路由能力有限，常用第三方路由：\n- `gorilla/mux` - 功能丰富\n- `chi` - 轻量高效\n- `gin` - 高性能Web框架\n\n## 练习\n编写函数 `createRouter() *http.ServeMux`，注册两个路由：`/hello` 返回 `\"Hello!\"`，`/api/status` 返回 `\"OK\"`。\n编写函数 `withLogging(handler http.HandlerFunc) http.HandlerFunc`，创建日志中间件，在处理请求前输出请求方法。",
+    "order": 18,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "import (\n\t\"log\"\n\t\"net/http\"\n\t\"net/http/httptest\"\n)\n\nfunc createRouter() *http.ServeMux {\n\tmux := http.NewServeMux()\n\t// 注册路由\n\treturn mux\n}\n\nfunc withLogging(handler http.HandlerFunc) http.HandlerFunc {\n\t// 日志中间件\n\treturn handler\n}",
+    "solution_code": "import (\n\t\"log\"\n\t\"net/http\"\n\t\"net/http/httptest\"\n)\n\nfunc createRouter() *http.ServeMux {\n\tmux := http.NewServeMux()\n\tmux.HandleFunc(\"/hello\", func(w http.ResponseWriter, r *http.Request) {\n\t\tfmt.Fprintf(w, \"Hello!\")\n\t})\n\tmux.HandleFunc(\"/api/status\", func(w http.ResponseWriter, r *http.Request) {\n\t\tfmt.Fprintf(w, \"OK\")\n\t})\n\treturn mux\n}\n\nfunc withLogging(handler http.HandlerFunc) http.HandlerFunc {\n\treturn func(w http.ResponseWriter, r *http.Request) {\n\t\tlog.Printf(\"Request: %s %s\", r.Method, r.URL.Path)\n\t\thandler(w, r)\n\t}\n}",
+    "test_cases": [
+      {
+        "input": "func() string { mux := createRouter(); w := httptest.NewRecorder(); r := httptest.NewRequest(\"GET\", \"/hello\", nil); mux.ServeHTTP(w, r); return w.Body.String() }()",
+        "expected_output": "Hello!",
+        "description": "/hello 路由应返回 Hello!"
+      },
+      {
+        "input": "func() string { called := false; h := withLogging(func(w http.ResponseWriter, r *http.Request) { called = true; fmt.Fprintf(w, \"done\") }); w := httptest.NewRecorder(); r := httptest.NewRequest(\"GET\", \"/test\", nil); h(w, r); return fmt.Sprintf(\"%v\", called) }()",
+        "expected_output": "true",
+        "description": "中间件应调用原始handler"
+      }
+    ],
+    "hint": "使用 mux.HandleFunc 注册路由；中间件通过闭包包装原始handler"
+  },
+  {
+    "title": "数据库操作",
+    "slug": "go-19-database",
+    "description": "学习database/sql和GORM入门",
+    "content": "# 数据库操作\n\n## database/sql\nGo标准库 `database/sql` 提供了数据库操作的通用接口：\n\n```go\nimport \"database/sql\"\nimport _ \"github.com/go-sql-driver/mysql\"\n\n// 打开数据库连接\ndb, err := sql.Open(\"mysql\", \"user:password@/dbname\")\nif err != nil {\n    log.Fatal(err)\n}\ndefer db.Close()\n\n// 查询单行\nvar name string\nerr = db.QueryRow(\"SELECT name FROM users WHERE id = ?\", 1).Scan(&name)\n\n// 查询多行\nrows, err := db.Query(\"SELECT id, name FROM users\")\ndefer rows.Close()\nfor rows.Next() {\n    var id int\n    var name string\n    rows.Scan(&id, &name)\n}\n\n// 插入数据\nresult, err := db.Exec(\"INSERT INTO users (name) VALUES (?)\", \"Alice\")\nid, _ := result.LastInsertId()\n```\n\n## 预处理语句\n```go\nstmt, err := db.Prepare(\"INSERT INTO users (name) VALUES (?)\")\ndefer stmt.Close()\nstmt.Exec(\"Alice\")\nstmt.Exec(\"Bob\")\n```\n\n## 事务\n```go\ntx, err := db.Begin()\n_, err = tx.Exec(\"UPDATE accounts SET balance = balance - 100 WHERE id = 1\")\n_, err = tx.Exec(\"UPDATE accounts SET balance = balance + 100 WHERE id = 2\")\nif err != nil {\n    tx.Rollback()  // 回滚\n    return\n}\ntx.Commit()  // 提交\n```\n\n## GORM 入门\nGORM是流行的Go ORM库：\n\n```go\ntype User struct {\n    gorm.Model\n    Name string\n    Age  int\n}\n\ndb.AutoMigrate(&User{})\ndb.Create(&User{Name: \"Alice\", Age: 30})\nvar user User\ndb.First(&user, 1)  // 查询ID为1的记录\ndb.Where(\"name = ?\", \"Alice\").First(&user)\n```\n\n## 练习\n编写结构体 `User`，包含 `ID int`、`Name string`、`Email string` 字段。\n编写函数 `filterUsers(users []User, predicate func(User) bool) []User`，根据条件过滤用户。\n编写函数 `findUserByName(users []User, name string) (User, bool)`，按名称查找用户。",
+    "order": 19,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "type User struct {\n\tID    int\n\tName  string\n\tEmail string\n}\n\nfunc filterUsers(users []User, predicate func(User) bool) []User {\n\t// 根据条件过滤用户\n\treturn nil\n}\n\nfunc findUserByName(users []User, name string) (User, bool) {\n\t// 按名称查找用户\n\treturn User{}, false\n}",
+    "solution_code": "type User struct {\n\tID    int\n\tName  string\n\tEmail string\n}\n\nfunc filterUsers(users []User, predicate func(User) bool) []User {\n\tvar result []User\n\tfor _, u := range users {\n\t\tif predicate(u) {\n\t\t\tresult = append(result, u)\n\t\t}\n\t}\n\treturn result\n}\n\nfunc findUserByName(users []User, name string) (User, bool) {\n\tfor _, u := range users {\n\t\tif u.Name == name {\n\t\t\treturn u, true\n\t\t}\n\t}\n\treturn User{}, false\n}",
+    "test_cases": [
+      {
+        "input": "func() string { users := []User{{1, \"Alice\", \"a@test.com\"}, {2, \"Bob\", \"b@test.com\"}, {3, \"Charlie\", \"c@test.com\"}}; result := filterUsers(users, func(u User) bool { return len(u.Name) > 3 }); return fmt.Sprintf(\"%d\", len(result)) }()",
+        "expected_output": "2",
+        "description": "过滤名字长度>3的用户应返回2个"
+      },
+      {
+        "input": "func() string { users := []User{{1, \"Alice\", \"a@test.com\"}, {2, \"Bob\", \"b@test.com\"}}; u, ok := findUserByName(users, \"Alice\"); return fmt.Sprintf(\"%v,%s\", ok, u.Name) }()",
+        "expected_output": "true,Alice",
+        "description": "查找存在的用户应返回 true"
+      },
+      {
+        "input": "func() string { users := []User{{1, \"Alice\", \"a@test.com\"}}; _, ok := findUserByName(users, \"Charlie\"); return fmt.Sprintf(\"%v\", ok) }()",
+        "expected_output": "false",
+        "description": "查找不存在的用户应返回 false"
+      }
+    ],
+    "hint": "filterUsers 遍历切片用 predicate 过滤；findUserByName 遍历匹配名称"
+  },
+  {
+    "title": "JSON处理",
+    "slug": "go-20-json",
+    "description": "学习encoding/json和结构体标签",
+    "content": "# JSON处理\n\n## encoding/json\nGo标准库 `encoding/json` 提供JSON编解码能力：\n\n## 结构体与JSON标签\n通过结构体标签控制JSON序列化行为：\n\n```go\ntype Person struct {\n    Name  string `json:\"name\"`           // 指定JSON字段名\n    Age   int    `json:\"age\"`\n    Email string `json:\"email,omitempty\"` // omitempty: 零值时省略\n    Pass  string `json:\"-\"`               // 完全忽略该字段\n}\n```\n\n## 序列化（Marshal）\n将Go值转为JSON：\n\n```go\np := Person{Name: \"Alice\", Age: 30, Email: \"alice@test.com\"}\ndata, err := json.Marshal(p)          // 紧凑格式\ndata, err := json.MarshalIndent(p, \"\", \"  \")  // 美化格式\nfmt.Println(string(data))\n// {\"name\":\"Alice\",\"age\":30,\"email\":\"alice@test.com\"}\n```\n\n## 反序列化（Unmarshal）\n将JSON转为Go值：\n\n```go\njsonStr := `{\"name\":\"Bob\",\"age\":25}`\nvar p Person\nerr := json.Unmarshal([]byte(jsonStr), &p)\nfmt.Println(p.Name)  // Bob\nfmt.Println(p.Age)   // 25\n```\n\n## 动态JSON\n处理不确定结构的JSON：\n\n```go\nvar data map[string]interface{}\njson.Unmarshal([]byte(jsonStr), &data)\nname := data[\"name\".(string)\n```\n\n## 编码器和解码器\n用于流式处理：\n\n```go\ndec := json.NewDecoder(reader)\nenc := json.NewEncoder(writer)\n```\n\n## 练习\n编写结构体 `Product`，包含 `Name string`（JSON标签 `\"name\"`）、`Price float64`（JSON标签 `\"price\"`）、`InStock bool`（JSON标签 `\"in_stock,omitempty\"`）。\n编写函数 `toJSON(p Product) string`，将Product序列化为JSON字符串。\n编写函数 `fromJSON(s string) Product`，将JSON字符串反序列化为Product。",
+    "order": 20,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "type Product struct {\n\tName    string  `json:\"name\"`\n\tPrice   float64 `json:\"price\"`\n\tInStock bool    `json:\"in_stock,omitempty\"`\n}\n\nfunc toJSON(p Product) string {\n\t// 序列化为JSON字符串\n\treturn \"\"\n}\n\nfunc fromJSON(s string) Product {\n\t// 反序列化为Product\n\treturn Product{}\n}",
+    "solution_code": "import \"encoding/json\"\n\ntype Product struct {\n\tName    string  `json:\"name\"`\n\tPrice   float64 `json:\"price\"`\n\tInStock bool    `json:\"in_stock,omitempty\"`\n}\n\nfunc toJSON(p Product) string {\n\tdata, _ := json.Marshal(p)\n\treturn string(data)\n}\n\nfunc fromJSON(s string) Product {\n\tvar p Product\n\tjson.Unmarshal([]byte(s), &p)\n\treturn p\n}",
+    "test_cases": [
+      {
+        "input": "toJSON(Product{Name: \"Book\", Price: 29.99, InStock: true})",
+        "expected_output": "{\"name\":\"Book\",\"price\":29.99,\"in_stock\":true}",
+        "description": "toJSON 应正确序列化Product"
+      },
+      {
+        "input": "toJSON(Product{Name: \"Pen\", Price: 5.5, InStock: false})",
+        "expected_output": "{\"name\":\"Pen\",\"price\":5.5}",
+        "description": "InStock为false时omitempty应省略"
+      },
+      {
+        "input": "func() string { p := fromJSON(\"{\\\"name\\\":\\\"Laptop\\\",\\\"price\\\":999.99,\\\"in_stock\\\":true}\"); return fmt.Sprintf(\"%s,%.2f,%v\", p.Name, p.Price, p.InStock) }()",
+        "expected_output": "Laptop,999.99,true",
+        "description": "fromJSON 应正确反序列化"
+      }
+    ],
+    "hint": "使用 json.Marshal 序列化，json.Unmarshal 反序列化；omitempty 零值时省略字段"
+  },
+  {
+    "title": "并发爬虫",
+    "slug": "go-21-concurrent-crawler",
+    "description": "使用Goroutine和Channel实现并发爬虫",
+    "content": "# 并发爬虫\n\n## 爬虫基本原理\n网络爬虫的基本流程：发送HTTP请求 → 解析响应 → 提取数据 → 存储。\n\nGo天生适合写爬虫，goroutine轻量级并发让爬取效率极高。\n\n## 并发爬取\n使用goroutine并发请求多个URL：\n\n```go\nfunc fetch(url string, ch chan<- string) {\n    resp, err := http.Get(url)\n    if err != nil {\n        ch <- fmt.Sprintf(\"Error: %s\", url)\n        return\n    }\n    defer resp.Body.Close()\n    body, _ := io.ReadAll(resp.Body)\n    ch <- fmt.Sprintf(\"%s: %d bytes\", url, len(body))\n}\n\nurls := []string{\"http://example.com\", \"http://golang.org\"}\nch := make(chan string, len(urls))\nfor _, url := range urls {\n    go fetch(url, ch)\n}\nfor range urls {\n    fmt.Println(<-ch)\n}\n```\n\n## 限速控制\n使用带缓冲的channel或time.Ticker控制请求速率：\n\n```go\nlimiter := make(chan struct{}, 5)  // 最多5个并发\nfor _, url := range urls {\n    limiter <- struct{}{}  // 获取令牌\n    go func(url string) {\n        defer func() { <-limiter }()  // 释放令牌\n        fetch(url, ch)\n    }(url)\n}\n```\n\n## 结果去重\n使用map记录已访问的URL：\n\n```go\nvisited := make(map[string]bool)\nif !visited[url] {\n    visited[url] = true\n    // 爬取\n}\n```\n\n## 练习\n编写函数 `processURLs(urls []string, maxConcurrent int) map[string]int`，并发获取URL的状态码，使用最多maxConcurrent个并发goroutine，返回每个URL对应的HTTP状态码映射。\n编写函数 `mergeResults(channels ...chan map[string]int) map[string]int`，合并多个channel的结果。",
+    "order": 21,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "func processURLs(urls []string, maxConcurrent int) map[string]int {\n\t// 并发获取URL状态码\n\treturn nil\n}\n\nfunc mergeResults(channels ...chan map[string]int) map[string]int {\n\t// 合并多个channel的结果\n\treturn nil\n}",
+    "solution_code": "import \"net/http\"\n\nfunc processURLs(urls []string, maxConcurrent int) map[string]int {\n\tresult := make(map[string]int)\n\tch := make(chan struct{ url string; status int }, len(urls))\n\tsem := make(chan struct{}, maxConcurrent)\n\n\tfor _, u := range urls {\n\t\tsem <- struct{}{}\n\t\tgo func(url string) {\n\t\t\tdefer func() { <-sem }()\n\t\t\tresp, err := http.Get(url)\n\t\t\tif err != nil {\n\t\t\t\tch <- struct{ url string; status int }{url, 0}\n\t\t\t\treturn\n\t\t\t}\n\t\t\tdefer resp.Body.Close()\n\t\t\tch <- struct{ url string; status int }{url, resp.StatusCode}\n\t\t}(u)\n\t}\n\n\tfor i := 0; i < len(urls); i++ {\n\t\tr := <-ch\n\t\tresult[r.url] = r.status\n\t}\n\treturn result\n}\n\nfunc mergeResults(channels ...chan map[string]int) map[string]int {\n\tmerged := make(map[string]int)\n\tfor _, ch := range channels {\n\t\tfor k, v := range <-ch {\n\t\t\tmerged[k] = v\n\t\t}\n\t}\n\treturn merged\n}",
+    "test_cases": [
+      {
+        "input": "func() string { ch1 := make(chan map[string]int, 1); ch2 := make(chan map[string]int, 1); ch1 <- map[string]int{\"a\": 1}; ch2 <- map[string]int{\"b\": 2}; m := mergeResults(ch1, ch2); return fmt.Sprintf(\"%d\", len(m)) }()",
+        "expected_output": "2",
+        "description": "合并两个channel的结果应有2个键"
+      },
+      {
+        "input": "func() string { ch1 := make(chan map[string]int, 1); ch2 := make(chan map[string]int, 1); ch1 <- map[string]int{\"x\": 10}; ch2 <- map[string]int{\"y\": 20}; m := mergeResults(ch1, ch2); return fmt.Sprintf(\"%d,%d\", m[\"x\"], m[\"y\"]) }()",
+        "expected_output": "10,20",
+        "description": "合并结果应包含所有键值"
+      }
+    ],
+    "hint": "使用带缓冲channel做信号量限制并发；mergeResults从每个channel读取并合并到结果map"
+  },
+  {
+    "title": "WebSocket",
+    "slug": "go-22-websocket",
+    "description": "使用gorilla/websocket实现实时通信",
+    "content": "# WebSocket\n\n## 什么是WebSocket？\nWebSocket是一种全双工通信协议，允许服务器主动向客户端推送数据，适用于实时聊天、通知推送、实时数据等场景。\n\n## gorilla/websocket\nGo最流行的WebSocket库：\n\n```go\nimport \"github.com/gorilla/websocket\"\n\nvar upgrader = websocket.Upgrader{\n    CheckOrigin: func(r *http.Request) bool { return true },\n}\n\nfunc handleWebSocket(w http.ResponseWriter, r *http.Request) {\n    conn, err := upgrader.Upgrade(w, r, nil)\n    if err != nil {\n        log.Println(\"Upgrade error:\", err)\n        return\n    }\n    defer conn.Close()\n\n    for {\n        messageType, message, err := conn.ReadMessage()\n        if err != nil {\n            break\n        }\n        // 回显消息\n        conn.WriteMessage(messageType, message)\n    }\n}\n```\n\n## 消息类型\n- `TextMessage` (1) - 文本消息\n- `BinaryMessage` (2) - 二进制消息\n- `CloseMessage` (8) - 关闭消息\n- `PingMessage` (9) / `PongMessage` (10) - 心跳\n\n## Hub模式\n管理多个连接的常用模式：\n\n```go\ntype Hub struct {\n    clients    map[*Client]bool\n    broadcast  chan []byte\n    register   chan *Client\n    unregister chan *Client\n}\n```\n\n## 练习\n编写结构体 `SimpleHub`，包含 `clients map[int]chan string`、`broadcast chan string`、`nextID int`。\n实现 `AddClient(ch chan string) int` 方法，将客户端添加到Hub并返回ID。\n实现 `Broadcast(msg string)` 方法，向所有客户端发送消息。",
+    "order": 22,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "type SimpleHub struct {\n\tclients   map[int]chan string\n\tbroadcast chan string\n\tnextID    int\n}\n\nfunc NewSimpleHub() *SimpleHub {\n\treturn &SimpleHub{\n\t\tclients:   make(map[int]chan string),\n\t\tbroadcast: make(chan string, 10),\n\t\tnextID:    1,\n\t}\n}\n\nfunc (h *SimpleHub) AddClient(ch chan string) int {\n\t// 添加客户端，返回ID\n\treturn 0\n}\n\nfunc (h *SimpleHub) Broadcast(msg string) {\n\t// 向所有客户端发送消息\n}",
+    "solution_code": "type SimpleHub struct {\n\tclients   map[int]chan string\n\tbroadcast chan string\n\tnextID    int\n}\n\nfunc NewSimpleHub() *SimpleHub {\n\treturn &SimpleHub{\n\t\tclients:   make(map[int]chan string),\n\t\tbroadcast: make(chan string, 10),\n\t\tnextID:    1,\n\t}\n}\n\nfunc (h *SimpleHub) AddClient(ch chan string) int {\n\tid := h.nextID\n\th.nextID++\n\th.clients[id] = ch\n\treturn id\n}\n\nfunc (h *SimpleHub) Broadcast(msg string) {\n\tfor _, ch := range h.clients {\n\t\tselect {\n\t\tcase ch <- msg:\n\t\tdefault:\n\t\t}\n\t}\n}",
+    "test_cases": [
+      {
+        "input": "func() string { hub := NewSimpleHub(); ch1 := make(chan string, 1); ch2 := make(chan string, 1); id1 := hub.AddClient(ch1); id2 := hub.AddClient(ch2); hub.Broadcast(\"hello\"); return fmt.Sprintf(\"%d,%s,%s\", id1+id2, <-ch1, <-ch2) }()",
+        "expected_output": "3,hello,hello",
+        "description": "AddClient应返回递增ID，Broadcast应向所有客户端发送消息"
+      },
+      {
+        "input": "func() string { hub := NewSimpleHub(); ch := make(chan string, 1); id := hub.AddClient(ch); return fmt.Sprintf(\"%d\", id) }()",
+        "expected_output": "1",
+        "description": "第一个客户端ID应为1"
+      }
+    ],
+    "hint": "AddClient分配递增ID并存入map；Broadcast遍历所有客户端channel发送消息"
+  },
+  {
+    "title": "gRPC服务",
+    "slug": "go-23-grpc",
+    "description": "学习Protocol Buffers和gRPC服务定义",
+    "content": "# gRPC服务\n\n## 什么是gRPC？\ngRPC是Google开发的高性能RPC框架，使用Protocol Buffers作为接口定义语言和序列化格式，支持多种语言。\n\n## Protocol Buffers\n定义消息和服务：\n\n```protobuf\nsyntax = \"proto3\";\n\nmessage HelloRequest {\n    string name = 1;\n}\n\nmessage HelloReply {\n    string message = 1;\n}\n\nservice Greeter {\n    rpc SayHello (HelloRequest) returns (HelloReply);\n}\n```\n\n## Go中的消息定义\n在Go中，可以用结构体模拟protobuf消息：\n\n```go\ntype HelloRequest struct {\n    Name string `protobuf:\"name\"`\n}\n\ntype HelloReply struct {\n    Message string `protobuf:\"message\"`\n}\n```\n\n## 服务接口\n```go\ntype GreeterService interface {\n    SayHello(req HelloRequest) HelloReply\n}\n```\n\n## gRPC通信模式\n- **Unary RPC** - 请求-响应模式（最常用）\n- **Server Streaming** - 服务器流式响应\n- **Client Streaming** - 客户端流式请求\n- **Bidirectional Streaming** - 双向流\n\n## 练习\n编写结构体 `CalcRequest`，包含 `A int` 和 `B int` 字段。\n编写结构体 `CalcResponse`，包含 `Result int` 字段。\n编写函数 `add(req CalcRequest) CalcResponse`，返回A+B的结果。\n编写函数 `multiply(req CalcRequest) CalcResponse`，返回A*B的结果。",
+    "order": 23,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "type CalcRequest struct {\n\tA int\n\tB int\n}\n\ntype CalcResponse struct {\n\tResult int\n}\n\nfunc add(req CalcRequest) CalcResponse {\n\t// 返回 A + B\n\treturn CalcResponse{}\n}\n\nfunc multiply(req CalcRequest) CalcResponse {\n\t// 返回 A * B\n\treturn CalcResponse{}\n}",
+    "solution_code": "type CalcRequest struct {\n\tA int\n\tB int\n}\n\ntype CalcResponse struct {\n\tResult int\n}\n\nfunc add(req CalcRequest) CalcResponse {\n\treturn CalcResponse{Result: req.A + req.B}\n}\n\nfunc multiply(req CalcRequest) CalcResponse {\n\treturn CalcResponse{Result: req.A * req.B}\n}",
+    "test_cases": [
+      {
+        "input": "add(CalcRequest{A: 3, B: 5}).Result",
+        "expected_output": "8",
+        "description": "add(3, 5) 应返回 8"
+      },
+      {
+        "input": "multiply(CalcRequest{A: 4, B: 7}).Result",
+        "expected_output": "28",
+        "description": "multiply(4, 7) 应返回 28"
+      },
+      {
+        "input": "add(CalcRequest{A: -1, B: 1}).Result",
+        "expected_output": "0",
+        "description": "add(-1, 1) 应返回 0"
+      },
+      {
+        "input": "multiply(CalcRequest{A: 0, B: 100}).Result",
+        "expected_output": "0",
+        "description": "multiply(0, 100) 应返回 0"
+      }
+    ],
+    "hint": "直接访问 req.A 和 req.B 进行运算，构造 CalcResponse 返回"
+  },
+  {
+    "title": "综合项目",
+    "slug": "go-24-task-scheduler",
+    "description": "实现一个分布式任务调度器",
+    "content": "# 综合项目：分布式任务调度器\n\n## 项目概述\n本关将综合运用前面学到的所有知识，实现一个简化版的分布式任务调度器。涉及结构体、接口、并发、错误处理等核心概念。\n\n## 核心概念\n\n### 任务（Task）\n任务是调度器的基本单元，包含任务ID、执行函数、状态等信息。\n\n### 调度器（Scheduler）\n调度器负责任务的注册、调度和执行，使用Worker Pool模式并发执行任务。\n\n### Worker\nWorker从任务队列中获取任务并执行，将结果写入结果通道。\n\n## 设计思路\n\n```go\n// 任务状态\ntype TaskStatus string\n\nconst (\n    StatusPending   TaskStatus = \"pending\"\n    StatusRunning   TaskStatus = \"running\"\n    StatusCompleted TaskStatus = \"completed\"\n    StatusFailed    TaskStatus = \"failed\"\n)\n\n// 任务定义\ntype Task struct {\n    ID       string\n    Execute  func() (string, error)\n    Status   TaskStatus\n    Result   string\n}\n\n// 任务结果\ntype TaskResult struct {\n    TaskID string\n    Result string\n    Err    error\n}\n```\n\n## 调度器实现要点\n1. 使用channel作为任务队列\n2. 使用sync.WaitGroup等待所有任务完成\n3. 使用sync.Map或互斥锁保护共享状态\n4. 支持优雅关闭\n\n## 练习\n实现 `SimpleScheduler` 结构体，包含以下方法：\n- `NewSimpleScheduler(workerCount int) *SimpleScheduler` - 创建调度器\n- `Submit(taskID string, fn func() (string, error))` - 提交任务\n- `Start()` - 启动调度器\n- `Results() []TaskResult` - 获取所有结果\n- `Stop()` - 停止调度器",
+    "order": 24,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "import \"sync\"\n\ntype TaskResult struct {\n\tTaskID string\n\tResult string\n\tErr    error\n}\n\ntype SimpleScheduler struct {\n\tworkerCount int\n\ttasks       chan func() TaskResult\n\tresults     []TaskResult\n\tmu          sync.Mutex\n\twg          sync.WaitGroup\n}\n\nfunc NewSimpleScheduler(workerCount int) *SimpleScheduler {\n\treturn &SimpleScheduler{\n\t\tworkerCount: workerCount,\n\t\ttasks:       make(chan func() TaskResult, 100),\n\t}\n}\n\nfunc (s *SimpleScheduler) Submit(taskID string, fn func() (string, error)) {\n\t// 提交任务\n}\n\nfunc (s *SimpleScheduler) Start() {\n\t// 启动worker\n}\n\nfunc (s *SimpleScheduler) Results() []TaskResult {\n\t// 获取所有结果\n\treturn nil\n}\n\nfunc (s *SimpleScheduler) Stop() {\n\t// 停止调度器\n}",
+    "solution_code": "import \"sync\"\n\ntype TaskResult struct {\n\tTaskID string\n\tResult string\n\tErr    error\n}\n\ntype SimpleScheduler struct {\n\tworkerCount int\n\ttasks       chan func() TaskResult\n\tresults     []TaskResult\n\tmu          sync.Mutex\n\twg          sync.WaitGroup\n}\n\nfunc NewSimpleScheduler(workerCount int) *SimpleScheduler {\n\treturn &SimpleScheduler{\n\t\tworkerCount: workerCount,\n\t\ttasks:       make(chan func() TaskResult, 100),\n\t}\n}\n\nfunc (s *SimpleScheduler) Submit(taskID string, fn func() (string, error)) {\n\ts.wg.Add(1)\n\ts.tasks <- func() TaskResult {\n\t\tresult, err := fn()\n\t\treturn TaskResult{TaskID: taskID, Result: result, Err: err}\n\t}\n}\n\nfunc (s *SimpleScheduler) Start() {\n\tfor i := 0; i < s.workerCount; i++ {\n\t\tgo func() {\n\t\t\tfor task := range s.tasks {\n\t\t\t\tr := task()\n\t\t\t\ts.mu.Lock()\n\t\t\t\ts.results = append(s.results, r)\n\t\t\t\ts.mu.Unlock()\n\t\t\t\ts.wg.Done()\n\t\t\t}\n\t\t}()\n\t}\n}\n\nfunc (s *SimpleScheduler) Results() []TaskResult {\n\ts.mu.Lock()\n\tdefer s.mu.Unlock()\n\treturn s.results\n}\n\nfunc (s *SimpleScheduler) Stop() {\n\ts.wg.Wait()\n\tclose(s.tasks)\n}",
+    "test_cases": [
+      {
+        "input": "func() string { s := NewSimpleScheduler(2); s.Submit(\"t1\", func() (string, error) { return \"hello\", nil }); s.Submit(\"t2\", func() (string, error) { return \"world\", nil }); s.Start(); s.Stop(); results := s.Results(); ids := make([]string, len(results)); for i, r := range results { ids[i] = r.TaskID }; sort.Strings(ids); return strings.Join(ids, \",\") }()",
+        "expected_output": "t1,t2",
+        "description": "调度器应执行所有提交的任务"
+      },
+      {
+        "input": "func() string { s := NewSimpleScheduler(1); s.Submit(\"t1\", func() (string, error) { return \"ok\", nil }); s.Start(); s.Stop(); results := s.Results(); if len(results) == 1 { return results[0].Result }; return \"fail\" }()",
+        "expected_output": "ok",
+        "description": "任务结果应正确返回"
+      },
+      {
+        "input": "func() string { s := NewSimpleScheduler(3); for i := 0; i < 5; i++ { id := fmt.Sprintf(\"task%d\", i); s.Submit(id, func() (string, error) { return \"done\", nil }) }; s.Start(); s.Stop(); return fmt.Sprintf(\"%d\", len(s.Results())) }()",
+        "expected_output": "5",
+        "description": "5个任务应全部完成"
+      }
+    ],
+    "hint": "Submit中用wg.Add(1)计数，将任务包装后发送到channel；Start启动worker从channel读取执行；Stop等待wg完成后关闭channel"
+  }
+]

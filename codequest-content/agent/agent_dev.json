@@ -1,0 +1,872 @@
+[
+  {
+    "title": "Agent核心概念",
+    "slug": "agent-01-core",
+    "description": "理解AI Agent的定义与设计哲学",
+    "content": "# Agent核心概念\n\nAI Agent（智能体）是能够感知环境、做出决策并执行动作的自主系统。\n\n## Agent定义\nAgent = LLM + 记忆 + 规划 + 工具\n\n## 四大核心组件\n1. 感知（Perception）- 接收环境信息\n2. 推理（Reasoning）- 分析决策\n3. 行动（Action）- 执行操作\n4. 记忆（Memory）- 存储历史",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "agent",
+    "section": "Agent基础篇",
+    "starter_code": "class Agent:\n    def __init__(self, name):\n        self.name = name\n        self.memory = []\n    def perceive(self, o):\n        pass\n    def reason(self):\n        pass\n    def act(self):\n        pass\n",
+    "solution_code": "class Agent:\n    def __init__(self, name):\n        self.name = name\n        self.memory = []\n    def perceive(self, o):\n        self.memory.append(o)\n        return o\n    def reason(self):\n        if not self.memory:\n            return 'idle'\n        return f'processing: {self.memory[-1]}'\n    def act(self):\n        d = self.reason()\n        self.memory.append(d)\n        return d\n",
+    "test_cases": [
+      {
+        "input": "a=Agent('t'); a.perceive('hi'); a.reason()",
+        "expected_output": "processing: hi",
+        "description": "感知推理"
+      },
+      {
+        "input": "a=Agent('t'); a.reason()",
+        "expected_output": "idle",
+        "description": "无记忆"
+      },
+      {
+        "input": "a=Agent('t'); a.perceive('x'); a.act(); len(a.memory)",
+        "expected_output": "2",
+        "description": "记录"
+      }
+    ],
+    "hint": "perceive存入memory，reason基于最后一条推理",
+    "prerequisites": []
+  },
+  {
+    "title": "工具调用模式",
+    "slug": "agent-02-tools",
+    "description": "让Agent使用外部工具与环境交互",
+    "content": "# 工具调用模式\n\n工具调用是Agent区别普通LLM的核心能力。\n\n## 工具定义\n- 名称\n- 描述\n- 参数Schema\n- 执行函数\n\n## 注册中心\nToolRegistry管理所有工具注册和查找。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 15,
+    "track": "agent",
+    "section": "Agent基础篇",
+    "starter_code": "class Tool:\n    def __init__(self,n,d,f):\n        self.n=n;self.d=d;self.f=f\n    def run(self,*a,**kw):\n        pass\nclass ToolRegistry:\n    def __init__(s):s.t={}\n    def register(s,t):pass\n    def get_tool(s,n):pass\n",
+    "solution_code": "class Tool:\n    def __init__(self,n,d,f):\n        self.n=n;self.d=d;self.f=f\n    def run(self,*a,**kw):\n        return self.f(*a,**kw)\nclass ToolRegistry:\n    def __init__(s):s.t={}\n    def register(s,t):s.t[t.n]=t\n    def get_tool(s,n):return s.t.get(n)\n",
+    "test_cases": [
+      {
+        "input": "t=Tool('add','add',lambda a,b:a+b); t.run(2,3)",
+        "expected_output": "5",
+        "description": "执行工具"
+      },
+      {
+        "input": "r=ToolRegistry();t=Tool('s','s',lambda q:'f:'+q);r.register(t);r.get_tool('s').run('AI')",
+        "expected_output": "f:AI",
+        "description": "注册使用"
+      },
+      {
+        "input": "r=ToolRegistry();r.get_tool('x')is None",
+        "expected_output": "True",
+        "description": "不存在"
+      }
+    ],
+    "hint": "Tool.run调用func，ToolRegistry用字典存储",
+    "prerequisites": [
+      1
+    ]
+  },
+  {
+    "title": "系统提示词设计",
+    "slug": "agent-03-prompt",
+    "description": "设计高质量提示词定义Agent角色",
+    "content": "# 系统提示词设计\n\nSystem Prompt是Agent的宪法。\n\n## 五要素\n- 角色定义\n- 行为准则\n- 可用工具\n- 输出格式\n- 示例引导",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 15,
+    "track": "agent",
+    "section": "Agent基础篇",
+    "starter_code": "class PromptTemplate:\n    def __init__(s,t):s.t=t\n    def render(s,**kw):pass\n",
+    "solution_code": "class PromptTemplate:\n    def __init__(s,t):s.t=t\n    def render(s,**kw):\n        r=s.t\n        for k,v in kw.items():r=r.replace('{'+k+'}',str(v))\n        return r\n",
+    "test_cases": [
+      {
+        "input": "t=PromptTemplate('Hello {n}'); t.render(n='World')",
+        "expected_output": "Hello World",
+        "description": "填充模板"
+      },
+      {
+        "input": "t=PromptTemplate('{a}+{b}={c}'); t.render(a=1,b=2,c=3)",
+        "expected_output": "1+2=3",
+        "description": "多变量"
+      }
+    ],
+    "hint": "遍历kwargs替换占位符",
+    "prerequisites": [
+      1
+    ]
+  },
+  {
+    "title": "Chain-of-Thought推理",
+    "slug": "agent-04-cot",
+    "description": "让Agent分步推理解决复杂问题",
+    "content": "# Chain-of-Thought推理\n\nCoT让LLM展示推理过程。\n\n## 传统vs CoT\n- 传统：问题->答案（黑盒）\n- CoT：问题->步骤1->...->答案（透明）",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 15,
+    "track": "agent",
+    "section": "Agent基础篇",
+    "starter_code": "def count_steps(t):pass\ndef extract_answer(t):pass\n",
+    "solution_code": "def count_steps(t):\n    c=0\n    for l in t.splitlines():\n        if l.strip().startswith('步骤'):c+=1\n    return c\ndef extract_answer(t):\n    for l in t.splitlines():\n        if '答案：'in l:return l.split('答案：',1)[1].strip()\n    return None\n",
+    "test_cases": [
+      {
+        "input": "count_steps('步骤1：A\\n步骤2：B\\n答案：C')",
+        "expected_output": "2",
+        "description": "统计步骤"
+      },
+      {
+        "input": "extract_answer('答案：结论')",
+        "expected_output": "结论",
+        "description": "提取答案"
+      },
+      {
+        "input": "extract_answer('无')is None",
+        "expected_output": "True",
+        "description": "无答案"
+      }
+    ],
+    "hint": "count统计步骤行，extract分割答案",
+    "prerequisites": [
+      1,
+      3
+    ]
+  },
+  {
+    "title": "ReAct推理模式",
+    "slug": "agent-05-react",
+    "description": "推理与行动交替的Agent范式",
+    "content": "# ReAct推理模式\n\nReAct让Agent交替推理和行动。\n\n## 循环\nThought->Action->Observation->Thought...\n\n## 停止条件\n- 足够信息\n- 最大步数\n- 工具失败",
+    "order": 5,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "agent",
+    "section": "推理框架篇",
+    "starter_code": "class ReAct:\n    def __init__(s,m=10):s.h=[];s.m=m;s.n=0\n    def think(s,c):pass\n    def act(s,t):pass\n    def observe(s,r):pass\n    def step(s,q):pass\n",
+    "solution_code": "class ReAct:\n    def __init__(s,m=10):s.h=[];s.m=m;s.n=0\n    def think(s,c):return f'Thinking:{c}'\n    def act(s,t):return f'Action:{t}'\n    def observe(s,r):s.h.append(r);s.n+=1;return f'Observed:{r}'\n    def step(s,q):\n        if s.n>=s.m:return{'status':'max'}\n        t=s.think(q);a=s.act(t);o=s.observe(a)\n        return{'thought':t,'action':a,'observation':o,'step':s.n}\n",
+    "test_cases": [
+      {
+        "input": "a=ReAct();r=a.step('q');'thought'in r",
+        "expected_output": "True",
+        "description": "ReAct三步"
+      },
+      {
+        "input": "a=ReAct();a.step('t');a.step('t');a.n",
+        "expected_output": "2",
+        "description": "步数递增"
+      },
+      {
+        "input": "a=ReAct(m=1);a.step('q');a.step('q')",
+        "expected_output": "{'status': 'max'}",
+        "description": "最大步数"
+      }
+    ],
+    "hint": "step依次调用think->act->observe",
+    "prerequisites": [
+      1,
+      2,
+      4
+    ]
+  },
+  {
+    "title": "Plan-and-Execute",
+    "slug": "agent-06-plan-exec",
+    "description": "先制定计划再逐步执行",
+    "content": "# Plan-and-Execute\n\n先制定完整计划再逐步执行。\n\n## 流程\n目标->生成计划->按依赖顺序执行->汇总\n\n## vs ReAct\n- ReAct：边想边做（灵活）\n- Plan-Execute：先想好再做（稳定）",
+    "order": 6,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "agent",
+    "section": "推理框架篇",
+    "starter_code": "class Planner:\n    def __init__(s):s.s=[]\n    def add(s,id,act,de=None):pass\n    def order(s):pass\n",
+    "solution_code": "class Planner:\n    def __init__(s):s.s=[]\n    def add(s,id,act,de=None):s.s.append({'id':id,'action':act,'deps':de or[]})\n    def order(s):\n        o=[];v=set();m={x['id']:x for x in s.s}\n        def vis(i):\n            if i in v:return\n            x=m.get(i)\n            if x:\n                for d in x['deps']:vis(d)\n                v.add(i);o.append(i)\n        for x in s.s:vis(x['id'])\n        return o\n",
+    "test_cases": [
+      {
+        "input": "p=Planner();p.add(1,'a');p.add(2,'b',[1]);p.order()",
+        "expected_output": "[1, 2]",
+        "description": "依赖排序"
+      },
+      {
+        "input": "p=Planner();p.add(1,'x');p.order()",
+        "expected_output": "[1]",
+        "description": "单步"
+      }
+    ],
+    "hint": "DFS拓扑排序，先访问依赖再添加自身",
+    "prerequisites": [
+      5
+    ]
+  },
+  {
+    "title": "Reflexion自我反思",
+    "slug": "agent-07-reflexion",
+    "description": "从失败中学习并自我改进",
+    "content": "# Reflexion自我反思\n\nReflexion让Agent从失败中学习并改进。\n\n## 循环\n尝试->失败？->反思->改进->重试\n\n## vs简单重试\n简单重试：相同策略->相同失败\nReflexion：改进策略->可能成功",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "agent",
+    "section": "推理框架篇",
+    "starter_code": "class Reflexion:\n    def __init__(s):s.r=[]\n    def record(s,t,su,le):pass\n    def get(s,kw):pass\n",
+    "solution_code": "class Reflexion:\n    def __init__(s):s.r=[]\n    def record(s,t,su,le):s.r.append({'task':t,'success':su,'lesson':le})\n    def get(s,kw):return[x['lesson']for x in s.r if kw.lower()in x['task'].lower()and not x['success']]\n",
+    "test_cases": [
+      {
+        "input": "m=Reflexion();m.record('s','fail','better kw');len(m.get('s'))",
+        "expected_output": "1",
+        "description": "检索教训"
+      },
+      {
+        "input": "m=Reflexion();m.record('m','success','');m.get('m')",
+        "expected_output": "[]",
+        "description": "成功无教训"
+      }
+    ],
+    "hint": "record存储，get过滤失败记录",
+    "prerequisites": [
+      5
+    ]
+  },
+  {
+    "title": "多Agent协作模式概览",
+    "slug": "agent-08-multi-agent-modes",
+    "description": "掌握竞争/合作/分层三种协作模式",
+    "content": "# 多Agent协作模式\n\n## 三种模式\n### 1. 竞争模式\nAgent相互辩论寻找最优解\n### 2. 合作模式\nAgent共享信息协同推理\n### 3. 分层模式\nManager分配Worker执行",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "agent",
+    "section": "多Agent协作篇",
+    "starter_code": "def detect_mode(agents, task):pass\n",
+    "solution_code": "def detect_mode(agents, task):\n    if len(agents)<=1:return 'single'\n    if any(w in task for w in ['评估','比较','选择']):return 'competitive'\n    if any(w in task for w in ['协作','共同','团队']):return 'cooperative'\n    return 'hierarchical'\n",
+    "test_cases": [
+      {
+        "input": "detect_mode(['A','B'],'评估风险')",
+        "expected_output": "competitive",
+        "description": "评估用竞争"
+      },
+      {
+        "input": "detect_mode(['A','B'],'团队协作')",
+        "expected_output": "cooperative",
+        "description": "协作用合作"
+      },
+      {
+        "input": "detect_mode(['A'],'任何')",
+        "expected_output": "single",
+        "description": "单个"
+      }
+    ],
+    "hint": "关键词匹配模式类型",
+    "prerequisites": [
+      5
+    ]
+  },
+  {
+    "title": "分层式Agent架构",
+    "slug": "agent-09-hierarchical",
+    "description": "Manager-Worker任务分配执行",
+    "content": "# 分层式Agent架构\n\n## Manager职责\n- 任务分解\n- 依赖分析\n- 分配调度\n- 结果汇总\n\n## Worker职责\n- 接收执行任务\n- 返回结果",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "agent",
+    "section": "多Agent协作篇",
+    "starter_code": "class Worker:\n    def __init__(s,n,cap):s.n=n;s.cap=cap\n    def exec(s,t):pass\nclass Manager:\n    def __init__(s):s.w={}\n    def register(s,n,cap):pass\n    def assign(s,t):pass\n",
+    "solution_code": "class Worker:\n    def __init__(s,n,cap):s.n=n;s.cap=cap\n    def exec(s,t):return f'{s.n} done: {t}'\nclass Manager:\n    def __init__(s):s.w={}\n    def register(s,n,cap):s.w[n]=Worker(n,cap)\n    def assign(s,t):\n        if not s.w:return 'no workers'\n        b=max(s.w.items(),key=lambda w:len(set(w[1].cap)&set(t)))\n        return b[1].exec(t)\n",
+    "test_cases": [
+      {
+        "input": "m=Manager();m.register('alice',['data','analyze']);m.assign('analyze data')",
+        "expected_output": "alice done: analyze data",
+        "description": "分配执行"
+      },
+      {
+        "input": "m=Manager();m.assign('x')",
+        "expected_output": "no workers",
+        "description": "无Worker"
+      }
+    ],
+    "hint": "register创建Worker，assign按能力匹配",
+    "prerequisites": [
+      8
+    ]
+  },
+  {
+    "title": "流水线与辩论协作",
+    "slug": "agent-10-pipeline-debate",
+    "description": "Pipeline串联和Debate辩论",
+    "content": "# 流水线与辩论\n\n## Pipeline模式\n按顺序处理，前一个输出是后一个输入\n\n## Debate模式\n多Agent提出观点，辩论达成共识\n\n| 模式 | 适用场景 |\n|------|---------|\n| Pipeline | 文档处理 |\n| Debate | 风险评估 |",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "agent",
+    "section": "多Agent协作篇",
+    "starter_code": "class Pipeline:\n    def __init__(s):s.s=[]\n    def add(s,n,fn):pass\n    def run(s,d):pass\n",
+    "solution_code": "class Pipeline:\n    def __init__(s):s.s=[]\n    def add(s,n,fn):s.s.append((n,fn))\n    def run(s,d):\n        r=d;lg=[]\n        for n,fn in s.s:r=fn(r);lg.append({'stage':n,'result':r})\n        return r,lg\n",
+    "test_cases": [
+      {
+        "input": "p=Pipeline();p.add('up',lambda x:x.upper());p.add('rev',lambda x:x[::-1]);r,_=p.run('hello');r",
+        "expected_output": "OLLEH",
+        "description": "顺序执行"
+      },
+      {
+        "input": "p=Pipeline();p.add('e',lambda x:x);r,lg=p.run('t');len(lg)",
+        "expected_output": "1",
+        "description": "记录日志"
+      }
+    ],
+    "hint": "add存储阶段，run按序执行",
+    "prerequisites": [
+      8
+    ]
+  },
+  {
+    "title": "Agent间通信",
+    "slug": "agent-11-agent-messaging",
+    "description": "标准化Agent消息传递机制",
+    "content": "# Agent间通信\n\n## 通信模式\n- 点对点：特定Agent间通信\n- 广播：向所有Agent发送\n\n## 任务状态\ncreated->assigned->in_progress->completed/failed",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "agent",
+    "section": "多Agent协作篇",
+    "starter_code": "class Msg:\n    def __init__(s,se,re,co):s.se=se;s.re=re;s.co=co\nclass Bus:\n    def __init__(s):s.q=[]\n    def send(s,m):pass\n    def recv(s,re):pass\n",
+    "solution_code": "class Msg:\n    def __init__(s,se,re,co):s.se=se;s.re=re;s.co=co\nclass Bus:\n    def __init__(s):s.q=[]\n    def send(s,m):s.q.append(m)\n    def recv(s,re):\n        ms=[m for m in s.q if m.re==re]\n        s.q=[m for m in s.q if m.re!=re]\n        return ms\n",
+    "test_cases": [
+      {
+        "input": "b=Bus();b.send(Msg('A','B','h'));len(b.q)",
+        "expected_output": "1",
+        "description": "发出"
+      },
+      {
+        "input": "b=Bus();b.send(Msg('A','B','h'));b.send(Msg('A','C','y'));len(b.recv('B'))",
+        "expected_output": "1",
+        "description": "接收自己"
+      }
+    ],
+    "hint": "send追加队列，recv过滤移除",
+    "prerequisites": [
+      8,
+      9
+    ]
+  },
+  {
+    "title": "MCP协议核心",
+    "slug": "agent-12-mcp-core",
+    "description": "MCP三大组件：Tools/Resources/Prompts",
+    "content": "MCP定义LLM与外部工具的标准交互方式。\n\n## 三大组件\n### Tools\nname+description+inputSchema+func\n### Resources\nuri+name+mimeType\n### Prompts\nname+template+arguments",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 22,
+    "track": "agent",
+    "section": "Agent协议篇",
+    "starter_code": "class MCPServer:\n    def __init__(s,n):s.n=n;s.t={}\n    def reg(s,n,d,sch,fn):pass\n    def list(s):pass\n    def call(s,n,a):pass\n",
+    "solution_code": "class MCPServer:\n    def __init__(s,n):s.n=n;s.t={}\n    def reg(s,n,d,sch,fn):s.t[n]={'name':n,'desc':d,'schema':sch,'func':fn}\n    def list(s):return[{'name':t['name'],'desc':t['desc'],'schema':t['schema']}for t in s.t.values()]\n    def call(s,n,a):\n        t=s.t.get(n)\n        if not t:raise ValueError('not found')\n        return t['func'](**a)\n",
+    "test_cases": [
+      {
+        "input": "s=MCPServer('t');s.reg('echo','echo',{'x':{'type':'str'}},lambda x:x);len(s.list())",
+        "expected_output": "1",
+        "description": "注册列出"
+      },
+      {
+        "input": "s=MCPServer('t');s.reg('add','add',{'a':{'type':'int'}},lambda a:a+1);s.call('add',{'a':5})",
+        "expected_output": "6",
+        "description": "调用"
+      }
+    ],
+    "hint": "register存储，list返回信息，call查找执行",
+    "prerequisites": [
+      2,
+      3
+    ]
+  },
+  {
+    "title": "MCP Server实现",
+    "slug": "agent-13-mcp-server",
+    "description": "构建完整MCP Server工具服务",
+    "content": "MCP Server基于JSON-RPC 2.0通信。\n\n## 方法处理\n- tools/list: 列出工具\n- tools/call: 调用工具\n\n## 错误处理\n出错返回isError和错误信息",
+    "order": 13,
+    "difficulty": "intermediate",
+    "xp_reward": 22,
+    "track": "agent",
+    "section": "Agent协议篇",
+    "starter_code": "def handle(srv,req):pass\n",
+    "solution_code": "def handle(srv,req):\n    m=req.get('method')\n    p=req.get('params',{})\n    if m=='tools/list':return{'tools':srv.list()}\n    if m=='tools/call':\n        try:\n            r=srv.call(p.get('name'),p.get('arguments',{}))\n            return{'content':[{'type':'text','text':str(r)}]}\n        except Exception as e:return{'isError':True,'content':[{'type':'text','text':str(e)}]}\n    return{'isError':True,'content':[{'type':'text','text':'Unknown:'+str(m)}]}\n",
+    "test_cases": [
+      {
+        "input": "class S:list=lambda s:[];handle(S(),{'method':'tools/list'})",
+        "expected_output": "{'tools': []}",
+        "description": "列表请求"
+      },
+      {
+        "input": "handle('s',{'method':'x'})",
+        "expected_output": "{'isError': True, 'content': [{'type': 'text', 'text': 'Unknown:x'}]}",
+        "description": "未知方法"
+      }
+    ],
+    "hint": "按method分发，tools/call捕获异常",
+    "prerequisites": [
+      12
+    ]
+  },
+  {
+    "title": "A2A协议基础",
+    "slug": "agent-14-a2a",
+    "description": "Agent间通信标准",
+    "content": "A2A是Agent间通信标准协议。\n\n## Agent Card\nname+capabilities+skills+state\n\n## 任务分配\n广播->匹配->分配->执行->进度更新\n\n## MCP vs A2A\nMCP: LLM->工具\nA2A: Agent->Agent",
+    "order": 14,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "Agent协议篇",
+    "starter_code": "class AgentCard:\n    def __init__(s,n,caps):s.n=n;s.caps=caps;s.state='idle'\n    def match(s,t):pass\nclass Orchestra:\n    def __init__(s):s.ag=[]\n    def reg(s,card):pass\n    def assign(s,t):pass\n",
+    "solution_code": "class AgentCard:\n    def __init__(s,n,caps):s.n=n;s.caps=caps;s.state='idle'\n    def match(s,t):return any(c in t for c in s.caps)\nclass Orchestra:\n    def __init__(s):s.ag=[]\n    def reg(s,card):s.ag.append(card)\n    def assign(s,t):\n        for a in s.ag:\n            if a.match(t)and a.state=='idle':\n                a.state='busy';return a\n        return None\n",
+    "test_cases": [
+      {
+        "input": "c=AgentCard('r',['search']);c.match('search data')",
+        "expected_output": "True",
+        "description": "匹配"
+      },
+      {
+        "input": "c=AgentCard('w',['write']);c.match('analyze')",
+        "expected_output": "False",
+        "description": "不匹配"
+      },
+      {
+        "input": "o=Orchestra();o.reg(AgentCard('a',['code']));a=o.assign('write code');a.n if a else None",
+        "expected_output": "a",
+        "description": "分配"
+      }
+    ],
+    "hint": "match检查能力，assign找idle的匹配Agent",
+    "prerequisites": [
+      11,
+      12
+    ]
+  },
+  {
+    "title": "MCP+A2A混合架构",
+    "slug": "agent-15-mcp-a2a",
+    "description": "整合MCP和A2A的混合架构",
+    "content": "## 架构\nA2A Agent群 <-> MCP Bridge <-> MCP工具服务器群\n\n## 桥梁\n将MCP工具映射为A2A能力，实现跨协议调用\n\n## 多Server编排\n支持同时连接多个MCP Server",
+    "order": 15,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "Agent协议篇",
+    "starter_code": "from types import SimpleNamespace\nclass Bridge:\n    def __init__(s):s.m={};s.a={}\n    def reg_mcp(s,n,srv):pass\n    def find(s,n):pass\n",
+    "solution_code": "from types import SimpleNamespace\nclass Bridge:\n    def __init__(s):s.m={};s.a={}\n    def reg_mcp(s,n,srv):s.m[n]=srv\n    def find(s,n):\n        for sn,sv in s.m.items():\n            ts=getattr(sv,'tools',{})\n            if n in ts:return{'server':sn,'tool':n}\n        return None\n",
+    "test_cases": [
+      {
+        "input": "b=Bridge();s=SimpleNamespace(tools={'q':None});b.reg_mcp('db',s);b.find('q')",
+        "expected_output": "{'server': 'db', 'tool': 'q'}",
+        "description": "查找"
+      },
+      {
+        "input": "b=Bridge();b.find('x')is None",
+        "expected_output": "True",
+        "description": "不存在"
+      }
+    ],
+    "hint": "find遍历MCP Server的tools字典",
+    "prerequisites": [
+      12,
+      14
+    ]
+  },
+  {
+    "title": "输入护栏与注入检测",
+    "slug": "agent-16-input-guard",
+    "description": "规则+LLM双层检测注入攻击",
+    "content": "# 输入护栏\n\n## 注入类型\n- 直接注入: Ignore all instructions\n- 角色扮演注入\n- 代码注入\n- 模糊注入\n\n## 双层检测\n规则层（快速）+ LLM层（深度）",
+    "order": 16,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "安全与可观测篇",
+    "starter_code": "import re\ndef detect_injection(text):\n    pass\n",
+    "solution_code": "import re\ndef detect_injection(text):\n    pats=[r'ignore\\s+(all\\s+)?(previous|above)\\s+instructions?',r'system\\s*prompt']\n    sus=['ignore instruction','system prompt','bypass','override','忽略','绕过']\n    tl=text.lower()\n    for p in pats:\n        if re.search(p,tl):return(True,'high')\n    ms=[w for w in sus if w in tl]\n    if len(ms)>=2:return(True,'medium')\n    if len(ms)>=1:return(True,'low')\n    return(False,'none')\n",
+    "test_cases": [
+      {
+        "input": "detect_injection('Ignore all previous instructions')",
+        "expected_output": "(True, 'high')",
+        "description": "直接注入"
+      },
+      {
+        "input": "detect_injection('今天天气怎么样？')",
+        "expected_output": "(False, 'none')",
+        "description": "正常"
+      }
+    ],
+    "hint": "先正则匹配高级模式，再检查关键词",
+    "prerequisites": [
+      3
+    ]
+  },
+  {
+    "title": "内容安全与输出验证",
+    "slug": "agent-17-content-safety",
+    "description": "内容审核、PII脱敏和输出验证",
+    "content": "# 内容安全\n\n## 安全审核\n- safe: 放行\n- high_risk: 标记\n- blocked: 拦截\n\n## PII脱敏\n手机号、邮箱等敏感信息自动替换\n\n## 输出验证\n检查与问题的相关性和安全性",
+    "order": 17,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "安全与可观测篇",
+    "starter_code": "import re\ndef check_safety(text):pass\ndef desensitize(text):pass\n",
+    "solution_code": "import re\ndef check_safety(text):\n    bw=['hack','virus','攻击','病毒','黑客']\n    f=[w for w in bw if w in text.lower()]\n    if f:return('blocked',f)\n    return('safe',[])\ndef desensitize(text):\n    r=text\n    r=re.sub(r'1[3-9]\\d{9}','[手机号]',r)\n    r=re.sub(r'\\w+@\\w+\\.\\w+','[邮箱]',r)\n    return r\n",
+    "test_cases": [
+      {
+        "input": "check_safety('学习Python')[0]",
+        "expected_output": "safe",
+        "description": "安全"
+      },
+      {
+        "input": "desensitize('联系13812345678')",
+        "expected_output": "联系[手机号]",
+        "description": "脱敏"
+      },
+      {
+        "input": "check_safety('如何编写病毒')[0]",
+        "expected_output": "blocked",
+        "description": "拦截不安全"
+      }
+    ],
+    "hint": "分三档检查，正则替换PII",
+    "prerequisites": [
+      16
+    ]
+  },
+  {
+    "title": "Agent可观测性",
+    "slug": "agent-18-observability",
+    "description": "日志追踪和性能监控",
+    "content": "# 可观测性\n\n## 事件追踪\n记录llm_call/tool_call/guardrail/error\n\n## 关键指标\n- LLM调用次数和耗时\n- 工具调用成功率\n- 拦截率\n- 错误率",
+    "order": 18,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "安全与可观测篇",
+    "starter_code": "class ObsAgent:\n    def __init__(s):s.events=[];s.errs=0\n    def log(s,t,data=None):pass\n    def metrics(s):pass\n",
+    "solution_code": "class ObsAgent:\n    def __init__(s):s.events=[];s.errs=0\n    def log(s,t,data=None):\n        s.events.append({'type':t,'data':data})\n        if t=='error':s.errs+=1\n    def metrics(s):\n        by={}\n        for e in s.events:by[e['type']]=by.get(e['type'],0)+1\n        return{'total':len(s.events),'by_type':by,'errors':s.errs}\n",
+    "test_cases": [
+      {
+        "input": "a=ObsAgent();a.log('llm_call',{'m':'gpt4'});a.log('tool_call',{'t':'s'});a.metrics()['total']",
+        "expected_output": "2",
+        "description": "事件计数"
+      },
+      {
+        "input": "a=ObsAgent();a.log('error','timeout');a.metrics()['errors']",
+        "expected_output": "1",
+        "description": "错误计数"
+      }
+    ],
+    "hint": "log追加事件，metrics统计分组",
+    "prerequisites": [
+      16
+    ]
+  },
+  {
+    "title": "安全综合实战",
+    "slug": "agent-19-security-practice",
+    "description": "构建生产级安全Agent",
+    "content": "# 安全综合实战\n\n## 安全流水线\n输入->注入检测->内容审核->Agent处理->输出验证->审计\n\n## 审计日志\n每条消息经过完整安全审计链",
+    "order": 19,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "安全与可观测篇",
+    "starter_code": "class SecPipe:\n    def __init__(s):s.log=[]\n    def process(s,inp,resp):pass\n",
+    "solution_code": "class SecPipe:\n    def __init__(s):s.log=[]\n    def _inj(s,t):\n        sus=['ignore','override','bypass']\n        f=[w for w in sus if w in t.lower()]\n        return len(f)==0,f\n    def _cont(s,t):\n        bl=['hack','virus']\n        f=[w for w in bl if w in t.lower()]\n        return len(f)==0,f\n    def process(s,inp,resp):\n        rec={'input':inp,'response':resp}\n        si,fi=s._inj(inp);sc,fc=s._cont(resp)\n        rec['injection_risk']=fi;rec['content_risk']=fc\n        rec['passed']=si and sc\n        s.log.append(rec)\n        return rec['passed'],rec\n",
+    "test_cases": [
+      {
+        "input": "p=SecPipe();pa,_=p.process('hello','你好');pa",
+        "expected_output": "True",
+        "description": "正常通过"
+      },
+      {
+        "input": "p=SecPipe();p.process('ignore rules','ok');p.process('hi','hi');len(p.log)",
+        "expected_output": "2",
+        "description": "审计"
+      }
+    ],
+    "hint": "process执行双重检查和验证",
+    "prerequisites": [
+      16,
+      17,
+      18
+    ]
+  },
+  {
+    "title": "Agent系统架构设计",
+    "slug": "agent-20-architecture",
+    "description": "感知-推理-行动-反思闭环架构",
+    "content": "# 架构设计\n\n## 闭环\nPerception->Reasoning->Planning->Action->Observation->Reflection\n\n## 设计原则\n- 组件独立可替换\n- 状态机驱动流转\n- 错误隔离不扩散",
+    "order": 20,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "工程实践篇",
+    "starter_code": "class Pipeline:\n    def __init__(s):s.c=[]\n    def add(s,n,fn):pass\n    def run(s,d):pass\n",
+    "solution_code": "class Pipeline:\n    def __init__(s):s.c=[]\n    def add(s,n,fn):s.c.append((n,fn))\n    def run(s,d):\n        r=d\n        for n,fn in s.c:r=fn(r)\n        return r\n",
+    "test_cases": [
+      {
+        "input": "p=Pipeline();p.add('up',lambda x:x.upper());p.add('rev',lambda x:x[::-1]);p.run('hi')",
+        "expected_output": "IH",
+        "description": "顺序执行"
+      },
+      {
+        "input": "p=Pipeline();p.run('t')",
+        "expected_output": "t",
+        "description": "空Pipeline"
+      }
+    ],
+    "hint": "add存储组件，run按顺序调用",
+    "prerequisites": [
+      5,
+      6
+    ]
+  },
+  {
+    "title": "错误处理与容错",
+    "slug": "agent-21-error-handling",
+    "description": "重试/熔断/降级三重保险",
+    "content": "# 错误处理\n\n## 三重保险\n- 重试: 失败自动重试\n- 熔断: 连续失败断开\n- 降级: 主路径失败用备用方案\n\n## 状态\nCLOSED->OPEN->HALF_OPEN->CLOSED",
+    "order": 21,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "工程实践篇",
+    "starter_code": "class Breaker:\n    def __init__(s,th=3):s.fails=0;s.th=th;s.state='CLOSED'\n    def call(s,fn):pass\n    def reset(s):pass\n",
+    "solution_code": "class Breaker:\n    def __init__(s,th=3):s.fails=0;s.th=th;s.state='CLOSED'\n    def call(s,fn):\n        if s.state=='OPEN':raise Exception('OPEN')\n        try:\n            r=fn();s.state='CLOSED';s.fails=0;return r\n        except:\n            s.fails+=1\n            if s.fails>=s.th:s.state='OPEN'\n            raise\n    def reset(s):s.fails=0;s.state='CLOSED'\n",
+    "test_cases": [
+      {
+        "input": "b=Breaker(2);b.call(lambda:1);b.state",
+        "expected_output": "CLOSED",
+        "description": "成功"
+      },
+      {
+        "input": "b=Breaker(2);b.call(lambda:1/0);b.call(lambda:1/0);b.state",
+        "expected_output": "OPEN",
+        "description": "失败断开"
+      }
+    ],
+    "hint": "成功重置，失败递增，超阈值断开",
+    "prerequisites": [
+      20
+    ]
+  },
+  {
+    "title": "性能优化与缓存",
+    "slug": "agent-22-performance",
+    "description": "LLM响应缓存和性能优化",
+    "content": "# 性能优化\n\n## LLM缓存\n相同输入缓存避免重复推理\n\n## 性能指标\n- 命中率(Hit Rate)\n- P50/P95/P99延迟\n- 吞吐量(RPS)",
+    "order": 22,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "工程实践篇",
+    "starter_code": "class Cache:\n    def __init__(s,ms=50):s.c={};s.ms=ms;s.h=0;s.m=0\n    def get(s,k):pass\n    def set(s,k,v):pass\n    def rate(s):pass\n",
+    "solution_code": "class Cache:\n    def __init__(s,ms=50):s.c={};s.ms=ms;s.h=0;s.m=0\n    def get(s,k):\n        if k in s.c:s.h+=1;return s.c[k]\n        s.m+=1;return None\n    def set(s,k,v):\n        if len(s.c)>=s.ms:s.c.pop(next(iter(s.c)))\n        s.c[k]=v\n    def rate(s):return s.h/(s.h+s.m)if(s.h+s.m)>0 else 0.0\n",
+    "test_cases": [
+      {
+        "input": "c=Cache(2);c.set('a',1);c.get('a')",
+        "expected_output": "1",
+        "description": "命中"
+      },
+      {
+        "input": "c=Cache();c.get('x')is None",
+        "expected_output": "True",
+        "description": "未命中"
+      },
+      {
+        "input": "c=Cache();c.set('a',1);c.get('a');round(c.rate(),2)",
+        "expected_output": "1.0",
+        "description": "命中率"
+      }
+    ],
+    "hint": "get命中hits++，set满淘汰最早项",
+    "prerequisites": [
+      20
+    ]
+  },
+  {
+    "title": "部署与监控",
+    "slug": "agent-23-deployment",
+    "description": "生产环境部署策略和监控指标",
+    "content": "# 部署与监控\n\n## 生产指标\n- 吞吐量(RPS)\n- 延迟分布(P50/P95/P99)\n- 错误率\n- 可用性\n\n## 健康检查\n定期检测API/LLM/数据库连通性",
+    "order": 23,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "工程实践篇",
+    "starter_code": "class Metrics:\n    def __init__(s):s.lat=[];s.errs=0;s.total=0\n    def rec(s,lat,ok):pass\n    def err_rate(s):pass\n    def summary(s):pass\n",
+    "solution_code": "class Metrics:\n    def __init__(s):s.lat=[];s.errs=0;s.total=0\n    def rec(s,lat,ok):\n        s.lat.append(lat);s.total+=1\n        if not ok:s.errs+=1\n    def err_rate(s):return s.errs/max(s.total,1)\n    def summary(s):\n        sl=sorted(s.lat);n=len(sl)\n        return{'total':s.total,'errors':s.errs,'err_rate':s.err_rate(),'avg':sum(s.lat)/n if n else 0,'p50':sl[n//2]if n else 0,'p95':sl[int(n*0.95)]if n else 0,'p99':sl[int(n*0.99)]if n else 0}\n",
+    "test_cases": [
+      {
+        "input": "m=Metrics();m.rec(0.1,True);m.rec(0.2,False);m.total",
+        "expected_output": "2",
+        "description": "记录"
+      },
+      {
+        "input": "m=Metrics();m.rec(0.1,False);round(m.err_rate(),2)",
+        "expected_output": "1.0",
+        "description": "错误率"
+      }
+    ],
+    "hint": "rec记录延迟和成功率，summary计算统计",
+    "prerequisites": [
+      22
+    ]
+  },
+  {
+    "title": "MCP深度实践",
+    "slug": "agent-24-mcp-deep",
+    "description": "流式响应、工具链编排和多Server协作",
+    "content": "MCP深度特性。\n\n## 流式响应\nSSE风格的数据推送\n\n## 工具链\nfetch->clean->analyze->report\n\n## 多Server编排\ndatabase-service + ai-service 协同",
+    "order": 24,
+    "difficulty": "advanced",
+    "xp_reward": 28,
+    "track": "agent",
+    "section": "高级专题篇",
+    "starter_code": "from types import SimpleNamespace\nclass Registry:\n    def __init__(s):s.sv={}\n    def reg(s,n,srv):pass\n    def find(s,tool):pass\n    def list_all(s):pass\n",
+    "solution_code": "from types import SimpleNamespace\nclass Registry:\n    def __init__(s):s.sv={}\n    def reg(s,n,srv):s.sv[n]=srv\n    def find(s,tool):\n        for sn,sv in s.sv.items():\n            ts=getattr(sv,'tools',{})\n            if tool in ts:return{'server':sn,'tool':tool}\n        return None\n    def list_all(s):\n        r={}\n        for n,sv in s.sv.items():r[n]=list(getattr(sv,'tools',{}).keys())\n        return r\n",
+    "test_cases": [
+      {
+        "input": "r=Registry();s=SimpleNamespace(tools={'q':None});r.reg('db',s);r.find('q')['server']",
+        "expected_output": "db",
+        "description": "查找"
+      },
+      {
+        "input": "r=Registry();s=SimpleNamespace(tools={'a':1,'b':2});r.reg('srv',s);len(r.list_all()['srv'])",
+        "expected_output": "2",
+        "description": "列出"
+      }
+    ],
+    "hint": "find遍历查找，list_all收集列表",
+    "prerequisites": [
+      13,
+      15
+    ]
+  },
+  {
+    "title": "A2A状态管理",
+    "slug": "agent-25-a2a-stateful",
+    "description": "有状态通信和任务进度追踪",
+    "content": "A2A支持有状态交互。\n\n## 任务生命周期\ncreated->assigned->in_progress(0-100%)->completed/failed\n\n## 能力矩阵\n每个Agent定义自身能力，按匹配度分配",
+    "order": 25,
+    "difficulty": "advanced",
+    "xp_reward": 28,
+    "track": "agent",
+    "section": "高级专题篇",
+    "starter_code": "class Tracker:\n    def __init__(s):s.tasks={}\n    def create(s,i,desc):pass\n    def progress(s,i,p):pass\n    def status(s,i):pass\n",
+    "solution_code": "class Tracker:\n    def __init__(s):s.tasks={}\n    def create(s,i,desc):\n        s.tasks[i]={'desc':desc,'state':'created','progress':0}\n        return s.tasks[i]\n    def progress(s,i,p):\n        if i not in s.tasks:return None\n        t=s.tasks[i];t['progress']=p\n        if p>=100:t['state']='completed'\n        elif t['state']=='created'and p>0:t['state']='in_progress'\n        return t\n    def status(s,i):return s.tasks.get(i)\n",
+    "test_cases": [
+      {
+        "input": "t=Tracker();t.create('t1','search');t.status('t1')['state']",
+        "expected_output": "created",
+        "description": "创建"
+      },
+      {
+        "input": "t=Tracker();t.create('t1','do');t.progress('t1',50);t.status('t1')['state']",
+        "expected_output": "in_progress",
+        "description": "执行中"
+      },
+      {
+        "input": "t=Tracker();t.create('t1','do');t.progress('t1',100);t.status('t1')['state']",
+        "expected_output": "completed",
+        "description": "完成"
+      }
+    ],
+    "hint": "create初始化，progress自动转换状态",
+    "prerequisites": [
+      14
+    ]
+  },
+  {
+    "title": "Agent评估与调试",
+    "slug": "agent-26-evaluation",
+    "description": "系统化评估Agent性能和调试技巧",
+    "content": "# 评估与调试\n\n## 评估维度\n- 任务完成率\n- 步骤效率\n- 工具准确率\n- 响应质量\n\n## 调试方法\n日志追踪->回放分析->A/B测试",
+    "order": 26,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "agent",
+    "section": "高级专题篇",
+    "starter_code": "class Evaluator:\n    def __init__(s):s.r=[]\n    def eval(s,exp,act):pass\n    def summary(s):pass\n",
+    "solution_code": "class Evaluator:\n    def __init__(s):s.r=[]\n    def eval(s,exp,act):\n        ew=set(str(exp).lower().split());aw=set(str(act).lower().split())\n        ov=len(ew&aw);sc=int(ov/len(ew)*100)if ew else 100\n        s.r.append(sc);return sc\n    def summary(s):\n        if not s.r:return{'avg':0,'runs':0}\n        return{'avg':sum(s.r)/len(s.r),'runs':len(s.r)}\n",
+    "test_cases": [
+      {
+        "input": "e=Evaluator();e.eval('hello world','hello world')",
+        "expected_output": "100",
+        "description": "完全匹配"
+      },
+      {
+        "input": "e=Evaluator();e.eval('hello world','hi');e.summary()['runs']",
+        "expected_output": "1",
+        "description": "记录次数"
+      }
+    ],
+    "hint": "词集合交集计算相似度",
+    "prerequisites": [
+      20,
+      21
+    ]
+  },
+  {
+    "title": "Agent科学研究",
+    "slug": "agent-27-science",
+    "description": "文献综述、假设生成和实验设计",
+    "content": "# Agent科学研究\n\n## 工作流\n文献搜索->综述->假设生成->实验设计->数据分析->报告\n\nAgent正在改变科学研究的方式。",
+    "order": 27,
+    "difficulty": "advanced",
+    "xp_reward": 30,
+    "track": "agent",
+    "section": "高级专题篇",
+    "starter_code": "def gen_hypothesis(q,lit):pass\ndef design_experiment(h):pass\n",
+    "solution_code": "def gen_hypothesis(q,lit):\n    kw=lit.split()[:3]\n    hyp=f'{q} significantly affects {\" and \".join(kw)}'\n    return{'hypothesis':hyp,'testable':True}\ndef design_experiment(h):\n    return{'hypothesis':h,'variables':{'indep':'treatment','dep':'outcome'},'groups':['control','experimental'],'metrics':['accuracy','f1','latency'],'sample_size':100}\n",
+    "test_cases": [
+      {
+        "input": "h=gen_hypothesis('AI','safety paper');'hypothesis'in h",
+        "expected_output": "True",
+        "description": "生成假设"
+      },
+      {
+        "input": "d=design_experiment('x');len(d['metrics'])",
+        "expected_output": "3",
+        "description": "设计指标"
+      }
+    ],
+    "hint": "gen_hypothesis组合问题关键词，design_experiment定义实验",
+    "prerequisites": [
+      26
+    ]
+  },
+  {
+    "title": "综合项目：AI研发助手",
+    "slug": "agent-28-ai-tutor",
+    "description": "整合全部Agent技术的智能系统",
+    "content": "# 综合项目：AI研发助手\n\n## 架构\n用户界面->API Gateway->Agent编排器->MCP工具层->数据层\n\n## 核心模块\n1. 用户画像\n2. 知识图谱\n3. 推荐引擎\n4. 问答模块\n5. 代码评测\n\n恭喜完成整个智能体工坊的学习！",
+    "order": 28,
+    "difficulty": "advanced",
+    "xp_reward": 30,
+    "track": "agent",
+    "section": "高级专题篇",
+    "starter_code": "class AITutor:\n    def __init__(s):s.prof={};s.kn={}\n    def update(s,uid,topic,score):pass\n    def recommend(s,uid):pass\n    def weak(s,uid):pass\n",
+    "solution_code": "class AITutor:\n    def __init__(s):s.prof={};s.kn={}\n    def update(s,uid,topic,score):\n        if uid not in s.prof:s.prof[uid]={}\n        s.prof[uid][topic]=score\n    def recommend(s,uid):\n        w=s.weak(uid)\n        if w:return f'建议复习: {w[0]}'\n        return '全部优秀！继续探索新知识！'\n    def weak(s,uid):\n        p=s.prof.get(uid,{})\n        w=[t for t,sc in p.items()if sc<60]\n        return sorted(w,key=lambda t:p[t])\n",
+    "test_cases": [
+      {
+        "input": "t=AITutor();t.update('u1','python',80);t.update('u1','ml',40);t.recommend('u1')",
+        "expected_output": "建议复习: ml",
+        "description": "推荐薄弱"
+      },
+      {
+        "input": "t=AITutor();t.update('u1','py',90);t.recommend('u1')",
+        "expected_output": "全部优秀！继续探索新知识！",
+        "description": "全部优秀"
+      }
+    ],
+    "hint": "update存分数，weak筛低于60分的领域",
+    "prerequisites": [
+      5,
+      8,
+      12,
+      20
+    ]
+  }
+]

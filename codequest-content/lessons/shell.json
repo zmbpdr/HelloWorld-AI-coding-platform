@@ -1,0 +1,270 @@
+[
+  {
+    "title": "Hello Shell — 脚本结构、shebang、执行权限",
+    "slug": "shell-01-hello-shell",
+    "description": "学习 Shell 脚本的基本结构、shebang 行的作用以及如何赋予脚本执行权限",
+    "content": "# Hello Shell — 脚本结构、shebang、执行权限\n\n## 什么是 Shell 脚本？\n\nShell 脚本是将一系列命令写入文件中，由 Shell 解释器逐行执行的程序。它是 Linux/Unix 系统管理自动化的核心工具，能够将日常重复操作封装为可复用的脚本。\n\n## Shebang 行\n\n脚本的第一行以 `#!` 开头，称为 shebang（也叫 hashbang），用于指定解释器的路径：\n\n```bash\n#!/bin/bash\n```\n\n这告诉系统使用 `/bin/bash` 来执行此脚本。常见的 shebang 还有：\n- `#!/bin/sh` — POSIX 兼容 Shell\n- `#!/usr/bin/env bash` — 更通用的写法，通过 env 查找 bash\n\n## 脚本基本结构\n\n一个完整的 Shell 脚本通常包含：\n\n```bash\n#!/bin/bash\n# 这是注释\n\necho \"Hello, World!\"   # 输出文本\n```\n\n- **第一行**：shebang，指定解释器\n- **注释**：以 `#` 开头，解释器会忽略\n- **命令**：每行一条命令，或用 `;` 分隔多条命令\n\n## 执行脚本的三种方式\n\n1. **赋予执行权限后直接运行**：\n   ```bash\n   chmod +x script.sh\n   ./script.sh\n   ```\n\n2. **通过解释器运行**：\n   ```bash\n   bash script.sh\n   ```\n\n3. **使用 source 或 . 执行**（在当前 Shell 环境中运行）：\n   ```bash\n   source script.sh\n   . script.sh\n   ```\n\n## echo 命令\n\n`echo` 是最常用的输出命令，用于在终端打印文本：\n\n```bash\necho \"Hello, Shell!\"       # 输出：Hello, Shell!\necho -n \"无换行\"           # 不在末尾换行\necho -e \"换行\\n制表符\\t\"   # 启用转义字符解析\n```\n\n## 练习\n\n编写一个 Shell 脚本，输出 `Hello, Shell!`。确保脚本以正确的 shebang 行开头。",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#!/bin/bash\n# 在这里编写你的代码\n",
+    "solution_code": "#!/bin/bash\necho \"Hello, Shell!\"",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Hello, Shell!",
+        "description": "应输出 Hello, Shell!"
+      }
+    ],
+    "hint": "使用 echo 命令输出文本，格式：echo \"内容\""
+  },
+  {
+    "title": "变量与环境 — 变量定义、$引用、环境变量、export",
+    "slug": "shell-02-variables-env",
+    "description": "学习 Shell 中变量的定义与引用、环境变量的使用以及 export 命令",
+    "content": "# 变量与环境 — 变量定义、$引用、环境变量、export\n\n## 变量定义\n\nShell 中定义变量非常简单，**等号两边不能有空格**：\n\n```bash\nname=\"Shell\"\ncount=100\n```\n\n⚠️ 注意：`name = \"Shell\"` 是错误的！等号两侧有空格会被当作命令执行。\n\n## 引用变量\n\n使用 `$` 或 `${}` 来引用变量的值：\n\n```bash\necho $name        # 输出：Shell\necho ${name}      # 输出：Shell\necho \"Hello $name\" # 输出：Hello Shell\n```\n\n`${}` 形式在变量名后紧跟其他字符时特别有用：\n\n```bash\nfruit=\"apple\"\necho \"${fruit}s are good\"  # 输出：apples are good\necho \"$fruits are good\"     # 错误：$fruits 未定义\n```\n\n## 引号的作用\n\n- **双引号** `\"\"`：保留变量展开，但屏蔽大多数特殊字符\n- **单引号** `''`：所有字符原样输出，不做任何展开\n- **反引号** `` `` `` 或 `$()`：命令替换，执行命令并获取输出\n\n```bash\nname=\"World\"\necho \"Hello $name\"   # 输出：Hello World\necho 'Hello $name'   # 输出：Hello $name\necho \"Today: $(date)\" # 输出：Today: 当前日期\n```\n\n## 环境变量\n\n环境变量是所有子进程都能访问的全局变量。常见环境变量：\n\n| 变量 | 含义 |\n|------|------|\n| `$HOME` | 用户主目录 |\n| `$USER` | 当前用户名 |\n| `$PATH` | 命令搜索路径 |\n| `$PWD` | 当前工作目录 |\n| `$SHELL` | 当前 Shell 路径 |\n\n## export 命令\n\n`export` 将局部变量提升为环境变量，使其对子进程可见：\n\n```bash\nMY_VAR=\"hello\"       # 局部变量，子进程不可见\nexport MY_VAR=\"hello\" # 环境变量，子进程可见\n```\n\n## 特殊变量\n\n- `$0` — 脚本名\n- `$1` ~ `$9` — 位置参数\n- `$#` — 参数个数\n- `$@` — 所有参数（作为独立字符串）\n- `$?` — 上一个命令的退出状态码\n\n## 练习\n\n定义变量 `greeting` 值为 `Hello`，变量 `target` 值为 `Shell`，然后输出 `Hello, Shell!`（使用变量拼接）。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#!/bin/bash\n# 定义变量并拼接输出\n",
+    "solution_code": "#!/bin/bash\ngreeting=\"Hello\"\ntarget=\"Shell\"\necho \"${greeting}, ${target}!\"",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Hello, Shell!",
+        "description": "应使用变量拼接输出 Hello, Shell!"
+      }
+    ],
+    "hint": "定义两个变量，用 ${} 引用并拼接，注意逗号和感叹号的位置"
+  },
+  {
+    "title": "输入输出 — echo/printf、重定向、管道",
+    "slug": "shell-03-input-output",
+    "description": "学习 Shell 中的输入输出操作：echo/printf 格式化输出、重定向和管道",
+    "content": "# 输入输出 — echo/printf、重定向、管道\n\n## echo 命令详解\n\n`echo` 是最简单的输出命令：\n\n```bash\necho \"Hello\"              # 基本输出\necho -n \"No newline\"      # 不换行\necho -e \"Line1\\nLine2\"    # 解析转义字符\n```\n\n## printf 格式化输出\n\n`printf` 提供更强大的格式化能力，类似 C 语言的 printf：\n\n```bash\nprintf \"Name: %s\\n\" \"Alice\"       # 字符串\nprintf \"Age: %d\\n\" 25              # 整数\nprintf \"Pi: %.2f\\n\" 3.14159        # 浮点数（保留2位）\nprintf \"%-10s %5d\\n\" \"Alice\" 25   # 左对齐字符串，右对齐数字\n```\n\n常用格式符：\n- `%s` — 字符串\n- `%d` — 整数\n- `%f` — 浮点数\n- `\\n` — 换行\n- `\\t` — 制表符\n\n## 重定向\n\n重定向用于控制命令的输入输出方向：\n\n| 操作符 | 含义 | 示例 |\n|--------|------|------|\n| `>` | 输出重定向（覆盖） | `echo \"hello\" > file.txt` |\n| `>>` | 输出重定向（追加） | `echo \"world\" >> file.txt` |\n| `<` | 输入重定向 | `sort < names.txt` |\n| `2>` | 标准错误重定向 | `cmd 2> error.log` |\n| `&>` | 合并输出与错误 | `cmd &> all.log` |\n| `2>&1` | 错误重定向到输出 | `cmd > out.log 2>&1` |\n\n## 管道\n\n管道 `|` 将前一个命令的标准输出作为后一个命令的标准输入：\n\n```bash\ncat file.txt | sort | uniq          # 排序并去重\nls -la | grep \".sh\"                # 查找 .sh 文件\nps aux | grep nginx | wc -l        # 统计 nginx 进程数\necho \"hello world\" | tr 'a-z' 'A-Z' # 转大写\n```\n\n## /dev/null\n\n`/dev/null` 是一个特殊设备文件，写入的数据会被丢弃，读取时返回 EOF：\n\n```bash\ncommand > /dev/null 2>&1   # 丢弃所有输出\n```\n\n## 练习\n\n使用 `printf` 格式化输出一行信息，格式为 `Name: Shell, Level: 1`，其中 Shell 和 1 分别用 `%s` 和 `%d` 格式符替换。",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#!/bin/bash\n# 使用 printf 格式化输出\n",
+    "solution_code": "#!/bin/bash\nprintf \"Name: %s, Level: %d\\n\" \"Shell\" 1",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Name: Shell, Level: 1",
+        "description": "应使用 printf 格式化输出 Name: Shell, Level: 1"
+      }
+    ],
+    "hint": "printf 格式：printf \"格式字符串\" 参数1 参数2，字符串用 %s，整数用 %d"
+  },
+  {
+    "title": "条件判断 — test/[ ]、if/else、逻辑运算符",
+    "slug": "shell-04-conditionals",
+    "description": "学习 Shell 中的条件判断：test 命令、if/else 分支结构和逻辑运算符",
+    "content": "# 条件判断 — test/[ ]、if/else、逻辑运算符\n\n## test 命令与 [ ]\n\n`test` 命令用于条件判断，`[ ]` 是 test 的语法糖：\n\n```bash\ntest 5 -gt 3 && echo \"yes\"   # 使用 test\n[ 5 -gt 3 ] && echo \"yes\"    # 使用 [ ]\n```\n\n⚠️ 注意：`[ ]` 内部两侧必须有空格！\n\n## 数值比较\n\n| 操作符 | 含义 | 示例 |\n|--------|------|------|\n| `-eq` | 等于 | `[ $a -eq $b ]` |\n| `-ne` | 不等于 | `[ $a -ne $b ]` |\n| `-gt` | 大于 | `[ $a -gt $b ]` |\n| `-ge` | 大于等于 | `[ $a -ge $b ]` |\n| `-lt` | 小于 | `[ $a -lt $b ]` |\n| `-le` | 小于等于 | `[ $a -le $b ]` |\n\n## 字符串比较\n\n| 操作符 | 含义 |\n|--------|------|\n| `=` / `==` | 相等 |\n| `!=` | 不相等 |\n| `-z` | 长度为零 |\n| `-n` | 长度非零 |\n\n## 文件判断\n\n| 操作符 | 含义 |\n|--------|------|\n| `-f` | 是普通文件 |\n| `-d` | 是目录 |\n| `-e` | 存在 |\n| `-r` | 可读 |\n| `-w` | 可写 |\n| `-x` | 可执行 |\n\n## if/elif/else\n\n```bash\nif [ condition ]; then\n    # 条件为真\nelif [ condition2 ]; then\n    # 条件2为真\nelse\n    # 以上条件都不满足\nfi\n```\n\n## 逻辑运算符\n\n```bash\n[ $a -gt 0 ] && [ $a -lt 10 ]   # 逻辑与（两个测试）\n[ $a -gt 0 -a $a -lt 10 ]       # 逻辑与（-a，已不推荐）\n[ $a -lt 0 -o $a -gt 10 ]       # 逻辑或（-o，已不推荐）\n\n# 推荐使用 [[ ]]，支持 && 和 ||\n[[ $a -gt 0 && $a -lt 10 ]]      # 逻辑与\n[[ $a -lt 0 || $a -gt 10 ]]      # 逻辑或\n```\n\n## [[ ]] 与 [ ] 的区别\n\n`[[ ]]` 是 Bash 的增强版测试：\n- 支持 `&&`、`||` 逻辑运算\n- 支持模式匹配 `[[ $str == pattern* ]]`\n- 不需要对变量加引号保护\n- 更安全，推荐在 Bash 脚本中使用\n\n## 练习\n\n编写脚本，定义变量 `score=85`，使用 if/elif/else 判断：\n- score >= 90 输出 `Excellent`\n- score >= 70 输出 `Good`\n- score >= 60 输出 `Pass`\n- 否则输出 `Fail`\n## 运算符优先级\n理解运算符的优先级对编写正确的表达式至关重要。当不确定时，使用括号 `()` 明确优先级。\n\n## 常见陷阱\n- 整数除法 vs 浮点除法（不同语言行为不同）\n- 取余运算中负数的处理\n- 比较浮点数时不要用 `==`（精度问题）\n- 逻辑运算符的短路求值特性\n",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#!/bin/bash\n# 根据 score 判断等级\nscore=85\n",
+    "solution_code": "#!/bin/bash\nscore=85\nif [ $score -ge 90 ]; then\n    echo \"Excellent\"\nelif [ $score -ge 70 ]; then\n    echo \"Good\"\nelif [ $score -ge 60 ]; then\n    echo \"Pass\"\nelse\n    echo \"Fail\"\nfi",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Good",
+        "description": "score=85 时应输出 Good"
+      }
+    ],
+    "hint": "使用 if/elif/else/fi 结构，数值比较用 -ge（大于等于）"
+  },
+  {
+    "title": "循环结构 — for、while、until、break/continue",
+    "slug": "shell-05-loops",
+    "description": "学习 Shell 中的循环结构：for、while、until 循环以及 break/continue 控制",
+    "content": "# 循环结构 — for、while、until、break/continue\n\n## for 循环\n\n### 遍历列表\n\n```bash\nfor fruit in apple banana cherry; do\n    echo \"I like $fruit\"\ndone\n```\n\n### C 风格 for 循环\n\n```bash\nfor ((i=1; i<=5; i++)); do\n    echo \"Number: $i\"\ndone\n```\n\n### 遍历命令输出\n\n```bash\nfor file in *.sh; do\n    echo \"Script: $file\"\ndone\n```\n\n### 遍历序列\n\n```bash\nfor i in $(seq 1 10); do\n    echo $i\ndone\n\n# 或使用 Bash 内置\nfor i in {1..10}; do\n    echo $i\ndone\n```\n\n## while 循环\n\n`while` 在条件为真时持续执行：\n\n```bash\ncount=1\nwhile [ $count -le 5 ]; do\n    echo \"Count: $count\"\n    ((count++))\ndone\n```\n\n### 读取文件行\n\n```bash\nwhile IFS= read -r line; do\n    echo \"Line: $line\"\ndone < input.txt\n```\n\n## until 循环\n\n`until` 与 `while` 相反，在条件为假时持续执行（直到条件为真）：\n\n```bash\ncount=1\nuntil [ $count -gt 5 ]; do\n    echo \"Count: $count\"\n    ((count++))\ndone\n```\n\n## break 与 continue\n\n- **break**：立即退出当前循环\n- **continue**：跳过本次迭代，进入下一次\n\n```bash\nfor i in {1..10}; do\n    if [ $i -eq 3 ]; then\n        continue   # 跳过 3\n    fi\n    if [ $i -eq 8 ]; then\n        break      # 到 8 停止\n    fi\n    echo $i\ndone\n# 输出：1 2 4 5 6 7\n```\n\n## 循环中的常用技巧\n\n```bash\n# 无限循环\nwhile true; do\n    echo \"running...\"\n    sleep 1\ndone\n\n# 并行执行（后台）\nfor i in {1..5}; do\n    process_item $i &\ndone\nwait  # 等待所有后台任务完成\n```\n\n## 练习\n\n使用 for 循环计算 1 到 10 的累加和，输出格式为 `Sum: 55`。\n## 循环的性能考量\n- 避免在循环中进行重复计算\n- 尽量减少循环体内的函数调用\n- 考虑使用更高效的数据结构\n\n## 循环 vs 递归 vs 高阶函数\n| 方式 | 适用场景 |\n|------|---------|\n| for/while | 明确次数、简单遍历 |\n| 递归 | 树形结构、分治问题 |\n| map/filter | 数据转换和过滤 |\n\n## 常见错误\n- 死循环（循环条件永远为真）\n- 差一错误（off-by-one）\n- 在遍历时修改集合\n",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#!/bin/bash\n# 计算 1 到 10 的累加和\n",
+    "solution_code": "#!/bin/bash\nsum=0\nfor i in {1..10}; do\n    sum=$((sum + i))\ndone\necho \"Sum: $sum\"",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Sum: 55",
+        "description": "1到10的累加和应为55"
+      }
+    ],
+    "hint": "定义 sum=0，用 for 循环累加，算术运算用 $(( )) 或 let"
+  },
+  {
+    "title": "函数 — 定义、参数、返回值、局部变量",
+    "slug": "shell-06-functions",
+    "description": "学习 Shell 函数的定义方式、参数传递、返回值处理和局部变量",
+    "content": "# 函数 — 定义、参数、返回值、局部变量\n\n## 函数定义\n\nShell 中有两种定义函数的语法：\n\n```bash\n# 方式一（推荐）\nmy_func() {\n    echo \"Hello from function\"\n}\n\n# 方式二\nfunction my_func {\n    echo \"Hello from function\"\n}\n```\n\n## 函数调用\n\n```bash\ngreet() {\n    echo \"Welcome!\"\n}\n\ngreet   # 调用函数，输出：Welcome!\n```\n\n## 函数参数\n\n函数内部通过 `$1`、`$2` 等访问参数，与脚本参数用法相同：\n\n```bash\ngreet() {\n    echo \"Hello, $1! You are $2 years old.\"\n}\n\ngreet \"Alice\" 25   # 输出：Hello, Alice! You are 25 years old.\n```\n\n特殊变量：\n- `$#` — 参数个数\n- `$@` — 所有参数\n- `$*` — 所有参数（作为单个字符串）\n\n## 返回值\n\nShell 函数的返回值有两种方式：\n\n### 1. exit 状态码（0-255）\n\n```bash\nis_even() {\n    if [ $(($1 % 2)) -eq 0 ]; then\n        return 0   # 成功\n    else\n        return 1   # 失败\n    fi\n}\n\nis_even 4\necho $?   # 输出：0\n```\n\n### 2. 通过 echo 输出（命令替换获取）\n\n```bash\nadd() {\n    echo $(($1 + $2))\n}\n\nresult=$(add 3 5)\necho $result   # 输出：8\n```\n\n⚠️ `return` 只能返回 0-255 的整数，要返回字符串或更大数值，使用 `echo`。\n\n## 局部变量\n\n默认情况下，Shell 函数中的变量是全局的。使用 `local` 声明局部变量：\n\n```bash\ncounter() {\n    local count=0    # 局部变量，不影响外部\n    ((count++))\n    echo $count\n}\n\ncounter     # 输出：1\necho $count # 输出空（外部无此变量）\n```\n\n## 递归\n\nShell 函数支持递归调用：\n\n```bash\nfactorial() {\n    if [ $1 -le 1 ]; then\n        echo 1\n    else\n        local prev=$(factorial $(($1 - 1)))\n        echo $(($1 * prev))\n    fi\n}\n\necho $(factorial 5)   # 输出：120\n```\n\n## 练习\n\n编写函数 `multiply`，接收两个参数并返回它们的乘积（通过 echo 输出），然后调用 `multiply 6 7` 并输出结果。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#!/bin/bash\n# 编写 multiply 函数并调用\n",
+    "solution_code": "#!/bin/bash\nmultiply() {\n    echo $(($1 * $2))\n}\nresult=$(multiply 6 7)\necho $result",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "42",
+        "description": "6 * 7 应输出 42"
+      }
+    ],
+    "hint": "函数内用 echo $(( )) 输出计算结果，调用时用 $(func arg1 arg2) 捕获"
+  },
+  {
+    "title": "字符串处理 — 截取、替换、正则、awk/sed",
+    "slug": "shell-07-string-processing",
+    "description": "学习 Shell 字符串处理：截取、替换、正则匹配以及 awk/sed 基础",
+    "content": "# 字符串处理 — 截取、替换、正则、awk/sed\n\n## 字符串长度\n\n```bash\nstr=\"Hello World\"\necho ${#str}   # 输出：11\n```\n\n## 子串截取\n\n```bash\nstr=\"Hello World\"\necho ${str:0:5}    # 输出：Hello（从位置0取5个字符）\necho ${str:6}       # 输出：World（从位置6取到末尾）\necho ${str: -5}     # 输出：World（取最后5个字符，注意空格）\n```\n\n## 字符串替换\n\n```bash\nstr=\"hello world hello\"\n\n# 替换第一个匹配\necho ${str/hello/HELLO}      # 输出：HELLO world hello\n\n# 替换所有匹配\necho ${str//hello/HELLO}     # 输出：HELLO world HELLO\n\n# 替换开头匹配\necho ${str/#hello/HELLO}     # 输出：HELLO world hello\n\n# 替换结尾匹配\necho ${str/%hello/HELLO}     # 输出：hello world HELLO\n```\n\n## 删除模式\n\n```bash\npath=\"/home/user/file.txt\"\n\n# 从开头删除最短匹配\necho ${path#*/}       # 输出：home/user/file.txt\n\n# 从开头删除最长匹配\necho ${path##*/}      # 输出：file.txt\n\n# 从结尾删除最短匹配\necho ${path%/*}       # 输出：/home/user\n\n# 从结尾删除最长匹配\necho ${path%%/*}      # 输出空\n```\n\n## 大小写转换\n\n```bash\nstr=\"Hello World\"\necho ${str^^}    # 输出：HELLO WORLD（转大写）\necho ${str,,}    # 输出：hello world（转小写）\n```\n\n## 正则匹配\n\n使用 `=~` 进行正则匹配（需在 `[[ ]]` 中使用）：\n\n```bash\nif [[ \"hello123\" =~ ^[a-z]+[0-9]+$ ]]; then\n    echo \"匹配成功\"\nfi\n\n# 获取匹配结果\n[[ \"2024-01-15\" =~ ([0-9]{4})-([0-9]{2})-([0-9]{2}) ]]\necho ${BASH_REMATCH[1]}  # 输出：2024\necho ${BASH_REMATCH[2]}  # 输出：01\necho ${BASH_REMATCH[3]}  # 输出：15\n```\n\n## sed 流编辑器\n\n`sed` 用于对文本流进行编辑：\n\n```bash\n# 替换\necho \"hello world\" | sed 's/world/SHELL/'     # 输出：hello SHELL\n\n# 全局替换\necho \"aaa\" | sed 's/a/b/g'                    # 输出：bbb\n\n# 删除行\necho -e \"line1\\nline2\\nline3\" | sed '2d'       # 删除第2行\n\n# 多个替换\necho \"hello\" | sed -e 's/h/H/' -e 's/o/O/'    # 输出：HellO\n```\n\n## awk 文本处理\n\n`awk` 是强大的文本处理工具：\n\n```bash\n# 按列提取\necho \"Alice 25\" | awk '{print $1}'    # 输出：Alice\necho \"Alice 25\" | awk '{print $2}'    # 输出：25\n\n# 自定义分隔符\necho \"Alice,25,F\" | awk -F',' '{print $1 \" is \" $2}'  # 输出：Alice is 25\n\n# 计算求和\necho -e \"10\\n20\\n30\" | awk '{sum+=$1} END{print sum}'  # 输出：60\n```\n\n## 练习\n\n定义字符串 `str=\"Hello Shell World\"`，使用字符串截取提取 `Shell`，然后输出它。",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "#!/bin/bash\n# 截取字符串中的 Shell\nstr=\"Hello Shell World\"\n",
+    "solution_code": "#!/bin/bash\nstr=\"Hello Shell World\"\necho ${str:6:5}",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Shell",
+        "description": "应从字符串中截取出 Shell"
+      }
+    ],
+    "hint": "使用 ${str:起始位置:长度} 截取子串，注意 Shell 从位置6开始，长度为5"
+  },
+  {
+    "title": "数组与关联数组 — 声明、遍历、操作",
+    "slug": "shell-08-arrays",
+    "description": "学习 Bash 中的索引数组和关联数组（字典）的声明、遍历与操作",
+    "content": "# 数组与关联数组 — 声明、遍历、操作\n\n## 索引数组\n\n### 声明与赋值\n\n```bash\n# 方式一：逐个赋值\nfruits[0]=\"apple\"\nfruits[1]=\"banana\"\nfruits[2]=\"cherry\"\n\n# 方式二：一次性声明\nfruits=(\"apple\" \"banana\" \"cherry\")\n\n# 方式三：声明并指定索引\ncolors=([0]=\"red\" [2]=\"blue\" [5]=\"green\")  # 稀疏数组\n```\n\n### 访问元素\n\n```bash\necho ${fruits[0]}     # 输出：apple\necho ${fruits[1]}     # 输出：banana\necho ${fruits[-1]}    # 输出：cherry（最后一个元素）\n```\n\n### 获取数组信息\n\n```bash\necho ${#fruits[@]}    # 数组长度：3\necho ${!fruits[@]}    # 所有索引：0 1 2\necho ${fruits[@]}     # 所有元素：apple banana cherry\n```\n\n### 遍历数组\n\n```bash\n# 遍历元素\nfor fruit in \"${fruits[@]}\"; do\n    echo \"$fruit\"\ndone\n\n# 遍历索引和元素\nfor i in \"${!fruits[@]}\"; do\n    echo \"Index $i: ${fruits[$i]}\"\ndone\n```\n\n### 数组操作\n\n```bash\n# 追加元素\nfruits+=(\"date\")\n\n# 删除元素\nunset fruits[1]       # 删除索引1的元素\n\n# 切片\necho ${fruits[@]:1:2}  # 从索引1取2个元素\n\n# 替换\necho ${fruits[@]/apple/APPLE}  # 替换所有元素中的 apple\n```\n\n## 关联数组（字典）\n\n关联数组需要用 `declare -A` 声明：\n\n```bash\n# 声明关联数组\ndeclare -A person\n\n# 赋值\nperson[name]=\"Alice\"\nperson[age]=25\nperson[city]=\"Beijing\"\n\n# 也可以一次性声明\ndeclare -A colors=([red]=\"#FF0000\" [green]=\"#00FF00\" [blue]=\"#0000FF\")\n```\n\n### 访问与遍历\n\n```bash\n# 访问\necho ${person[name]}     # 输出：Alice\n\n# 所有键\necho ${!person[@]}       # 输出：name age city\n\n# 所有值\necho ${person[@]}        # 输出：Alice 25 Beijing\n\n# 键值对数量\necho ${#person[@]}       # 输出：3\n\n# 遍历\nfor key in \"${!person[@]}\"; do\n    echo \"$key: ${person[$key]}\"\ndone\n```\n\n### 检查键是否存在\n\n```bash\nif [[ -v person[name] ]]; then\n    echo \"name 键存在\"\nfi\n```\n\n## 练习\n\n创建索引数组 `nums=(10 20 30 40 50)`，计算数组所有元素的和，输出格式为 `Total: 150`。",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "#!/bin/bash\n# 计算数组元素之和\nnums=(10 20 30 40 50)\n",
+    "solution_code": "#!/bin/bash\nnums=(10 20 30 40 50)\ntotal=0\nfor num in \"${nums[@]}\"; do\n    total=$((total + num))\ndone\necho \"Total: $total\"",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Total: 150",
+        "description": "数组元素之和应为150"
+      }
+    ],
+    "hint": "用 for 遍历 ${nums[@]}，累加到 total 变量中"
+  },
+  {
+    "title": "进程管理 — 后台运行、信号、trap、wait",
+    "slug": "shell-09-process-management",
+    "description": "学习 Shell 进程管理：后台运行、信号处理、trap 捕获和 wait 等待",
+    "content": "# 进程管理 — 后台运行、信号、trap、wait\n\n## 后台运行\n\n在命令末尾加 `&` 可将命令放入后台执行：\n\n```bash\n# 后台运行\nsleep 10 &\necho \"后台任务已启动，PID: $!\"\n\n# 后台运行并忽略挂断信号\nnohup sleep 100 &\n```\n\n`$!` 获取最近一个后台进程的 PID。\n\n## jobs 命令\n\n查看当前 Shell 会话中的后台任务：\n\n```bash\nsleep 100 &\nsleep 200 &\njobs          # 列出所有后台任务\njobs -l       # 详细列出（含 PID）\nfg %1         # 将任务1调到前台\nbg %2         # 将暂停的任务2在后台继续\n```\n\n## 信号\n\n信号是进程间通信的机制，常用信号：\n\n| 信号 | 编号 | 含义 |\n|------|------|------|\n| SIGHUP | 1 | 终端挂断 |\n| SIGINT | 2 | 中断（Ctrl+C） |\n| SIGQUIT | 3 | 退出（Ctrl+\\） |\n| SIGKILL | 9 | 强制杀死（不可捕获） |\n| SIGTERM | 15 | 终止（默认 kill 信号） |\n| SIGSTOP | 19 | 暂停（不可捕获） |\n| SIGCONT | 18 | 继续 |\n\n## 发送信号\n\n```bash\nkill -9 12345        # 强制杀死 PID 12345\nkill -SIGTERM 12345  # 发送终止信号\nkill -15 12345       # 同上\npkill -f \"nginx\"     # 按名称模式杀死进程\nkillall sleep        # 杀死所有 sleep 进程\n```\n\n## trap 捕获信号\n\n`trap` 命令用于捕获信号并执行自定义处理：\n\n```bash\n# 捕获 SIGINT (Ctrl+C)\ntrap 'echo \"\\n捕获 Ctrl+C，不退出\"' SIGINT\n\n# 捕获退出信号，执行清理\ntrap 'rm -f /tmp/tempfile; echo \"清理完成\"' EXIT\n\n# 忽略信号\ntrap '' SIGTERM   # 忽略 SIGTERM\n\n# 恢复默认行为\ntrap - SIGINT\n```\n\n### 实际应用：优雅退出\n\n```bash\ncleanup() {\n    echo \"正在清理资源...\"\n    rm -f /tmp/mylock\n    exit 0\n}\n\ntrap cleanup SIGINT SIGTERM EXIT\n\necho \"服务启动，PID: $$\"\nwhile true; do\n    sleep 1\ndone\n```\n\n## wait 命令\n\n`wait` 等待后台进程完成：\n\n```bash\n# 启动多个后台任务\nsleep 2 &\npid1=$!\nsleep 3 &\npid2=$!\n\n# 等待特定进程\nwait $pid1\necho \"任务1完成，退出码: $?\"\n\n# 等待所有后台任务\nwait\necho \"所有任务完成\"\n```\n\n## 进程替换\n\n```bash\n# 进程替换\ndiff <(sort file1.txt) <(sort file2.txt)\n\n# <(...) 生成一个临时文件描述符\n```\n\n## 练习\n\n编写脚本，使用 trap 捕获 SIGINT 信号并输出 `Caught SIGINT`，然后使用 kill 向自己发送 SIGINT 信号（通过 `$$` 获取当前 PID），最后在 trap 处理中输出后正常退出。",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "#!/bin/bash\n# 使用 trap 捕获信号\n",
+    "solution_code": "#!/bin/bash\ntrap 'echo \"Caught SIGINT\"; exit 0' SIGINT\nkill -SIGINT $$",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Caught SIGINT",
+        "description": "应捕获 SIGINT 信号并输出 Caught SIGINT"
+      }
+    ],
+    "hint": "trap '命令' SIGINT 捕获信号，$$ 是当前脚本 PID，用 kill -SIGINT $$ 发送信号给自己"
+  },
+  {
+    "title": "文件操作 — 查找find、比较diff、归档tar",
+    "slug": "shell-10-file-operations",
+    "description": "学习 Shell 文件操作：find 查找、diff 比较、tar 归档压缩",
+    "content": "# 文件操作 — 查找find、比较diff、归档tar\n\n## find 命令\n\n`find` 是最强大的文件查找工具：\n\n### 基本语法\n\n```bash\nfind [路径] [条件] [动作]\n```\n\n### 按名称查找\n\n```bash\nfind . -name \"*.sh\"              # 查找所有 .sh 文件\nfind . -iname \"*.SH\"             # 忽略大小写\nfind /home -name \"*.txt\"         # 在 /home 中查找\n```\n\n### 按类型查找\n\n```bash\nfind . -type f                   # 普通文件\nfind . -type d                   # 目录\nfind . -type l                   # 符号链接\n```\n\n### 按时间查找\n\n```bash\nfind . -mtime -7                 # 7天内修改的文件\nfind . -atime +30                # 30天以上未访问的文件\nfind . -mmin -60                 # 60分钟内修改的文件\n```\n\n### 按大小查找\n\n```bash\nfind . -size +100M               # 大于100MB的文件\nfind . -size -1k                 # 小于1KB的文件\nfind . -empty                    # 空文件或空目录\n```\n\n### 组合条件\n\n```bash\nfind . -name \"*.sh\" -type f                    # AND（默认）\nfind . \\( -name \"*.sh\" -o -name \"*.bash\" \\)    # OR\nfind . -name \"*.sh\" -not -path \"*/test/*\"       # NOT\n```\n\n### 对结果执行操作\n\n```bash\nfind . -name \"*.log\" -delete                    # 删除\nfind . -name \"*.sh\" -exec chmod +x {} \\;        # 执行命令\nfind . -name \"*.tmp\" -exec rm -f {} +           # 批量执行（更高效）\nfind . -name \"*.sh\" | xargs wc -l               # 配合 xargs\n```\n\n## diff 命令\n\n`diff` 比较两个文件的差异：\n\n```bash\n# 基本比较\ndiff file1.txt file2.txt\n\n# 统一格式（推荐）\ndiff -u file1.txt file2.txt\n\n# 并排比较\ndiff -y file1.txt file2.txt\n\n# 仅判断是否相同\ndiff -q file1.txt file2.txt\n\n# 比较目录\ndiff -r dir1/ dir2/\n```\n\n### diff 输出解读\n\n```\n1c1             # 第1行有变化\n< old line      # 旧文件内容\n---\n> new line      # 新文件内容\n```\n\n- `a` — 添加（add）\n- `c` — 修改（change）\n- `d` — 删除（delete）\n\n## tar 归档\n\n`tar` 用于打包和压缩文件：\n\n### 创建归档\n\n```bash\n# 创建 tar 包\ntar -cf archive.tar file1 file2\n\n# 创建并压缩（gzip）\ntar -czf archive.tar.gz dir/\n\n# 创建并压缩（bzip2，压缩率更高）\ntar -cjf archive.tar.bz2 dir/\n```\n\n### 解压归档\n\n```bash\n# 解压 tar 包\ntar -xf archive.tar\n\n# 解压 .tar.gz\ntar -xzf archive.tar.gz\n\n# 解压 .tar.bz2\ntar -xjf archive.tar.bz2\n\n# 解压到指定目录\ntar -xzf archive.tar.gz -C /tmp/\n```\n\n### 查看归档内容\n\n```bash\ntar -tf archive.tar.gz\n```\n\n### 参数说明\n\n| 参数 | 含义 |\n|------|------|\n| `-c` | 创建归档 |\n| `-x` | 解压归档 |\n| `-t` | 列出内容 |\n| `-f` | 指定文件名 |\n| `-z` | gzip 压缩/解压 |\n| `-j` | bzip2 压缩/解压 |\n| `-v` | 显示过程 |\n| `-C` | 指定解压目录 |\n\n## 练习\n\n在 `/tmp` 目录下创建 `shelltest` 目录，在其中创建三个文件 `a.txt`、`b.txt`、`c.txt`（内容分别为 `A`、`B`、`C`），然后使用 find 查找 `/tmp/shelltest` 下所有 `.txt` 文件并输出它们的路径（按名称排序）。\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "#!/bin/bash\n# 创建目录和文件，然后使用 find 查找\n",
+    "solution_code": "#!/bin/bash\nmkdir -p /tmp/shelltest\necho \"A\" > /tmp/shelltest/a.txt\necho \"B\" > /tmp/shelltest/b.txt\necho \"C\" > /tmp/shelltest/c.txt\nfind /tmp/shelltest -name \"*.txt\" | sort",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "/tmp/shelltest/a.txt\n/tmp/shelltest/b.txt\n/tmp/shelltest/c.txt",
+        "description": "应找到三个 txt 文件并按名称排序输出"
+      }
+    ],
+    "hint": "mkdir -p 创建目录，echo 写入文件，find -name \"*.txt\" 查找，sort 排序"
+  },
+  {
+    "title": "系统监控 — ps/top/df/du、日志分析",
+    "slug": "shell-11-system-monitoring",
+    "description": "学习 Shell 系统监控：进程查看、磁盘使用、日志分析",
+    "content": "# 系统监控 — ps/top/df/du、日志分析\n\n## 进程查看\n\n### ps 命令\n\n```bash\n# 查看当前终端进程\nps\n\n# 查看所有进程（BSD 风格）\nps aux\n\n# 查看所有进程（System V 风格）\nps -ef\n\n# 查看指定用户的进程\nps -u root\n\n# 查看进程树\nps -ef --forest\n\n# 自定义输出列\nps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem\n```\n\n### 常用 ps 输出列\n\n| 列 | 含义 |\n|----|------|\n| PID | 进程 ID |\n| PPID | 父进程 ID |\n| %CPU | CPU 使用率 |\n| %MEM | 内存使用率 |\n| VSZ | 虚拟内存大小 |\n| RSS | 物理内存大小 |\n| STAT | 进程状态 |\n| START | 启动时间 |\n| TIME | 累计 CPU 时间 |\n| COMMAND | 命令名 |\n\n### top/htop\n\n```bash\ntop           # 实时进程监控\nhtop          # 增强版（需安装）\ntop -u root   # 监控指定用户\ntop -p 1234   # 监控指定 PID\n```\n\n## 磁盘监控\n\n### df — 磁盘空间\n\n```bash\ndf              # 所有文件系统\ndf -h           # 人类可读格式\ndf -h /home     # 指定目录所在分区\ndf -i           # 显示 inode 使用情况\ndf -T           # 显示文件系统类型\n```\n\n### du — 目录大小\n\n```bash\ndu                  # 当前目录大小\ndu -h               # 人类可读格式\ndu -sh /home        # 汇总显示\ndu -h --max-depth=1 /  # 只显示一层\ndu -sh * | sort -rh     # 按大小排序\ndu -ah /tmp         # 包含文件\n```\n\n## 内存监控\n\n```bash\nfree              # 内存使用\nfree -h           # 人类可读\nfree -m           # 以 MB 为单位\n\n# /proc/meminfo 详细信息\ncat /proc/meminfo\n```\n\n## 日志分析\n\n### 常用日志文件\n\n| 文件 | 内容 |\n|------|------|\n| `/var/log/syslog` | 系统日志 |\n| `/var/log/auth.log` | 认证日志 |\n| `/var/log/kern.log` | 内核日志 |\n| `/var/log/nginx/access.log` | Nginx 访问日志 |\n\n### 日志分析技巧\n\n```bash\n# 实时查看日志\ntail -f /var/log/syslog\n\n# 搜索关键词\ngrep \"ERROR\" /var/log/syslog\ngrep -i \"error\" /var/log/syslog    # 忽略大小写\n\n# 统计错误次数\ngrep -c \"ERROR\" /var/log/syslog\n\n# 按时间范围过滤\nawk '/2024-01-15 10:*/,/2024-01-15 11:*/' /var/log/syslog\n\n# 提取 IP 地址并统计\ngrep -oE '[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}' access.log | sort | uniq -c | sort -rn | head\n\n# 查看最频繁的请求\nawk '{print $7}' access.log | sort | uniq -c | sort -rn | head -10\n```\n\n## 练习\n\n编写脚本，输出当前系统的内存使用摘要，格式为 `Memory: X MB / Y MB`，其中 X 是已用内存（MB），Y 是总内存（MB）。使用 `free -m` 命令获取数据。",
+    "order": 11,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "#!/bin/bash\n# 输出内存使用摘要\n",
+    "solution_code": "#!/bin/bash\nmem_info=$(free -m | awk '/Mem:/{print $3, $2}')\nused=$(echo $mem_info | awk '{print $1}')\ntotal=$(echo $mem_info | awk '{print $2}')\necho \"Memory: ${used} MB / ${total} MB\"",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "",
+        "description": "应输出格式为 Memory: X MB / Y MB 的内存摘要（具体数值因系统而异，仅验证格式）",
+        "match_regex": "Memory: [0-9]+ MB / [0-9]+ MB"
+      }
+    ],
+    "hint": "用 free -m 获取内存信息，awk 提取 Mem 行的第2列（总量）和第3列（已用）"
+  },
+  {
+    "title": "网络工具 — curl/wget、ping、netstat",
+    "slug": "shell-12-network-tools",
+    "description": "学习 Shell 网络工具：HTTP 请求、网络诊断、连接查看",
+    "content": "# 网络工具 — curl/wget、ping、netstat\n\n## curl 命令\n\n`curl` 是强大的 HTTP 客户端工具：\n\n### 基本请求\n\n```bash\n# GET 请求\ncurl https://example.com\n\n# 只显示响应头\ncurl -I https://example.com\n\n# 显示详细信息（含请求头）\ncurl -v https://example.com\n\n# 静默模式（不显示进度）\ncurl -s https://example.com\n\n# 保存响应到文件\ncurl -o output.html https://example.com\ncurl -O https://example.com/file.zip   # 保留原始文件名\n```\n\n### POST 请求\n\n```bash\n# 发送表单数据\ncurl -X POST -d \"name=Alice&age=25\" https://api.example.com/users\n\n# 发送 JSON\ncurl -X POST -H \"Content-Type: application/json\" \\\n     -d '{\"name\":\"Alice\",\"age\":25}' \\\n     https://api.example.com/users\n\n# 从文件读取 JSON\ncurl -X POST -H \"Content-Type: application/json\" \\\n     -d @data.json \\\n     https://api.example.com/users\n```\n\n### 其他实用选项\n\n```bash\n# 跟随重定向\ncurl -L https://example.com\n\n# 设置超时\ncurl --max-time 10 https://example.com\n\n# 携带 Cookie\ncurl -b \"session=abc123\" https://example.com\n\n# 下载断点续传\ncurl -C - -O https://example.com/largefile.zip\n\n# 只获取 HTTP 状态码\ncurl -s -o /dev/null -w \"%{http_code}\" https://example.com\n```\n\n## wget 命令\n\n`wget` 专注于文件下载：\n\n```bash\n# 下载文件\nwget https://example.com/file.zip\n\n# 指定保存名称\nwget -O myfile.zip https://example.com/file.zip\n\n# 断点续传\nwget -c https://example.com/largefile.zip\n\n# 递归下载网站\nwget -r -l 2 https://example.com\n\n# 后台下载\nwget -b https://example.com/file.zip\n\n# 镜像网站\nwget --mirror https://example.com\n```\n\n## ping 网络诊断\n\n```bash\n# 基本用法\nping example.com\n\n# 指定次数\nping -c 4 example.com\n\n# 指定间隔\nping -i 2 example.com\n\n# 指定包大小\nping -s 1024 example.com\n```\n\n## 网络连接查看\n\n### netstat（传统工具）\n\n```bash\nnetstat -tlnp     # 查看监听端口\nnetstat -an       # 所有连接\nnetstat -an | grep :80  # 查看特定端口\n```\n\n### ss（现代替代）\n\n```bash\nss -tlnp          # 查看监听端口\nss -s             # 连接统计\nss -tan           # 所有 TCP 连接\n```\n\n### 其他网络工具\n\n```bash\n# DNS 查询\nnslookup example.com\ndig example.com\n\n# 路由追踪\ntraceroute example.com\n\n# 查看网络接口\nip addr\nifconfig\n\n# 查看路由表\nip route\n```\n\n## 练习\n\n编写脚本，使用 curl 获取 `https://httpbin.org/get` 的 HTTP 状态码并输出，格式为 `HTTP Status: 200`。",
+    "order": 12,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "#!/bin/bash\n# 获取 HTTP 状态码\n",
+    "solution_code": "#!/bin/bash\nstatus=$(curl -s -o /dev/null -w \"%{http_code}\" https://httpbin.org/get)\necho \"HTTP Status: $status\"",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "",
+        "description": "应输出格式为 HTTP Status: XXX 的状态码（需网络访问，200 表示成功）",
+        "match_regex": "HTTP Status: [0-9]{3}"
+      }
+    ],
+    "hint": "curl -s -o /dev/null -w \"%{http_code}\" URL 可获取 HTTP 状态码"
+  },
+  {
+    "title": "定时任务 — crontab、at、日志轮转",
+    "slug": "shell-13-cron-jobs",
+    "description": "学习 Shell 定时任务：crontab 定时执行、at 一次性任务、日志轮转",
+    "content": "# 定时任务 — crontab、at、日志轮转\n\n## crontab 定时任务\n\n### cron 表达式格式\n\n```\n┌──────── 分钟 (0-59)\n│ ┌────── 小时 (0-23)\n│ │ ┌──── 日 (1-31)\n│ │ │ ┌── 月 (1-12)\n│ │ │ │ ┌ 星期 (0-7，0和7都是周日)\n│ │ │ │ │\n* * * * * 命令\n```\n\n### 常用示例\n\n```bash\n# 每分钟执行\n* * * * * /path/to/script.sh\n\n# 每小时整点执行\n0 * * * * /path/to/script.sh\n\n# 每天凌晨2点执行\n0 2 * * * /path/to/backup.sh\n\n# 每周一上午9点执行\n0 9 * * 1 /path/to/report.sh\n\n# 每月1号凌晨3点执行\n0 3 1 * * /path/to/monthly.sh\n\n# 每5分钟执行\n*/5 * * * * /path/to/check.sh\n\n# 工作日（周一到周五）上午9点\n0 9 * * 1-5 /path/to/work.sh\n\n# 每小时第15和45分钟执行\n15,45 * * * * /path/to/script.sh\n```\n\n### crontab 命令\n\n```bash\ncrontab -l           # 列出当前用户的定时任务\ncrontab -e           # 编辑定时任务\ncrontab -r           # 删除所有定时任务\ncrontab -u user -l   # 查看指定用户的任务\ncrontab file         # 从文件导入任务\n```\n\n### 特殊时间快捷方式\n\n```bash\n@reboot    # 系统启动时执行\n@yearly    # 每年1月1日 0:00（等同 0 0 1 1 *）\n@monthly   # 每月1日 0:00\n@weekly    # 每周日 0:00\n@daily     # 每天 0:00（等同 @midnight）\n@hourly    # 每小时 0分\n```\n\n### crontab 环境变量\n\n```bash\n# 在 crontab 文件中设置环境变量\nSHELL=/bin/bash\nPATH=/usr/local/bin:/usr/bin:/bin\nMAILTO=admin@example.com\nHOME=/\n\n# 任务输出默认通过邮件发送，可重定向\n0 * * * * /path/to/script.sh >> /var/log/mytask.log 2>&1\n```\n\n## at 一次性任务\n\n`at` 用于安排一次性定时任务：\n\n```bash\n# 在指定时间执行\necho \"/path/to/script.sh\" | at 10:00 AM\necho \"/path/to/script.sh\" | at 2:30 PM tomorrow\necho \"/path/to/script.sh\" | at 10:00 AM next Monday\n\n# 相对时间\necho \"backup.sh\" | at now + 1 hour\necho \"backup.sh\" | at now + 30 minutes\n\n# 交互式输入\nat 10:00 AM\n> /path/to/script.sh\n> Ctrl+D\n\n# 查看任务队列\natq\n\n# 删除任务\natrm 1    # 删除任务编号1\n\n# 查看任务详情\nat -c 1\n```\n\n## 日志轮转 (logrotate)\n\n`logrotate` 自动管理日志文件的轮转、压缩和删除：\n\n### 配置文件\n\n```\n/var/log/myapp.log {\n    daily           # 每天轮转\n    rotate 7        # 保留7份\n    compress        # 压缩旧日志\n    delaycompress   # 延迟一次压缩\n    missingok       # 日志不存在不报错\n    notifempty      # 空日志不轮转\n    create 0644 root root   # 创建新日志的权限\n    postrotate\n        /usr/bin/killall -HUP myapp   # 轮转后重载应用\n    endscript\n}\n```\n\n### 手动执行\n\n```bash\nlogrotate -f /etc/logrotate.conf    # 强制轮转\nlogrotate -d /etc/logrotate.conf    # 调试模式（不实际执行）\n```\n\n## 练习\n\n编写脚本，模拟生成一个 crontab 时间表达式解析器。接收变量 `schedule=\"0 2 * * *\"`，解析并输出其含义：`Runs at 02:00 AM every day`。",
+    "order": 13,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "#!/bin/bash\n# 解析 crontab 时间表达式\nschedule=\"0 2 * * *\"\n",
+    "solution_code": "#!/bin/bash\nschedule=\"0 2 * * *\"\nread min hour day month weekday <<< \"$schedule\"\nif [[ \"$min\" == \"0\" && \"$day\" == \"*\" && \"$month\" == \"*\" && \"$weekday\" == \"*\" ]]; then\n    echo \"Runs at $(printf '%02d' $hour):$(printf '%02d' $min) AM every day\"\nfi",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Runs at 02:00 AM every day",
+        "description": "应解析 0 2 * * * 为每天凌晨2点运行"
+      }
+    ],
+    "hint": "用 read 拆分5个字段，根据各字段值判断执行频率，printf %02d 格式化时间"
+  },
+  {
+    "title": "综合项目 — 自动化部署脚本",
+    "slug": "shell-14-deploy-script",
+    "description": "综合运用所学知识，编写一个完整的自动化部署脚本",
+    "content": "# 综合项目 — 自动化部署脚本\n\n## 项目概述\n\n本关将综合运用前面所学的所有知识，编写一个完整的自动化部署脚本。一个优秀的部署脚本需要包含：\n\n1. **参数解析** — 支持命令行选项\n2. **环境检查** — 验证依赖是否满足\n3. **配置管理** — 读取配置文件\n4. **构建流程** — 编译或打包项目\n5. **部署操作** — 停止服务、更新文件、启动服务\n6. **错误处理** — 失败时回滚\n7. **日志记录** — 记录部署过程\n\n## 参数解析\n\n### 位置参数\n\n```bash\necho \"脚本名: $0\"\necho \"第一个参数: $1\"\necho \"参数数量: $#\"\necho \"所有参数: $@\"\n```\n\n### getopts 解析选项\n\n```bash\nwhile getopts \"e:v:h\" opt; do\n    case $opt in\n        e) env=\"$OPTARG\" ;;\n        v) version=\"$OPTARG\" ;;\n        h) echo \"Usage: $0 [-e env] [-v version]\"; exit 0 ;;\n        ?) echo \"无效选项\"; exit 1 ;;\n    esac\ndone\n```\n\n## 配置文件\n\n```bash\n# 读取配置文件\nif [ -f deploy.conf ]; then\n    source deploy.conf\nelse\n    echo \"配置文件不存在\"\n    exit 1\nfi\n```\n\n## 错误处理与回滚\n\n```bash\nset -e   # 命令失败时退出\nset -u   # 使用未定义变量时退出\nset -o pipefail  # 管道中任何命令失败时退出\n\n# 回滚函数\nrollback() {\n    echo \"部署失败，正在回滚...\"\n    # 恢复备份\n    if [ -d \"$BACKUP_DIR\" ]; then\n        cp -r \"$BACKUP_DIR\"/* \"$DEPLOY_DIR\"/\n    fi\n    # 重启服务\n    systemctl restart myapp\n    echo \"回滚完成\"\n    exit 1\n}\n\ntrap rollback ERR\n```\n\n## 日志函数\n\n```bash\nLOG_FILE=\"/var/log/deploy.log\"\n\nlog() {\n    local level=$1\n    shift\n    local message=\"$*\"\n    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')\n    echo \"[$timestamp] [$level] $message\" | tee -a \"$LOG_FILE\"\n}\n\nlog INFO \"开始部署\"\nlog ERROR \"部署失败\"\n```\n\n## 完整部署脚本框架\n\n```bash\n#!/bin/bash\nset -euo pipefail\n\n# 配置\nAPP_NAME=\"myapp\"\nDEPLOY_DIR=\"/opt/$APP_NAME\"\nBACKUP_DIR=\"/tmp/${APP_NAME}_backup_$(date +%Y%m%d%H%M%S)\"\n\n# 日志函数\nlog() { echo \"[$(date '+%H:%M:%S')] $*\"; }\n\n# 清理函数\ncleanup() { rm -rf \"$BACKUP_DIR\"; }\ntrap cleanup EXIT\n\n# 主流程\nmain() {\n    log \"=== 开始部署 $APP_NAME ===\"\n    \n    # 1. 环境检查\n    log \"检查环境...\"\n    command -v node >/dev/null || { log \"错误: 未安装 Node.js\"; exit 1; }\n    \n    # 2. 备份\n    log \"备份当前版本...\"\n    cp -r \"$DEPLOY_DIR\" \"$BACKUP_DIR\"\n    \n    # 3. 构建\n    log \"构建项目...\"\n    npm run build\n    \n    # 4. 部署\n    log \"部署新版本...\"\n    cp -r dist/* \"$DEPLOY_DIR/\"\n    \n    # 5. 重启\n    log \"重启服务...\"\n    systemctl restart \"$APP_NAME\"\n    \n    log \"=== 部署完成 ===\"\n}\n\nmain \"$@\"\n```\n\n## 练习\n\n编写一个简化版的部署脚本，实现以下功能：\n1. 定义 `deploy` 函数，输出 `Deploying version 1.0.0...`\n2. 定义 `rollback` 函数，输出 `Rolling back...`\n3. 使用 trap 捕获 ERR 信号，出错时调用 rollback\n4. 调用 deploy 函数\n5. 输出 `Deploy completed successfully`",
+    "order": 14,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "#!/bin/bash\n# 自动化部署脚本\n",
+    "solution_code": "#!/bin/bash\nrollback() {\n    echo \"Rolling back...\"\n}\n\ntrap rollback ERR\n\ndeploy() {\n    echo \"Deploying version 1.0.0...\"\n}\n\ndeploy\necho \"Deploy completed successfully\"",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Deploying version 1.0.0...\nDeploy completed successfully",
+        "description": "应按顺序输出部署和完成信息"
+      }
+    ],
+    "hint": "定义 deploy 和 rollback 函数，trap rollback ERR 捕获错误，依次调用 deploy 并输出成功信息"
+  }
+]

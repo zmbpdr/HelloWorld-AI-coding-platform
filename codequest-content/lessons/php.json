@@ -1,0 +1,486 @@
+[
+  {
+    "title": "Hello World",
+    "slug": "php-01-hello-world",
+    "description": "学习PHP基础：标签、echo输出、变量与注释",
+    "content": "# Hello World — PHP入门第一课\n\n## PHP标签\n\nPHP代码必须包含在`<?php ... ?>`标签内。在纯PHP文件中，推荐省略结尾的`?>`标签，避免意外输出空白字符。\n\n```php\n<?php\necho \"Hello, World!\";\n```\n\n## echo 输出\n\n`echo`是PHP最常用的输出语句，可以输出字符串、数字和变量。它不是函数，而是语言结构，因此可以不加括号使用。\n\n```php\n<?php\necho \"你好\";\necho 42;\necho \"Hello\", \" \", \"World\"; // 多参数输出\n```\n\n## 变量\n\nPHP变量以`$`符号开头，无需声明类型，是弱类型语言。变量名区分大小写，必须以字母或下划线开头。\n\n```php\n<?php\n$name = \"PHP\";\n$version = 8;\n$isAwesome = true;\n```\n\n## 注释\n\nPHP支持三种注释方式：\n\n```php\n<?php\n// 单行注释\n# 也是单行注释\n/*\n   多行注释\n   可以跨越多行\n*/\n```\n\n## 练习\n\n编写一个函数`greet()`，接收一个名字参数，返回`\"Hello, {name}!\"`格式的问候字符串。如果没有传入参数，默认返回`\"Hello, World!\"`。\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "<?php\nfunction greet($name = \"World\") {\n    // 在这里编写你的代码\n    return \"\";\n}",
+    "solution_code": "<?php\nfunction greet($name = \"World\") {\n    return \"Hello, {$name}!\";\n}",
+    "test_cases": [
+      {
+        "input": "greet()",
+        "expected_output": "Hello, World!",
+        "description": "greet() 无参数时应返回 Hello, World!"
+      },
+      {
+        "input": "greet(\"PHP\")",
+        "expected_output": "Hello, PHP!",
+        "description": "greet('PHP') 应返回 Hello, PHP!"
+      }
+    ],
+    "hint": "使用双引号字符串中的 {$name} 语法来插入变量，或使用 . 拼接字符串"
+  },
+  {
+    "title": "数据类型",
+    "slug": "php-02-data-types",
+    "description": "学习PHP数据类型：标量、复合、特殊类型及类型转换",
+    "content": "# 数据类型 — PHP的类型系统\n\n## 标量类型\n\nPHP有4种标量类型：\n\n- **bool** — 布尔值：`true`或`false`\n- **int** — 整数：`42`、`-7`、`0xFF`\n- **float** — 浮点数：`3.14`、`1.2e3`\n- **string** — 字符串：`\"hello\"`、`'world'`\n\n```php\n<?php\n$boolVal = true;\n$intVal = 42;\n$floatVal = 3.14;\n$strVal = \"Hello\";\n```\n\n## 复合类型\n\n- **array** — 数组：`[1, 2, 3]`或`['key' => 'value']`\n- **object** — 对象：通过`new`创建\n- **callable** — 可调用类型\n- **iterable** — 可遍历类型\n\n## 特殊类型\n\n- **null** — 表示变量没有值\n- **resource** — 外部资源句柄（如数据库连接）\n\n## 类型转换\n\nPHP支持显式类型转换和自动类型转换：\n\n```php\n<?php\n$str = \"42\";\n$num = (int)$str;      // 显式转换\n$num = intval($str);   // 函数转换\n```\n\n## 类型检测函数\n\n```php\n<?php\nis_int($var);     // 是否为整数\nis_string($var);  // 是否为字符串\nis_array($var);   // 是否为数组\ngettype($var);    // 获取类型名称\n```\n\n## 练习\n\n编写函数`describeType($value)`，返回值的类型描述字符串，格式为`\"{value} is {type}\"`。例如`describeType(42)`返回`\"42 is integer\"`。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "<?php\nfunction describeType($value) {\n    // 在这里编写你的代码\n    return \"\";\n}",
+    "solution_code": "<?php\nfunction describeType($value) {\n    $type = gettype($value);\n    if ($type === 'double') {\n        $type = 'double';\n    }\n    return \"{$value} is {$type}\";\n}",
+    "test_cases": [
+      {
+        "input": "describeType(42)",
+        "expected_output": "42 is integer",
+        "description": "describeType(42) 应返回 '42 is integer'"
+      },
+      {
+        "input": "describeType(\"hello\")",
+        "expected_output": "hello is string",
+        "description": "describeType('hello') 应返回 'hello is string'"
+      },
+      {
+        "input": "describeType(true)",
+        "expected_output": "1 is boolean",
+        "description": "describeType(true) 应返回 '1 is boolean'"
+      }
+    ],
+    "hint": "使用 gettype() 函数获取变量类型名称，然后用双引号字符串插入变量"
+  },
+  {
+    "title": "运算符与流程控制",
+    "slug": "php-03-operators-control-flow",
+    "description": "学习PHP运算符与流程控制：算术/比较/逻辑运算符、if/switch/循环",
+    "content": "# 运算符与流程控制\n\n## 算术运算符\n\n```php\n<?php\n$a + $b;   // 加法\n$a - $b;   // 减法\n$a * $b;   // 乘法\n$a / $b;   // 除法\n$a % $b;   // 取模\n$a ** $b;  // 幂运算\n```\n\n## 比较运算符\n\n```php\n<?php\n$a == $b;   // 等于（弱比较）\n$a === $b;  // 全等（强比较，类型也必须相同）\n$a != $b;   // 不等于\n$a !== $b;  // 不全等\n$a > $b;    // 大于\n$a <=> $b;  // 太空船运算符：-1, 0, 1\n```\n\n> **重要**：始终优先使用`===`而非`==`，避免弱类型比较的陷阱。\n\n## 逻辑运算符\n\n```php\n<?php\n$a && $b;   // 逻辑与\n$a || $b;   // 逻辑或\n!$a;        // 逻辑非\n```\n\n## if / elseif / else\n\n```php\n<?php\nif ($score >= 90) {\n    echo \"优秀\";\n} elseif ($score >= 60) {\n    echo \"及格\";\n} else {\n    echo \"不及格\";\n}\n```\n\n## switch\n\n```php\n<?php\nswitch ($color) {\n    case 'red':\n        echo \"红色\";\n        break;\n    case 'blue':\n        echo \"蓝色\";\n        break;\n    default:\n        echo \"未知\";\n}\n```\n\n## 循环\n\n```php\n<?php\n// for 循环\nfor ($i = 0; $i < 10; $i++) { }\n\n// while 循环\nwhile ($cond) { }\n\n// do-while 循环\ndo { } while ($cond);\n\n// foreach 循环（遍历数组）\nforeach ($arr as $key => $value) { }\n```\n\n## 练习\n\n编写函数`fizzBuzz($n)`，对1到$n$的数字：\n- 能同时被3和5整除返回`\"FizzBuzz\"`\n- 能被3整除返回`\"Fizz\"`\n- 能被5整除返回`\"Buzz\"`\n- 否则返回数字本身的字符串形式\n## 运算符优先级\n理解运算符的优先级对编写正确的表达式至关重要。当不确定时，使用括号 `()` 明确优先级。\n\n## 常见陷阱\n- 整数除法 vs 浮点除法（不同语言行为不同）\n- 取余运算中负数的处理\n- 比较浮点数时不要用 `==`（精度问题）\n- 逻辑运算符的短路求值特性\n",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "<?php\nfunction fizzBuzz($n) {\n    // 在这里编写你的代码\n    return \"\";\n}",
+    "solution_code": "<?php\nfunction fizzBuzz($n) {\n    if ($n % 15 === 0) {\n        return \"FizzBuzz\";\n    } elseif ($n % 3 === 0) {\n        return \"Fizz\";\n    } elseif ($n % 5 === 0) {\n        return \"Buzz\";\n    } else {\n        return (string)$n;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "fizzBuzz(15)",
+        "expected_output": "FizzBuzz",
+        "description": "fizzBuzz(15) 应返回 FizzBuzz"
+      },
+      {
+        "input": "fizzBuzz(9)",
+        "expected_output": "Fizz",
+        "description": "fizzBuzz(9) 应返回 Fizz"
+      },
+      {
+        "input": "fizzBuzz(10)",
+        "expected_output": "Buzz",
+        "description": "fizzBuzz(10) 应返回 Buzz"
+      },
+      {
+        "input": "fizzBuzz(7)",
+        "expected_output": "7",
+        "description": "fizzBuzz(7) 应返回 '7'"
+      }
+    ],
+    "hint": "先判断能否同时被3和5整除（即被15整除），再分别判断3和5，最后返回数字字符串"
+  },
+  {
+    "title": "数组",
+    "slug": "php-04-arrays",
+    "description": "学习PHP数组：索引数组、关联数组、多维数组及常用数组函数",
+    "content": "# 数组 — PHP最强大的数据结构\n\n## 索引数组\n\nPHP的索引数组是有序映射，默认从0开始：\n\n```php\n<?php\n$fruits = ['apple', 'banana', 'cherry'];\necho $fruits[0]; // apple\n```\n\n## 关联数组\n\n使用自定义键名：\n\n```php\n<?php\n$person = [\n    'name' => 'Alice',\n    'age' => 25,\n    'city' => 'Beijing'\n];\necho $person['name']; // Alice\n```\n\n## 多维数组\n\n数组中的元素可以是另一个数组：\n\n```php\n<?php\n$students = [\n    ['name' => 'Alice', 'score' => 95],\n    ['name' => 'Bob', 'score' => 87]\n];\necho $students[0]['name']; // Alice\n```\n\n## 常用数组函数\n\n```php\n<?php\ncount($arr);           // 元素个数\narray_push($arr, $v);  // 末尾添加\narray_pop($arr);       // 弹出末尾\narray_merge($a, $b);   // 合并数组\nin_array($val, $arr);  // 是否存在\narray_keys($arr);      // 获取所有键\narray_values($arr);    // 获取所有值\nsort($arr);            // 排序（修改原数组）\narray_map($fn, $arr);  // 映射\narray_filter($arr, $fn); // 过滤\n```\n\n## 练习\n\n编写函数`getTopStudents($students, $minScore)`，接收学生数组（每个元素包含`name`和`score`）和最低分数，返回分数不低于`$minScore`的学生姓名数组，按分数降序排列。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "<?php\nfunction getTopStudents($students, $minScore) {\n    // 在这里编写你的代码\n    return [];\n}",
+    "solution_code": "<?php\nfunction getTopStudents($students, $minScore) {\n    $filtered = array_filter($students, function($s) use ($minScore) {\n        return $s['score'] >= $minScore;\n    });\n    usort($filtered, function($a, $b) {\n        return $b['score'] - $a['score'];\n    });\n    return array_map(function($s) {\n        return $s['name'];\n    }, $filtered);\n}",
+    "test_cases": [
+      {
+        "input": "getTopStudents([['name'=>'Alice','score'=>95],['name'=>'Bob','score'=>72],['name'=>'Carol','score'=>88]], 80)",
+        "expected_output": "[\"Alice\",\"Carol\"]",
+        "description": "分数>=80的学生按降序返回姓名"
+      },
+      {
+        "input": "getTopStudents([['name'=>'Dave','score'=>60],['name'=>'Eve','score'=>90]], 70)",
+        "expected_output": "[\"Eve\"]",
+        "description": "分数>=70的学生按降序返回姓名"
+      }
+    ],
+    "hint": "使用 array_filter 过滤，usort 按分数降序排序，array_map 提取姓名"
+  },
+  {
+    "title": "函数",
+    "slug": "php-05-functions",
+    "description": "学习PHP函数：定义、参数、返回值与变量作用域",
+    "content": "# 函数 — 代码复用的基石\n\n## 函数定义\n\n```php\n<?php\nfunction add(int $a, int $b): int {\n    return $a + $b;\n}\n```\n\nPHP 7+支持类型声明（参数类型和返回值类型），有助于减少bug。\n\n## 参数\n\n### 默认参数\n\n```php\n<?php\nfunction greet($name = 'Guest') {\n    return \"Hello, {$name}!\";\n}\n```\n\n### 可变参数\n\n```php\n<?php\nfunction sum(...$numbers) {\n    return array_sum($numbers);\n}\necho sum(1, 2, 3, 4); // 10\n```\n\n### 引用传参\n\n```php\n<?php\nfunction increment(&$num) {\n    $num++;\n}\n$val = 5;\nincrement($val); // $val 变为 6\n```\n\n## 返回值\n\n函数可以返回任意类型，也可以返回`null`（没有return语句时）。PHP 7+支持返回值类型声明：\n\n```php\n<?php\nfunction findUser(int $id): ?array {\n    // 返回数组或 null\n}\n```\n\n## 变量作用域\n\nPHP函数内的变量是局部变量，不能直接访问全局变量。访问全局变量需要使用`global`关键字或`$GLOBALS`数组：\n\n```php\n<?php\n$counter = 0;\nfunction increment() {\n    global $counter;\n    $counter++;\n}\n```\n\n## 匿名函数与闭包\n\n```php\n<?php\n$multiply = function($a, $b) {\n    return $a * $b;\n};\n\n// 闭包使用 use 传入外部变量\n$factor = 3;\n$triple = function($n) use ($factor) {\n    return $n * $factor;\n};\n```\n\n## 箭头函数（PHP 7.4+）\n\n```php\n<?php\n$double = fn($n) => $n * 2;\n```\n\n## 练习\n\n编写函数`calculate($operation, ...$numbers)`，根据操作符对数字进行计算：\n- `\"sum\"` — 返回所有数字之和\n- `\"avg\"` — 返回所有数字的平均值（保留2位小数）\n- `\"max\"` — 返回最大值\n- `\"min\"` — 返回最小值\n如果操作符无效，返回`null`。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "<?php\nfunction calculate($operation, ...$numbers) {\n    // 在这里编写你的代码\n    return null;\n}",
+    "solution_code": "<?php\nfunction calculate($operation, ...$numbers) {\n    if (empty($numbers)) {\n        return $operation === 'sum' ? 0 : null;\n    }\n    switch ($operation) {\n        case 'sum':\n            return array_sum($numbers);\n        case 'avg':\n            return round(array_sum($numbers) / count($numbers), 2);\n        case 'max':\n            return max($numbers);\n        case 'min':\n            return min($numbers);\n        default:\n            return null;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "calculate('sum', 1, 2, 3, 4, 5)",
+        "expected_output": "15",
+        "description": "calculate('sum', 1,2,3,4,5) 应返回 15"
+      },
+      {
+        "input": "calculate('avg', 10, 20, 30)",
+        "expected_output": "20",
+        "description": "calculate('avg', 10,20,30) 应返回 20"
+      },
+      {
+        "input": "calculate('max', 3, 7, 2, 9, 1)",
+        "expected_output": "9",
+        "description": "calculate('max', 3,7,2,9,1) 应返回 9"
+      },
+      {
+        "input": "calculate('unknown', 1, 2)",
+        "expected_output": "",
+        "description": "calculate('unknown', 1,2) 应返回 null（空输出）"
+      }
+    ],
+    "hint": "使用 switch 语句匹配操作符，用 ...$numbers 接收可变参数，array_sum/max/min 是内置函数"
+  },
+  {
+    "title": "字符串处理",
+    "slug": "php-06-strings",
+    "description": "学习PHP字符串：单双引号区别、拼接与常用字符串函数",
+    "content": "# 字符串处理 — PHP的文本操作利器\n\n## 单引号与双引号\n\n单引号字符串中的变量和转义字符（除`\\'`和`\\\\`）不会被解析：\n\n```php\n<?php\n$name = 'World';\necho 'Hello, $name';   // Hello, $name\necho \"Hello, $name\";   // Hello, World\n```\n\n双引号支持变量解析和转义字符：\n\n```php\n<?php\necho \"Hello, {$name}!\";  // 推荐用花括号包裹变量\necho \"Line1\\nLine2\";     // \\n 解析为换行\n```\n\n## 字符串拼接\n\nPHP使用`.`运算符拼接字符串（不是`+`）：\n\n```php\n<?php\n$greeting = 'Hello' . ', ' . 'World';\n$greeting .= '!'; // 追加\n```\n\n## 常用字符串函数\n\n```php\n<?php\nstrlen($str);              // 字符串长度\nstrpos($str, $needle);     // 查找子串位置\nsubstr($str, $start, $len);// 截取子串\nstr_replace($old, $new, $str); // 替换\nstrtolower($str);          // 转小写\nstrtoupper($str);          // 转大写\ntrim($str);                // 去除首尾空白\nexplode(',', $str);        // 分割为数组\nimplode(',', $arr);        // 数组拼接为字符串\nstr_repeat($str, $n);      // 重复字符串\nstrrev($str);              // 反转字符串\nucfirst($str);             // 首字母大写\nnl2br($str);               // 换行转<br>\n```\n\n## 多字节字符串\n\n处理中文等多字节字符时，应使用`mb_`系列函数：\n\n```php\n<?php\nmb_strlen($str, 'UTF-8');\nmb_substr($str, 0, 3, 'UTF-8');\n```\n\n## 练习\n\n编写函数`formatName($name)`，将名字格式化为首字母大写、其余小写的形式。然后编写函数`createSlug($title)`，将标题转换为URL slug：小写、空格替换为连字符、只保留字母数字和连字符。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "<?php\nfunction createSlug($title) {\n    // 在这里编写你的代码\n    return \"\";\n}",
+    "solution_code": "<?php\nfunction createSlug($title) {\n    $slug = strtolower($title);\n    $slug = str_replace(' ', '-', $slug);\n    $slug = preg_replace('/[^a-z0-9\\-]/', '', $slug);\n    $slug = preg_replace('/\\-+/', '-', $slug);\n    $slug = trim($slug, '-');\n    return $slug;\n}",
+    "test_cases": [
+      {
+        "input": "createSlug('Hello World')",
+        "expected_output": "hello-world",
+        "description": "createSlug('Hello World') 应返回 hello-world"
+      },
+      {
+        "input": "createSlug('PHP is Awesome!')",
+        "expected_output": "php-is-awesome",
+        "description": "createSlug('PHP is Awesome!') 应返回 php-is-awesome"
+      },
+      {
+        "input": "createSlug('  Learn   PHP  ')",
+        "expected_output": "learn-php",
+        "description": "createSlug('  Learn   PHP  ') 应返回 learn-php"
+      }
+    ],
+    "hint": "使用 strtolower 转小写，str_replace 替换空格，preg_replace 移除非法字符和重复连字符"
+  },
+  {
+    "title": "面向对象",
+    "slug": "php-07-oop-basics",
+    "description": "学习PHP面向对象：class、属性、方法与构造函数",
+    "content": "# 面向对象 — PHP的OOP基础\n\n## 类的定义\n\n```php\n<?php\nclass User {\n    // 属性\n    public string $name;\n    private int $age;\n\n    // 构造函数\n    public function __construct(string $name, int $age) {\n        $this->name = $name;\n        $this->age = $age;\n    }\n\n    // 方法\n    public function greet(): string {\n        return \"Hi, I'm {$this->name}\";\n    }\n}\n\n$user = new User('Alice', 25);\necho $user->greet();\n```\n\n## 访问修饰符\n\n- **public** — 任何地方都可访问\n- **protected** — 仅本类及子类可访问\n- **private** — 仅本类可访问\n\n## 构造函数与析构函数\n\n```php\n<?php\nclass MyClass {\n    public function __construct() {\n        // 对象创建时调用\n    }\n\n    public function __destruct() {\n        // 对象销毁时调用\n    }\n}\n```\n\n## 静态属性与方法\n\n```php\n<?php\nclass MathHelper {\n    public static function square(int $n): int {\n        return $n * $n;\n    }\n}\necho MathHelper::square(5); // 25\n```\n\n## 魔术方法\n\n- `__construct()` — 构造函数\n- `__destruct()` — 析构函数\n- `__get()` / `__set()` — 属性访问拦截\n- `__toString()` — 对象转字符串\n- `__clone()` — 对象克隆时调用\n\n## 练习\n\n编写一个`BankAccount`类，包含私有属性`$balance`，构造函数接收初始余额。实现方法：\n- `deposit($amount)` — 存款，返回新余额\n- `withdraw($amount)` — 取款（余额不足返回false），返回新余额或false\n- `getBalance()` — 获取余额",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "<?php\nclass BankAccount {\n    private float $balance;\n\n    public function __construct(float $initialBalance) {\n        // 在这里编写你的代码\n    }\n\n    public function deposit(float $amount): float {\n        // 在这里编写你的代码\n        return 0;\n    }\n\n    public function withdraw(float $amount) {\n        // 在这里编写你的代码\n        return 0;\n    }\n\n    public function getBalance(): float {\n        // 在这里编写你的代码\n        return 0;\n    }\n}",
+    "solution_code": "<?php\nclass BankAccount {\n    private float $balance;\n\n    public function __construct(float $initialBalance) {\n        $this->balance = $initialBalance;\n    }\n\n    public function deposit(float $amount): float {\n        $this->balance += $amount;\n        return $this->balance;\n    }\n\n    public function withdraw(float $amount) {\n        if ($amount > $this->balance) {\n            return false;\n        }\n        $this->balance -= $amount;\n        return $this->balance;\n    }\n\n    public function getBalance(): float {\n        return $this->balance;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "$acc = new BankAccount(100); echo $acc->getBalance();",
+        "expected_output": "100",
+        "description": "初始余额应为100"
+      },
+      {
+        "input": "$acc = new BankAccount(100); echo $acc->deposit(50);",
+        "expected_output": "150",
+        "description": "存入50后余额应为150"
+      },
+      {
+        "input": "$acc = new BankAccount(100); var_export($acc->withdraw(30));",
+        "expected_output": "70",
+        "description": "取出30后余额应为70"
+      },
+      {
+        "input": "$acc = new BankAccount(50); var_export($acc->withdraw(100));",
+        "expected_output": "false",
+        "description": "余额不足取款应返回false"
+      }
+    ],
+    "hint": "在构造函数中用 $this->balance 赋值，withdraw 中先判断余额是否充足"
+  },
+  {
+    "title": "继承与Trait",
+    "slug": "php-08-inheritance-traits",
+    "description": "学习PHP继承与Trait：extends、abstract、interface与trait",
+    "content": "# 继承与Trait — 代码复用的进阶\n\n## 继承（extends）\n\n```php\n<?php\nclass Animal {\n    protected string $name;\n\n    public function __construct(string $name) {\n        $this->name = $name;\n    }\n\n    public function speak(): string {\n        return \"{$this->name} makes a sound\";\n    }\n}\n\nclass Dog extends Animal {\n    public function speak(): string {\n        return \"{$this->name} barks\";\n    }\n}\n```\n\n## 抽象类（abstract）\n\n抽象类不能被实例化，子类必须实现所有抽象方法：\n\n```php\n<?php\nabstract class Shape {\n    abstract public function area(): float;\n\n    public function describe(): string {\n        return \"Area: \" . $this->area();\n    }\n}\n\nclass Circle extends Shape {\n    public function __construct(private float $radius) {}\n\n    public function area(): float {\n        return pi() * $this->radius ** 2;\n    }\n}\n```\n\n## 接口（interface）\n\n接口定义方法签名，类通过`implements`实现：\n\n```php\n<?php\ninterface Loggable {\n    public function log(string $message): void;\n}\n\nclass FileLogger implements Loggable {\n    public function log(string $message): void {\n        file_put_contents('app.log', $message . PHP_EOL, FILE_APPEND);\n    }\n}\n```\n\n## Trait\n\nTrait是PHP独有的代码复用机制，类似于\"可复制粘贴\"的方法集：\n\n```php\n<?php\ntrait Timestampable {\n    private ?DateTime $createdAt = null;\n\n    public function setCreatedAt(): void {\n        $this->createdAt = new DateTime();\n    }\n\n    public function getCreatedAt(): ?DateTime {\n        return $this->createdAt;\n    }\n}\n\nclass Article {\n    use Timestampable;\n}\n```\n\n## 练习\n\n编写抽象类`Shape`和它的子类`Rectangle`、`Triangle`。`Shape`有抽象方法`area()`和具体方法`describe()`。再编写接口`Drawable`（方法`draw()`），让两个子类实现它。",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "<?php\nabstract class Shape {\n    abstract public function area(): float;\n\n    public function describe(): string {\n        return \"Area: \" . $this->area();\n    }\n}\n\ninterface Drawable {\n    public function draw(): string;\n}\n\nclass Rectangle extends Shape implements Drawable {\n    // 在这里编写你的代码\n}\n\nclass Triangle extends Shape implements Drawable {\n    // 在这里编写你的代码\n}",
+    "solution_code": "<?php\nabstract class Shape {\n    abstract public function area(): float;\n\n    public function describe(): string {\n        return \"Area: \" . $this->area();\n    }\n}\n\ninterface Drawable {\n    public function draw(): string;\n}\n\nclass Rectangle extends Shape implements Drawable {\n    public function __construct(private float $width, private float $height) {}\n\n    public function area(): float {\n        return $this->width * $this->height;\n    }\n\n    public function draw(): string {\n        return \"Drawing Rectangle\";\n    }\n}\n\nclass Triangle extends Shape implements Drawable {\n    public function __construct(private float $base, private float $height) {}\n\n    public function area(): float {\n        return 0.5 * $this->base * $this->height;\n    }\n\n    public function draw(): string {\n        return \"Drawing Triangle\";\n    }\n}",
+    "test_cases": [
+      {
+        "input": "$r = new Rectangle(4, 5); echo $r->area();",
+        "expected_output": "20",
+        "description": "矩形4x5面积应为20"
+      },
+      {
+        "input": "$t = new Triangle(6, 4); echo $t->area();",
+        "expected_output": "12",
+        "description": "三角形底6高4面积应为12"
+      },
+      {
+        "input": "$r = new Rectangle(3, 7); echo $r->describe();",
+        "expected_output": "Area: 21",
+        "description": "矩形describe()应返回 'Area: 21'"
+      },
+      {
+        "input": "$t = new Triangle(6, 4); echo $t->draw();",
+        "expected_output": "Drawing Triangle",
+        "description": "Triangle draw() 应返回 'Drawing Triangle'"
+      }
+    ],
+    "hint": "Rectangle面积=宽×高，Triangle面积=0.5×底×高，实现Drawable接口的draw()方法"
+  },
+  {
+    "title": "命名空间与自动加载",
+    "slug": "php-09-namespaces-autoloading",
+    "description": "学习PHP命名空间、PSR-4自动加载与Composer",
+    "content": "# 命名空间与自动加载 — 现代PHP项目组织\n\n## 命名空间（namespace）\n\n命名空间用于解决类名冲突，类似于文件系统的目录：\n\n```php\n<?php\nnamespace App\\Models;\n\nclass User {\n    // 完整类名：App\\Models\\User\n}\n```\n\n### 使用命名空间中的类\n\n```php\n<?php\nuse App\\Models\\User;\nuse App\\Services\\{UserService, EmailService};\n\n$user = new User();\n```\n\n## PSR-4 自动加载规范\n\nPSR-4规定：类的完全限定名与文件路径对应。例如：\n\n- 类`App\\Models\\User` → 文件`src/Models/User.php`\n- 类`App\\Services\\UserService` → 文件`src/Services/UserService.php`\n\n## Composer 自动加载配置\n\n在`composer.json`中配置：\n\n```json\n{\n    \"autoload\": {\n        \"psr-4\": {\n            \"App\\\\\": \"src/\"\n        }\n    }\n}\n```\n\n运行`composer dump-autoload`生成自动加载文件。\n\n## 自定义自动加载\n\n理解原理，手动实现简单的自动加载器：\n\n```php\n<?php\nspl_autoload_register(function (string $class) {\n    $prefix = 'App\\\\';\n    $baseDir = __DIR__ . '/src/';\n\n    if (strpos($class, $prefix) === 0) {\n        $relativeClass = substr($class, strlen($prefix));\n        $file = $baseDir . str_replace('\\\\', '/', $relativeClass) . '.php';\n        if (file_exists($file)) {\n            require $file;\n        }\n    }\n});\n```\n\n## 练习\n\n编写函数`resolveClassPath(string $className, string $prefix, string $baseDir)`，根据PSR-4规范将类名转换为文件路径。例如：\n- `resolveClassPath('App\\\\Models\\\\User', 'App\\\\', 'src/')` → `src/Models/User.php`\n- 如果类名不以prefix开头，返回`null`",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "<?php\nfunction resolveClassPath(string $className, string $prefix, string $baseDir): ?string {\n    // 在这里编写你的代码\n    return null;\n}",
+    "solution_code": "<?php\nfunction resolveClassPath(string $className, string $prefix, string $baseDir): ?string {\n    if (strpos($className, $prefix) !== 0) {\n        return null;\n    }\n    $relativeClass = substr($className, strlen($prefix));\n    $relativePath = str_replace('\\\\', '/', $relativeClass);\n    return $baseDir . $relativePath . '.php';\n}",
+    "test_cases": [
+      {
+        "input": "resolveClassPath('App\\\\Models\\\\User', 'App\\\\', 'src/')",
+        "expected_output": "src/Models/User.php",
+        "description": "App\\Models\\User 应映射到 src/Models/User.php"
+      },
+      {
+        "input": "resolveClassPath('App\\\\Services\\\\EmailService', 'App\\\\', 'src/')",
+        "expected_output": "src/Services/EmailService.php",
+        "description": "App\\Services\\EmailService 应映射到 src/Services/EmailService.php"
+      },
+      {
+        "input": "resolveClassPath('Vendor\\\\Lib\\\\Helper', 'App\\\\', 'src/')",
+        "expected_output": "",
+        "description": "不匹配前缀应返回 null"
+      }
+    ],
+    "hint": "用 strpos 检查前缀，substr 截取相对类名，str_replace 将反斜杠转为斜杠"
+  },
+  {
+    "title": "错误与异常",
+    "slug": "php-10-errors-exceptions",
+    "description": "学习PHP错误与异常处理：try/catch、自定义异常与错误处理",
+    "content": "# 错误与异常 — 健壮代码的保障\n\n## 异常处理（try/catch）\n\n```php\n<?php\ntry {\n    $result = riskyOperation();\n} catch (InvalidArgumentException $e) {\n    echo \"参数错误: \" . $e->getMessage();\n} catch (RuntimeException $e) {\n    echo \"运行时错误: \" . $e->getMessage();\n} finally {\n    echo \"无论如何都执行\";\n}\n```\n\n## 自定义异常\n\n```php\n<?php\nclass ValidationException extends RuntimeException {\n    private array $errors;\n\n    public function __construct(array $errors, string $message = '') {\n        parent::__construct($message ?: 'Validation failed');\n        $this->errors = $errors;\n    }\n\n    public function getErrors(): array {\n        return $this->errors;\n    }\n}\n```\n\n## 错误转异常\n\nPHP的Error和Exception是不同的体系。PHP 7+中，大多数错误以`Error`类抛出，可以被catch捕获：\n\n```php\n<?php\ntry {\n    $result = 1 / 0;\n} catch (DivisionByZeroError $e) {\n    echo \"不能除以零\";\n}\n```\n\n## set_error_handler\n\n将传统错误转换为异常：\n\n```php\n<?php\nset_error_handler(function ($severity, $message, $file, $line) {\n    throw new ErrorException($message, 0, $severity, $file, $line);\n});\n```\n\n## set_exception_handler\n\n全局异常处理器，处理未被捕获的异常：\n\n```php\n<?php\nset_exception_handler(function (Throwable $e) {\n    error_log($e->getMessage());\n    echo \"系统错误，请稍后重试\";\n});\n```\n\n## 练习\n\n编写函数`safeDivide($a, $b)`，进行安全除法运算。如果`$b`为0，抛出`InvalidArgumentException`并包含消息`\"Division by zero\"`。编写函数`parsePositiveInt($value)`，将值转为正整数，如果值不是正整数则抛出`InvalidArgumentException`。",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "<?php\nfunction safeDivide($a, $b) {\n    // 在这里编写你的代码\n    return 0;\n}\n\nfunction parsePositiveInt($value): int {\n    // 在这里编写你的代码\n    return 0;\n}",
+    "solution_code": "<?php\nfunction safeDivide($a, $b) {\n    if ($b == 0) {\n        throw new InvalidArgumentException(\"Division by zero\");\n    }\n    return $a / $b;\n}\n\nfunction parsePositiveInt($value): int {\n    $intVal = filter_var($value, FILTER_VALIDATE_INT);\n    if ($intVal === false || $intVal <= 0) {\n        throw new InvalidArgumentException(\"Value must be a positive integer\");\n    }\n    return $intVal;\n}",
+    "test_cases": [
+      {
+        "input": "echo safeDivide(10, 2);",
+        "expected_output": "5",
+        "description": "safeDivide(10, 2) 应返回 5"
+      },
+      {
+        "input": "try { safeDivide(10, 0); } catch (InvalidArgumentException $e) { echo $e->getMessage(); }",
+        "expected_output": "Division by zero",
+        "description": "除以零应抛出 InvalidArgumentException"
+      },
+      {
+        "input": "echo parsePositiveInt('42');",
+        "expected_output": "42",
+        "description": "parsePositiveInt('42') 应返回 42"
+      },
+      {
+        "input": "try { parsePositiveInt(-5); } catch (InvalidArgumentException $e) { echo $e->getMessage(); }",
+        "expected_output": "Value must be a positive integer",
+        "description": "负数应抛出异常"
+      }
+    ],
+    "hint": "使用 throw new InvalidArgumentException() 抛出异常，filter_var 配合 FILTER_VALIDATE_INT 验证整数"
+  },
+  {
+    "title": "文件与表单",
+    "slug": "php-11-files-forms",
+    "description": "学习PHP文件操作与表单处理：文件读写、上传与验证",
+    "content": "# 文件与表单 — Web开发的核心交互\n\n## 文件读写\n\n### 读取文件\n\n```php\n<?php\n// 读取整个文件\n$content = file_get_contents('data.txt');\n\n// 逐行读取\n$lines = file('data.txt', FILE_IGNORE_NEW_LINES);\n\n// 使用文件句柄\n$handle = fopen('data.txt', 'r');\nwhile (($line = fgets($handle)) !== false) {\n    echo $line;\n}\nfclose($handle);\n```\n\n### 写入文件\n\n```php\n<?php\nfile_put_contents('output.txt', $data);          // 覆盖写入\nfile_put_contents('output.txt', $data, FILE_APPEND); // 追加写入\n```\n\n## 表单处理\n\n### 接收表单数据\n\n```php\n<?php\n$name = $_POST['name'] ?? '';\n$email = $_GET['email'] ?? '';\n```\n\n### 数据验证\n\n```php\n<?php\nfunction validateInput(array $data): array {\n    $errors = [];\n    if (empty($data['name'])) {\n        $errors[] = '姓名不能为空';\n    }\n    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {\n        $errors[] = '邮箱格式无效';\n    }\n    return $errors;\n}\n```\n\n## 文件上传\n\n```php\n<?php\nif ($_SERVER['REQUEST_METHOD'] === 'POST') {\n    $file = $_FILES['avatar'];\n    if ($file['error'] === UPLOAD_ERR_OK) {\n        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);\n        $allowed = ['jpg', 'png', 'gif'];\n        if (in_array($ext, $allowed)) {\n            move_uploaded_file($file['tmp_name'], 'uploads/' . $file['name']);\n        }\n    }\n}\n```\n\n## 练习\n\n编写函数`validateFormData(array $data)`，验证表单数据：\n- `name` — 必填，长度2-50\n- `email` — 必填，合法邮箱格式\n- `age` — 可选，如果提供必须是18-120之间的整数\n返回错误数组，无错误返回空数组。",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "<?php\nfunction validateFormData(array $data): array {\n    // 在这里编写你的代码\n    return [];\n}",
+    "solution_code": "<?php\nfunction validateFormData(array $data): array {\n    $errors = [];\n\n    // name 验证\n    $name = trim($data['name'] ?? '');\n    if (empty($name)) {\n        $errors[] = 'Name is required';\n    } elseif (mb_strlen($name) < 2 || mb_strlen($name) > 50) {\n        $errors[] = 'Name must be 2-50 characters';\n    }\n\n    // email 验证\n    $email = trim($data['email'] ?? '');\n    if (empty($email)) {\n        $errors[] = 'Email is required';\n    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        $errors[] = 'Invalid email format';\n    }\n\n    // age 验证（可选）\n    if (isset($data['age']) && $data['age'] !== '') {\n        $age = filter_var($data['age'], FILTER_VALIDATE_INT);\n        if ($age === false || $age < 18 || $age > 120) {\n            $errors[] = 'Age must be between 18 and 120';\n        }\n    }\n\n    return $errors;\n}",
+    "test_cases": [
+      {
+        "input": "echo json_encode(validateFormData(['name'=>'Alice','email'=>'alice@example.com','age'=>25]));",
+        "expected_output": "[]",
+        "description": "合法数据应返回空错误数组"
+      },
+      {
+        "input": "echo json_encode(validateFormData(['name'=>'','email'=>'invalid','age'=>15]));",
+        "expected_output": "[\"Name is required\",\"Invalid email format\",\"Age must be between 18 and 120\"]",
+        "description": "多个字段无效时应返回所有错误"
+      },
+      {
+        "input": "echo json_encode(validateFormData(['name'=>'Alice','email'=>'alice@example.com']));",
+        "expected_output": "[]",
+        "description": "age可选，不提供时不应报错"
+      }
+    ],
+    "hint": "用 empty 检查必填，mb_strlen 检查长度，filter_var 配合 FILTER_VALIDATE_EMAIL 和 FILTER_VALIDATE_INT 验证格式"
+  },
+  {
+    "title": "会话与Cookie",
+    "slug": "php-12-sessions-cookies",
+    "description": "学习PHP会话与Cookie：session_start、$_SESSION与安全实践",
+    "content": "# 会话与Cookie — 用户状态管理\n\n## Cookie\n\nCookie是存储在客户端的小段数据：\n\n```php\n<?php\n// 设置Cookie（必须在输出之前）\nsetcookie('username', 'Alice', time() + 3600, '/', '', true, true);\n// 参数：名称、值、过期时间、路径、域名、仅HTTPS、仅HTTP\n\n// 读取Cookie\n$username = $_COOKIE['username'] ?? '';\n\n// 删除Cookie\nsetcookie('username', '', time() - 3600);\n```\n\n## Session\n\nSession数据存储在服务器端，通过Session ID关联客户端：\n\n```php\n<?php\n// 启动会话（必须在输出之前）\nsession_start();\n\n// 设置Session数据\n$_SESSION['user_id'] = 42;\n$_SESSION['username'] = 'Alice';\n\n// 读取Session\n$userId = $_SESSION['user_id'] ?? null;\n\n// 删除单个Session变量\nunset($_SESSION['user_id']);\n\n// 销毁整个会话\nsession_destroy();\n```\n\n## 安全实践\n\n### Cookie安全\n- 始终设置`HttpOnly`标志，防止XSS窃取Cookie\n- 在HTTPS环境下设置`Secure`标志\n- 使用`SameSite`属性防止CSRF：\n\n```php\n<?php\nsetcookie('token', $token, [\n    'expires' => time() + 3600,\n    'path' => '/',\n    'secure' => true,\n    'httponly' => true,\n    'samesite' => 'Strict'\n]);\n```\n\n### Session安全\n- 使用`session_regenerate_id()`防止会话固定攻击\n- 设置合理的Session过期时间\n- 不要在Session中存储敏感信息\n\n## 练习\n\n编写函数`createSecureToken($userId, $secret)`，生成一个简单的认证token。格式为`base64($userId . ':' . hmac-sha256($userId, $secret))`。再编写函数`validateToken($token, $secret)`，验证token并返回userId，无效返回null。",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "<?php\nfunction createSecureToken($userId, $secret): string {\n    // 在这里编写你的代码\n    return \"\";\n}\n\nfunction validateToken($token, $secret): ?string {\n    // 在这里编写你的代码\n    return null;\n}",
+    "solution_code": "<?php\nfunction createSecureToken($userId, $secret): string {\n    $signature = hash_hmac('sha256', (string)$userId, $secret);\n    return base64_encode($userId . ':' . $signature);\n}\n\nfunction validateToken($token, $secret): ?string {\n    $decoded = base64_decode($token, true);\n    if ($decoded === false) {\n        return null;\n    }\n    $parts = explode(':', $decoded, 2);\n    if (count($parts) !== 2) {\n        return null;\n    }\n    $userId = $parts[0];\n    $signature = $parts[1];\n    $expectedSignature = hash_hmac('sha256', $userId, $secret);\n    if (!hash_equals($expectedSignature, $signature)) {\n        return null;\n    }\n    return $userId;\n}",
+    "test_cases": [
+      {
+        "input": "$token = createSecureToken('42', 'mysecret'); echo validateToken($token, 'mysecret');",
+        "expected_output": "42",
+        "description": "创建的token用相同密钥验证应返回userId"
+      },
+      {
+        "input": "$token = createSecureToken('42', 'mysecret'); var_export(validateToken($token, 'wrongsecret'));",
+        "expected_output": "NULL",
+        "description": "用错误密钥验证应返回null"
+      },
+      {
+        "input": "var_export(validateToken('invalidtoken', 'mysecret'));",
+        "expected_output": "NULL",
+        "description": "无效token应返回null"
+      }
+    ],
+    "hint": "使用 hash_hmac 生成签名，base64_encode/decode 编码token，hash_equals 安全比较签名"
+  },
+  {
+    "title": "数据库操作",
+    "slug": "php-13-database-pdo",
+    "description": "学习PHP数据库操作：PDO、预处理语句与CRUD",
+    "content": "# 数据库操作 — PDO与安全查询\n\n## PDO 连接\n\nPDO（PHP Data Objects）是PHP的数据库抽象层，支持多种数据库：\n\n```php\n<?php\ntry {\n    $pdo = new PDO(\n        'mysql:host=localhost;dbname=myapp;charset=utf8mb4',\n        'username',\n        'password',\n        [\n            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,\n            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,\n        ]\n    );\n} catch (PDOException $e) {\n    die('Connection failed: ' . $e->getMessage());\n}\n```\n\n## 预处理语句（防止SQL注入）\n\n```php\n<?php\n// 位置参数\n$stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');\n$stmt->execute([$userId]);\n$user = $stmt->fetch();\n\n// 命名参数\n$stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');\n$stmt->execute(['email' => $email]);\n$user = $stmt->fetch();\n```\n\n## CRUD 操作\n\n```php\n<?php\n// Create\n$stmt = $pdo->prepare('INSERT INTO users (name, email) VALUES (:name, :email)');\n$stmt->execute(['name' => $name, 'email' => $email]);\n$newId = $pdo->lastInsertId();\n\n// Read\n$stmt = $pdo->prepare('SELECT * FROM users WHERE id = :id');\n$stmt->execute(['id' => $id]);\n$user = $stmt->fetch();\n\n// Update\n$stmt = $pdo->prepare('UPDATE users SET name = :name WHERE id = :id');\n$stmt->execute(['name' => $newName, 'id' => $id]);\n\n// Delete\n$stmt = $pdo->prepare('DELETE FROM users WHERE id = :id');\n$stmt->execute(['id' => $id]);\n```\n\n## 事务\n\n```php\n<?php\n$pdo->beginTransaction();\ntry {\n    $pdo->prepare('UPDATE accounts SET balance = balance - ? WHERE id = ?')->execute([$amount, $fromId]);\n    $pdo->prepare('UPDATE accounts SET balance = balance + ? WHERE id = ?')->execute([$amount, $toId]);\n    $pdo->commit();\n} catch (PDOException $e) {\n    $pdo->rollBack();\n    throw $e;\n}\n```\n\n## 练习\n\n编写一个`UserRepository`类，模拟数据库操作（使用内存数组存储）。实现方法：\n- `findById($id)` — 按ID查找用户，不存在返回null\n- `create($data)` — 创建用户，返回新用户（含自增id）\n- `delete($id)` — 删除用户，成功返回true，不存在返回false",
+    "order": 13,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "<?php\nclass UserRepository {\n    private array $users = [];\n    private int $nextId = 1;\n\n    public function findById(int $id): ?array {\n        // 在这里编写你的代码\n        return null;\n    }\n\n    public function create(array $data): array {\n        // 在这里编写你的代码\n        return [];\n    }\n\n    public function delete(int $id): bool {\n        // 在这里编写你的代码\n        return false;\n    }\n}",
+    "solution_code": "<?php\nclass UserRepository {\n    private array $users = [];\n    private int $nextId = 1;\n\n    public function findById(int $id): ?array {\n        return $this->users[$id] ?? null;\n    }\n\n    public function create(array $data): array {\n        $id = $this->nextId++;\n        $user = array_merge(['id' => $id], $data);\n        $this->users[$id] = $user;\n        return $user;\n    }\n\n    public function delete(int $id): bool {\n        if (!isset($this->users[$id])) {\n            return false;\n        }\n        unset($this->users[$id]);\n        return true;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "$repo = new UserRepository(); $user = $repo->create(['name'=>'Alice','email'=>'alice@test.com']); echo json_encode($user);",
+        "expected_output": "{\"id\":1,\"name\":\"Alice\",\"email\":\"alice@test.com\"}",
+        "description": "创建用户应返回含自增id的完整数据"
+      },
+      {
+        "input": "$repo = new UserRepository(); $repo->create(['name'=>'Bob','email'=>'bob@test.com']); echo json_encode($repo->findById(1));",
+        "expected_output": "{\"id\":1,\"name\":\"Bob\",\"email\":\"bob@test.com\"}",
+        "description": "按ID查找应返回对应用户"
+      },
+      {
+        "input": "$repo = new UserRepository(); var_export($repo->delete(999));",
+        "expected_output": "false",
+        "description": "删除不存在的用户应返回false"
+      }
+    ],
+    "hint": "用数组模拟数据表，nextId 实现自增，findById 用 ?? 运算符，delete 用 unset"
+  },
+  {
+    "title": "MVC框架",
+    "slug": "php-14-mvc-laravel",
+    "description": "学习MVC架构与Laravel基础：路由、控制器与Blade模板",
+    "content": "# MVC框架 — Laravel入门\n\n## MVC架构\n\nMVC将应用分为三层：\n\n- **Model** — 数据与业务逻辑\n- **View** — 展示层（HTML模板）\n- **Controller** — 处理请求，协调Model和View\n\n```\n请求 → 路由 → 控制器 → Model → 控制器 → View → 响应\n```\n\n## Laravel 路由\n\n在`routes/web.php`中定义路由：\n\n```php\n<?php\nuse App\\Http\\Controllers\\UserController;\n\nRoute::get('/users', [UserController::class, 'index']);\nRoute::get('/users/{id}', [UserController::class, 'show']);\nRoute::post('/users', [UserController::class, 'store']);\nRoute::put('/users/{id}', [UserController::class, 'update']);\nRoute::delete('/users/{id}', [UserController::class, 'destroy']);\n\n// 资源路由（等价于上面5条）\nRoute::resource('users', UserController::class);\n```\n\n## 控制器\n\n```php\n<?php\nnamespace App\\Http\\Controllers;\n\nuse App\\Models\\User;\n\nclass UserController extends Controller\n{\n    public function index()\n    {\n        $users = User::all();\n        return view('users.index', compact('users'));\n    }\n\n    public function show(int $id)\n    {\n        $user = User::findOrFail($id);\n        return view('users.show', compact('user'));\n    }\n}\n```\n\n## Blade 模板\n\n```blade\n{{-- 基本输出 --}}\n<h1>{{ $user->name }}</h1>\n\n{{-- 条件判断 --}}\n@if($user->isAdmin())\n    <span>管理员</span>\n@elseif($user->isModerator())\n    <span>版主</span>\n@else\n    <span>普通用户</span>\n@endif\n\n{{-- 循环 --}}\n@foreach($users as $user)\n    <li>{{ $user->name }}</li>\n@endforeach\n\n{{-- 模板继承 --}}\n@extends('layouts.app')\n@section('content')\n    <p>页面内容</p>\n@endsection\n```\n\n## 练习\n\n编写一个简单的路由器类`Router`，支持注册和匹配GET路由。实现方法：\n- `get($path, $handler)` — 注册GET路由\n- `dispatch($method, $path)` — 匹配路由，返回handler或null\n支持路径参数，如`/users/{id}`匹配`/users/42`并提取参数。",
+    "order": 14,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "<?php\nclass Router {\n    private array $routes = [];\n\n    public function get(string $path, $handler): void {\n        // 在这里编写你的代码\n    }\n\n    public function dispatch(string $method, string $path) {\n        // 在这里编写你的代码\n        return null;\n    }\n}",
+    "solution_code": "<?php\nclass Router {\n    private array $routes = [];\n\n    public function get(string $path, $handler): void {\n        $this->routes[] = [\n            'method' => 'GET',\n            'path' => $path,\n            'handler' => $handler,\n            'pattern' => $this->buildPattern($path)\n        ];\n    }\n\n    private function buildPattern(string $path): string {\n        $pattern = preg_replace('/\\{([a-zA-Z_]+)\\}/', '(?P<$1>[^/]+)', $path);\n        return '#^' . $pattern . '$#';\n    }\n\n    public function dispatch(string $method, string $path) {\n        foreach ($this->routes as $route) {\n            if ($route['method'] !== $method) {\n                continue;\n            }\n            if (preg_match($route['pattern'], $path, $matches)) {\n                $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);\n                return [\n                    'handler' => $route['handler'],\n                    'params' => $params\n                ];\n            }\n        }\n        return null;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "$r = new Router(); $r->get('/hello', 'HomeController@index'); echo json_encode($r->dispatch('GET', '/hello'));",
+        "expected_output": "{\"handler\":\"HomeController@index\",\"params\":[]}",
+        "description": "精确路径匹配应返回handler和空参数"
+      },
+      {
+        "input": "$r = new Router(); $r->get('/users/{id}', 'UserController@show'); echo json_encode($r->dispatch('GET', '/users/42'));",
+        "expected_output": "{\"handler\":\"UserController@show\",\"params\":{\"id\":\"42\"}}",
+        "description": "路径参数应被正确提取"
+      },
+      {
+        "input": "$r = new Router(); $r->get('/hello', 'HomeController@index'); var_export($r->dispatch('POST', '/hello'));",
+        "expected_output": "NULL",
+        "description": "请求方法不匹配应返回null"
+      }
+    ],
+    "hint": "用正则将 {param} 替换为命名捕获组 (?P<name>[^/]+)，用 preg_match 匹配并提取参数"
+  },
+  {
+    "title": "API开发",
+    "slug": "php-15-restful-api",
+    "description": "学习RESTful API开发：JSON响应、状态码与JWT认证",
+    "content": "# API开发 — 构建RESTful接口\n\n## RESTful 设计原则\n\n- 使用HTTP方法表示操作：GET(读)、POST(创建)、PUT(更新)、DELETE(删除)\n- 使用URL表示资源：`/api/users`、`/api/users/1`\n- 使用HTTP状态码表示结果：200(成功)、201(创建)、400(错误请求)、401(未认证)、404(未找到)\n- 返回JSON格式数据\n\n## JSON 响应\n\n```php\n<?php\nheader('Content-Type: application/json; charset=utf-8');\n\n// 成功响应\necho json_encode([\n    'status' => 'success',\n    'data' => $user\n]);\n\n// 错误响应\nhttp_response_code(404);\necho json_encode([\n    'status' => 'error',\n    'message' => 'User not found'\n]);\n```\n\n## 请求处理\n\n```php\n<?php\n// 获取请求体\n$input = json_decode(file_get_contents('php://input'), true);\n\n// 获取请求头\n$contentType = $_SERVER['CONTENT_TYPE'] ?? '';\n$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';\n```\n\n## JWT 认证\n\nJWT（JSON Web Token）是无状态的认证方案：\n\n```php\n<?php\n// 生成Token（使用firebase/php-jwt库）\nuse Firebase\\JWT\\JWT;\n\n$payload = [\n    'iss' => 'http://example.com',\n    'aud' => 'http://example.com',\n    'iat' => time(),\n    'exp' => time() + 3600,\n    'uid' => $userId\n];\n$jwt = JWT::encode($payload, $secretKey, 'HS256');\n\n// 验证Token\n$decoded = JWT::decode($jwt, new Key($secretKey, 'HS256'));\n```\n\n## API版本控制\n\n```php\n<?php\n// URL路径方式\nRoute::prefix('v1')->group(function () {\n    Route::get('/users', [UserController::class, 'index']);\n});\n\n// 请求头方式\n// Accept: application/vnd.myapi.v1+json\n```\n\n## 练习\n\n编写一个`ApiResponse`类，提供统一的API响应格式：\n- `success($data, $code = 200)` — 成功响应\n- `error($message, $code = 400)` — 错误响应\n- `paginated($data, $page, $perPage, $total)` — 分页响应\n每个方法返回包含status、data/message和可选meta的数组。",
+    "order": 15,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "<?php\nclass ApiResponse {\n    public static function success($data, int $code = 200): array {\n        // 在这里编写你的代码\n        return [];\n    }\n\n    public static function error(string $message, int $code = 400): array {\n        // 在这里编写你的代码\n        return [];\n    }\n\n    public static function paginated(array $data, int $page, int $perPage, int $total): array {\n        // 在这里编写你的代码\n        return [];\n    }\n}",
+    "solution_code": "<?php\nclass ApiResponse {\n    public static function success($data, int $code = 200): array {\n        return [\n            'status' => 'success',\n            'code' => $code,\n            'data' => $data\n        ];\n    }\n\n    public static function error(string $message, int $code = 400): array {\n        return [\n            'status' => 'error',\n            'code' => $code,\n            'message' => $message\n        ];\n    }\n\n    public static function paginated(array $data, int $page, int $perPage, int $total): array {\n        return [\n            'status' => 'success',\n            'code' => 200,\n            'data' => $data,\n            'meta' => [\n                'page' => $page,\n                'per_page' => $perPage,\n                'total' => $total,\n                'total_pages' => (int)ceil($total / $perPage)\n            ]\n        ];\n    }\n}",
+    "test_cases": [
+      {
+        "input": "echo json_encode(ApiResponse::success(['id'=>1,'name'=>'Alice']));",
+        "expected_output": "{\"status\":\"success\",\"code\":200,\"data\":{\"id\":1,\"name\":\"Alice\"}}",
+        "description": "success 应返回标准成功格式"
+      },
+      {
+        "input": "echo json_encode(ApiResponse::error('Not found', 404));",
+        "expected_output": "{\"status\":\"error\",\"code\":404,\"message\":\"Not found\"}",
+        "description": "error 应返回标准错误格式"
+      },
+      {
+        "input": "echo json_encode(ApiResponse::paginated([['id'=>1]], 1, 10, 25));",
+        "expected_output": "{\"status\":\"success\",\"code\":200,\"data\":[{\"id\":1}],\"meta\":{\"page\":1,\"per_page\":10,\"total\":25,\"total_pages\":3}}",
+        "description": "paginated 应返回含分页元数据的响应"
+      }
+    ],
+    "hint": "success 返回 status/data/code，error 返回 status/message/code，paginated 额外包含 meta 分页信息"
+  },
+  {
+    "title": "综合项目：博客系统",
+    "slug": "php-16-blog-project",
+    "description": "综合运用所学知识，构建一个博客系统的核心功能",
+    "content": "# 综合项目 — 博客系统\n\n恭喜你来到最后一关！现在让我们综合运用前面学到的所有知识，构建一个博客系统的核心功能。\n\n## 项目需求\n\n一个博客系统需要以下核心功能：\n\n1. **文章管理** — 创建、读取、更新、删除文章\n2. **用户系统** — 用户注册、登录验证\n3. **评论功能** — 对文章发表评论\n4. **标签分类** — 文章与标签的关联\n\n## 涉及的知识点\n\n- 面向对象编程（类、继承、接口）\n- 数组与字符串处理\n- 异常处理\n- 命名空间\n- 函数与闭包\n\n## 设计思路\n\n### 数据模型\n\n```\nUser: id, username, email, password\nPost: id, title, content, author_id, created_at\ntag: id, name\nComment: id, post_id, author_name, content, created_at\n```\n\n### 核心类\n\n- `Model` — 基础模型类（抽象）\n- `User` — 用户模型\n- `Post` — 文章模型\n- `Blog` — 博客管理器（协调各模型）\n\n## 练习\n\n编写一个`Blog`类，使用内存数组模拟数据库，实现以下功能：\n- `createPost($title, $content, $authorId)` — 创建文章，返回文章数组（含id和created_at）\n- `getPost($id)` — 获取文章（含作者信息），不存在返回null\n- `getPostsByAuthor($authorId)` — 获取指定作者的所有文章\n- `addComment($postId, $authorName, $content)` — 添加评论，文章不存在时抛出异常",
+    "order": 16,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "<?php\nclass Blog {\n    private array $posts = [];\n    private array $users = [];\n    private array $comments = [];\n    private int $nextPostId = 1;\n    private int $nextCommentId = 1;\n\n    public function __construct() {\n        $this->users = [\n            1 => ['id' => 1, 'username' => 'alice', 'email' => 'alice@example.com'],\n            2 => ['id' => 2, 'username' => 'bob', 'email' => 'bob@example.com']\n        ];\n    }\n\n    public function createPost(string $title, string $content, int $authorId): array {\n        // 在这里编写你的代码\n        return [];\n    }\n\n    public function getPost(int $id): ?array {\n        // 在这里编写你的代码\n        return null;\n    }\n\n    public function getPostsByAuthor(int $authorId): array {\n        // 在这里编写你的代码\n        return [];\n    }\n\n    public function addComment(int $postId, string $authorName, string $content): array {\n        // 在这里编写你的代码\n        return [];\n    }\n}",
+    "solution_code": "<?php\nclass Blog {\n    private array $posts = [];\n    private array $users = [];\n    private array $comments = [];\n    private int $nextPostId = 1;\n    private int $nextCommentId = 1;\n\n    public function __construct() {\n        $this->users = [\n            1 => ['id' => 1, 'username' => 'alice', 'email' => 'alice@example.com'],\n            2 => ['id' => 2, 'username' => 'bob', 'email' => 'bob@example.com']\n        ];\n    }\n\n    public function createPost(string $title, string $content, int $authorId): array {\n        $id = $this->nextPostId++;\n        $post = [\n            'id' => $id,\n            'title' => $title,\n            'content' => $content,\n            'author_id' => $authorId,\n            'created_at' => date('Y-m-d H:i:s')\n        ];\n        $this->posts[$id] = $post;\n        return $post;\n    }\n\n    public function getPost(int $id): ?array {\n        if (!isset($this->posts[$id])) {\n            return null;\n        }\n        $post = $this->posts[$id];\n        $author = $this->users[$post['author_id']] ?? null;\n        $post['author'] = $author;\n        $post['comments'] = array_values(array_filter($this->comments, function($c) use ($id) {\n            return $c['post_id'] === $id;\n        }));\n        return $post;\n    }\n\n    public function getPostsByAuthor(int $authorId): array {\n        return array_values(array_filter($this->posts, function($p) use ($authorId) {\n            return $p['author_id'] === $authorId;\n        }));\n    }\n\n    public function addComment(int $postId, string $authorName, string $content): array {\n        if (!isset($this->posts[$postId])) {\n            throw new InvalidArgumentException(\"Post not found\");\n        }\n        $id = $this->nextCommentId++;\n        $comment = [\n            'id' => $id,\n            'post_id' => $postId,\n            'author_name' => $authorName,\n            'content' => $content,\n            'created_at' => date('Y-m-d H:i:s')\n        ];\n        $this->comments[$id] = $comment;\n        return $comment;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "$blog = new Blog(); $post = $blog->createPost('Hello', 'World', 1); echo $post['title'];",
+        "expected_output": "Hello",
+        "description": "创建文章后应能获取标题"
+      },
+      {
+        "input": "$blog = new Blog(); $blog->createPost('Test', 'Content', 1); $post = $blog->getPost(1); echo $post['author']['username'];",
+        "expected_output": "alice",
+        "description": "获取文章时应包含作者信息"
+      },
+      {
+        "input": "$blog = new Blog(); $blog->createPost('A', 'a', 1); $blog->createPost('B', 'b', 2); echo count($blog->getPostsByAuthor(1));",
+        "expected_output": "1",
+        "description": "按作者筛选应只返回该作者的文章"
+      },
+      {
+        "input": "$blog = new Blog(); $blog->createPost('Test', 'Content', 1); $comment = $blog->addComment(1, 'Charlie', 'Great post!'); echo $comment['author_name'];",
+        "expected_output": "Charlie",
+        "description": "添加评论后应能获取评论者名"
+      }
+    ],
+    "hint": "用内存数组模拟数据表，createPost 自增id并记录created_at，getPost 关联作者和评论，addComment 先检查文章是否存在"
+  }
+]

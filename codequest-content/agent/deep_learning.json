@@ -1,0 +1,358 @@
+[
+  {
+    "title": "感知机与线性分类",
+    "slug": "dl-01-perceptron",
+    "description": "学习感知机模型的基本原理、数学公式和线性分类能力，理解为什么感知机无法解决XOR问题。",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "dl",
+    "section": "神经网络基础",
+    "content": "# 感知机与线性分类\n\n## 什么是感知机\n\n感知机（Perceptron）是最早的人工神经网络模型，由Frank Rosenblatt在1957年提出。它是一个二分类的线性模型，模拟了生物神经元的\"接收信号→处理→输出\"过程。\n\n感知机接收多个输入信号，每个信号有对应的权重，计算加权和后经过激活函数（符号函数）输出二分类结果。\n\n## 数学模型\n\n感知机的数学公式为：\n\n$$f(x) = \\operatorname{sign}(w \\cdot x + b)$$\n\n其中：\n- $w$ 是权重向量，表示每个输入的重要程度\n- $b$ 是偏置项，控制决策边界的偏移\n- $\\operatorname{sign}$ 是符号函数，当输入 $\\ge 0$ 时输出 $+1$，否则输出 $-1$\n\n从几何角度看，$w \\cdot x + b = 0$ 定义了一个超平面，感知机学习的过程就是不断调整这个超平面以正确分离两类样本。\n\n## 学习算法\n\n感知机使用误分类驱动的学习算法：\n\n1. 初始化权重 $w$ 和偏置 $b$ 为 0\n2. 遍历每个训练样本 $(x_i, y_i)$\n3. 如果 $y_i \\cdot (w \\cdot x_i + b) \\le 0$（即样本被误分类），则更新参数：\n   $$w \\leftarrow w + \\eta \\cdot y_i \\cdot x_i$$\n   $$b \\leftarrow b + \\eta \\cdot y_i$$\n4. 重复直到所有样本被正确分类或达到最大迭代次数\n\n```python\nimport numpy as np\n\nclass Perceptron:\n    def __init__(self, learning_rate=0.01, epochs=100):\n        self.lr = learning_rate\n        self.epochs = epochs\n        self.weights = None\n        self.bias = None\n\n    def fit(self, X, y):\n        n_samples, n_features = X.shape\n        self.weights = np.zeros(n_features)\n        self.bias = 0\n\n        for epoch in range(self.epochs):\n            errors = 0\n            for xi, yi in zip(X, y):\n                if yi * (np.dot(xi, self.weights) + self.bias) <= 0:\n                    self.weights += self.lr * yi * xi\n                    self.bias += self.lr * yi\n                    errors += 1\n            if errors == 0:\n                break\n\n    def predict(self, X):\n        return np.where(np.dot(X, self.weights) + self.bias >= 0, 1, -1)\n```\n\n## 线性可分性\n\n感知机的核心局限在于**只能解决线性可分问题**。对于AND和OR逻辑门，样本在二维平面上存在一条直线可以将正负样本分开；而XOR问题则不存在这样的直线，单层感知机无论怎么训练都无法收敛。\n\nXOR问题的解决需要在输入层和输出层之间加入隐藏层，引入非线性变换——这就是多层感知机（MLP）的诞生动机。",
+    "starter_code": "import numpy as np\n\nclass Perceptron:\n    def __init__(self, learning_rate=0.01, epochs=100):\n        self.lr = learning_rate\n        self.epochs = epochs\n        self.weights = None\n        self.bias = None\n\n    def fit(self, X, y):\n        # TODO: 实现感知机训练算法\n        pass\n\n    def predict(self, X):\n        # TODO: 实现预测逻辑\n        pass\n\n# 测试AND逻辑门\nif __name__ == \"__main__\":\n    X = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]])\n    y = np.array([1, -1, -1, -1])  # AND gate\n    p = Perceptron()\n    p.fit(X, y)\n    print(p.predict(X))",
+    "solution_code": "import numpy as np\n\nclass Perceptron:\n    def __init__(self, learning_rate=0.01, epochs=100):\n        self.lr = learning_rate\n        self.epochs = epochs\n        self.weights = None\n        self.bias = None\n\n    def fit(self, X, y):\n        n_samples, n_features = X.shape\n        self.weights = np.zeros(n_features)\n        self.bias = 0\n        for epoch in range(self.epochs):\n            errors = 0\n            for xi, yi in zip(X, y):\n                if yi * (np.dot(xi, self.weights) + self.bias) <= 0:\n                    self.weights += self.lr * yi * xi\n                    self.bias += self.lr * yi\n                    errors += 1\n            if errors == 0:\n                break\n\n    def predict(self, X):\n        return np.where(np.dot(X, self.weights) + self.bias >= 0, 1, -1)\n\nif __name__ == \"__main__\":\n    X = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]])\n    y = np.array([1, -1, -1, -1])\n    p = Perceptron()\n    p.fit(X, y)\n    print(p.predict(X))",
+    "test_cases": [
+      {
+        "input": "perceptron_and([1, 1])",
+        "expected_output": "1",
+        "description": "AND逻辑：两个正输入应输出1"
+      },
+      {
+        "input": "perceptron_and([1, -1])",
+        "expected_output": "-1",
+        "description": "AND逻辑：一正一负应输出-1"
+      }
+    ],
+    "hint": "注意：训练时遍历每个样本，判断 y_i * (w·x_i + b) <= 0 时更新权重和偏置。",
+    "prerequisites": []
+  },
+  {
+    "title": "多层感知机与非线性",
+    "slug": "dl-02-mlp",
+    "description": "理解多层感知机如何通过隐藏层和非线性激活函数突破线性可分的限制，解决XOR问题。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "dl",
+    "section": "神经网络基础",
+    "content": "# 多层感知机与非线性\n\n## 从线性到非线性\n\n单层感知机的局限性在于只能学习线性决策边界。多层感知机（MLP）通过在输入层和输出层之间加入**隐藏层**并使用**非线性激活函数**来解决这个问题。\n\nMLP是一个通用函数逼近器——只要有足够多的隐藏神经元，它可以逼近任何连续函数。\n\n## 网络结构\n\nMLP由三部分组成：\n- **输入层**：接收原始特征，神经元数等于特征维度\n- **隐藏层**：进行非线性变换，可以有多层\n- **输出层**：产生最终预测\n\n每一层与下一层之间是全连接的，每个连接有一个权重参数。\n\n```python\nimport numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-np.clip(x, -500, 500)))\n\ndef sigmoid_derivative(x):\n    s = sigmoid(x)\n    return s * (1 - s)\n\nclass MLP:\n    def __init__(self, input_size, hidden_size, output_size, lr=0.1):\n        self.lr = lr\n        self.W1 = np.random.randn(input_size, hidden_size) * 0.01\n        self.b1 = np.zeros((1, hidden_size))\n        self.W2 = np.random.randn(hidden_size, output_size) * 0.01\n        self.b2 = np.zeros((1, output_size))\n\n    def forward(self, X):\n        self.z1 = np.dot(X, self.W1) + self.b1\n        self.a1 = sigmoid(self.z1)\n        self.z2 = np.dot(self.a1, self.W2) + self.b2\n        self.a2 = sigmoid(self.z2)\n        return self.a2\n```\n\n## XOR问题的解决\n\n单层感知机无法解决的XOR问题，MLP可以轻松解决。隐藏层的作用是将输入映射到一个新的特征空间：\n\n- 第一个隐藏神经元可能学习到 $x_1 + x_2$ 的模式\n- 第二个隐藏神经元可能学习到 $x_1 - x_2$ 的模式\n- 输出层结合这两个特征，就能形成非线性决策边界\n\n## 深度 vs 宽度\n\n- **深度**（更多层）：可以更高效地表示复杂函数，通过逐层抽象提取层级特征\n- **宽度**（更多神经元）：提供更高的表示容量\n\n实践表明，更深的网络通常比更宽的网络更具参数效率。",
+    "starter_code": "import numpy as np\n\ndef sigmoid(x):\n    x_clipped = np.clip(x, -500, 500)\n    return 1 / (1 + np.exp(-x_clipped))\n\ndef sigmoid_derivative(x):\n    s = sigmoid(x)\n    return s * (1 - s)\n\nclass MLP:\n    def __init__(self, input_size, hidden_size, output_size, lr=0.1):\n        self.lr = lr\n        # TODO: 初始化权重矩阵和偏置\n        pass\n\n    def forward(self, X):\n        # TODO: 实现前向传播\n        pass\n\n    def backward(self, X, y, output):\n        # TODO: 实现反向传播\n        pass\n\n    def fit(self, X, y, epochs=5000):\n        # TODO: 实现训练循环\n        pass\n\n    def predict(self, X):\n        out = self.forward(X)\n        return np.where(out >= 0.5, 1, 0)",
+    "solution_code": "import numpy as np\n\ndef sigmoid(x):\n    x_clipped = np.clip(x, -500, 500)\n    return 1 / (1 + np.exp(-x_clipped))\n\ndef sigmoid_derivative(x):\n    s = sigmoid(x)\n    return s * (1 - s)\n\nclass MLP:\n    def __init__(self, input_size, hidden_size, output_size, lr=0.1):\n        self.lr = lr\n        self.W1 = np.random.randn(input_size, hidden_size) * 0.01\n        self.b1 = np.zeros((1, hidden_size))\n        self.W2 = np.random.randn(hidden_size, output_size) * 0.01\n        self.b2 = np.zeros((1, output_size))\n\n    def forward(self, X):\n        self.z1 = np.dot(X, self.W1) + self.b1\n        self.a1 = sigmoid(self.z1)\n        self.z2 = np.dot(self.a1, self.W2) + self.b2\n        self.a2 = sigmoid(self.z2)\n        return self.a2\n\n    def backward(self, X, y, output):\n        m = X.shape[0]\n        dZ2 = output - y.reshape(-1, 1)\n        dW2 = np.dot(self.a1.T, dZ2) / m\n        db2 = np.sum(dZ2, axis=0, keepdims=True) / m\n        dZ1 = np.dot(dZ2, self.W2.T) * sigmoid_derivative(self.z1)\n        dW1 = np.dot(X.T, dZ1) / m\n        db1 = np.sum(dZ1, axis=0, keepdims=True) / m\n        self.W1 -= self.lr * dW1\n        self.b1 -= self.lr * db1\n        self.W2 -= self.lr * dW2\n        self.b2 -= self.lr * db2\n\n    def fit(self, X, y, epochs=5000):\n        for epoch in range(epochs):\n            output = self.forward(X)\n            self.backward(X, y, output)\n\n    def predict(self, X):\n        out = self.forward(X)\n        return np.where(out >= 0.5, 1, 0)\n\nif __name__ == \"__main__\":\n    mlp = MLP(2, 4, 1, lr=0.1)\n    X_xor = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])\n    y_xor = np.array([0, 1, 1, 0])\n    mlp.fit(X_xor, y_xor, epochs=10000)\n    print(mlp.predict(X_xor).flatten())",
+    "test_cases": [
+      {
+        "input": "mlp_xor([[0, 0], [0, 1], [1, 0], [1, 1]])",
+        "expected_output": "[0 1 1 0]",
+        "description": "XOR问题：异或逻辑的正确输出"
+      },
+      {
+        "input": "len(mlp_xor([[0, 0]]).flatten())",
+        "expected_output": "1",
+        "description": "单样本预测应返回长度为1的数组"
+      }
+    ],
+    "hint": "前向传播：X → (W1,b1) → sigmoid → (W2,b2) → sigmoid → output。反向传播使用链式法则计算梯度。",
+    "prerequisites": [
+      "dl-01-perceptron"
+    ]
+  },
+  {
+    "title": "反向传播算法",
+    "slug": "dl-03-backprop",
+    "description": "深入理解反向传播算法如何使用链式法则高效计算梯度，以及梯度消失和爆炸问题。",
+    "order": 3,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "dl",
+    "section": "神经网络基础",
+    "content": "# 反向传播算法\n\n## 为什么需要反向传播\n\n训练神经网络需要计算损失函数对每个参数的梯度，然后使用梯度下降更新参数。对于深层网络，手动求导计算量巨大，反向传播通过复用中间结果大幅降低计算复杂度——从 $O(n^2)$ 降低到 $O(n)$。\n\n## 链式法则\n\n反向传播的核心是微积分中的**链式法则**（Chain Rule）：\n\n$$\\frac{\\partial L}{\\partial w} = \\frac{\\partial L}{\\partial y} \\cdot \\frac{\\partial y}{\\partial z} \\cdot \\frac{\\partial z}{\\partial w}$$\n\n神经网络的前向传播可以看作一个计算图（Computation Graph），反向传播沿着计算图反向逐层计算局部梯度并相乘。\n\n## 反向传播步骤\n\n以带有一个隐藏层的MLP为例，使用均方误差损失：\n\n1. **前向传播**：记录每一层的输入和激活值\n2. **输出层梯度**：计算损失对输出的梯度\n3. **隐藏层梯度**：利用输出层梯度乘以权重矩阵的转置，再乘以激活函数的导数\n4. **参数更新**：使用累积的梯度更新权重和偏置\n\n```python\nimport numpy as np\n\ndef mse_loss(y_pred, y_true):\n    return np.mean((y_pred - y_true) ** 2)\n\ndef backward(self, X, y, output):\n    m = X.shape[0]\n    # 输出层误差\n    dZ2 = output - y.reshape(-1, 1)\n    dW2 = np.dot(self.a1.T, dZ2) / m\n    db2 = np.sum(dZ2, axis=0, keepdims=True) / m\n    # 隐藏层误差（反向传播）\n    dZ1 = np.dot(dZ2, self.W2.T) * sigmoid_derivative(self.z1)\n    dW1 = np.dot(X.T, dZ1) / m\n    db1 = np.sum(dZ1, axis=0, keepdims=True) / m\n    return dW1, db1, dW2, db2\n```\n\n## 梯度消失与爆炸\n\n- **梯度消失**：随着层数增加，梯度趋于0，前层参数几乎不更新（常见于Sigmoid/Tanh激活）\n- **梯度爆炸**：梯度指数级增长，导致参数更新过大，模型无法收敛\n\n解决方法：\n- 使用ReLU激活函数（正半轴梯度恒为1）\n- 批归一化（Batch Normalization）\n- 残差连接（Residual Connection）\n- 梯度裁剪（Gradient Clipping）",
+    "starter_code": "import numpy as np\n\ndef relu(x):\n    return np.maximum(0, x)\n\ndef relu_derivative(x):\n    return np.where(x > 0, 1, 0)\n\ndef mse_loss(y_pred, y_true):\n    return np.mean((y_pred - y_true) ** 2)\n\nclass NeuralNetwork:\n    def __init__(self, layers, lr=0.01):\n        self.lr = lr\n        self.weights = []\n        self.biases = []\n        # TODO: 初始化权重和偏置\n\n    def forward(self, X):\n        # TODO: 实现前向传播，记录中间值\n        pass\n\n    def backward(self, X, y, output):\n        # TODO: 实现反向传播\n        pass\n\n    def train(self, X, y, epochs=1000):\n        # TODO: 训练循环\n        pass",
+    "solution_code": "import numpy as np\n\ndef relu(x):\n    return np.maximum(0, x)\n\ndef relu_derivative(x):\n    return np.where(x > 0, 1, 0)\n\ndef mse_loss(y_pred, y_true):\n    return np.mean((y_pred - y_true) ** 2)\n\nclass NeuralNetwork:\n    def __init__(self, layers, lr=0.01):\n        self.lr = lr\n        self.weights = []\n        self.biases = []\n        for i in range(len(layers) - 1):\n            w = np.random.randn(layers[i], layers[i + 1]) * np.sqrt(2.0 / layers[i])\n            b = np.zeros((1, layers[i + 1]))\n            self.weights.append(w)\n            self.biases.append(b)\n\n    def forward(self, X):\n        self.zs = []  # 线性变换结果\n        self.activations = [X]  # 激活值\n        A = X\n        for w, b in zip(self.weights, self.biases):\n            Z = np.dot(A, w) + b\n            self.zs.append(Z)\n            A = relu(Z)\n            self.activations.append(A)\n        return A\n\n    def backward(self, X, y, output):\n        m = X.shape[0]\n        dZ = 2 * (output - y.reshape(-1, 1)) / m\n        for i in range(len(self.weights) - 1, -1, -1):\n            A_prev = self.activations[i]\n            dW = np.dot(A_prev.T, dZ) / m\n            db = np.sum(dZ, axis=0, keepdims=True) / m\n            self.weights[i] -= self.lr * dW\n            self.biases[i] -= self.lr * db\n            if i > 0:\n                dZ = np.dot(dZ, self.weights[i].T) * relu_derivative(self.zs[i - 1])\n\n    def train(self, X, y, epochs=1000):\n        for epoch in range(epochs):\n            output = self.forward(X)\n            loss = mse_loss(output, y.reshape(-1, 1))\n            self.backward(X, y, output)\n\n    def predict(self, X):\n        return self.forward(X)\n\nif __name__ == \"__main__\":\n    nn = NeuralNetwork([2, 4, 4, 1], lr=0.01)\n    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])\n    y = np.array([0, 1, 1, 0])\n    nn.train(X, y, epochs=2000)\n    print(nn.predict(X))",
+    "test_cases": [
+      {
+        "input": "backprop_xor([[0, 0], [0, 1], [1, 0], [1, 1]])",
+        "expected_output": "0.0",
+        "description": "XOR(0,0)应接近0"
+      },
+      {
+        "input": "backprop_xor([[0, 1]])[0][0]",
+        "expected_output": "1.0",
+        "description": "XOR(0,1)应接近1"
+      }
+    ],
+    "hint": "反向传播时，从输出层开始向前逐层递推梯度：dZ_layer = dZ_next @ W.T * activation_derivative(z_layer)。",
+    "prerequisites": [
+      "dl-02-mlp"
+    ]
+  },
+  {
+    "title": "激活函数详解",
+    "slug": "dl-04-activation",
+    "description": "全面对比Sigmoid、Tanh、ReLU、Softmax等激活函数，理解各自优劣和适用场景。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "dl",
+    "section": "神经网络基础",
+    "content": "# 激活函数详解\n\n## 为什么需要激活函数\n\n没有激活函数（或者说恒等激活函数），多层神经网络等价于单层线性模型。激活函数引入**非线性变换**，使网络能学习复杂模式，具备通用函数逼近能力。\n\n## 常见激活函数\n\n### Sigmoid\n$$\\sigma(x) = \\frac{1}{1 + e^{-x}}$$\n\n- 输出范围 $(0, 1)$，适合二分类输出层\n- 平滑可导，但存在严重梯度饱和：$|x|$ 较大时梯度趋近于0\n- 输出非零中心化，影响梯度更新的效率\n\n### Tanh\n$$\\tanh(x) = \\frac{e^x - e^{-x}}{e^x + e^{-x}}$$\n\n- 输出范围 $(-1, 1)$，零中心化，训练更稳定\n- 仍存在梯度饱和问题\n- 常用于RNN隐藏层\n\n### ReLU（Rectified Linear Unit）\n$$\\text{ReLU}(x) = \\max(0, x)$$\n\n- 正半轴梯度恒为1，有效缓解梯度消失\n- 计算简单，收敛速度快\n- 缺点：负半轴梯度为0，可能导致神经元\"死亡\"\n\n### Leaky ReLU\n$$\\text{LeakyReLU}(x) = \\max(\\alpha x, x), \\quad \\alpha \\approx 0.01$$\n\n- 为负半轴提供一个小梯度，解决神经元死亡问题\n\n### Softmax\n$$\\text{Softmax}(x_i) = \\frac{e^{x_i}}{\\sum_j e^{x_j}}$$\n\n- 将任意实数向量转换为概率分布\n- 输出和为1，适合多分类\n- 通常与交叉熵损失配合使用\n\n```python\nimport numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-np.clip(x, -500, 500)))\n\ndef relu(x):\n    return np.maximum(0, x)\n\ndef leaky_relu(x, alpha=0.01):\n    return np.where(x > 0, x, alpha * x)\n\ndef tanh(x):\n    return np.tanh(x)\n\ndef softmax(x):\n    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)\n```\n\n## 选择指南\n\n| 场景 | 推荐激活函数 |\n|------|-------------|\n| 隐藏层（默认） | ReLU / Leaky ReLU |\n| 二分类输出 | Sigmoid |\n| 多分类输出 | Softmax |\n| RNN隐藏层 | Tanh |\n| 回归输出 | 无（恒等） |\n\n**经验法则**：从ReLU开始，如果遇到神经元死亡问题，尝试Leaky ReLU或ELU。",
+    "starter_code": "import numpy as np\n\ndef sigmoid(x):\n    # TODO: 实现Sigmoid函数\n    pass\n\ndef relu(x):\n    # TODO: 实现ReLU函数\n    pass\n\ndef tanh(x):\n    # TODO: 实现Tanh函数\n    pass\n\ndef softmax(x):\n    # TODO: 实现Softmax函数（注意数值稳定性）\n    pass\n\ndef activation_forward(x, name='relu'):\n    # TODO: 根据名称调用对应的激活函数\n    pass",
+    "solution_code": "import numpy as np\n\ndef sigmoid(x):\n    x_clipped = np.clip(x, -500, 500)\n    return 1 / (1 + np.exp(-x_clipped))\n\ndef relu(x):\n    return np.maximum(0, x)\n\ndef tanh(x):\n    return np.tanh(x)\n\ndef softmax(x):\n    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)\n\ndef activation_forward(x, name='relu'):\n    activations = {\n        'sigmoid': sigmoid,\n        'relu': relu,\n        'tanh': tanh,\n        'softmax': softmax\n    }\n    return activations[name](x)\n\nif __name__ == \"__main__\":\n    x = np.array([-1, 0, 1])\n    print(\"Sigmoid:\", sigmoid(x))\n    print(\"ReLU:\", relu(x))\n    print(\"Tanh:\", tanh(x))\n    print(\"Softmax:\", softmax(x))",
+    "test_cases": [
+      {
+        "input": "round(sigmoid(0), 3)",
+        "expected_output": "0.5",
+        "description": "Sigmoid(0)应等于0.5"
+      },
+      {
+        "input": "int(relu(-3))",
+        "expected_output": "0",
+        "description": "ReLU(-3)应等于0"
+      },
+      {
+        "input": "int(relu(3))",
+        "expected_output": "3",
+        "description": "ReLU(3)应等于3"
+      }
+    ],
+    "hint": "Softmax实现时先减去最大值（exp_x = exp(x - max)）可以保证数值稳定性，避免exp溢出。",
+    "prerequisites": [
+      "dl-02-mlp"
+    ]
+  },
+  {
+    "title": "卷积神经网络基础",
+    "slug": "dl-05-conv",
+    "description": "理解卷积操作、池化、特征图等CNN核心概念，并手写实现二维卷积。",
+    "order": 5,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "dl",
+    "section": "卷积神经网络",
+    "content": "# 卷积神经网络基础\n\n## 从全连接到卷积\n\n全连接层（Fully Connected Layer）将输入展开为一维向量，完全忽略了空间结构信息。对于图像数据，相邻像素之间有很强的空间相关性，卷积操作通过**局部连接**和**权值共享**来高效利用这种结构。\n\n## 卷积操作\n\n二维卷积的核心思想：一个小的卷积核（Kernel/Filter）在输入图像上滑动，每个位置进行逐元素相乘再求和。\n\n$$\\text{Output}(i,j) = \\sum_{m} \\sum_{n} \\text{Input}(i+m, j+n) \\cdot \\text{Kernel}(m, n)$$\n\n### 关键参数\n- **卷积核大小（Kernel Size）**：通常为 $3 \\times 3$ 或 $5 \\times 5$\n- **步长（Stride）**：卷积核滑动的步长，默认1\n- **填充（Padding）**：在输入边界补零，控制输出尺寸\n\n### 输出尺寸公式\n$$\\text{Output Size} = \\frac{\\text{Input Size} - \\text{Kernel Size} + 2 \\times \\text{Padding}}{\\text{Stride}} + 1$$\n\n## 池化层\n\n池化（Pooling）对特征图进行下采样：\n- **最大池化（Max Pooling）**：取区域内的最大值，保留最显著特征\n- **平均池化（Average Pooling）**：取区域内的平均值\n\n池化的作用：\n1. 降低空间维度，减少计算量\n2. 提供平移不变性\n3. 扩大感受野\n\n```python\nimport numpy as np\n\ndef convolution2d(image, kernel):\n    \"\"\"简单的二维卷积（无padding，stride=1）\"\"\"\n    h, w = image.shape\n    kh, kw = kernel.shape\n    out_h = h - kh + 1\n    out_w = w - kw + 1\n    output = np.zeros((out_h, out_w))\n    for i in range(out_h):\n        for j in range(out_w):\n            region = image[i:i+kh, j:j+kw]\n            output[i, j] = np.sum(region * kernel)\n    return output\n```\n\n## 经典CNN流水线\n\n典型的CNN结构遵循以下模式：\n\n$$\\text{Conv} \\rightarrow \\text{ReLU} \\rightarrow \\text{Pool} \\rightarrow \\text{Conv} \\rightarrow \\text{ReLU} \\rightarrow \\text{Pool} \\rightarrow \\text{Flatten} \\rightarrow \\text{FC} \\rightarrow \\text{Softmax}$$\n\n前面的卷积层负责提取低级到高级的视觉特征，后面的全连接层负责分类。",
+    "starter_code": "import numpy as np\n\ndef convolution2d(image, kernel):\n    \"\"\"\n    实现二维卷积操作（无padding, stride=1）\n    image: (H, W) 输入图像\n    kernel: (KH, KW) 卷积核\n    return: (H-KH+1, W-KW+1) 输出特征图\n    \"\"\"\n    # TODO: 实现二维卷积\n    pass\n\ndef max_pooling2d(feature_map, pool_size=2):\n    \"\"\"\n    实现最大池化（stride=pool_size）\n    feature_map: (H, W) 特征图\n    pool_size: 池化窗口大小\n    \"\"\"\n    # TODO: 实现最大池化\n    pass",
+    "solution_code": "import numpy as np\n\ndef convolution2d(image, kernel):\n    h, w = image.shape\n    kh, kw = kernel.shape\n    out_h = h - kh + 1\n    out_w = w - kw + 1\n    output = np.zeros((out_h, out_w))\n    for i in range(out_h):\n        for j in range(out_w):\n            region = image[i:i+kh, j:j+kw]\n            output[i, j] = np.sum(region * kernel)\n    return output\n\ndef max_pooling2d(feature_map, pool_size=2):\n    h, w = feature_map.shape\n    out_h = h // pool_size\n    out_w = w // pool_size\n    output = np.zeros((out_h, out_w))\n    for i in range(out_h):\n        for j in range(out_w):\n            region = feature_map[i*pool_size:(i+1)*pool_size, j*pool_size:(j+1)*pool_size]\n            output[i, j] = np.max(region)\n    return output\n\nif __name__ == \"__main__\":\n    image = np.array([[1, 2, 0, 1],\n                      [3, 1, 2, 0],\n                      [0, 2, 1, 3],\n                      [1, 0, 2, 1]])\n    kernel = np.array([[1, 0, -1],\n                       [1, 0, -1],\n                       [1, 0, -1]])\n    fm = convolution2d(image, kernel)\n    print(\"Feature map:\", fm)\n    pooled = max_pooling2d(fm)\n    print(\"Pooled:\", pooled)",
+    "test_cases": [
+      {
+        "input": "conv2d_simple(np.array([[1,1,1],[1,1,1],[1,1,1]]), np.array([[1]]))",
+        "expected_output": "[[1. 1. 1.]\n [1. 1. 1.]\n [1. 1. 1.]]",
+        "description": "1x1核对全1矩阵卷积应不改变数值"
+      },
+      {
+        "input": "max_pool2d_simple(np.array([[1,2],[3,4]]), 2)",
+        "expected_output": "[[4.]]",
+        "description": "2x2最大池化应取最大值4"
+      }
+    ],
+    "hint": "卷积输出尺寸为 (H-KH+1, W-KW+1)。池化时注意使用 np.max(range) 取窗口最大值。",
+    "prerequisites": [
+      "dl-04-activation"
+    ]
+  },
+  {
+    "title": "经典CNN架构",
+    "slug": "dl-06-classic-cnn",
+    "description": "学习LeNet-5、AlexNet、VGGNet等里程碑式的CNN架构设计理念。",
+    "order": 6,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "dl",
+    "section": "卷积神经网络",
+    "content": "# 经典CNN架构\n\n## LeNet-5 (1998)\n\nYann LeCun 提出的LeNet-5是开创性的CNN架构，用于手写数字识别（MNIST）。架构为：\n\n$$\\text{Input(32x32)} \\rightarrow \\text{Conv(6@5x5)} \\rightarrow \\text{Pool(2x2)} \\rightarrow \\text{Conv(16@5x5)} \\rightarrow \\text{Pool(2x2)} \\rightarrow \\text{FC(120)} \\rightarrow \\text{FC(84)} \\rightarrow \\text{FC(10)}$$\n\n重要设计：\n- 使用Tanh激活函数（当时的标准选择）\n- 卷积层后接池化层来降维\n- 最后使用全连接层进行分类\n\n## AlexNet (2012)\n\nAlexNet在ImageNet比赛中以巨大优势夺冠，标志着深度学习革命的开始。\n\n核心创新：\n- **ReLU激活函数**：比Tanh训练速度快数倍\n- **Dropout正则化**：在FC层中以0.5概率随机丢弃神经元\n- **数据增强**：随机裁剪、水平翻转等\n- **双GPU训练**：将网络拆分到两个GPU上训练\n- **重叠池化**：池化步长小于窗口大小\n\n## VGGNet (2014)\n\nVGGNet由牛津大学VGG组提出，特点是极简一致的设计哲学：\n- **全部使用 3×3 卷积核**：两个3×3卷积的感受野等价于一个5×5卷积，但参数更少\n- **全部使用 2×2 最大池化**\n- 通过堆叠更多层来增加深度\n\n```python\nimport numpy as np\n\ndef vgg_style_forward(image):\n    \"\"\"模拟VGG风格的前向传播：重复的 Conv→ReLU→Pool 块\"\"\"\n    features = image\n    channels = [64, 128, 256, 512, 512]\n    convs_per_block = [2, 2, 3, 3, 3]\n\n    for block_idx, (ch, num_convs) in enumerate(zip(channels, convs_per_block)):\n        for _ in range(num_convs):\n            # 模拟3x3卷积\n            features = f\"Conv3x3→{ch}ch + ReLU\"\n        # 2x2最大池化\n        features = f\"{features} + MaxPool2x2\"\n\n    return features\n```\n\n## 架构演进趋势\n\n| 模型 | 年份 | 层数 | Top-5 Error | 关键创新 |\n|------|------|------|-------------|----------|\n| LeNet-5 | 1998 | 7 | - | 首个实用CNN |\n| AlexNet | 2012 | 8 | 15.3% | ReLU, Dropout |\n| VGG-16 | 2014 | 16 | 7.3% | 小卷积核堆叠 |\n| GoogLeNet | 2014 | 22 | 6.7% | Inception模块 |\n| ResNet-152 | 2015 | 152 | 3.6% | 残差连接 |\n\n**规律**：更深、更高效的架构不断推动性能提升。",
+    "starter_code": "import numpy as np\n\ndef cnn_block(input_shape, filters, kernel_size=3, pool_size=2):\n    \"\"\"\n    定义一个CNN块：Conv → ReLU → Pool\n    模拟操作，返回每步的形状变化\n    input_shape: (H, W, C) 输入形状\n    filters: 卷积核数量\n    kernel_size: 卷积核大小\n    pool_size: 池化窗口大小\n    return: 每步的形状列表\n    \"\"\"\n    # TODO: 计算Conv后的形状（零填充，保持空间尺寸）\n    # TODO: 计算Pool后的形状\n    pass\n\ndef vgg_demo():\n    \"\"\"\n    模拟VGG-16的架构信息\n    返回每层的信息列表\n    \"\"\"\n    # TODO: 实现VGG-16的架构描述\n    pass",
+    "solution_code": "import numpy as np\n\ndef cnn_block(input_shape, filters, kernel_size=3, pool_size=2):\n    h, w, c = input_shape\n    # Conv with same padding: output size = input size\n    conv_shape = (h, w, filters)\n    # Pool: size halved\n    pool_shape = (h // pool_size, w // pool_size, filters)\n    return [\n        f\"Input: {h}×{w}×{c}\",\n        f\"Conv{kernel_size}: {conv_shape[0]}×{conv_shape[1]}×{conv_shape[2]}\",\n        f\"ReLU: {conv_shape[0]}×{conv_shape[1]}×{conv_shape[2]}\",\n        f\"MaxPool{pool_size}: {pool_shape[0]}×{pool_shape[1]}×{pool_shape[2]}\"\n    ]\n\ndef vgg_demo():\n    arch = [\n        (2, 64), (2, 128), (3, 256),\n        (3, 512), (3, 512)\n    ]\n    info = [\"VGG-16 Architecture:\"]\n    shape = (224, 224, 3)\n    for num_convs, filters in arch:\n        for _ in range(num_convs):\n            info.append(f\"  Conv3-{filters}: {shape[0]}×{shape[1]}×{filters}\")\n            shape = (shape[0], shape[1], filters)\n        info.append(f\"  MaxPool: {shape[0]}×{shape[1]}×{shape[2]} → {shape[0]//2}×{shape[1]//2}×{shape[2]}\")\n        shape = (shape[0] // 2, shape[1] // 2, shape[2])\n    info.append(\"  FC-4096 → FC-4096 → FC-1000\")\n    return info\n\nif __name__ == \"__main__\":\n    shapes = cnn_block((32, 32, 3), 64)\n    for s in shapes:\n        print(s)\n    print()\n    for s in vgg_demo():\n        print(s)",
+    "test_cases": [
+      {
+        "input": "len(cnn_block_sim((32, 32, 3), 64))",
+        "expected_output": "4",
+        "description": "CNN块应返回4步形状信息"
+      },
+      {
+        "input": "len(vgg_demo_sim())",
+        "expected_output": "18",
+        "description": "VGG-16应包含所有层信息"
+      }
+    ],
+    "hint": "卷积使用same padding时空间尺寸不变，池化后尺寸减半。VGG-16有13个卷积层和3个全连接层。",
+    "prerequisites": [
+      "dl-05-conv"
+    ]
+  },
+  {
+    "title": "ResNet与残差学习",
+    "slug": "dl-07-resnet",
+    "description": "深入理解ResNet的残差连接设计、跳跃连接如何解决退化问题，以及迁移学习的实践。",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "dl",
+    "section": "卷积神经网络",
+    "content": "# ResNet与残差学习\n\n## 退化问题\n\n直觉上，更深的网络应该有更好的性能。但实验发现：随着深度增加，网络准确率先上升后**饱和甚至下降**。这被称为\"退化问题\"（Degradation Problem），它不是过拟合（训练误差也在上升），而是优化困难——深层网络中的梯度信号在反向传播过程中逐渐消失。\n\n## 残差块（Residual Block）\n\nResNet的核心创新是引入**跳跃连接**（Skip Connection / Shortcut Connection）：\n\n$$H(x) = F(x) + x$$\n\n网络不再学习目标映射 $H(x)$，而是学习**残差** $F(x) = H(x) - x$。这看似简单，效果却极为显著。\n\n```python\nimport numpy as np\n\ndef conv_bn_relu(x, weight, bias, gamma, beta):\n    \"\"\"Conv → BatchNorm → ReLU\"\"\"\n    out = np.dot(x, weight) + bias\n    mean = np.mean(out, axis=-1, keepdims=True)\n    var = np.var(out, axis=-1, keepdims=True)\n    out = gamma * (out - mean) / np.sqrt(var + 1e-5) + beta\n    return np.maximum(0, out)\n\ndef residual_block(x, weights):\n    \"\"\"\n    残差块: x → Conv→BN→ReLU→Conv→BN → add(x) → ReLU\n    \"\"\"\n    residual = x\n    # 主路径\n    out = conv_bn_relu(x, weights['w1'], weights['b1'],\n                       weights['gamma1'], weights['beta1'])\n    out = np.dot(out, weights['w2']) + weights['b2']\n    mean = np.mean(out, axis=-1, keepdims=True)\n    var = np.var(out, axis=-1, keepdims=True)\n    out = weights['gamma2'] * (out - mean) / np.sqrt(var + 1e-5) + weights['beta2']\n    # 跳跃连接\n    out = out + residual\n    return np.maximum(0, out)\n```\n\n## 为什么残差学习有效\n\n1. **梯度高速公路**：梯度可以通过跳跃连接直接传播到前层，$\\frac{\\partial L}{\\partial x} = \\frac{\\partial L}{\\partial H} \\cdot (\\frac{\\partial F}{\\partial x} + 1)$，+1保证梯度不会完全消失\n2. **恒等映射的便利性**：如果恒等映射是最优的，残差块只需让 $F(x) = 0$\n3. **集成效应**：残差网络可看作多个浅层网络的集成\n\n## ResNet变体\n\n- ResNet-18/34：使用两层残差块\n- ResNet-50/101/152：使用三层\"瓶颈\"残差块（1×1→3×3→1×1）\n\n## 迁移学习实践\n\n在数据量有限的情况下，通常做法：\n\n1. 加载ImageNet预训练的ResNet模型\n2. 冻结前层（特征提取器），仅训练最后的分类层\n3. 如果数据量较多，可以解冻部分后层进行微调（Fine-tuning）\n\n迁移学习让小数据集也能享受大模型的效果。",
+    "starter_code": "import numpy as np\n\ndef relu(x):\n    return np.maximum(0, x)\n\ndef residual_forward(x, weights):\n    \"\"\"\n    实现残差块前向传播\n    x: 输入张量\n    weights: 包含 w1, b1, w2, b2 的字典\n    返回: 残差块输出\n    \"\"\"\n    # TODO: Conv1 → BN → ReLU\n    # TODO: Conv2 → BN\n    # TODO: Skip Connection: out + x\n    # TODO: Final ReLU\n    pass\n\ndef build_resnet_layer(input_channels, output_channels, stride=1):\n    \"\"\"\n    构建ResNet中的一层（包含残差连接）\n    模拟函数，返回层的描述\n    \"\"\"\n    # TODO: 返回层的结构描述\n    pass",
+    "solution_code": "import numpy as np\n\ndef relu(x):\n    return np.maximum(0, x)\n\ndef residual_forward(x, weights):\n    residual = x\n    # Conv1\n    out = np.dot(x, weights['w1']) + weights['b1']\n    # BN1\n    mean = np.mean(out, axis=-1, keepdims=True)\n    var = np.var(out, axis=-1, keepdims=True)\n    out = (out - mean) / np.sqrt(var + 1e-5)\n    out = relu(out)\n    # Conv2\n    out = np.dot(out, weights['w2']) + weights['b2']\n    # BN2\n    mean = np.mean(out, axis=-1, keepdims=True)\n    var = np.var(out, axis=-1, keepdims=True)\n    out = (out - mean) / np.sqrt(var + 1e-5)\n    # Skip connection\n    out = out + residual\n    out = relu(out)\n    return out\n\ndef build_resnet_layer(input_channels, output_channels, stride=1):\n    return {\n        \"type\": \"Bottleneck\" if input_channels != output_channels else \"BasicBlock\",\n        \"layers\": [\n            f\"Conv1x1({input_channels}→{output_channels//4})\",\n            f\"Conv3x3({output_channels//4}→{output_channels//4}), stride={stride}\",\n            f\"Conv1x1({output_channels//4}→{output_channels})\"\n        ],\n        \"shortcut\": \"Identity\" if input_channels == output_channels else f\"Conv1x1({input_channels}→{output_channels})\"\n    }\n\nif __name__ == \"__main__\":\n    layer = build_resnet_layer(64, 256)\n    print(layer)",
+    "test_cases": [
+      {
+        "input": "build_resnet_layer_sim(64, 64)['type']",
+        "expected_output": "'BasicBlock'",
+        "description": "输入输出通道相同时使用BasicBlock"
+      },
+      {
+        "input": "build_resnet_layer_sim(64, 256)['type']",
+        "expected_output": "'Bottleneck'",
+        "description": "输入输出通道不同时使用Bottleneck"
+      }
+    ],
+    "hint": "残差块的关键是 $out = F(x) + x$。当输入输出维度不匹配时，shortcut需要1×1卷积调整通道数。",
+    "prerequisites": [
+      "dl-06-classic-cnn"
+    ]
+  },
+  {
+    "title": "RNN与LSTM",
+    "slug": "dl-08-rnn",
+    "description": "掌握循环神经网络RNN原理，以及LSTM/GRU如何通过门控机制解决长期依赖问题。",
+    "order": 8,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "dl",
+    "section": "循环与Transformer",
+    "content": "# 循环神经网络与LSTM\n\n## 序列建模的挑战\n\n传统前馈神经网络假设输入之间是独立的，无法处理变长的序列数据（文本、语音、视频帧等），也无法\"记住\"历史信息。\n\n## RNN原理\n\n循环神经网络（Recurrent Neural Network）在每个时间步接收当前输入 $x_t$ 和上一步的隐藏状态 $h_{t-1}$，输出当前隐藏状态 $h_t$：\n\n$$h_t = \\tanh(W_{ih} \\cdot x_t + W_{hh} \\cdot h_{t-1} + b_h)$$\n\n$$y_t = W_{hy} \\cdot h_t + b_y$$\n\n关键洞察：同一个权重矩阵 $W_{hh}$ 在所有时间步**共享**，这使得RNN能处理任意长度的序列。\n\n```python\nimport numpy as np\n\nclass SimpleRNN:\n    def __init__(self, input_size, hidden_size, output_size):\n        self.Wxh = np.random.randn(hidden_size, input_size) * 0.01\n        self.Whh = np.random.randn(hidden_size, hidden_size) * 0.01\n        self.Why = np.random.randn(output_size, hidden_size) * 0.01\n        self.bh = np.zeros((hidden_size, 1))\n        self.by = np.zeros((output_size, 1))\n\n    def forward(self, inputs):\n        h = np.zeros((self.Whh.shape[0], 1))\n        outputs = []\n        for x in inputs:\n            x = x.reshape(-1, 1)\n            h = np.tanh(np.dot(self.Wxh, x) + np.dot(self.Whh, h) + self.bh)\n            y = np.dot(self.Why, h) + self.by\n            outputs.append(y)\n        return outputs, h\n```\n\n## RNN的局限：长期依赖\n\nRNN存在**梯度消失/爆炸**问题：当序列很长时，反向传播的梯度被多次乘以 $W_{hh}$，导致梯度指数级衰减或增长。这意味着RNN难以学习远距离的依赖关系。\n\n## LSTM（长短期记忆网络）\n\nLSTM引入**三个门**和一个**细胞状态**（Cell State）来解决长期依赖：\n\n1. **遗忘门** $f_t = \\sigma(W_f \\cdot [h_{t-1}, x_t] + b_f)$ ——决定丢弃哪些旧信息\n2. **输入门** $i_t = \\sigma(W_i \\cdot [h_{t-1}, x_t] + b_i)$ ——决定存储哪些新信息\n3. **输出门** $o_t = \\sigma(W_o \\cdot [h_{t-1}, x_t] + b_o)$ ——决定输出什么信息\n\n细胞状态更新：$C_t = f_t \\odot C_{t-1} + i_t \\odot \\tilde{C}_t$\n\n## GRU（门控循环单元）\n\nGRU是LSTM的简化版，只有两个门（重置门和更新门），参数更少但效果相近。将LSTM的遗忘门和输入门合并为更新门。",
+    "starter_code": "import numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-np.clip(x, -500, 500)))\n\nclass LSTMCell:\n    def __init__(self, input_size, hidden_size):\n        # 合并所有权重矩阵\n        self.W = np.random.randn(input_size + hidden_size, 4 * hidden_size) * 0.01\n        self.b = np.zeros((1, 4 * hidden_size))\n        self.hidden_size = hidden_size\n\n    def forward(self, x, prev_h, prev_c):\n        \"\"\"\n        LSTM单步前向传播\n        x: (1, input_size)\n        prev_h: (1, hidden_size)\n        prev_c: (1, hidden_size)\n        return: (next_h, next_c)\n        \"\"\"\n        # TODO: 拼接输入，计算门控值\n        # TODO: 更新细胞状态\n        # TODO: 计算输出\n        pass",
+    "solution_code": "import numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-np.clip(x, -500, 500)))\n\nclass LSTMCell:\n    def __init__(self, input_size, hidden_size):\n        self.W = np.random.randn(input_size + hidden_size, 4 * hidden_size) * 0.01\n        self.b = np.zeros((1, 4 * hidden_size))\n        self.hidden_size = hidden_size\n\n    def forward(self, x, prev_h, prev_c):\n        combined = np.concatenate([x, prev_h], axis=1)\n        gates = np.dot(combined, self.W) + self.b\n        f, i, g, o = np.split(gates, 4, axis=1)\n        f = sigmoid(f)\n        i = sigmoid(i)\n        g = np.tanh(g)\n        o = sigmoid(o)\n        next_c = f * prev_c + i * g\n        next_h = o * np.tanh(next_c)\n        return next_h, next_c\n\nif __name__ == \"__main__\":\n    lstm = LSTMCell(3, 5)\n    x = np.random.randn(1, 3)\n    h = np.zeros((1, 5))\n    c = np.zeros((1, 5))\n    nh, nc = lstm.forward(x, h, c)\n    print(\"Hidden state shape:\", nh.shape)\n    print(\"Cell state shape:\", nc.shape)",
+    "test_cases": [
+      {
+        "input": "lstm_output_shape(np.ones((1, 3)), np.zeros((1, 4)), np.zeros((1, 4)))[0].shape",
+        "expected_output": "(1, 4)",
+        "description": "LSTM隐藏状态形状验证"
+      },
+      {
+        "input": "lstm_output_shape(np.ones((1, 3)), np.zeros((1, 4)), np.zeros((1, 4)))[1].shape",
+        "expected_output": "(1, 4)",
+        "description": "LSTM细胞状态形状验证"
+      }
+    ],
+    "hint": "将4个门的权重矩阵合并为一个大的W（[input_size+hidden_size, 4*hidden_size]），前向传播时用np.split分割为f, i, g, o。",
+    "prerequisites": [
+      "dl-03-backprop"
+    ]
+  },
+  {
+    "title": "注意力机制",
+    "slug": "dl-09-attention",
+    "description": "理解Attention机制的原理，掌握Scaled Dot-Product Attention的计算过程。",
+    "order": 9,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "dl",
+    "section": "循环与Transformer",
+    "content": "# 注意力机制\n\n## 为什么需要注意力\n\n传统的Seq2Seq模型（编码器-解码器结构）将所有输入信息压缩到一个定长的上下文向量中，当输入序列很长时，这个\"信息瓶颈\"导致性能急剧下降。\n\n注意力机制（Attention Mechanism）允许解码器在每个时间步**动态关注**编码器中相关的部分，而不是被动地依赖一个固定的上下文向量。\n\n## 注意力的一般形式\n\n注意力可以理解为一种**寻址操作**：\n- **Query（Q）**：当前要查询的信息（来自解码器）\n- **Key（K）**：每个位置的\"标签\"（来自编码器）\n- **Value（V）**：每个位置的实际内容（来自编码器）\n\n计算过程：\n1. 计算Query与每个Key的相似度得分\n2. 用Softmax将得分归一化为注意力权重\n3. 加权求和Value得到输出\n\n$$\\text{Attention}(Q, K, V) = \\sum_i \\text{softmax}(\\text{score}(Q, K_i))_i \\cdot V_i$$\n\n## Scaled Dot-Product Attention\n\n这是Transformer中使用的注意力变体：\n\n$$\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V$$\n\n为什么除以 $\\sqrt{d_k}$？当 $d_k$ 较大时，点积 $QK^T$ 的方差增大，进入Softmax的饱和区，梯度变小。除以 $\\sqrt{d_k}$ 可以保持方差稳定。\n\n```python\nimport numpy as np\n\ndef softmax(x):\n    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)\n\ndef scaled_dot_product_attention(Q, K, V, mask=None):\n    \"\"\"\n    Q: (..., seq_len_q, d_k)\n    K: (..., seq_len_k, d_k)\n    V: (..., seq_len_k, d_v)\n    \"\"\"\n    d_k = K.shape[-1]\n    scores = np.dot(Q, K.transpose(0, 2, 1)) / np.sqrt(d_k)\n    if mask is not None:\n        scores = scores + mask  # mask位置设为 -inf\n    weights = softmax(scores)\n    output = np.dot(weights, V)\n    return output\n```\n\n## 多头注意力（Multi-Head Attention）\n\n单头注意力只能关注一种模式。多头注意力将 Q、K、V 分别通过多个线性投影，并行计算多组注意力，然后拼接结果：\n\n$$\\text{MultiHead}(Q, K, V) = \\text{Concat}(\\text{head}_1, ..., \\text{head}_h)W^O$$\n\n$$\\text{head}_i = \\text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$\n\n## 自注意力（Self-Attention）\n\n当 Q、K、V 都来自同一个输入时，称为自注意力。自注意力让序列中的每个位置都与所有其他位置交互，捕捉长距离依赖关系。",
+    "starter_code": "import numpy as np\n\ndef softmax(x, axis=-1):\n    exp_x = np.exp(x - np.max(x, axis=axis, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=axis, keepdims=True)\n\ndef scaled_dot_product_attention(Q, K, V, mask=None):\n    \"\"\"\n    实现缩放点积注意力\n    Q: (batch, seq_len_q, d_k)\n    K: (batch, seq_len_k, d_k)\n    V: (batch, seq_len_k, d_v)\n    \"\"\"\n    # TODO: 计算注意力分数 scores = Q @ K^T / sqrt(d_k)\n    # TODO: 如果有mask，应用mask\n    # TODO: Softmax得到权重\n    # TODO: 加权求和V\n    pass\n\ndef multi_head_attention(Q, K, V, num_heads):\n    \"\"\"\n    实现多头注意力\n    Q, K, V: (batch, seq_len, d_model)\n    num_heads: 注意力头数\n    \"\"\"\n    # TODO: 分割为多头\n    # TODO: 对每个头计算注意力\n    # TODO: 拼接多头结果\n    pass",
+    "solution_code": "import numpy as np\n\ndef softmax(x, axis=-1):\n    exp_x = np.exp(x - np.max(x, axis=axis, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=axis, keepdims=True)\n\ndef scaled_dot_product_attention(Q, K, V, mask=None):\n    d_k = K.shape[-1]\n    scores = np.matmul(Q, K.transpose(0, 2, 1)) / np.sqrt(d_k)\n    if mask is not None:\n        scores = scores + mask\n    weights = softmax(scores, axis=-1)\n    output = np.matmul(weights, V)\n    return output\n\ndef multi_head_attention(Q, K, V, num_heads=8):\n    batch_size, seq_len, d_model = Q.shape\n    d_k = d_model // num_heads\n    # 分割为多头\n    Q_heads = Q.reshape(batch_size, seq_len, num_heads, d_k).transpose(0, 2, 1, 3)\n    K_heads = K.reshape(batch_size, seq_len, num_heads, d_k).transpose(0, 2, 1, 3)\n    V_heads = V.reshape(batch_size, seq_len, num_heads, d_k).transpose(0, 2, 1, 3)\n    # 每个头计算注意力\n    Q_heads = Q_heads.reshape(batch_size * num_heads, seq_len, d_k)\n    K_heads = K_heads.reshape(batch_size * num_heads, seq_len, d_k)\n    V_heads = V_heads.reshape(batch_size * num_heads, seq_len, d_k)\n    attn_output = scaled_dot_product_attention(Q_heads, K_heads, V_heads)\n    # 拼接\n    attn_output = attn_output.reshape(batch_size, num_heads, seq_len, d_k)\n    attn_output = attn_output.transpose(0, 2, 1, 3).reshape(batch_size, seq_len, d_model)\n    return attn_output\n\nif __name__ == \"__main__\":\n    Q = np.random.randn(2, 4, 64)\n    K = np.random.randn(2, 4, 64)\n    V = np.random.randn(2, 4, 64)\n    out = scaled_dot_product_attention(Q, K, V)\n    print(\"Attention output shape:\", out.shape)\n    mh_out = multi_head_attention(Q, K, V, num_heads=8)\n    print(\"Multi-head output shape:\", mh_out.shape)",
+    "test_cases": [
+      {
+        "input": "attn_output_shape(np.ones((2, 4, 64)), np.ones((2, 4, 64)), np.ones((2, 4, 64))).shape",
+        "expected_output": "(2, 4, 64)",
+        "description": "注意力输出形状应与V相同"
+      },
+      {
+        "input": "np.abs(attn_weights_sum(np.ones((1, 5, 8)), np.ones((1, 5, 8)), np.ones((1, 5, 8)))[0][0].sum() - 1) < 1e-5",
+        "expected_output": "True",
+        "description": "注意力权重求和应约等于1"
+      }
+    ],
+    "hint": "核心公式：scores = Q @ K^T / sqrt(d_k)，然后 softmax(scores) @ V。batch版本使用np.matmul处理三维张量。",
+    "prerequisites": [
+      "dl-08-rnn"
+    ]
+  },
+  {
+    "title": "Transformer架构",
+    "slug": "dl-10-transformer",
+    "description": "全面理解Transformer的编码器-解码器结构、位置编码，以及如何从头实现一个简单的Transformer。",
+    "order": 10,
+    "difficulty": "advanced",
+    "xp_reward": 30,
+    "track": "dl",
+    "section": "循环与Transformer",
+    "content": "# Transformer架构\n\n## 整体架构\n\nTransformer（Vaswani et al., 2017）完全基于注意力机制，抛弃了循环和卷积。它采用编码器-解码器（Encoder-Decoder）结构，但每一步都可以并行计算。\n\n```\n编码器: Input → Embedding → Positional Encoding → [Self-Attention → FFN] × N\n解码器: Output → Embedding → Positional Encoding → [Masked Self-Attn → Cross-Attn → FFN] × N → Linear → Softmax\n```\n\n## 位置编码（Positional Encoding）\n\n由于没有循环或卷积，Transformer无法感知序列中元素的顺序。位置编码向输入嵌入中注入位置信息：\n\n$$PE_{(pos, 2i)} = \\sin\\left(\\frac{pos}{10000^{2i/d_{model}}}\\right)$$\n$$PE_{(pos, 2i+1)} = \\cos\\left(\\frac{pos}{10000^{2i/d_{model}}}\\right)$$\n\n其中 $pos$ 是位置，$i$ 是维度索引。这种设计使得模型可以轻松关注相对位置。\n\n## 编码器层\n\n每个编码器层包含两个子层：\n1. **多头自注意力**：输入序列中的每个位置关注所有其他位置\n2. **前馈神经网络**：两个线性变换中间夹一个ReLU，即 $\\text{FFN}(x) = \\max(0, xW_1 + b_1) W_2 + b_2$\n\n每个子层后都有残差连接和层归一化（$\\text{LayerNorm}(x + \\text{Sublayer}(x))$）。\n\n## 解码器层\n\n解码器层包含三个子层：\n1. **掩码多头自注意力**：只能关注当前位置及之前的位置（防止\"偷看\"未来信息）\n2. **交叉注意力**：Query来自解码器，Key和Value来自编码器输出\n3. **前馈神经网络**\n\n```python\nimport numpy as np\n\ndef layer_norm(x, gamma=1.0, beta=0.0, eps=1e-5):\n    \"\"\"层归一化\"\"\"\n    mean = np.mean(x, axis=-1, keepdims=True)\n    var = np.var(x, axis=-1, keepdims=True)\n    return gamma * (x - mean) / np.sqrt(var + eps) + beta\n\ndef positional_encoding(seq_len, d_model):\n    \"\"\"生成位置编码\"\"\"\n    pe = np.zeros((seq_len, d_model))\n    for pos in range(seq_len):\n        for i in range(0, d_model, 2):\n            pe[pos, i] = np.sin(pos / (10000 ** (i / d_model)))\n            pe[pos, i + 1] = np.cos(pos / (10000 ** (i / d_model)))\n    return pe\n```\n\n## Transformer的优势\n\n1. **并行计算**：不像RNN需要串行处理，所有位置可以同时计算\n2. **全局感受野**：每个位置可以直接关注到序列中的任何其他位置\n3. **可扩展性**：参数量和计算量可随数据规模灵活增加\n\n这些特性使Transformer成为LLM（GPT、LLaMA等）的基础架构。",
+    "starter_code": "import numpy as np\n\ndef positional_encoding(seq_len, d_model):\n    \"\"\"\n    生成正弦-余弦位置编码\n    seq_len: 序列长度\n    d_model: 嵌入维度\n    return: (seq_len, d_model) 位置编码矩阵\n    \"\"\"\n    # TODO: 实现位置编码\n    pass\n\ndef layer_norm(x, eps=1e-5):\n    \"\"\"\n    层归一化：对最后一个维度归一化\n    x: (..., d_model)\n    \"\"\"\n    # TODO: 实现层归一化\n    pass\n\ndef feedforward_network(x, W1, b1, W2, b2):\n    \"\"\"\n    前馈神经网络: ReLU(x @ W1 + b1) @ W2 + b2\n    \"\"\"\n    # TODO: 实现FFN\n    pass",
+    "solution_code": "import numpy as np\n\ndef positional_encoding(seq_len, d_model):\n    pe = np.zeros((seq_len, d_model))\n    for pos in range(seq_len):\n        for i in range(0, d_model, 2):\n            denominator = 10000 ** (i / d_model)\n            pe[pos, i] = np.sin(pos / denominator)\n            if i + 1 < d_model:\n                pe[pos, i + 1] = np.cos(pos / denominator)\n    return pe\n\ndef layer_norm(x, eps=1e-5):\n    mean = np.mean(x, axis=-1, keepdims=True)\n    var = np.var(x, axis=-1, keepdims=True)\n    return (x - mean) / np.sqrt(var + eps)\n\ndef feedforward_network(x, W1, b1, W2, b2):\n    hidden = np.maximum(0, np.dot(x, W1) + b1)\n    output = np.dot(hidden, W2) + b2\n    return output\n\ndef transformer_encoder_block(x, attn_weights, ffn_weights):\n    n_samples, seq_len, d_model = x.shape\n    # Self-Attention\n    attn_out = x  # 简化：略去实际注意力计算\n    # Add & Norm\n    x = layer_norm(x + attn_out)\n    # Feed Forward\n    ffn_out = feedforward_network(x, ffn_weights['W1'], ffn_weights['b1'],\n                                   ffn_weights['W2'], ffn_weights['b2'])\n    # Add & Norm\n    x = layer_norm(x + ffn_out)\n    return x\n\nif __name__ == \"__main__\":\n    pe = positional_encoding(10, 512)\n    print(\"Positional encoding shape:\", pe.shape)\n    x = np.random.randn(2, 10, 512)\n    ln_out = layer_norm(x)\n    print(\"Layer norm mean:\", np.mean(ln_out))\n    print(\"Layer norm var:\", np.var(ln_out))",
+    "test_cases": [
+      {
+        "input": "positional_encoding_tf(4, 512).shape",
+        "expected_output": "(4, 512)",
+        "description": "位置编码形状应为(seq_len, d_model)"
+      },
+      {
+        "input": "round(np.abs(np.mean(layer_norm_tf(np.random.randn(100, 64)))), 3)",
+        "expected_output": "0.0",
+        "description": "层归一化后均值应接近0"
+      }
+    ],
+    "hint": "位置编码的核心：偶数索引用sin，奇数索引用cos，分母为 10000^(i/d_model)。",
+    "prerequisites": [
+      "dl-09-attention"
+    ]
+  },
+  {
+    "title": "正则化与防止过拟合",
+    "slug": "dl-11-regularization",
+    "description": "掌握L1/L2正则化、Dropout、数据增强、早停等防过拟合技术。",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "dl",
+    "section": "训练优化",
+    "content": "# 正则化与防止过拟合\n\n## 过拟合的本质\n\n过拟合（Overfitting）指模型在训练数据上表现很好，但在测试数据上表现差——模型\"记住\"了训练集中的噪声和特定模式，而不是学习到普遍规律。\n\n## L1/L2正则化\n\n正则化通过在损失函数中添加参数范数惩罚来约束模型复杂度：\n\n$$L_{reg} = L_{original} + \\lambda \\|w\\|_p$$\n\n- **L1正则化** $\\|w\\|_1 = \\sum |w_i|$：促使参数稀疏化（许多权重变为0），有特征选择的效果\n- **L2正则化** $\\|w\\|_2^2 = \\sum w_i^2$：使参数趋向于小的值但不会为0，也叫权重衰减\n\n```python\nimport numpy as np\n\ndef l1_loss(weights, lambda_=0.01):\n    \"\"\"L1正则化损失\"\"\"\n    return lambda_ * np.sum(np.abs(weights))\n\ndef l2_loss(weights, lambda_=0.01):\n    \"\"\"L2正则化损失\"\"\"\n    return lambda_ * np.sum(weights ** 2)\n\ndef total_loss(y_pred, y_true, weights, lambda_l1=0.0, lambda_l2=0.01):\n    \"\"\"总损失 = MSE + L1 + L2\"\"\"\n    mse = np.mean((y_pred - y_true) ** 2)\n    l1 = l1_loss(weights, lambda_l1)\n    l2 = l2_loss(weights, lambda_l2)\n    return mse + l1 + l2\n```\n\n## Dropout\n\nDropout在训练时以概率 $p$ 随机\"丢弃\"神经元（将其输出置零）。\n\n关键机制：\n- 训练时：每个神经元以概率 $p$ 被保留，以概率 $1-p$ 被丢弃\n- 测试时：所有神经元都激活，但输出乘以 $p$（或等价地在训练时除以 $p$，即Inverted Dropout）\n\nDropout强迫网络学习冗余表示，每个神经元不能\"依赖\"其他特定神经元的存在。\n\n## 其他正则化技术\n\n### 数据增强\n通过对训练数据施加随机变换（旋转、裁剪、翻转、加噪声等）来扩充数据集。模型接触到更多变化，泛化能力更强。\n\n### 早停（Early Stopping）\n监控验证集损失，当验证损失不再下降时停止训练，防止模型在训练集上过度优化。\n\n### 批归一化（Batch Normalization）\n虽然主要解决内部协变量偏移问题，但也具有轻微的正则化效果。",
+    "starter_code": "import numpy as np\n\ndef dropout_forward(x, keep_prob=0.5, training=True):\n    \"\"\"\n    实现Dropout前向传播（Inverted Dropout）\n    x: 输入\n    keep_prob: 保留概率\n    training: 是否训练模式\n    \"\"\"\n    # TODO: 训练模式下生成mask并缩放\n    # TODO: 测试模式下直接返回x\n    pass\n\ndef l2_regularized_loss(y_pred, y_true, weights, lambda_):\n    \"\"\"\n    计算带L2正则化的均方误差损失\n    \"\"\"\n    # TODO: MSE + lambda * sum(w^2)\n    pass",
+    "solution_code": "import numpy as np\n\ndef dropout_forward(x, keep_prob=0.5, training=True):\n    if not training:\n        return x\n    mask = (np.random.rand(*x.shape) < keep_prob).astype(np.float64)\n    # Inverted Dropout: 训练时除以keep_prob\n    return (x * mask) / keep_prob\n\ndef l2_regularized_loss(y_pred, y_true, weights, lambda_=0.01):\n    mse = np.mean((y_pred - y_true) ** 2)\n    l2 = lambda_ * np.sum(weights ** 2)\n    return mse + l2\n\nclass RegularizedModel:\n    def __init__(self, lr=0.01, lambda_=0.01, dropout_keep=0.8):\n        self.lr = lr\n        self.lambda_ = lambda_\n        self.dropout_keep = dropout_keep\n        self.weights = None\n\n    def fit(self, X, y, epochs=1000):\n        n_features = X.shape[1]\n        self.weights = np.random.randn(n_features) * 0.01\n        for epoch in range(epochs):\n            # Forward with dropout\n            h = dropout_forward(X, self.dropout_keep, training=True)\n            pred = np.dot(h, self.weights)\n            loss = l2_regularized_loss(pred, y, self.weights, self.lambda_)\n            # Gradient (simplified)\n            grad = np.dot(h.T, (pred - y)) / len(y) + 2 * self.lambda_ * self.weights\n            self.weights -= self.lr * grad\n\n    def predict(self, X):\n        h = dropout_forward(X, self.dropout_keep, training=False)\n        return np.dot(h, self.weights)\n\nif __name__ == \"__main__\":\n    x = np.random.randn(100, 10)\n    out = dropout_forward(x, 0.5, training=True)\n    print(\"Dropout output mean (should be ~0):\", np.mean(out))\n    y_pred = np.random.randn(10)\n    y_true = np.random.randn(10)\n    w = np.random.randn(5)\n    print(\"Regularized loss:\", l2_regularized_loss(y_pred, y_true, w, 0.01))",
+    "test_cases": [
+      {
+        "input": "abs(np.mean(dropout_tf(np.ones((1000, 50)), 0.5, True)) - 1.0) < 0.2",
+        "expected_output": "True",
+        "description": "Inverted Dropout保持期望不变"
+      },
+      {
+        "input": "round(l2_reg_loss(np.array([1.0]), np.array([0.0]), np.array([3.0]), 0.0), 3)",
+        "expected_output": "1.0",
+        "description": "lambda=0时只有MSE，无正则化项"
+      }
+    ],
+    "hint": "Inverted Dropout在训练时 mask = (random < keep_prob) / keep_prob，测试时直接返回x。L2 = lambda * sum(w^2)。",
+    "prerequisites": [
+      "dl-03-backprop"
+    ]
+  },
+  {
+    "title": "学习率调度",
+    "slug": "dl-12-lr-schedule",
+    "description": "掌握学习率衰减、余弦退火、Warmup等学习率调度策略，理解它们如何加速收敛并提升最终性能。",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "dl",
+    "section": "训练优化",
+    "content": "# 学习率调度\n\n## 为什么需要调度学习率\n\n固定的学习率存在矛盾：\n- 太大：训练初期加速收敛，但后期在最优解附近震荡，无法收敛到精确解\n- 太小：收敛缓慢，可能陷入局部最优\n\n学习率调度（Learning Rate Schedule）在训练过程中动态调整学习率，兼顾收敛速度和精度。\n\n## 常见调度策略\n\n### Step Decay（阶梯衰减）\n每隔固定epoch数，学习率乘以一个衰减因子：\n\n$$lr = lr_0 \\times \\gamma^{\\lfloor epoch / step\\_size \\rfloor}$$\n\n```python\nimport numpy as np\n\ndef step_decay(initial_lr, epoch, drop_factor=0.5, epochs_drop=30):\n    \"\"\"阶梯衰减\"\"\"\n    return initial_lr * (drop_factor ** (epoch // epochs_drop))\n```\n\n### Exponential Decay（指数衰减）\n学习率以指数速度衰减：\n$$lr = lr_0 \\times e^{-decay\\_rate \\times epoch}$$\n\n### Cosine Annealing（余弦退火）\n学习率按照余弦曲线从初始值衰减到最小值：\n$$lr = lr_{min} + \\frac{1}{2}(lr_0 - lr_{min})(1 + \\cos(\\frac{epoch}{T_{max}}\\pi))$$\n\n```python\ndef cosine_annealing(initial_lr, epoch, T_max, lr_min=0):\n    \"\"\"余弦退火\"\"\"\n    return lr_min + 0.5 * (initial_lr - lr_min) * (1 + np.cos(np.pi * epoch / T_max))\n```\n\n### Warmup（预热）\n训练开始阶段线性增加学习率，避免模型在初始化阶段不稳定：\n\n```python\ndef warmup_lr(initial_lr, epoch, warmup_epochs=5):\n    \"\"\"线性预热\"\"\"\n    if epoch < warmup_epochs:\n        return initial_lr * (epoch + 1) / warmup_epochs\n    return initial_lr\n```\n\n## 现代实践\n\n在实践中，通常组合多种策略：\n1. **Warmup阶段**：学习率线性增长（前5-10个epoch）\n2. **主训练阶段**：使用Cosine Annealing或Step Decay\n3. **循环学习率**：学习率在上下界之间循环变化，有助于跳出局部最优\n\n## 学习率对训练的影响\n\n| 现象 | 可能原因 |\n|------|----------|\n| Loss震荡剧烈 | 学习率太大 |\n| Loss下降极慢 | 学习率太小 |\n| Loss先降后升 | 学习率太大，发散 |\n| Loss在平台期停滞 | 可能需降低学习率 |",
+    "starter_code": "import numpy as np\n\ndef step_decay(initial_lr, epoch, drop_factor=0.5, epochs_drop=30):\n    \"\"\"\n    阶梯衰减：每epochs_drop个epoch学习率乘以drop_factor\n    \"\"\"\n    # TODO: 实现阶梯衰减\n    pass\n\ndef cosine_annealing(initial_lr, epoch, T_max, lr_min=0):\n    \"\"\"\n    余弦退火\n    T_max: 完成一个余弦周期的epoch数\n    \"\"\"\n    # TODO: 实现余弦退火\n    pass\n\ndef warmup_cosine(initial_lr, epoch, warmup_epochs=5, T_max=100, lr_min=1e-6):\n    \"\"\"\n    组合Warmup和余弦退火\n    \"\"\"\n    # TODO: 先warmup，再cosine\n    pass",
+    "solution_code": "import numpy as np\n\ndef step_decay(initial_lr, epoch, drop_factor=0.5, epochs_drop=30):\n    return initial_lr * (drop_factor ** (epoch // epochs_drop))\n\ndef cosine_annealing(initial_lr, epoch, T_max, lr_min=0):\n    if epoch >= T_max:\n        return lr_min\n    return lr_min + 0.5 * (initial_lr - lr_min) * (1 + np.cos(np.pi * epoch / T_max))\n\ndef warmup_cosine(initial_lr, epoch, warmup_epochs=5, T_max=100, lr_min=1e-6):\n    if epoch < warmup_epochs:\n        return initial_lr * (epoch + 1) / warmup_epochs\n    effective_epoch = epoch - warmup_epochs\n    effective_T = T_max - warmup_epochs\n    return cosine_annealing(initial_lr, effective_epoch, effective_T, lr_min)\n\ndef plot_lr_schedule(initial_lr=0.01, total_epochs=120):\n    \"\"\"模拟不同的学习率调度曲线\"\"\"\n    schedules = {'step': [], 'cosine': [], 'warmup_cosine': []}\n    for epoch in range(total_epochs):\n        schedules['step'].append(step_decay(initial_lr, epoch, 0.5, 30))\n        schedules['cosine'].append(cosine_annealing(initial_lr, epoch, 120, 0))\n        schedules['warmup_cosine'].append(warmup_cosine(initial_lr, epoch, 5, 120))\n    return schedules\n\nif __name__ == \"__main__\":\n    print(\"Epoch 0 step:\", step_decay(0.01, 0))\n    print(\"Epoch 30 step:\", step_decay(0.01, 30))\n    print(\"Epoch 60 step:\", step_decay(0.01, 60))\n    print(\"Epoch 0 cosine:\", cosine_annealing(0.01, 0, 120))\n    print(\"Epoch 60 cosine:\", round(cosine_annealing(0.01, 60, 120), 6))\n    print(\"Epoch 120 cosine:\", cosine_annealing(0.01, 120, 120))",
+    "test_cases": [
+      {
+        "input": "step_decay_tf(0.01, 0, 0.5, 30)",
+        "expected_output": "0.01",
+        "description": "第0个epoch学习率不应衰减"
+      },
+      {
+        "input": "step_decay_tf(0.01, 30, 0.5, 30)",
+        "expected_output": "0.005",
+        "description": "第30个epoch学习率应减半"
+      },
+      {
+        "input": "round(cosine_annealing_tf(0.01, 0, 100), 3)",
+        "expected_output": "0.01",
+        "description": "余弦退火初始值为初始学习率"
+      }
+    ],
+    "hint": "阶梯衰减公式：lr * (factor ** (epoch // drop_epochs))。余弦退火公式：lr_min + 0.5 * (lr0 - lr_min) * (1 + cos(pi * epoch / T_max))。",
+    "prerequisites": [
+      "dl-03-backprop"
+    ]
+  }
+]

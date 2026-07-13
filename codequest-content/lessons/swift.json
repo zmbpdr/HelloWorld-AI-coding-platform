@@ -1,0 +1,426 @@
+[
+  {
+    "title": "Hello World",
+    "slug": "swift-01-hello-world",
+    "description": "学习Swift Playground、print函数、常量与变量声明，编写你的第一个Swift程序",
+    "content": "# Hello World — 你的第一个Swift程序\n\n## 什么是Swift？\nSwift是Apple于2014年推出的现代编程语言，用于开发iOS、macOS、watchOS和tvOS应用。它结合了C和Objective-C的优点，同时采用了更安全的编程模式和更简洁的语法。Swift的设计理念是：**安全、快速、表达力强**。\n\n## Playground\nSwift Playground是学习和实验Swift代码的交互式环境。你可以即时看到代码的运行结果，非常适合初学者。在Xcode中创建一个Playground，就可以开始编写Swift代码了。\n\n## 常量与变量\nSwift使用 `let` 声明常量，`var` 声明变量：\n\n```swift\nlet name = \"Swift\"     // 常量，赋值后不可修改\nvar age = 10           // 变量，可以修改\nage = 11               // 没问题！\n// name = \"Java\"       // 编译错误！常量不可修改\n```\n**最佳实践**：优先使用 `let`，只在需要修改时才用 `var`。这样可以让代码更安全，也能帮助编译器优化性能。\n\n## 类型推断\nSwift具有强大的类型推断能力，声明变量时通常不需要显式指定类型：\n\n```swift\nlet message = \"Hello\"   // Swift自动推断为String类型\nlet year = 2024         // 自动推断为Int类型\n```\n\n如果需要显式指定类型：\n```swift\nlet score: Double = 95  // 显式指定为Double\n```\n\n## print函数\n`print()` 是Swift中最基本的输出函数：\n\n```swift\nprint(\"Hello, World!\")\nprint(\"得分是\\(95)\")   // 字符串插值\n```\n\n字符串插值使用 `\\(表达式)` 将值嵌入字符串中，这是Swift的一大特色。\n\n## 函数基础\n使用 `func` 关键字定义函数，`->` 标注返回类型：\n\n```swift\nfunc greet() -> String {\n    return \"Hello, Swift!\"\n}\n```\n\n## 练习\n请编写函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func hello() -> String {\n    // 在这里编写你的代码\n    return \"\"\n}",
+    "solution_code": "func hello() -> String {\n    return \"Hello, World!\"\n}",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      },
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 return 语句返回字符串 \"Hello, World!\""
+  },
+  {
+    "title": "数据类型",
+    "slug": "swift-02-data-types",
+    "description": "学习Swift基本数据类型Int/Double/String/Bool及类型转换",
+    "content": "# 数据类型 — Swift的类型系统\n\n## 基本数据类型\nSwift提供了丰富的基本数据类型，它们都是值类型：\n\n### 整数 Int\n```swift\nlet age: Int = 25           // 有符号整数\nlet count: UInt = 100       // 无符号整数\n```\n在64位平台上，`Int` 等同于 `Int64`，是64位整数。日常开发中统一使用 `Int` 即可。\n\n### 浮点数 Double / Float\n```swift\nlet pi: Double = 3.14159    // 64位浮点数，精度更高\nlet temp: Float = 36.5      // 32位浮点数\n```\nSwift默认推断小数字面量为 `Double` 类型，推荐优先使用 `Double`。\n\n### 字符串 String\n```swift\nlet greeting = \"Hello, Swift!\"\nlet multiLine = \"\"\"\n    这是多行字符串，\n    用三个双引号包围。\n\"\"\"\n```\nSwift的 `String` 是Unicode兼容的，可以正确处理中文、emoji等各种字符。\n\n### 布尔值 Bool\n```swift\nlet isSwift: Bool = true\nlet isOld: Bool = false\n```\nSwift的 `Bool` 只有 `true` 和 `false` 两个值，不能用0或1代替。\n\n## 类型转换\nSwift是**类型安全**的语言，不会自动进行隐式类型转换，必须显式转换：\n\n```swift\nlet intVal: Int = 42\nlet doubleVal: Double = Double(intVal)   // Int -> Double\nlet backToInt: Int = Int(3.14)           // Double -> Int，结果为3（截断）\n\nlet numStr: String = String(intVal)      // Int -> String\nlet strNum: Int? = Int(\"42\")             // String -> Int?（可能失败）\n```\n\n## 类型别名\ntypealias 可以为类型创建别名：\n```swift\ntypealias AudioSample = UInt16\nlet sample: AudioSample = 32767\n```\n\n## 练习\n编写函数 `convertAndSum(a: Int, b: Double) -> Double`，将整数 `a` 转换为Double后与 `b` 相加并返回结果。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func convertAndSum(a: Int, b: Double) -> Double {\n    // 将a转换为Double，然后与b相加\n    return 0.0\n}",
+    "solution_code": "func convertAndSum(a: Int, b: Double) -> Double {\n    return Double(a) + b\n}",
+    "test_cases": [
+      {
+        "input": "convertAndSum(a: 3, b: 4.5)",
+        "expected_output": "7.5",
+        "description": "3 + 4.5 应等于 7.5"
+      },
+      {
+        "input": "convertAndSum(a: 10, b: 20.0)",
+        "expected_output": "30.0",
+        "description": "10 + 20.0 应等于 30.0"
+      }
+    ],
+    "hint": "使用 Double(a) 将Int转换为Double，然后直接相加"
+  },
+  {
+    "title": "集合类型",
+    "slug": "swift-03-collections",
+    "description": "学习Swift三大集合类型：Array数组、Set集合、Dictionary字典",
+    "content": "# 集合类型 — Array、Set、Dictionary\n\nSwift提供了三种主要的集合类型来存储多个值，它们都是泛型集合。\n\n## Array 数组\n数组是**有序**的元素集合，可以包含重复元素：\n\n```swift\n// 创建数组\nvar fruits = [\"Apple\", \"Banana\", \"Cherry\"]\nlet numbers: [Int] = [1, 2, 3, 4, 5]\n\n// 访问元素\nfruits[0]              // \"Apple\"\nfruits.count           // 3\nfruits.isEmpty         // false\n\n// 添加和删除\nfruits.append(\"Date\")        // 末尾添加\nfruits.insert(\"Fig\", at: 0)  // 指定位置插入\nfruits.removeLast()           // 删除最后一个\n```\n\n数组支持切片操作：`numbers[1...3]` 获取索引1到3的元素。\n\n## Set 集合\n集合是**无序**的元素集合，不允许重复元素：\n\n```swift\nvar colors: Set<String> = [\"Red\", \"Green\", \"Blue\"]\ncolors.insert(\"Yellow\")\ncolors.remove(\"Red\")\ncolors.contains(\"Green\")  // true\n\n// 集合运算\nlet a: Set = [1, 2, 3, 4]\nlet b: Set = [3, 4, 5, 6]\na.intersection(b)     // 交集 {3, 4}\na.union(b)            // 并集 {1, 2, 3, 4, 5, 6}\na.subtracting(b)      // 差集 {1, 2}\n```\n\nSet适合需要去重或快速查找的场景，查找时间复杂度为O(1)。\n\n## Dictionary 字典\n字典是**键值对**的无序集合：\n\n```swift\nvar scores: [String: Int] = [\"Alice\": 95, \"Bob\": 87]\n\n// 访问（返回Optional）\nscores[\"Alice\"]        // Optional(95)\nscores[\"Charlie\"]     // nil\n\n// 修改和添加\nscores[\"Bob\"] = 90    // 修改\nscores[\"Dave\"] = 78   // 添加新键值对\n\n// 删除\nscores.removeValue(forKey: \"Alice\")\n```\n\n字典的键必须是可哈希的（Hashable），Swift的基本类型默认都满足此要求。\n\n## 遍历集合\n```swift\nfor fruit in fruits { print(fruit) }\nfor (key, value) in scores { print(\"\\(key): \\(value)\") }\n```\n\n## 练习\n编写函数 `uniqueCount(names: [String]) -> Int`，利用Set去除数组中的重复元素，返回去重后的元素个数。",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func uniqueCount(names: [String]) -> Int {\n    // 利用Set去除重复元素，返回去重后的数量\n    return 0\n}",
+    "solution_code": "func uniqueCount(names: [String]) -> Int {\n    let uniqueNames = Set(names)\n    return uniqueNames.count\n}",
+    "test_cases": [
+      {
+        "input": "uniqueCount(names: [\"Alice\", \"Bob\", \"Alice\", \"Charlie\", \"Bob\"])",
+        "expected_output": "3",
+        "description": "去重后应有3个唯一名字"
+      },
+      {
+        "input": "uniqueCount(names: [\"A\", \"A\", \"A\"])",
+        "expected_output": "1",
+        "description": "全部重复时去重后应为1"
+      }
+    ],
+    "hint": "用 Set(names) 将数组转为Set自动去重，再取 count 属性"
+  },
+  {
+    "title": "控制流",
+    "slug": "swift-04-control-flow",
+    "description": "学习Swift条件判断if/switch、循环for-in/while、guard语句",
+    "content": "# 控制流 — 条件与循环\n\n## if 条件判断\nSwift的 `if` 条件不需要括号（但可以加），大括号是必须的：\n\n```swift\nlet score = 85\nif score >= 90 {\n    print(\"优秀\")\n} else if score >= 60 {\n    print(\"及格\")\n} else {\n    print(\"不及格\")\n}\n```\n\n条件表达式必须是 `Bool` 类型，不能用整数代替布尔值。\n\n## switch 匹配\nSwift的 `switch` 非常强大，支持多种匹配模式：\n\n```swift\nlet grade = \"A\"\nswitch grade {\ncase \"A\":\n    print(\"优秀\")\ncase \"B\":\n    print(\"良好\")\ncase \"C\", \"D\":    // 多值匹配\n    print(\"一般\")\ndefault:\n    print(\"其他\")\n}\n```\n\n**重要**：Swift的 `switch` 默认不穿透（no fallthrough），匹配一个case后自动退出。如果需要穿透，使用 `fallthrough` 关键字。\n\nswitch还支持范围匹配和元组匹配：\n```swift\nswitch score {\ncase 90...100: print(\"优秀\")\ncase 60..<90:  print(\"及格\")\ndefault:       print(\"不及格\")\n}\n```\n\n## for-in 循环\n```swift\nfor i in 1...5 { print(i) }      // 闭范围 1到5\nfor i in 1..<5 { print(i) }      // 半开范围 1到4\nfor item in array { print(item) } // 遍历集合\n```\n\n## while 循环\n```swift\nvar n = 2\nwhile n < 100 {\n    n *= 2\n}\n\nrepeat {\n    n /= 2\n} while n > 10    // 至少执行一次\n```\n\n## guard 语句\n`guard` 是Swift特有的提前退出机制，让代码更清晰：\n\n```swift\nfunc greet(person: String?) -> String {\n    guard let name = person else {\n        return \"Hello, stranger\"\n    }\n    return \"Hello, \\(name)\"\n}\n```\n\n`guard` 的else分支必须退出当前作用域（return、throw、break等）。\n\n## 练习\n编写函数 `fizzBuzz(n: Int) -> String`：如果n是3的倍数返回\"Fizz\"，是5的倍数返回\"Buzz\"，同时是3和5的倍数返回\"FizzBuzz\"，否则返回数字的字符串形式。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func fizzBuzz(n: Int) -> String {\n    // 实现FizzBuzz逻辑\n    return \"\"\n}",
+    "solution_code": "func fizzBuzz(n: Int) -> String {\n    if n % 15 == 0 {\n        return \"FizzBuzz\"\n    } else if n % 3 == 0 {\n        return \"Fizz\"\n    } else if n % 5 == 0 {\n        return \"Buzz\"\n    } else {\n        return String(n)\n    }\n}",
+    "test_cases": [
+      {
+        "input": "fizzBuzz(n: 15)",
+        "expected_output": "FizzBuzz",
+        "description": "15是3和5的倍数，应返回FizzBuzz"
+      },
+      {
+        "input": "fizzBuzz(n: 9)",
+        "expected_output": "Fizz",
+        "description": "9是3的倍数，应返回Fizz"
+      },
+      {
+        "input": "fizzBuzz(n: 10)",
+        "expected_output": "Buzz",
+        "description": "10是5的倍数，应返回Buzz"
+      },
+      {
+        "input": "fizzBuzz(n: 7)",
+        "expected_output": "7",
+        "description": "7不是3或5的倍数，应返回\"7\""
+      }
+    ],
+    "hint": "先判断同时是3和5的倍数（即15的倍数），再分别判断3和5的倍数"
+  },
+  {
+    "title": "函数与闭包",
+    "slug": "swift-05-functions-closures",
+    "description": "学习Swift函数定义、参数标签、默认参数、闭包表达式与高阶函数",
+    "content": "# 函数与闭包\n\n## 函数定义\nSwift函数使用 `func` 关键字定义，支持多返回值（元组）：\n\n```swift\nfunc add(a: Int, b: Int) -> Int {\n    return a + b\n}\nadd(a: 3, b: 5)   // 调用时需要标签\n```\n\n## 参数标签\nSwift函数的每个参数可以有**外部标签**和**内部名称**：\n\n```swift\nfunc greet(person name: String, from city: String) -> String {\n    return \"\\(name)来自\\(city)\"\n}\ngreet(person: \"Alice\", from: \"北京\")\n```\n\n- `person` 是外部标签（调用时使用）\n- `name` 是内部名称（函数体内使用）\n\n省略外部标签用 `_` ：\n```swift\nfunc multiply(_ a: Int, _ b: Int) -> Int { a * b }\nmultiply(3, 4)  // 调用时不需要标签\n```\n\n## 默认参数与可变参数\n```swift\nfunc power(base: Int, exponent: Int = 2) -> Int {\n    return Int(pow(Double(base), Double(exponent)))\n}\npower(base: 3)          // 9，使用默认指数2\npower(base: 3, exponent: 3)  // 27\n\nfunc sum(_ numbers: Int...) -> Int {\n    return numbers.reduce(0, +)\n}\nsum(1, 2, 3, 4)  // 10\n```\n\n## 闭包表达式\n闭包是自包含的函数代码块，可以捕获和存储上下文中的常量和变量：\n\n```swift\nlet add = { (a: Int, b: Int) -> Int in\n    return a + b\n}\nadd(3, 5)  // 8\n```\n\n### 尾随闭包\n当函数最后一个参数是闭包时，可以使用尾随闭包语法：\n\n```swift\nlet result = [1, 2, 3, 4, 5].map { $0 * 2 }  // [2, 4, 6, 8, 10]\nlet evens = [1, 2, 3, 4, 5].filter { $0 % 2 == 0 }  // [2, 4]\nlet sum = [1, 2, 3, 4, 5].reduce(0, +)  // 15\n```\n\n`$0`、`$1` 是闭包参数的简写，`in` 关键字分隔参数与函数体。\n\n## 练习\n编写函数 `transformArray(_ arr: [Int], using transform: (Int) -> Int) -> [Int]`，对数组中每个元素应用transform闭包，返回新数组。然后使用它将数组 `[1, 2, 3]` 中每个元素平方。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func transformArray(_ arr: [Int], using transform: (Int) -> Int) -> [Int] {\n    // 对arr中每个元素应用transform\n    return []\n}\n\nfunc squareAll(_ arr: [Int]) -> [Int] {\n    // 使用transformArray将每个元素平方\n    return []\n}",
+    "solution_code": "func transformArray(_ arr: [Int], using transform: (Int) -> Int) -> [Int] {\n    return arr.map(transform)\n}\n\nfunc squareAll(_ arr: [Int]) -> [Int] {\n    return transformArray(arr) { $0 * $0 }\n}",
+    "test_cases": [
+      {
+        "input": "squareAll([1, 2, 3])",
+        "expected_output": "[1, 4, 9]",
+        "description": "[1,2,3]平方后应为[1,4,9]"
+      },
+      {
+        "input": "squareAll([0, 5, 10])",
+        "expected_output": "[0, 25, 100]",
+        "description": "[0,5,10]平方后应为[0,25,100]"
+      }
+    ],
+    "hint": "transformArray中使用map方法，squareAll中传入闭包 { $0 * $0 }"
+  },
+  {
+    "title": "可选类型",
+    "slug": "swift-06-optionals",
+    "description": "学习Swift核心安全特性Optional、解包方式、??运算符与可选链",
+    "content": "# 可选类型 — Swift的安全核心\n\n## 什么是Optional？\nOptional是Swift最重要的安全特性之一。它表示一个值**可能存在，也可能为nil**：\n\n```swift\nvar name: String? = \"Alice\"   // 可选String，可能有值也可能为nil\nname = nil                    // 可以赋值为nil\nvar age: Int = 25             // 非可选Int，不能为nil\n// age = nil                  // 编译错误！\n```\n\n`String?` 等价于 `Optional<String>`，是枚举类型：`.some(value)` 或 `.none`。\n\nSwift通过Optional强制开发者处理\"值可能不存在\"的情况，从根源上消除了空指针异常。\n\n## 解包方式\n### 1. 强制解包 `!`\n```swift\nlet str: String? = \"Hello\"\nprint(str!)   // \"Hello\"，但如果str为nil会崩溃！\n```\n**危险**：只有在确定不为nil时才能使用，否则运行时崩溃。尽量避免使用。\n\n### 2. 可选绑定 if let / guard let\n```swift\nif let unwrapped = str {\n    print(unwrapped)   // 安全使用\n} else {\n    print(\"值为nil\")\n}\n\nfunc process(value: String?) -> String {\n    guard let v = value else {\n        return \"默认值\"\n    }\n    return v\n}\n```\n这是最推荐的解包方式，安全且清晰。\n\n### 3. 空合运算符 ??\n```swift\nlet name: String? = nil\nlet display = name ?? \"匿名\"   // \"匿名\"，nil时使用默认值\n```\n\n### 4. 隐式解包 `!`\n```swift\nlet assumed: String! = \"Hello\"\nprint(assumed)   // 自动解包，但为nil时仍会崩溃\n```\n仅在Interface Builder Outlet等特殊场景使用。\n\n## 可选链\n使用 `?` 访问可选值的属性或方法，如果中间任何一环为nil，整个链返回nil：\n\n```swift\nclass Person {\n    var address: Address?\n}\nclass Address {\n    var city: String = \"北京\"\n}\n\nlet person = Person()\nlet city = person.address?.city   // nil，因为address为nil\n```\n\n## 练习\n编写函数 `safeDivide(a: Int, b: Int) -> Int?`，当b为0时返回nil，否则返回a/b。再编写函数 `describeDivision(a: Int, b: Int) -> String`，调用safeDivide，如果结果为nil返回\"无法除以零\"，否则返回\"结果是X\"。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "func safeDivide(a: Int, b: Int) -> Int? {\n    // 当b为0时返回nil，否则返回a/b\n    return nil\n}\n\nfunc describeDivision(a: Int, b: Int) -> String {\n    // 调用safeDivide，用??或if let处理结果\n    return \"\"\n}",
+    "solution_code": "func safeDivide(a: Int, b: Int) -> Int? {\n    if b == 0 {\n        return nil\n    }\n    return a / b\n}\n\nfunc describeDivision(a: Int, b: Int) -> String {\n    if let result = safeDivide(a: a, b: b) {\n        return \"结果是\\(result)\"\n    } else {\n        return \"无法除以零\"\n    }\n}",
+    "test_cases": [
+      {
+        "input": "describeDivision(a: 10, b: 3)",
+        "expected_output": "结果是3",
+        "description": "10/3整数除法结果为3"
+      },
+      {
+        "input": "describeDivision(a: 10, b: 0)",
+        "expected_output": "无法除以零",
+        "description": "除以零应返回无法除以零"
+      },
+      {
+        "input": "safeDivide(a: 10, b: 2)",
+        "expected_output": "Optional(5)",
+        "description": "10/2应返回Optional(5)"
+      }
+    ],
+    "hint": "safeDivide中先判断b==0返回nil，describeDivision中用if let解包结果"
+  },
+  {
+    "title": "结构体与类",
+    "slug": "swift-07-struct-class",
+    "description": "学习Swift中struct和class的定义、值类型与引用类型的区别",
+    "content": "# 结构体与类 — 值类型 vs 引用类型\n\n## 结构体 struct\n结构体是Swift中最常用的自定义类型，是**值类型**：\n\n```swift\nstruct Point {\n    var x: Double\n    var y: Double\n    \n    func distance(to other: Point) -> Double {\n        let dx = x - other.x\n        let dy = y - other.y\n        return (dx * dx + dy * dy).squareRoot()\n    }\n}\n\nvar p1 = Point(x: 3, y: 4)\nvar p2 = p1          // 值拷贝！p2是独立的副本\np2.x = 10\n// p1.x 仍然是 3，p2.x 是 10\n```\n\n值类型赋值时会创建副本，修改副本不影响原始值。Swift的Array、Dictionary、String都是值类型。\n\n## 类 class\n类是**引用类型**：\n\n```swift\nclass Person {\n    var name: String\n    var age: Int\n    \n    init(name: String, age: Int) {\n        self.name = name\n        self.age = age\n    }\n}\n\nlet alice = Person(name: \"Alice\", age: 25)\nlet bob = alice          // 引用拷贝！bob指向同一个对象\nbob.age = 30\n// alice.age 也是 30，因为alice和bob指向同一个实例\n```\n\n引用类型赋值时只复制引用（指针），两个变量指向同一个对象。\n\n## struct vs class 对比\n\n| 特性 | struct | class |\n|------|--------|-------|\n| 类型 | 值类型 | 引用类型 |\n| 拷贝 | 深拷贝 | 浅拷贝（引用） |\n| 初始化 | 自动生成memberwise init | 需要手写init |\n| 继承 | 不支持 | 支持 |\n| 析构 | 无 | 有deinit |\n| 身份比较 | == (需实现Equatable) | === (引用比较) |\n\n**Apple建议**：优先使用struct，只在需要继承或引用语义时才用class。\n\n## 练习\n定义结构体 `Rectangle`，包含 `width` 和 `height` 两个Double属性，并实现方法 `area() -> Double` 计算面积。",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "struct Rectangle {\n    var width: Double\n    var height: Double\n    \n    func area() -> Double {\n        // 计算并返回面积\n        return 0.0\n    }\n}",
+    "solution_code": "struct Rectangle {\n    var width: Double\n    var height: Double\n    \n    func area() -> Double {\n        return width * height\n    }\n}",
+    "test_cases": [
+      {
+        "input": "Rectangle(width: 5.0, height: 3.0).area()",
+        "expected_output": "15.0",
+        "description": "5.0 × 3.0 的面积应为15.0"
+      },
+      {
+        "input": "Rectangle(width: 2.5, height: 4.0).area()",
+        "expected_output": "10.0",
+        "description": "2.5 × 4.0 的面积应为10.0"
+      }
+    ],
+    "hint": "面积 = width * height"
+  },
+  {
+    "title": "属性与方法",
+    "slug": "swift-08-properties-methods",
+    "description": "学习存储属性、计算属性、属性观察器、实例方法与类型方法",
+    "content": "# 属性与方法\n\n## 存储属性\n存储属性是类或结构体中存储常量或变量的属性：\n\n```swift\nstruct User {\n    var name: String           // 变量存储属性\n    let id: Int                // 常量存储属性\n}\n```\n\n## 计算属性\n计算属性不存储值，而是通过getter和setter计算得出：\n\n```swift\nstruct Circle {\n    var radius: Double\n    \n    var area: Double {              // 只读计算属性\n        return .pi * radius * radius\n    }\n    \n    var diameter: Double {          // 带setter的计算属性\n        get { return radius * 2 }\n        set { radius = newValue / 2 }  // newValue是默认名称\n    }\n}\n```\n\n计算属性每次访问时都会重新计算，不会缓存结果。\n\n## 属性观察器\n`willSet` 在值改变前调用，`didSet` 在值改变后调用：\n\n```swift\nclass StepCounter {\n    var totalSteps: Int = 0 {\n        willSet {\n            print(\"即将变为 \\(newValue)\")\n        }\n        didSet {\n            if totalSteps > oldValue {\n                print(\"增加了 \\(totalSteps - oldValue) 步\")\n            }\n        }\n    }\n}\n```\n\n`newValue` 是即将设置的新值，`oldValue` 是改变前的旧值。\n\n## 懒加载属性\n`lazy` 修饰的属性只在第一次访问时初始化：\n\n```swift\nclass DataManager {\n    lazy var data: [String] = loadExpensiveData()\n}\n```\n\n## 方法\n### 实例方法\n实例方法属于类型的实例，可以访问实例属性：\n\n```swift\nstruct Counter {\n    var count = 0\n    mutating func increment() { count += 1 }  // struct中修改属性需要mutating\n}\n```\n\n### 类型方法\n用 `static` 修饰，属于类型本身：\n\n```swift\nstruct Math {\n    static func square(_ x: Int) -> Int { x * x }\n}\nMath.square(4)  // 16\n```\n\n## 练习\n定义结构体 `Temperature`，包含存储属性 `celsius`（摄氏温度），以及计算属性 `fahrenheit`（华氏温度 = 摄氏 × 9/5 + 32）。",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "struct Temperature {\n    var celsius: Double\n    \n    var fahrenheit: Double {\n        // 计算华氏温度\n        get {\n            return 0.0\n        }\n    }\n}",
+    "solution_code": "struct Temperature {\n    var celsius: Double\n    \n    var fahrenheit: Double {\n        get {\n            return celsius * 9 / 5 + 32\n        }\n    }\n}",
+    "test_cases": [
+      {
+        "input": "Temperature(celsius: 0).fahrenheit",
+        "expected_output": "32.0",
+        "description": "0°C 应等于 32°F"
+      },
+      {
+        "input": "Temperature(celsius: 100).fahrenheit",
+        "expected_output": "212.0",
+        "description": "100°C 应等于 212°F"
+      },
+      {
+        "input": "Temperature(celsius: 37).fahrenheit",
+        "expected_output": "98.6",
+        "description": "37°C 应等于 98.6°F"
+      }
+    ],
+    "hint": "华氏温度 = 摄氏温度 × 9/5 + 32"
+  },
+  {
+    "title": "继承与多态",
+    "slug": "swift-09-inheritance-polymorphism",
+    "description": "学习Swift类的继承、方法重写、final关键字与类型转换",
+    "content": "# 继承与多态\n\n## 继承\nSwift中只有**类**支持继承，一个类可以继承另一个类的属性和方法：\n\n```swift\nclass Vehicle {\n    var speed = 0.0\n    func describe() -> String {\n        return \"速度为\\(speed)km/h的交通工具\"\n    }\n}\n\nclass Car: Vehicle {\n    var gear = 1\n    override func describe() -> String {\n        return \"速度为\\(speed)km/h，档位\\(gear)的汽车\"\n    }\n}\n```\n\n子类使用 `: 父类名` 语法继承，可以添加新属性和方法。\n\n## 重写 override\n子类可以重写父类的方法、属性和下标，必须使用 `override` 关键字：\n\n```swift\nclass Animal {\n    func speak() -> String { \"...\" }\n}\n\nclass Dog: Animal {\n    override func speak() -> String { \"汪汪\" }\n}\n\nclass Cat: Animal {\n    override func speak() -> String { \"喵喵\" }\n}\n```\n\n使用 `super` 访问父类实现：\n```swift\noverride func describe() -> String {\n    return super.describe() + \"，额外信息\"\n}\n```\n\n## final 关键字\n`final` 防止类被继承或方法被重写：\n\n```swift\nfinal class ImmutableClass { }     // 不可被继承\nclass Parent {\n    final func cannotOverride() { }  // 不可被重写\n}\n```\n\n## 类型转换\n- `is`：类型检查，返回Bool\n- `as?`：安全转换，返回Optional\n- `as!`：强制转换，失败则崩溃\n\n```swift\nlet animals: [Animal] = [Dog(), Cat(), Dog()]\nfor animal in animals {\n    if let dog = animal as? Dog {\n        print(\"这是一只狗：\\(dog.speak())\")\n    }\n}\n```\n\n## 多态\n多态允许通过父类引用调用子类实现：\n```swift\nlet pets: [Animal] = [Dog(), Cat()]\nfor pet in pets {\n    print(pet.speak())  // 分别输出 \"汪汪\" 和 \"喵喵\"\n}\n```\n\n## 练习\n定义类 `Shape` 及其子类 `Circle` 和 `Rectangle`。Shape有方法 `area() -> Double` 返回0，Circle有属性 `radius`，Rectangle有属性 `width` 和 `height`，各自重写 `area()` 方法。",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "class Shape {\n    func area() -> Double {\n        return 0.0\n    }\n}\n\nclass Circle: Shape {\n    var radius: Double\n    init(radius: Double) {\n        self.radius = radius\n    }\n    // 重写area方法\n}\n\nclass RectangleShape: Shape {\n    var width: Double\n    var height: Double\n    init(width: Double, height: Double) {\n        self.width = width\n        self.height = height\n    }\n    // 重写area方法\n}",
+    "solution_code": "class Shape {\n    func area() -> Double {\n        return 0.0\n    }\n}\n\nclass Circle: Shape {\n    var radius: Double\n    init(radius: Double) {\n        self.radius = radius\n    }\n    override func area() -> Double {\n        return .pi * radius * radius\n    }\n}\n\nclass RectangleShape: Shape {\n    var width: Double\n    var height: Double\n    init(width: Double, height: Double) {\n        self.width = width\n        self.height = height\n    }\n    override func area() -> Double {\n        return width * height\n    }\n}",
+    "test_cases": [
+      {
+        "input": "Circle(radius: 1.0).area()",
+        "expected_output": "3.14159265358979",
+        "description": "半径为1的圆面积应约等于π"
+      },
+      {
+        "input": "RectangleShape(width: 3.0, height: 4.0).area()",
+        "expected_output": "12.0",
+        "description": "3×4的矩形面积应为12.0"
+      },
+      {
+        "input": "let s: Shape = Circle(radius: 2.0); s.area()",
+        "expected_output": "12.5663706143592",
+        "description": "多态：Shape引用调用Circle的area"
+      }
+    ],
+    "hint": "Circle的面积 = π × radius²，Rectangle的面积 = width × height，记得使用override关键字"
+  },
+  {
+    "title": "协议与扩展",
+    "slug": "swift-10-protocols-extensions",
+    "description": "学习Protocol协议定义、Extension扩展、默认实现与面向协议编程",
+    "content": "# 协议与扩展\n\n## 协议 Protocol\n协议定义了方法、属性的**蓝图**，类、结构体和枚举都可以遵循协议：\n\n```swift\nprotocol Describable {\n    var description: String { get }     // 只读属性要求\n    func describe() -> String           // 方法要求\n}\n\nstruct Person: Describable {\n    var name: String\n    var description: String { name }    // 实现属性要求\n    func describe() -> String {         // 实现方法要求\n        return \"我是\\(name)\"\n    }\n}\n```\n\n协议中的属性必须声明为 `{ get }` 或 `{ get set }`，方法不需要写函数体。\n\n## 多协议遵循\n一个类型可以遵循多个协议，用逗号分隔：\n```swift\nstruct Hero: Describable, Equatable, Codable {\n    // ...\n}\n```\n\n## 扩展 Extension\n扩展可以为已有类型添加新功能，即使你没有源代码：\n\n```swift\nextension Int {\n    var isEven: Bool { self % 2 == 0 }\n    func squared() -> Int { self * self }\n}\n\n4.isEven       // true\n5.squared()    // 25\n```\n\n扩展可以添加计算属性、方法、初始化器、嵌套类型和协议遵循。\n\n## 协议扩展与默认实现\n协议扩展可以为协议方法提供**默认实现**，这是Swift面向协议编程的核心：\n\n```swift\nprotocol Greetable {\n    var name: String { get }\n}\n\nextension Greetable {\n    func greet() -> String {\n        return \"你好，\\(name)！\"\n    }\n}\n\nstruct Student: Greetable {\n    var name: String\n    // 自动获得greet()的默认实现\n}\n\nStudent(name: \"小明\").greet()  // \"你好，小明！\"\n```\n\n## 面向协议编程 (POP)\nSwift推荐使用协议+扩展的组合替代继承来共享代码，更灵活且支持值类型：\n- 协议定义能力（Can-Do）\n- 扩展提供默认实现\n- 组合多个协议获得多种能力\n\n## 练习\n定义协议 `Summable`，要求实现 `sum() -> Int` 方法。通过协议扩展为 `[Int]` 数组提供默认实现（计算所有元素之和），然后编写函数 `total(_ numbers: [Int]) -> Int` 使用该协议方法。",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "protocol Summable {\n    func sum() -> Int\n}\n\n// 为[Int]扩展Summable协议并提供默认实现\n\nfunc total(_ numbers: [Int]) -> Int {\n    // 使用Summable协议的sum方法\n    return 0\n}",
+    "solution_code": "protocol Summable {\n    func sum() -> Int\n}\n\nextension Array where Element == Int {\n    func sum() -> Int {\n        return reduce(0, +)\n    }\n}\n\nextension Array: Summable where Element == Int {}\n\nfunc total(_ numbers: [Int]) -> Int {\n    return numbers.sum()\n}",
+    "test_cases": [
+      {
+        "input": "total([1, 2, 3, 4, 5])",
+        "expected_output": "15",
+        "description": "1+2+3+4+5 = 15"
+      },
+      {
+        "input": "total([10, -5, 3])",
+        "expected_output": "8",
+        "description": "10+(-5)+3 = 8"
+      },
+      {
+        "input": "total([])",
+        "expected_output": "0",
+        "description": "空数组之和应为0"
+      }
+    ],
+    "hint": "为Array扩展sum方法，使用reduce(0, +)计算总和"
+  },
+  {
+    "title": "错误处理",
+    "slug": "swift-11-error-handling",
+    "description": "学习Swift错误处理机制：throw/try/catch、Error协议、Result类型",
+    "content": "# 错误处理\n\n## Error 协议\nSwift的错误处理基于 `Error` 协议，通常用枚举来定义错误类型：\n\n```swift\nenum NetworkError: Error {\n    case badURL\n    case noData\n    case decodingFailed(reason: String)\n}\n```\n\n枚举可以带关联值，非常适合描述不同的错误情况。\n\n## throwing 函数\n使用 `throws` 标记可能抛出错误的函数：\n\n```swift\nfunc divide(_ a: Int, by b: Int) throws -> Int {\n    if b == 0 {\n        throw NetworkError.noData  // 抛出错误\n    }\n    return a / b\n}\n```\n\n## try / catch\n调用throwing函数必须使用 `try`，并用 `do-catch` 捕获错误：\n\n```swift\ndo {\n    let result = try divide(10, by: 0)\n    print(result)\n} catch NetworkError.noData {\n    print(\"没有数据\")\n} catch {\n    print(\"其他错误：\\(error)\")\n}\n```\n\n### try? 和 try!\n- `try?`：将错误转为Optional，失败返回nil\n- `try!`：强制执行，失败则崩溃\n\n```swift\nlet result1 = try? divide(10, by: 0)   // nil\nlet result2 = try? divide(10, by: 2)   // Optional(5)\n```\n\n## Result 类型\n`Result<Success, Failure>` 是Swift 5引入的类型，用于封装可能成功或失败的操作：\n\n```swift\nenum DivisionError: Error {\n    case divideByZero\n}\n\nfunc safeDivide(_ a: Int, by b: Int) -> Result<Int, DivisionError> {\n    if b == 0 {\n        return .failure(.divideByZero)\n    }\n    return .success(a / b)\n}\n\n// 使用\nswitch safeDivide(10, by: 0) {\ncase .success(let value):\n    print(\"结果是\\(value)\")\ncase .failure(let error):\n    print(\"错误：\\(error)\")\n}\n```\n\nResult的优势：错误信息是类型安全的，可以在异步场景中传递。\n\n## rethrows\n`rethrows` 表示函数本身不抛出错误，但其参数闭包可能抛出：\n```swift\nfunc process(_ value: Int, using transform: (Int) throws -> Int) rethrows -> Int {\n    return try transform(value)\n}\n```\n\n## 练习\n定义枚举 `MathError: Error` 包含 `divideByZero` 情况。编写throwing函数 `safeDivide(_ a: Int, by b: Int) throws -> Int`，当b为0时抛出 `MathError.divideByZero`，否则返回a/b。再编写函数 `tryDivide(_ a: Int, by b: Int) -> String`，调用safeDivide并返回描述字符串。",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "enum MathError: Error {\n    case divideByZero\n}\n\nfunc safeDivide(_ a: Int, by b: Int) throws -> Int {\n    // 当b为0时抛出MathError.divideByZero\n    return 0\n}\n\nfunc tryDivide(_ a: Int, by b: Int) -> String {\n    // 调用safeDivide，成功返回\"结果是X\"，失败返回\"错误：除以零\"\n    return \"\"\n}",
+    "solution_code": "enum MathError: Error {\n    case divideByZero\n}\n\nfunc safeDivide(_ a: Int, by b: Int) throws -> Int {\n    if b == 0 {\n        throw MathError.divideByZero\n    }\n    return a / b\n}\n\nfunc tryDivide(_ a: Int, by b: Int) -> String {\n    do {\n        let result = try safeDivide(a, by: b)\n        return \"结果是\\(result)\"\n    } catch MathError.divideByZero {\n        return \"错误：除以零\"\n    }\n}",
+    "test_cases": [
+      {
+        "input": "tryDivide(10, by: 2)",
+        "expected_output": "结果是5",
+        "description": "10/2应返回结果是5"
+      },
+      {
+        "input": "tryDivide(10, by: 0)",
+        "expected_output": "错误：除以零",
+        "description": "除以零应返回错误：除以零"
+      },
+      {
+        "input": "tryDivide(7, by: 3)",
+        "expected_output": "结果是2",
+        "description": "7/3整数除法结果为2"
+      }
+    ],
+    "hint": "safeDivide中用throw抛出错误，tryDivide中用do-catch捕获并处理"
+  },
+  {
+    "title": "泛型",
+    "slug": "swift-12-generics",
+    "description": "学习Swift泛型函数、泛型类型、类型约束与关联类型",
+    "content": "# 泛型 — 编写灵活可复用的代码\n\n## 泛型函数\n泛型让你编写适用于多种类型的函数，用占位符类型名（通常用T）代替具体类型：\n\n```swift\nfunc swapValues<T>(_ a: inout T, _ b: inout T) {\n    let temp = a\n    a = b\n    b = temp\n}\n\nvar x = 3, y = 5\nswapValues(&x, &y)  // x=5, y=3\n\nvar s1 = \"Hello\", s2 = \"World\"\nswapValues(&s1, &s2)  // 同一个函数，不同类型\n```\n\n`<T>` 是类型参数，在函数名后面声明，函数体中可以使用T作为类型。\n\n## 泛型类型\n可以定义泛型结构体、类和枚举：\n\n```swift\nstruct Stack<Element> {\n    private var items: [Element] = []\n    \n    mutating func push(_ item: Element) {\n        items.append(item)\n    }\n    \n    mutating func pop() -> Element? {\n        return items.popLast()\n    }\n    \n    var top: Element? { items.last }\n    var isEmpty: Bool { items.isEmpty }\n}\n\nvar intStack = Stack<Int>()\nintStack.push(1)\nintStack.push(2)\nintStack.pop()  // Optional(2)\n```\n\n## 类型约束\n可以限制类型参数必须遵循某个协议或继承某个类：\n\n```swift\nfunc findIndex<T: Equatable>(of value: T, in array: [T]) -> Int? {\n    for (index, item) in array.enumerated() {\n        if item == value {\n            return index\n        }\n    }\n    return nil\n}\n```\n\n`T: Equatable` 表示T必须是可比较相等性的类型。\n\n## 关联类型\n协议中使用 `associatedtype` 声明关联类型，让协议更灵活：\n\n```swift\nprotocol Container {\n    associatedtype Item\n    var count: Int { get }\n    mutating func append(_ item: Item)\n    subscript(i: Int) -> Item { get }\n}\n```\n\n遵循协议时，通过类型推断或 `typealias` 指定关联类型的具体类型。\n\n## 练习\n编写泛型函数 `findFirst<T: Equatable>(of target: T, in array: [T]) -> Int?`，返回目标元素在数组中首次出现的索引，未找到返回nil。",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "func findFirst<T: Equatable>(of target: T, in array: [T]) -> Int? {\n    // 返回target在array中首次出现的索引，未找到返回nil\n    return nil\n}",
+    "solution_code": "func findFirst<T: Equatable>(of target: T, in array: [T]) -> Int? {\n    for (index, item) in array.enumerated() {\n        if item == target {\n            return index\n        }\n    }\n    return nil\n}",
+    "test_cases": [
+      {
+        "input": "findFirst(of: 3, in: [1, 2, 3, 4, 3])",
+        "expected_output": "Optional(2)",
+        "description": "3首次出现在索引2"
+      },
+      {
+        "input": "findFirst(of: \"Bob\", in: [\"Alice\", \"Bob\", \"Charlie\"])",
+        "expected_output": "Optional(1)",
+        "description": "Bob首次出现在索引1"
+      },
+      {
+        "input": "findFirst(of: 99, in: [1, 2, 3])",
+        "expected_output": "nil",
+        "description": "99不在数组中，应返回nil"
+      }
+    ],
+    "hint": "使用enumerated()遍历数组同时获取索引和元素，用==比较是否相等"
+  },
+  {
+    "title": "内存管理",
+    "slug": "swift-13-memory-management",
+    "description": "学习Swift ARC内存管理、强引用循环、weak与unowned引用",
+    "content": "# 内存管理 — ARC与引用循环\n\n## ARC 自动引用计数\nSwift使用ARC（Automatic Reference Counting）管理内存。每当创建一个类实例，ARC分配内存；当实例不再被引用时，ARC释放内存：\n\n```swift\nclass Person {\n    let name: String\n    init(name: String) { \n        self.name = name\n        print(\"\\(name)被初始化\") \n    }\n    deinit { \n        print(\"\\(name)被释放\") \n    }\n}\n\nvar ref1: Person? = Person(name: \"Alice\")  // 引用计数=1\nvar ref2 = ref1                             // 引用计数=2\nref1 = nil                                  // 引用计数=1\nref2 = nil                                  // 引用计数=0，触发deinit\n```\n\nARC只适用于**类实例**（引用类型），结构体和枚举是值类型，不需要ARC。\n\n## 强引用循环\n当两个类实例互相持有对方的强引用时，就会形成循环引用，导致内存泄漏：\n\n```swift\nclass Apartment {\n    var tenant: Person?  // 强引用\n}\nclass Person2 {\n    var apartment: Apartment?  // 强引用\n}\n// Person → Apartment → Person 形成循环，都无法被释放！\n```\n\n## weak 弱引用\n`weak` 引用不会增加引用计数，且必须为Optional类型（因为引用的对象可能已被释放）：\n\n```swift\nclass Apartment2 {\n    weak var tenant: Person2?  // 弱引用，不增加引用计数\n}\n```\n当被引用的对象被释放后，weak引用自动变为nil。适用于生命周期可能短于引用方的场景。\n\n## unowned 无主引用\n`unowned` 也不会增加引用计数，但假设引用的对象始终有值（非Optional）：\n\n```swift\nclass Customer {\n    var card: CreditCard?\n}\nclass CreditCard {\n    unowned let owner: Customer  // 无主引用，假设owner始终存在\n    init(owner: Customer) { self.owner = owner }\n}\n```\n\n**weak vs unowned**：\n- weak：引用可能变为nil，用Optional\n- unowned：引用始终有值，用非Optional（访问已释放对象会崩溃）\n\n## 闭包中的循环引用\n闭包捕获self时也可能产生循环引用，使用捕获列表解决：\n\n```swift\nclass ViewModel {\n    var data: String = \"\"\n    lazy var loadData: () -> Void = { [weak self] in\n        guard let self = self else { return }\n        print(self.data)\n    }\n}\n```\n\n`[weak self]` 或 `[unowned self]` 在闭包捕获列表中声明，打破循环引用。\n\n## 练习\n定义类 `Team` 和 `Player`，Team有 `name` 和 `players` 数组（强引用），Player有 `name` 和 `weak var team`（弱引用）。编写函数 `createTeamAndPlayer() -> String`，创建团队和球员，建立双向关联，返回团队名和球员名。",
+    "order": 13,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "class Team {\n    let name: String\n    var players: [Player] = []\n    init(name: String) { self.name = name }\n}\n\nclass Player {\n    let name: String\n    weak var team: Team?\n    init(name: String) { self.name = name }\n}\n\nfunc createTeamAndPlayer() -> String {\n    // 创建团队和球员，建立关联，返回\"团队: X, 球员: Y\"\n    return \"\"\n}",
+    "solution_code": "class Team {\n    let name: String\n    var players: [Player] = []\n    init(name: String) { self.name = name }\n}\n\nclass Player {\n    let name: String\n    weak var team: Team?\n    init(name: String) { self.name = name }\n}\n\nfunc createTeamAndPlayer() -> String {\n    let team = Team(name: \"Swift队\")\n    let player = Player(name: \"小明\")\n    player.team = team\n    team.players.append(player)\n    return \"团队: \\(team.name), 球员: \\(player.name)\"\n}",
+    "test_cases": [
+      {
+        "input": "createTeamAndPlayer()",
+        "expected_output": "团队: Swift队, 球员: 小明",
+        "description": "应正确返回团队和球员信息"
+      },
+      {
+        "input": "createTeamAndPlayer()",
+        "expected_output": "团队: Swift队, 球员: 小明",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "Player的team属性用weak修饰避免循环引用，创建实例后互相赋值建立关联"
+  },
+  {
+    "title": "并发编程",
+    "slug": "swift-14-concurrency",
+    "description": "学习Swift并发：GCD、OperationQueue、async/await与Actor",
+    "content": "# 并发编程 — 异步与并行\n\n## 为什么需要并发？\n现代App需要同时处理多个任务：网络请求、UI响应、文件读写等。如果都在主线程顺序执行，界面会卡顿。并发编程让这些任务可以同时进行。\n\n## GCD (Grand Central Dispatch)\nGCD是Apple提供的C语言级别并发API，基于任务队列：\n\n```swift\n// 主队列（UI操作必须在主队列）\nDispatchQueue.main.async {\n    label.text = \"更新UI\"\n}\n\n// 后台队列\nDispatchQueue.global(qos: .background).async {\n    let data = fetchData()  // 耗时操作\n    DispatchQueue.main.async {\n        label.text = \"数据加载完成\"\n    }\n}\n```\n\nQoS（服务质量）等级从高到低：`.userInteractive` > `.userInitiated` > `.default` > `.utility` > `.background`。\n\n## OperationQueue\nOperationQueue是基于GCD的面向对象封装，支持取消、依赖和优先级：\n\n```swift\nlet queue = OperationQueue()\nqueue.addOperation {\n    print(\"后台任务\")\n}\n\nlet op1 = BlockOperation { print(\"操作1\") }\nlet op2 = BlockOperation { print(\"操作2\") }\nop2.addDependency(op1)  // op2等op1完成后才执行\nqueue.addOperations([op1, op2], waitUntilFinished: false)\n```\n\n## async/await (Swift 5.5+)\nSwift 5.5引入了结构化并发，让异步代码像同步代码一样清晰：\n\n```swift\nfunc fetchUser() async -> String {\n    // 模拟网络请求\n    try? await Task.sleep(nanoseconds: 1_000_000_000)\n    return \"Alice\"\n}\n\nfunc loadProfile() async {\n    let user = await fetchUser()     // 等待结果，不阻塞线程\n    print(\"加载用户：\\(user)\")\n}\n```\n\n- `async`：标记函数为异步函数\n- `await`：等待异步操作完成\n- 异步函数必须在异步上下文中调用\n\n## Task\n`Task` 创建异步任务：\n```swift\nTask {\n    let result = await fetchUser()\n    print(result)\n}\n```\n\n## Actor\nActor是Swift并发模型的核心，保证内部状态的线程安全：\n\n```swift\nactor Counter {\n    private var value = 0\n    \n    func increment() -> Int {\n        value += 1\n        return value\n    }\n    \n    func getValue() -> Int {\n        return value\n    }\n}\n\nlet counter = Counter()\nTask {\n    let v = await counter.increment()  // 必须用await访问\n}\n```\n\nActor自动串行化访问，防止数据竞争。\n\n## 练习\n编写异步函数 `processTasks(_ tasks: [String]) async -> [String]`，模拟处理多个任务，将每个任务名加上\"已完成\"后缀，返回处理后的数组。",
+    "order": 14,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "func processTasks(_ tasks: [String]) async -> [String] {\n    // 模拟异步处理每个任务，加上\"已完成\"后缀\n    return []\n}",
+    "solution_code": "func processTasks(_ tasks: [String]) async -> [String] {\n    var results: [String] = []\n    for task in tasks {\n        results.append(task + \"已完成\")\n    }\n    return results\n}",
+    "test_cases": [
+      {
+        "input": "Task { await processTasks([\"下载\", \"解析\", \"保存\"]) }",
+        "expected_output": "[\"下载已完成\", \"解析已完成\", \"保存已完成\"]",
+        "description": "每个任务名应加上\"已完成\"后缀"
+      },
+      {
+        "input": "Task { await processTasks([\"下载\", \"解析\", \"保存\"]) }",
+        "expected_output": "[\"下载已完成\", \"解析已完成\", \"保存已完成\"]",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "遍历tasks数组，对每个元素追加\"已完成\"字符串"
+  },
+  {
+    "title": "UI基础",
+    "slug": "swift-15-ui-basics",
+    "description": "学习SwiftUI视图、修饰符、状态绑定与布局基础",
+    "content": "# UI基础 — SwiftUI入门\n\n## SwiftUI 简介\nSwiftUI是Apple于2019年推出的声明式UI框架，用Swift代码描述界面：\n\n```swift\nimport SwiftUI\n\nstruct ContentView: View {\n    var body: some View {\n        Text(\"Hello, SwiftUI!\")\n            .font(.title)\n            .foregroundColor(.blue)\n    }\n}\n```\n\nSwiftUI的核心思想：**声明你想要什么，框架帮你实现**。与UIKit的命令式编程不同，你不需要手动管理视图的创建和更新。\n\n## 视图 View\n在SwiftUI中，一切皆View。`Text`、`Image`、`Button` 都是视图，你可以组合它们构建复杂界面：\n\n```swift\nVStack {                    // 垂直排列\n    Text(\"标题\")\n        .font(.largeTitle)\n    HStack {                // 水平排列\n        Text(\"左\")\n        Text(\"右\")\n    }\n}\n```\n\n常用布局容器：\n- `VStack`：垂直排列子视图\n- `HStack`：水平排列子视图\n- `ZStack`：层叠子视图\n- `List`：滚动列表\n\n## 修饰符 Modifier\n修饰符以链式调用方式修改视图的外观和行为：\n\n```swift\nText(\"Hello\")\n    .font(.title)\n    .fontWeight(.bold)\n    .foregroundColor(.white)\n    .padding()\n    .background(Color.blue)\n    .cornerRadius(10)\n```\n\n修饰符的顺序很重要！先 `.padding()` 再 `.background()` 会让背景包含内边距。\n\n## 状态管理\n### @State\n`@State` 用于视图内部的简单状态，值改变时自动刷新界面：\n\n```swift\nstruct CounterView: View {\n    @State private var count = 0\n    \n    var body: some View {\n        VStack {\n            Text(\"计数：\\(count)\")\n            Button(\"增加\") {\n                count += 1  // 自动刷新UI\n            }\n        }\n    }\n}\n```\n\n### @Binding\n`@Binding` 创建对 `@State` 的双向绑定，让子视图可以修改父视图的状态：\n\n```swift\nstruct ToggleView: View {\n    @Binding var isOn: Bool\n    var body: some View {\n        Toggle(\"开关\", isOn: $isOn)\n    }\n}\n```\n\n`$` 前缀创建绑定引用。\n\n## 练习\n编写SwiftUI视图结构体 `GreetingView`，包含一个 `@State` 属性 `name`（初始值为\"世界\"），显示文本\"你好，(name)!\"，以及一个按钮点击后将name改为\"Swift\"。",
+    "order": 15,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "import SwiftUI\n\nstruct GreetingView: View {\n    @State private var name: String = \"世界\"\n    \n    var body: some View {\n        VStack {\n            // 显示问候文本\n            Text(\"\")\n            // 添加按钮，点击后修改name\n        }\n    }\n}",
+    "solution_code": "import SwiftUI\n\nstruct GreetingView: View {\n    @State private var name: String = \"世界\"\n    \n    var body: some View {\n        VStack {\n            Text(\"你好，\\(name)!\")\n            Button(\"切换名字\") {\n                name = \"Swift\"\n            }\n        }\n    }\n}",
+    "test_cases": [
+      {
+        "input": "GreetingView().name",
+        "expected_output": "世界",
+        "description": "初始name应为\"世界\""
+      },
+      {
+        "input": "GreetingView().name",
+        "expected_output": "世界",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "用Text(\"你好，\\(name)!\")显示问候，Button的action中修改name = \"Swift\""
+  },
+  {
+    "title": "综合项目",
+    "slug": "swift-16-todo-app",
+    "description": "综合运用Swift知识，构建一个待办事项管理器",
+    "content": "# 综合项目 — 待办事项App\n\n恭喜你来到最后一关！在这一关中，我们将综合运用前面学到的所有知识，构建一个完整的待办事项管理器。\n\n## 项目需求\n我们需要实现一个 `TodoManager` 类，支持以下功能：\n1. 添加待办事项\n2. 标记事项为已完成\n3. 删除事项\n4. 查询未完成事项\n5. 查询所有事项\n\n## 综合知识点\n\n### 结构体与类\n- 用 `struct Todo` 表示单个待办事项\n- 用 `class TodoManager` 管理所有事项\n\n### 协议\n- 定义 `TodoRepository` 协议规范数据操作\n\n### 枚举与错误处理\n- 用枚举定义操作可能出现的错误\n- 用throw/catch处理异常情况\n\n### 集合与泛型\n- 使用Array存储事项\n- 使用filter/map等高阶函数操作数据\n\n### 闭包\n- 使用闭包作为过滤条件\n\n## 设计实现\n\n```swift\n// 待办事项模型\nstruct Todo: Equatable {\n    let id: Int\n    let title: String\n    var isCompleted: Bool\n}\n\n// 错误类型\nenum TodoError: Error {\n    case todoNotFound\n    case duplicateId\n}\n\n// 管理器类\nclass TodoManager {\n    private var todos: [Todo] = []\n    private var nextId = 1\n    \n    func add(title: String) -> Todo {\n        let todo = Todo(id: nextId, title: title, isCompleted: false)\n        nextId += 1\n        todos.append(todo)\n        return todo\n    }\n    \n    func complete(id: Int) throws -> Todo {\n        guard let index = todos.firstIndex(where: { $0.id == id }) else {\n            throw TodoError.todoNotFound\n        }\n        todos[index].isCompleted = true\n        return todos[index]\n    }\n    \n    func pending() -> [Todo] {\n        return todos.filter { !$0.isCompleted }\n    }\n    \n    func all() -> [Todo] {\n        return todos\n    }\n}\n```\n\n这个项目综合运用了：结构体（Todo）、枚举（TodoError）、类（TodoManager）、协议（Equatable）、错误处理（throw/throws）、高阶函数（filter/firstIndex）、闭包等知识点。\n\n## 练习\n实现 `TodoManager` 类，包含 `add(title:) -> Todo`、`complete(id:) throws -> Todo`、`pending() -> [Todo]` 和 `all() -> [Todo]` 方法。编写函数 `testTodoManager() -> String` 测试添加3个事项、完成第2个、返回未完成事项的标题列表。",
+    "order": 16,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "struct Todo: Equatable {\n    let id: Int\n    let title: String\n    var isCompleted: Bool\n}\n\nenum TodoError: Error {\n    case todoNotFound\n}\n\nclass TodoManager {\n    private var todos: [Todo] = []\n    private var nextId = 1\n    \n    func add(title: String) -> Todo {\n        // 创建新Todo并添加到数组\n        fatalError(\"未实现\")\n    }\n    \n    func complete(id: Int) throws -> Todo {\n        // 找到对应id的Todo，标记为已完成\n        fatalError(\"未实现\")\n    }\n    \n    func pending() -> [Todo] {\n        // 返回未完成的Todo列表\n        return []\n    }\n    \n    func all() -> [Todo] {\n        // 返回所有Todo\n        return []\n    }\n}\n\nfunc testTodoManager() -> String {\n    // 创建TodoManager，添加3个事项，完成第2个，返回未完成事项标题\n    return \"\"\n}",
+    "solution_code": "struct Todo: Equatable {\n    let id: Int\n    let title: String\n    var isCompleted: Bool\n}\n\nenum TodoError: Error {\n    case todoNotFound\n}\n\nclass TodoManager {\n    private var todos: [Todo] = []\n    private var nextId = 1\n    \n    func add(title: String) -> Todo {\n        let todo = Todo(id: nextId, title: title, isCompleted: false)\n        nextId += 1\n        todos.append(todo)\n        return todo\n    }\n    \n    func complete(id: Int) throws -> Todo {\n        guard let index = todos.firstIndex(where: { $0.id == id }) else {\n            throw TodoError.todoNotFound\n        }\n        todos[index].isCompleted = true\n        return todos[index]\n    }\n    \n    func pending() -> [Todo] {\n        return todos.filter { !$0.isCompleted }\n    }\n    \n    func all() -> [Todo] {\n        return todos\n    }\n}\n\nfunc testTodoManager() -> String {\n    let manager = TodoManager()\n    manager.add(title: \"学习Swift\")\n    manager.add(title: \"写代码\")\n    manager.add(title: \"提交作业\")\n    try? manager.complete(id: 2)\n    let pendingTodos = manager.pending()\n    return pendingTodos.map { $0.title }.joined(separator: \", \")\n}",
+    "test_cases": [
+      {
+        "input": "testTodoManager()",
+        "expected_output": "学习Swift, 提交作业",
+        "description": "完成第2个事项后，未完成事项应为学习Swift和提交作业"
+      },
+      {
+        "input": "let m = TodoManager(); m.add(title: \"A\"); m.add(title: \"B\"); m.all().count",
+        "expected_output": "2",
+        "description": "添加2个事项后总数应为2"
+      }
+    ],
+    "hint": "add中创建Todo并append，complete中用firstIndex查找并修改isCompleted，pending中用filter过滤未完成项"
+  }
+]

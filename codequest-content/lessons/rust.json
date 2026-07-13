@@ -1,0 +1,648 @@
+[
+  {
+    "title": "Hello World",
+    "slug": "rust-01-hello-world",
+    "description": "学习Cargo项目结构、main函数和println!宏，编写你的第一个Rust程序",
+    "content": "# Hello World — 你的第一个Rust程序\n\n## 什么是Rust？\nRust是一门注重**安全性**、**并发性**和**性能**的系统编程语言。它通过独特的所有权系统在编译期就消除了数据竞争和空指针等问题，被誉为\"不会出错的C++\"。\n\n## Cargo — Rust的构建工具\nCargo是Rust的包管理器和构建工具，类似于Node.js的npm或Python的pip。常用命令：\n\n```bash\ncargo new my_project   # 创建新项目\ncargo build            # 编译项目\ncargo run              # 编译并运行\ncargo test             # 运行测试\n```\n\n## main函数\n每个Rust程序都从 `main` 函数开始执行：\n\n```rust\nfn main() {\n    println!(\"Hello, World!\");\n}\n```\n\n- `fn` 关键字用于定义函数\n- `println!` 是一个**宏**（注意感叹号），用于向标准输出打印文本\n- 语句以分号 `;` 结尾\n\n## 函数与返回值\nRust函数使用 `->` 标注返回类型，最后一个表达式（无分号）即为返回值：\n\n```rust\nfn greet() -> String {\n    String::from(\"Hello, Rust!\")\n}\n```\n\n也可以使用 `return` 关键字提前返回，但惯用写法是省略 `return` 和末尾分号。\n\n## 练习\n请编写函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fn hello() -> String {\n    // 在这里编写你的代码\n    String::new()\n}",
+    "solution_code": "fn hello() -> String {\n    String::from(\"Hello, World!\")\n}",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      },
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 String::from() 创建字符串，或使用 .to_string() 方法"
+  },
+  {
+    "title": "变量与可变性",
+    "slug": "rust-02-variables",
+    "description": "学习let绑定、mut可变性、常量和变量遮蔽(Shadowing)",
+    "content": "# 变量与可变性\n\n## 不可变变量\n在Rust中，默认使用 `let` 声明的变量是**不可变的**（immutable），这与其他语言大不相同：\n\n```rust\nlet x = 5;\nx = 6;  // 编译错误！不能对不可变变量重新赋值\n```\n\nRust这样设计是为了安全——如果你不需要改变一个值，编译器就能帮你保证它不会被意外修改。\n\n## 可变变量\n使用 `mut` 关键字声明可变变量：\n\n```rust\nlet mut x = 5;\nx = 6;  // 没问题！\n```\n\n## 变量遮蔽 (Shadowing)\n你可以用相同的名字声明新变量来**遮蔽**旧变量，新变量可以有不同的类型：\n\n```rust\nlet x = 5;\nlet x = x + 1;      // x = 6，遮蔽了之前的x\nlet x = \"hello\";    // x = \"hello\"，类型从i32变成了&str\n```\n\n遮蔽 vs mut：遮蔽创建了一个全新的变量，而mut是修改同一个变量。遮蔽允许改变类型，mut不允许。\n\n## 常量\n```rust\nconst MAX_POINTS: u32 = 100_000;\n```\n常量用 `const` 声明，必须标注类型，不能使用 `mut`，且必须在编译期就能确定值。\n\n## 练习\n编写函数 `shadow_demo()`，演示变量遮蔽：将整数 `5` 遮蔽为 `5 + 1`，再遮蔽为字符串 `\"6\"`，返回该字符串。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fn shadow_demo() -> String {\n    // 使用变量遮蔽，将整数5变为字符串\"6\"\n    let x = 5;\n    // 在这里继续遮蔽x\n    String::new()\n}",
+    "solution_code": "fn shadow_demo() -> String {\n    let x = 5;\n    let x = x + 1;\n    let x = x.to_string();\n    x\n}",
+    "test_cases": [
+      {
+        "input": "shadow_demo()",
+        "expected_output": "6",
+        "description": "shadow_demo() 应返回 \"6\""
+      },
+      {
+        "input": "shadow_demo()",
+        "expected_output": "6",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 let x = x + 1 遮蔽，再用 let x = x.to_string() 转为字符串"
+  },
+  {
+    "title": "所有权系统",
+    "slug": "rust-03-ownership",
+    "description": "学习Rust核心概念：所有权规则、移动语义、Copy trait和借用",
+    "content": "# 所有权系统\n\n## 为什么需要所有权？\nRust没有垃圾回收（GC），也没有手动内存管理（如C的malloc/free）。它通过**所有权系统**在编译期管理内存，既安全又高效。\n\n## 所有权三规则\n1. Rust中每个值都有一个**所有者**（owner）\n2. 同一时刻，值只能有**一个**所有者\n3. 当所有者离开作用域，值被**丢弃**（drop）\n\n想象一下：一本书只能被一个人拥有。当你把书送给别人，你就不再拥有它了。\n\n## 移动语义\n将变量赋值给另一个变量时，所有权会**移动**（move）：\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1;  // s1的所有权移动到s2\n// println!(\"{}\", s1);  // 编译错误！s1已失效\nprintln!(\"{}\", s2);     // 正常\n```\n\n这就像把书给了别人，你就不能再看这本书了。\n\n## Clone\n如果需要深拷贝，使用 `.clone()`：\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1.clone();  // 深拷贝\nprintln!(\"{} {}\", s1, s2);  // 两个都有效\n```\n\n## Copy trait\n简单类型（如i32、f64、bool、char）实现了 `Copy` trait，赋值时会自动复制而非移动：\n```rust\nlet x = 5;\nlet y = x;  // i32实现了Copy，这里是复制\nprintln!(\"{} {}\", x, y);  // 两个都有效\n```\n\n## 练习\n编写函数 `ownership_transfer()`，创建一个String，将其所有权移动到新变量，返回新变量的内容。",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fn ownership_transfer() -> String {\n    let s1 = String::from(\"Rust\");\n    // 将s1的所有权移动到s2，然后返回s2\n    String::new()\n}",
+    "solution_code": "fn ownership_transfer() -> String {\n    let s1 = String::from(\"Rust\");\n    let s2 = s1;\n    s2\n}",
+    "test_cases": [
+      {
+        "input": "ownership_transfer()",
+        "expected_output": "Rust",
+        "description": "ownership_transfer() 应返回 \"Rust\""
+      },
+      {
+        "input": "ownership_transfer()",
+        "expected_output": "Rust",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "直接用 let s2 = s1; 移动所有权，然后返回 s2"
+  },
+  {
+    "title": "引用与生命周期",
+    "slug": "rust-04-references",
+    "description": "学习不可变引用&、可变引用&mut、借用规则和生命周期标注",
+    "content": "# 引用与生命周期\n\n## 借用 (Borrowing)\n如果不想转移所有权，可以使用**引用**来借用值，就像借别人的书来看，但书还是别人的：\n\n```rust\nfn calculate_length(s: &String) -> usize {\n    s.len()\n}\n\nlet s1 = String::from(\"hello\");\nlet len = calculate_length(&s1);  // 借用s1\n// s1仍然有效！\n```\n\n`&String` 表示对String的不可变引用，`&s1` 创建一个指向s1的引用。\n\n## 可变引用\n使用 `&mut` 创建可变引用，允许修改借来的值：\n\n```rust\nfn add_world(s: &mut String) {\n    s.push_str(\", world\");\n}\n\nlet mut s = String::from(\"hello\");\nadd_world(&mut s);\n// s 现在是 \"hello, world\"\n```\n\n## 借用规则\n1. 在同一时刻，你可以拥有**任意多个**不可变引用 `&T`\n2. 在同一时刻，你只能拥有**一个**可变引用 `&mut T`\n3. 可变引用与不可变引用**不能同时存在**\n\n这就像：一本书可以同时被多人阅读（多个不可变引用），但有人要修改时，其他人就不能看了。\n\n## 生命周期\n生命周期是Rust用来追踪引用有效性的机制。大多数情况下编译器可以自动推断，但有时需要手动标注：\n\n```rust\nfn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() { x } else { y }\n}\n```\n\n`'a` 是生命周期参数，表示返回的引用至少和两个输入引用中较短的那个一样长。\n\n## 练习\n编写函数 `append_suffix(s: &mut String)`，向字符串追加 `\"-rust\"` 后缀。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fn append_suffix(s: &mut String) {\n    // 向s追加 \"-rust\"\n}",
+    "solution_code": "fn append_suffix(s: &mut String) {\n    s.push_str(\"-rust\");\n}",
+    "test_cases": [
+      {
+        "input": "let mut s = String::from(\"hello\"); append_suffix(&mut s); s",
+        "expected_output": "hello-rust",
+        "description": "追加后缀后应得到 hello-rust"
+      },
+      {
+        "input": "let mut s = String::from(\"hello\"); append_suffix(&mut s); s",
+        "expected_output": "hello-rust",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 s.push_str() 方法向String追加字符串"
+  },
+  {
+    "title": "数据类型",
+    "slug": "rust-05-data-types",
+    "description": "学习标量类型、复合类型、元组、数组和Vector",
+    "content": "# 数据类型\n\n## 标量类型\nRust有四种基本标量类型：\n\n- **整数**：`i8`, `i16`, `i32`, `i64`, `i128`（有符号），`u8`, `u16`, `u32`, `u64`, `u128`（无符号），默认为 `i32`\n- **浮点数**：`f32`, `f64`，默认为 `f64`\n- **布尔值**：`bool`，值为 `true` 或 `false`\n- **字符**：`char`，4字节Unicode字符，用单引号 `'字'`\n\n## 复合类型\n\n### 元组 (Tuple)\n固定长度，可包含不同类型：\n```rust\nlet tup: (i32, f64, char) = (500, 6.4, '中');\nlet (x, y, z) = tup;  // 解构\nlet first = tup.0;     // 索引访问\n```\n\n### 数组 (Array)\n固定长度，所有元素同类型，存储在栈上：\n```rust\nlet arr: [i32; 5] = [1, 2, 3, 4, 5];\nlet first = arr[0];\nlet repeat = [3; 5];  // [3, 3, 3, 3, 3]\n```\n\n### Vector\n动态长度，所有元素同类型，存储在堆上：\n```rust\nlet mut v: Vec<i32> = Vec::new();\nv.push(1);\nv.push(2);\n\nlet v = vec![1, 2, 3];  // 使用宏创建\n```\n\n数组 vs Vector：数组大小固定、性能好；Vector大小可变、更灵活。\n\n## 练习\n编写函数 `make_tuple()` 返回一个元组 `(1, \"Rust\", true)`，编写函数 `sum_vec(v: &Vec<i32>)` 返回向量中所有元素之和。",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fn make_tuple() -> (i32, &'static str, bool) {\n    // 返回 (1, \"Rust\", true)\n    (0, \"\", false)\n}\n\nfn sum_vec(v: &Vec<i32>) -> i32 {\n    // 计算向量中所有元素之和\n    0\n}",
+    "solution_code": "fn make_tuple() -> (i32, &'static str, bool) {\n    (1, \"Rust\", true)\n}\n\nfn sum_vec(v: &Vec<i32>) -> i32 {\n    v.iter().sum()\n}",
+    "test_cases": [
+      {
+        "input": "make_tuple()",
+        "expected_output": "(1, \"Rust\", true)",
+        "description": "make_tuple() 应返回 (1, \"Rust\", true)"
+      },
+      {
+        "input": "sum_vec(&vec![1, 2, 3, 4, 5])",
+        "expected_output": "15",
+        "description": "sum_vec(&vec![1,2,3,4,5]) 应返回 15"
+      },
+      {
+        "input": "sum_vec(&vec![10, -3, 7])",
+        "expected_output": "14",
+        "description": "sum_vec(&vec![10,-3,7]) 应返回 14"
+      }
+    ],
+    "hint": "元组直接用括号构造，Vector求和可以用 iter().sum()"
+  },
+  {
+    "title": "控制流",
+    "slug": "rust-06-control-flow",
+    "description": "学习if表达式、loop/while/for循环和match模式匹配",
+    "content": "# 控制流\n\n## if 表达式\nRust的 `if` 是**表达式**，可以返回值：\n\n```rust\nlet number = 6;\nlet result = if number % 2 == 0 {\n    \"偶数\"\n} else {\n    \"奇数\"\n};\n```\n\n注意：if的每个分支返回的类型必须相同。\n\n## loop 循环\n`loop` 创建无限循环，可用 `break` 退出并返回值：\n\n```rust\nlet mut counter = 0;\nlet result = loop {\n    counter += 1;\n    if counter == 10 {\n        break counter * 2;  // 返回20\n    }\n};\n```\n\n## while 循环\n```rust\nlet mut n = 3;\nwhile n != 0 {\n    n -= 1;\n}\n```\n\n## for 循环\n最常用的循环形式：\n```rust\nfor i in 0..5 {       // 0, 1, 2, 3, 4\n    println!(\"{}\", i);\n}\nfor item in vec.iter() {  // 遍历集合\n    println!(\"{}\", item);\n}\n```\n\n## match 模式匹配\nRust的 `match` 极其强大，类似于其他语言的switch但更灵活：\n\n```rust\nlet x = 3;\nmatch x {\n    1 => \"一\",\n    2 => \"二\",\n    3 => \"三\",\n    _ => \"其他\",  // _ 匹配所有\n}\n```\n\nmatch必须穷尽所有可能，`_` 是通配符。\n\n## 练习\n编写函数 `classify(n: i32)` ，使用match返回：0→\"zero\"，1→\"one\"，其他→\"other\"。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fn classify(n: i32) -> &'static str {\n    // 使用match模式匹配\n    \"\"\n}",
+    "solution_code": "fn classify(n: i32) -> &'static str {\n    match n {\n        0 => \"zero\",\n        1 => \"one\",\n        _ => \"other\",\n    }\n}",
+    "test_cases": [
+      {
+        "input": "classify(0)",
+        "expected_output": "zero",
+        "description": "classify(0) 应返回 zero"
+      },
+      {
+        "input": "classify(1)",
+        "expected_output": "one",
+        "description": "classify(1) 应返回 one"
+      },
+      {
+        "input": "classify(42)",
+        "expected_output": "other",
+        "description": "classify(42) 应返回 other"
+      },
+      {
+        "input": "classify(-1)",
+        "expected_output": "other",
+        "description": "classify(-1) 应返回 other"
+      }
+    ],
+    "hint": "使用 match n { 0 => ..., 1 => ..., _ => ... } 模式匹配"
+  },
+  {
+    "title": "函数与闭包",
+    "slug": "rust-07-functions-closures",
+    "description": "学习函数定义、闭包语法、Fn/FnMut/FnOnce trait",
+    "content": "# 函数与闭包\n\n## 函数定义\nRust使用 `fn` 关键字定义函数，参数必须声明类型：\n\n```rust\nfn add(a: i32, b: i32) -> i32 {\n    a + b  // 最后一个表达式作为返回值\n}\n```\n\n函数指针是具体类型，大小固定。\n\n## 闭包 (Closure)\n闭包是匿名函数，可以捕获所在作用域的变量：\n\n```rust\nlet x = 4;\nlet equal_to_x = |z| z == x;  // 捕获了x\nassert!(equal_to_x(4));\n```\n\n闭包语法：`|参数| { 函数体 }`，类型通常可推断。\n\n## 闭包捕获方式与Fn trait\n闭包捕获变量的方式决定了它实现哪些trait：\n\n- `FnOnce`：消费捕获的变量（移动），只能调用一次\n- `FnMut`：可变借用捕获的变量，可多次调用但需mut\n- `Fn`：不可变借用捕获的变量，可多次调用\n\n```rust\nlet mut list = vec![1, 2, 3];\nlet mut push_closure = || { list.push(4); };  // FnMut\nlet len_closure = || list.len();              // Fn\n```\n\n## 闭包作为参数\n```rust\nfn apply<F: Fn(i32) -> i32>(f: F, x: i32) -> i32 {\n    f(x)\n}\nlet double = |x| x * 2;\napply(double, 5);  // 10\n```\n\n## 练习\n编写函数 `make_adder(x: i32) -> Box<dyn Fn(i32) -> i32>`，返回一个闭包，该闭包将参数加上x。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 7,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "fn make_adder(x: i32) -> Box<dyn Fn(i32) -> i32> {\n    // 返回一个闭包，将输入值加上x\n    Box::new(|_| 0)\n}",
+    "solution_code": "fn make_adder(x: i32) -> Box<dyn Fn(i32) -> i32> {\n    Box::new(move |y| x + y)\n}",
+    "test_cases": [
+      {
+        "input": "let add5 = make_adder(5); add5(3)",
+        "expected_output": "8",
+        "description": "make_adder(5)(3) 应返回 8"
+      },
+      {
+        "input": "let add10 = make_adder(10); add10(7)",
+        "expected_output": "17",
+        "description": "make_adder(10)(7) 应返回 17"
+      }
+    ],
+    "hint": "使用 move 闭包捕获x的值，返回 Box::new(move |y| x + y)"
+  },
+  {
+    "title": "结构体与枚举",
+    "slug": "rust-08-structs-enums",
+    "description": "学习struct定义与方法、enum变体、Option和Result类型",
+    "content": "# 结构体与枚举\n\n## 结构体 (Struct)\nRust有三种结构体：\n\n```rust\n// 命名字段结构体\nstruct User {\n    name: String,\n    age: u32,\n}\n\n// 元组结构体\nstruct Point(i32, i32);\n\n// 单元结构体\nstruct AlwaysEqual;\n```\n\n### 方法\n使用 `impl` 块为结构体添加方法：\n\n```rust\nimpl User {\n    fn new(name: String, age: u32) -> User {\n        User { name, age }\n    }\n    fn greet(&self) -> String {\n        format!(\"我是{}，今年{}岁\", self.name, self.age)\n    }\n}\n```\n\n`&self` 是 `self: &Self` 的简写，表示借用自身。\n\n## 枚举 (Enum)\n枚举可以携带数据，比其他语言的枚举强大得多：\n\n```rust\nenum Shape {\n    Circle(f64),\n    Rectangle(f64, f64),\n    Triangle(f64, f64, f64),\n}\n```\n\n## Option<T>\nRust没有空指针，用 `Option` 表示可能为空的值：\n\n```rust\nlet some: Option<i32> = Some(42);\nlet none: Option<i32> = None;\n```\n\n## Result<T, E>\n用 `Result` 表示可能失败的操作：\n\n```rust\nlet ok: Result<i32, &str> = Ok(42);\nlet err: Result<i32, &str> = Err(\"出错了\");\n```\n\n## 练习\n定义结构体 `Rectangle` 有 `width` 和 `height` 两个字段（f64），实现方法 `area(&self)` 返回面积。",
+    "order": 8,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "struct Rectangle {\n    width: f64,\n    height: f64,\n}\n\nimpl Rectangle {\n    fn area(&self) -> f64 {\n        // 计算矩形面积\n        0.0\n    }\n}",
+    "solution_code": "struct Rectangle {\n    width: f64,\n    height: f64,\n}\n\nimpl Rectangle {\n    fn area(&self) -> f64 {\n        self.width * self.height\n    }\n}",
+    "test_cases": [
+      {
+        "input": "Rectangle { width: 3.0, height: 4.0 }.area()",
+        "expected_output": "12",
+        "description": "3x4矩形面积应为12"
+      },
+      {
+        "input": "Rectangle { width: 5.5, height: 2.0 }.area()",
+        "expected_output": "11",
+        "description": "5.5x2矩形面积应为11"
+      }
+    ],
+    "hint": "面积 = width * height，使用 self.width * self.height"
+  },
+  {
+    "title": "错误处理",
+    "slug": "rust-09-error-handling",
+    "description": "学习Result<T,E>、?运算符、panic!和自定义错误类型",
+    "content": "# 错误处理\n\n## Rust的错误处理哲学\nRust将错误分为两类：\n- **可恢复错误**：如文件不存在、网络超时，使用 `Result<T, E>`\n- **不可恢复错误**：如数组越界、逻辑bug，使用 `panic!`\n\n## Result<T, E> 详解\n```rust\nenum Result<T, E> {\n    Ok(T),    // 成功，包含值T\n    Err(E),   // 失败，包含错误E\n}\n```\n\n### 处理Result的常用方式\n\n1. **match匹配**：\n```rust\nmatch result {\n    Ok(val) => val,\n    Err(e) => panic!(\"错误: {}\", e),\n}\n```\n\n2. **unwrap/expect**：成功返回值，失败panic（仅用于确定不会失败的场景）：\n```rust\nlet val = result.unwrap();\nlet val = result.expect(\"应该成功\");\n```\n\n3. **?运算符**：最优雅的方式，成功返回值，失败提前返回Err：\n```rust\nfn read_username() -> Result<String, std::io::Error> {\n    let content = std::fs::read_to_string(\"username.txt\")?;\n    Ok(content.trim().to_string())\n}\n```\n\n`?` 只能用在返回Result的函数中。\n\n## panic!\n当遇到无法恢复的错误时使用：\n```rust\npanic!(\"程序崩溃了！\");\n```\n\n## 自定义错误类型\n实现 `std::fmt::Display` 和 `std::error::Error` trait：\n\n```rust\n#[derive(Debug)]\nstruct MyError(String);\n\nimpl std::fmt::Display for MyError {\n    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {\n        write!(f, \"{}\", self.0)\n    }\n}\n```\n\n## 练习\n编写函数 `parse_positive(s: &str) -> Result<i32, String>`，将字符串解析为i32，如果不是正整数则返回错误信息。",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "fn parse_positive(s: &str) -> Result<i32, String> {\n    // 将字符串解析为正整数，失败返回Err\n    Ok(0)\n}",
+    "solution_code": "fn parse_positive(s: &str) -> Result<i32, String> {\n    match s.parse::<i32>() {\n        Ok(n) if n > 0 => Ok(n),\n        Ok(_) => Err(format!(\"{} 不是正整数\", s)),\n        Err(_) => Err(format!(\"无法解析: {}\", s)),\n    }\n}",
+    "test_cases": [
+      {
+        "input": "parse_positive(\"42\").unwrap()",
+        "expected_output": "42",
+        "description": "parse_positive(\"42\") 应返回 Ok(42)"
+      },
+      {
+        "input": "parse_positive(\"0\").is_err()",
+        "expected_output": "true",
+        "description": "parse_positive(\"0\") 应返回 Err"
+      },
+      {
+        "input": "parse_positive(\"abc\").is_err()",
+        "expected_output": "true",
+        "description": "parse_positive(\"abc\") 应返回 Err"
+      },
+      {
+        "input": "parse_positive(\"-5\").is_err()",
+        "expected_output": "true",
+        "description": "parse_positive(\"-5\") 应返回 Err"
+      }
+    ],
+    "hint": "使用 s.parse::<i32>() 解析字符串，结合 match 和守卫条件 if n > 0"
+  },
+  {
+    "title": "泛型与Trait",
+    "slug": "rust-10-generics-traits",
+    "description": "学习泛型函数与结构体、Trait定义与实现、Trait约束",
+    "content": "# 泛型与Trait\n\n## 泛型\n泛型让我们编写适用于多种类型的代码，避免重复：\n\n```rust\n// 泛型函数\nfn largest<T: PartialOrd>(list: &[T]) -> &T {\n    let mut max = &list[0];\n    for item in &list[1..] {\n        if item > max { max = item; }\n    }\n    max\n}\n\n// 泛型结构体\nstruct Point<T> {\n    x: T,\n    y: T,\n}\n```\n\n## Trait — Rust的接口\nTrait定义一组方法签名，类似于其他语言的Interface：\n\n```rust\ntrait Summary {\n    fn summarize(&self) -> String;\n}\n\nstruct Article { title: String, content: String }\n\nimpl Summary for Article {\n    fn summarize(&self) -> String {\n        format!(\"{}: {}\", self.title, self.content)\n    }\n}\n```\n\n### 默认实现\n```rust\ntrait Greet {\n    fn greet(&self) -> String {\n        String::from(\"你好！\")  // 默认实现\n    }\n}\n```\n\n## Trait约束 (Bounds)\n限制泛型参数必须实现某些trait：\n\n```rust\nfn print<T: std::fmt::Display>(item: T) {\n    println!(\"{}\", item);\n}\n\n// 等价写法\nfn print<T>(item: T)\nwhere\n    T: std::fmt::Display,\n{\n    println!(\"{}\", item);\n}\n```\n\n## 练习\n定义trait `Describable` 有方法 `describe(&self) -> String`，为结构体 `Product { name: String, price: f64 }` 实现该trait，返回格式 `\"{name}: ${price}\"`。",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "trait Describable {\n    fn describe(&self) -> String;\n}\n\nstruct Product {\n    name: String,\n    price: f64,\n}\n\nimpl Describable for Product {\n    fn describe(&self) -> String {\n        // 返回 \"{name}: ${price}\" 格式\n        String::new()\n    }\n}",
+    "solution_code": "trait Describable {\n    fn describe(&self) -> String;\n}\n\nstruct Product {\n    name: String,\n    price: f64,\n}\n\nimpl Describable for Product {\n    fn describe(&self) -> String {\n        format!(\"{}: ${}\", self.name, self.price)\n    }\n}",
+    "test_cases": [
+      {
+        "input": "Product { name: String::from(\"Rust书\"), price: 59.9 }.describe()",
+        "expected_output": "Rust书: $59.9",
+        "description": "Product描述应返回正确格式"
+      },
+      {
+        "input": "Product { name: String::from(\"键盘\"), price: 199.0 }.describe()",
+        "expected_output": "键盘: $199",
+        "description": "Product描述应返回正确格式"
+      }
+    ],
+    "hint": "使用 format!() 宏格式化字符串，self.name 和 self.price 访问字段"
+  },
+  {
+    "title": "生命周期进阶",
+    "slug": "rust-11-lifetimes",
+    "description": "学习函数/结构体/Trait中的生命周期标注与省略规则",
+    "content": "# 生命周期进阶\n\n## 为什么需要生命周期？\n生命周期是Rust用来确保引用始终有效的机制。想象你借了一本书，生命周期就是借书期限——编译器需要确保你在还书之前不会继续使用这本书。\n\n## 生命周期标注语法\n生命周期参数以 `'` 开头，如 `'a`、`'b`：\n\n```rust\nfn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() { x } else { y }\n}\n```\n\n`'a` 表示：返回的引用至少和两个输入引用中**较短**的那个活一样长。\n\n## 结构体中的生命周期\n当结构体持有引用时，必须标注生命周期：\n\n```rust\nstruct Parser<'a> {\n    content: &'a str,\n}\n\nimpl<'a> Parser<'a> {\n    fn new(content: &'a str) -> Self {\n        Parser { content }\n    }\n}\n```\n\n这表示 `Parser` 不能比它引用的 `content` 活得更久。\n\n## 生命周期省略规则\n编译器在某些情况下可以自动推断生命周期，无需手动标注：\n\n1. 每个引用参数获得自己的生命周期参数\n2. 如果只有一个输入生命周期，它赋给输出\n3. 如果有 `&self` 或 `&mut self`，其生命周期赋给输出\n\n```rust\n// 省略前\nfn first<'a>(s: &'a str) -> &'a str { ... }\n// 省略后\nfn first(s: &str) -> &str { ... }\n```\n\n## 静态生命周期\n`'static` 表示引用在整个程序运行期间都有效：\n\n```rust\nlet s: &'static str = \"我是静态字符串\";\n```\n\n字符串字面量总是 `'static` 的，因为它们直接编译进二进制文件。\n\n## 练习\n编写函数 `first_word(s: &str) -> &str`，返回字符串中第一个空格前的部分（或整个字符串如果没有空格）。",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "fn first_word(s: &str) -> &str {\n    // 返回第一个空格前的部分\n    \"\"\n}",
+    "solution_code": "fn first_word(s: &str) -> &str {\n    match s.find(' ') {\n        Some(i) => &s[..i],\n        None => s,\n    }\n}",
+    "test_cases": [
+      {
+        "input": "first_word(\"hello world\")",
+        "expected_output": "hello",
+        "description": "first_word(\"hello world\") 应返回 \"hello\""
+      },
+      {
+        "input": "first_word(\"Rust\")",
+        "expected_output": "Rust",
+        "description": "first_word(\"Rust\") 应返回 \"Rust\""
+      },
+      {
+        "input": "first_word(\"foo bar baz\")",
+        "expected_output": "foo",
+        "description": "first_word(\"foo bar baz\") 应返回 \"foo\""
+      }
+    ],
+    "hint": "使用 s.find(' ') 查找空格位置，然后用切片 &s[..i] 获取前半部分"
+  },
+  {
+    "title": "智能指针",
+    "slug": "rust-12-smart-pointers",
+    "description": "学习Box、Rc、RefCell、Arc和Mutex智能指针",
+    "content": "# 智能指针\n\n## 什么是智能指针？\n智能指针是拥有额外元数据和功能的指针。普通引用只是借用数据，而智能指针**拥有**数据。\n\n## Box<T> — 堆分配\n将数据分配到堆上，栈上只保留指针：\n\n```rust\nlet b = Box::new(5);  // 5存储在堆上\n```\n\n主要用途：\n- 编译时大小未知的类型（如递归类型）\n- 转移大量数据而不复制\n- trait对象（`dyn Trait`）\n\n```rust\nenum List {\n    Cons(i32, Box<List>),\n    Nil,\n}\n```\n\n## Rc<T> — 引用计数\n允许多个所有者共享同一数据（仅单线程）：\n\n```rust\nuse std::rc::Rc;\nlet a = Rc::new(5);\nlet b = Rc::clone(&a);  // 引用计数+1，不深拷贝\n```\n\n想象Rc像是一间共享办公室，多个人可以同时使用，最后一个人离开时关灯（释放内存）。\n\n## RefCell<T> — 内部可变性\n在不可变引用中修改数据（运行时检查借用规则）：\n\n```rust\nuse std::cell::RefCell;\nlet data = RefCell::new(vec![1, 2, 3]);\ndata.borrow_mut().push(4);  // 通过不可变引用修改！\n```\n\nRefCell将借用检查从编译期推迟到运行时，违反规则会panic。\n\n## Arc<T> — 原子引用计数\n线程安全版本的Rc，用于多线程共享数据。\n\n## Mutex<T> — 互斥锁\n确保同一时刻只有一个线程访问数据：\n\n```rust\nuse std::sync::Mutex;\nlet m = Mutex::new(5);\nlet mut num = m.lock().unwrap();\n*num = 6;\n```\n\n## 练习\n编写函数 `create_cons_list()` 返回一个Box链表：1→2→3→Nil。",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "enum List {\n    Cons(i32, Box<List>),\n    Nil,\n}\n\nfn create_cons_list() -> List {\n    // 创建 1→2→3→Nil 的链表\n    List::Nil\n}",
+    "solution_code": "enum List {\n    Cons(i32, Box<List>),\n    Nil,\n}\n\nfn create_cons_list() -> List {\n    List::Cons(1, Box::new(List::Cons(2, Box::new(List::Cons(3, Box::new(List::Nil))))))\n}",
+    "test_cases": [
+      {
+        "input": "match create_cons_list() { List::Cons(v, _) => v, _ => -1 }",
+        "expected_output": "1",
+        "description": "链表头部应为1"
+      },
+      {
+        "input": "match create_cons_list() { List::Cons(v, _) => v, _ => -1 }",
+        "expected_output": "1",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "从尾部开始构建：List::Cons(1, Box::new(List::Cons(2, Box::new(List::Cons(3, Box::new(List::Nil))))))"
+  },
+  {
+    "title": "迭代器",
+    "slug": "rust-13-iterators",
+    "description": "学习Iterator trait、消耗式与惰性适配器、自定义迭代器",
+    "content": "# 迭代器\n\n## Iterator trait\n所有迭代器都实现 `Iterator` trait：\n\n```rust\ntrait Iterator {\n    type Item;\n    fn next(&mut self) -> Option<Self::Item>;\n}\n```\n\n每次调用 `next()` 返回 `Some(值)` 或 `None`（结束）。\n\n## 创建迭代器\n```rust\nlet v = vec![1, 2, 3];\nv.iter()      // 不可变引用: &T\nv.iter_mut()  // 可变引用: &mut T\nv.into_iter() // 获取所有权: T\n```\n\n## 消耗式适配器\n调用后会消费迭代器：\n\n```rust\nlet sum: i32 = vec![1, 2, 3].iter().sum();       // 6\ncollect: Vec<_> = vec![1,2,3].iter().collect();\nlet count = vec![1,2,3].iter().count();           // 3\n```\n\n## 惰性适配器\n调用后不立即执行，产生新迭代器：\n\n```rust\nlet v = vec![1, 2, 3, 4, 5];\nv.iter().map(|x| x * 2);       // 惰性，不执行\nv.iter().filter(|x| *x > 3);   // 惰性\nv.iter().take(2);               // 惰性\n```\n\n只有调用消耗式适配器时才会真正执行：\n```rust\nlet doubled: Vec<i32> = vec![1, 2, 3].iter().map(|x| x * 2).collect();\n// [2, 4, 6]\n```\n\n## 链式调用\n迭代器最强大的特性是可以链式组合：\n\n```rust\nlet result: Vec<i32> = (1..=10)\n    .filter(|x| x % 2 == 0)   // 2,4,6,8,10\n    .map(|x| x * x)           // 4,16,36,64,100\n    .take(3)                  // 4,16,36\n    .collect();\n```\n\n## 练习\n编写函数 `square_evens(v: &Vec<i32>) -> Vec<i32>`，筛选偶数并求平方，返回结果向量。",
+    "order": 13,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "fn square_evens(v: &Vec<i32>) -> Vec<i32> {\n    // 筛选偶数并求平方\n    vec![]\n}",
+    "solution_code": "fn square_evens(v: &Vec<i32>) -> Vec<i32> {\n    v.iter()\n        .filter(|x| *x % 2 == 0)\n        .map(|x| x * x)\n        .collect()\n}",
+    "test_cases": [
+      {
+        "input": "square_evens(&vec![1, 2, 3, 4, 5, 6])",
+        "expected_output": "[4, 16, 36]",
+        "description": "偶数平方应为 [4, 16, 36]"
+      },
+      {
+        "input": "square_evens(&vec![1, 3, 5])",
+        "expected_output": "[]",
+        "description": "无偶数时应返回空向量"
+      },
+      {
+        "input": "square_evens(&vec![0, 2])",
+        "expected_output": "[0, 4]",
+        "description": "包含0时0的平方仍为0"
+      }
+    ],
+    "hint": "链式调用 .iter().filter().map().collect()"
+  },
+  {
+    "title": "模块系统",
+    "slug": "rust-14-modules",
+    "description": "学习mod/pub/use关键字、crate类型和workspace组织",
+    "content": "# 模块系统\n\n## 模块 (Module)\n模块用于组织和封装代码，类似于其他语言的命名空间或包：\n\n```rust\nmod network {\n    pub fn connect() { /* ... */ }\n    fn disconnect() { /* ... */ }  // 私有，外部不可见\n}\n\nnetwork::connect();    // 公有，可访问\n// network::disconnect();  // 编译错误！私有\n```\n\n## 可见性\n- 默认私有：只有同模块内可见\n- `pub`：公开，外部可访问\n- `pub(crate)`：crate内可见\n- `pub(super)`：父模块可见\n\n## use — 引入路径\n```rust\nuse std::collections::HashMap;\nuse std::io::{self, Read, Write};  // 批量引入\n\nlet mut map = HashMap::new();  // 无需写全路径\n```\n\n## 模块文件组织\n```\nsrc/\n├── main.rs          // 模块根\n├── network.rs       // mod network; 引入\n├── network/         // 或目录形式\n│   ├── mod.rs\n│   └── server.rs\n```\n\n在 `main.rs` 中：\n```rust\nmod network;           // 声明模块\nuse network::connect;  // 引入项\n```\n\n## Crate\nCrate是Rust的编译单元，分为：\n- **二进制crate**：编译为可执行程序（有main函数）\n- **库crate**：编译为库供其他crate使用（有lib.rs）\n\n## Workspace\n管理多个相关的crate：\n```toml\n[workspace]\nmembers = [\n    \"app\",\n    \"lib\",\n]\n```\n\n## 练习\n编写函数 `module_demo()` 返回字符串 `\"modules organized\"`，模拟模块组织的概念。",
+    "order": 14,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "// 定义 math_utils 模块\nmod math_utils {\n    // TODO: 公开 add 和 multiply 函数\n}\n\n// 在 main 域使用模块函数\nfn calc_all(a: i32, b: i32) -> (i32, i32) {\n    // TODO: 调用 math_utils 中的函数\n    (0, 0)\n}",
+    "solution_code": "mod math_utils {\n    pub fn add(a: i32, b: i32) -> i32 {\n        a + b\n    }\n\n    pub fn multiply(a: i32, b: i32) -> i32 {\n        a * b\n    }\n}\n\nuse math_utils::{add, multiply};\n\nfn calc_all(a: i32, b: i32) -> (i32, i32) {\n    (add(a, b), multiply(a, b))\n}",
+    "test_cases": [
+      {
+        "input": "calc_all(2, 3)",
+        "expected_output": "(5, 6)",
+        "description": "模块函数 add 和 multiply 应正确计算"
+      },
+      {
+        "input": "calc_all(5, 7)",
+        "expected_output": "(12, 35)",
+        "description": "calc_all 应正确委托给模块函数"
+      },
+      {
+        "input": "add(10, 20)",
+        "expected_output": "30",
+        "description": "use 导入后 add 应可直接调用"
+      }
+    ],
+    "hint": "使用 String::from() 返回字符串"
+  },
+  {
+    "title": "宏编程",
+    "slug": "rust-15-macros",
+    "description": "学习声明宏macro_rules!和过程宏（派生宏、属性宏、函数宏）",
+    "content": "# 宏编程\n\n## 宏 vs 函数\n- **函数**：在运行时调用，类型安全，不能接受可变数量的参数\n- **宏**：在编译期展开，可以操作代码结构，可以接受可变参数\n\n宏在编译时展开为代码，相当于自动写代码。\n\n## 声明宏 macro_rules!\n使用模式匹配定义宏：\n\n```rust\nmacro_rules! say_hello {\n    () => {\n        println!(\"Hello!\");\n    };\n    ($name:expr) => {\n        println!(\"Hello, {}!\", $name);\n    };\n}\n\nsay_hello!();         // Hello!\nsay_hello!(\"Rust\");   // Hello, Rust!\n```\n### 常用设计符\n- `expr`：表达式\n- `ident`：标识符\n- `ty`：类型\n- `stmt`：语句\n- `tt`：token树（最通用）\n\n### 重复模式\n```rust\nmacro_rules! sum {\n    ($($x:expr),+) => {{\n        0 $(+ $x)+\n    }};\n}\nlet total = sum!(1, 2, 3);  // 6\n```\n\n## 过程宏\n三种类型：\n\n1. **派生宏**：`#[derive(MacroName)]`\n2. **属性宏**：`#[macro_name]`\n3. **函数宏**：`macro_name!(...)`\n\n过程宏需要单独的crate（`proc-macro = true`），操作token流：\n\n```rust\n#[proc_macro_derive(HelloMacro)]\npub fn hello_macro_derive(input: TokenStream) -> TokenStream {\n    // 解析、转换、生成代码\n}\n```\n\n## 练习\n编写声明宏 `double!`，接受一个表达式并返回其两倍的值。",
+    "order": 15,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "macro_rules! double {\n    // 编写宏，返回表达式的两倍\n    ($x:expr) => {\n        0\n    };\n}\n\nfn test_double() -> i32 {\n    double!(21)\n}",
+    "solution_code": "macro_rules! double {\n    ($x:expr) => {\n        $x * 2\n    };\n}\n\nfn test_double() -> i32 {\n    double!(21)\n}",
+    "test_cases": [
+      {
+        "input": "test_double()",
+        "expected_output": "42",
+        "description": "double!(21) 应返回 42"
+      },
+      {
+        "input": "test_double()",
+        "expected_output": "42",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "宏模式 ($x:expr) => { $x * 2 }"
+  },
+  {
+    "title": "测试与文档",
+    "slug": "rust-16-testing-docs",
+    "description": "学习#[test]属性、文档测试、集成测试和基准测试",
+    "content": "# 测试与文档\n\n## 单元测试\n使用 `#[test]` 属性标记测试函数：\n\n```rust\nfn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\n#[test]\nfn test_add() {\n    assert_eq!(add(2, 3), 5);\n    assert_ne!(add(2, 3), 6);\n}\n```\n\n### 断言宏\n- `assert!(expr)` — 表达式必须为true\n- `assert_eq!(left, right)` — 两者相等\n- `assert_ne!(left, right)` — 两者不等\n- 可添加自定义消息：`assert_eq!(a, b, \"a应该等于b\")`\n\n### 测试panic\n```rust\n#[test]\n#[should_panic]\nfn test_panic() {\n    panic!(\"预期panic\");\n}\n```\n\n### 使用Result\n```rust\n#[test]\nfn test_with_result() -> Result<(), String> {\n    if 2 + 2 == 4 {\n        Ok(())\n    } else {\n        Err(String::from(\"算术错误\"))\n    }\n}\n```\n\n## 文档测试\n代码示例写在文档注释中会自动成为测试：\n\n```rust\n/// 将字符串转为大写\n///\n/// # Examples\n/// ```\n/// let s = to_upper(\"hello\");\n/// assert_eq!(s, \"HELLO\");\n/// ```\nfn to_upper(s: &str) -> String {\n    s.to_uppercase()\n}\n```\n\n运行 `cargo test` 会自动执行文档中的代码示例。\n\n## 集成测试\n放在 `tests/` 目录下，可以测试库的公开API：\n\n```\nproject/\n├── src/\n│   └── lib.rs\n└── tests/\n    └── integration_test.rs\n```\n\n## 练习\n编写函数 `is_palindrome(s: &str) -> bool`，判断字符串是否为回文，并编写测试函数。",
+    "order": 16,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "fn is_palindrome(s: &str) -> bool {\n    // 判断字符串是否为回文\n    false\n}\n\n#[test]\nfn test_palindrome() {\n    // 编写测试\n}",
+    "solution_code": "fn is_palindrome(s: &str) -> bool {\n    let reversed: String = s.chars().rev().collect();\n    s == reversed\n}\n\n#[test]\nfn test_palindrome() {\n    assert!(is_palindrome(\"racecar\"));\n    assert!(is_palindrome(\"\"));\n    assert!(!is_palindrome(\"hello\"));\n}",
+    "test_cases": [
+      {
+        "input": "is_palindrome(\"racecar\")",
+        "expected_output": "true",
+        "description": "racecar 是回文"
+      },
+      {
+        "input": "is_palindrome(\"hello\")",
+        "expected_output": "false",
+        "description": "hello 不是回文"
+      },
+      {
+        "input": "is_palindrome(\"abba\")",
+        "expected_output": "true",
+        "description": "abba 是回文"
+      }
+    ],
+    "hint": "使用 s.chars().rev().collect() 反转字符串，然后比较"
+  },
+  {
+    "title": "文件系统操作",
+    "slug": "rust-17-filesystem",
+    "description": "学习std::fs模块、路径处理PathBuf和文件读写操作",
+    "content": "# 文件系统操作\n\n## 读取文件\n```rust\nuse std::fs;\n\n// 读取整个文件为字符串\nlet content = fs::read_to_string(\"hello.txt\").expect(\"读取失败\");\n\n// 读取为字节\nlet bytes = fs::read(\"hello.txt\").expect(\"读取失败\");\n```\n\n## 写入文件\n```rust\nuse std::fs;\n\n// 写入文件（覆盖）\nfs::write(\"output.txt\", \"Hello, Rust!\").expect(\"写入失败\");\n\n// 追加写入\nuse std::fs::OpenOptions;\nuse std::io::Write;\nlet mut file = OpenOptions::new()\n    .append(true)\n    .open(\"output.txt\")\n    .expect(\"打开失败\");\nwriteln!(file, \"追加一行\").expect(\"写入失败\");\n```\n\n## 路径处理\n```rust\nuse std::path::Path;\nuse std::path::PathBuf;\n\nlet path = Path::new(\"/usr/local/bin\");\npath.parent();       // Some(/usr/local)\npath.file_name();    // Some(bin)\npath.extension();    // None\n\nlet mut buf = PathBuf::from(\"/usr\");\nbuf.push(\"local\");    // /usr/local\nbuf.set_extension(\"txt\");  // /usr/local.txt\n```\n\n## 目录操作\n```rust\nfs::create_dir(\"new_dir\").expect(\"创建目录失败\");\nfs::create_dir_all(\"a/b/c\").expect(\"递归创建失败\");\nfs::remove_dir(\"new_dir\").expect(\"删除目录失败\");\n\n// 遍历目录\nfor entry in fs::read_dir(\".\").expect(\"读取目录失败\") {\n    let entry = entry.expect(\"读取条目失败\");\n    println!(\"{:?}\", entry.path());\n}\n```\n\n## 练习\n编写函数 `get_filename(path: &str) -> String`，从路径中提取文件名（不含扩展名），如 `\"/usr/local/main.rs\"` → `\"main\"`。",
+    "order": 17,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "fn get_filename(path: &str) -> String {\n    // 从路径中提取文件名（不含扩展名）\n    String::new()\n}",
+    "solution_code": "fn get_filename(path: &str) -> String {\n    use std::path::Path;\n    let p = Path::new(path);\n    match p.file_stem() {\n        Some(stem) => stem.to_string_lossy().to_string(),\n        None => String::new(),\n    }\n}",
+    "test_cases": [
+      {
+        "input": "get_filename(\"/usr/local/main.rs\")",
+        "expected_output": "main",
+        "description": "应从路径提取文件名 main"
+      },
+      {
+        "input": "get_filename(\"config.toml\")",
+        "expected_output": "config",
+        "description": "应从相对路径提取文件名 config"
+      },
+      {
+        "input": "get_filename(\"/home/user/docs/readme.txt\")",
+        "expected_output": "readme",
+        "description": "应从路径提取文件名 readme"
+      }
+    ],
+    "hint": "使用 std::path::Path 的 file_stem() 方法获取不含扩展名的文件名"
+  },
+  {
+    "title": "并发编程",
+    "slug": "rust-18-concurrency",
+    "description": "学习线程spawn、消息传递channel和共享状态Mutex/Arc",
+    "content": "# 并发编程\n\n## 创建线程\n```rust\nuse std::thread;\nuse std::time::Duration;\n\nlet handle = thread::spawn(|| {\n    for i in 1..5 {\n        println!(\"子线程: {}\", i);\n        thread::sleep(Duration::from_millis(1));\n    }\n});\n\nhandle.join().unwrap();  // 等待子线程结束\n```\n\n## move 闭包\n线程可能比创建它的作用域活得更久，所以需要 `move` 将变量所有权移入闭包：\n\n```rust\nlet v = vec![1, 2, 3];\nlet handle = thread::spawn(move || {\n    println!(\"{:?}\", v);  // v的所有权已移入\n});\n```\n\n## 消息传递 (Channel)\nRust推崇\"不要通过共享内存来通信，而要通过通信来共享内存\"：\n\n```rust\nuse std::sync::mpsc;  // 多生产者，单消费者\n\nlet (tx, rx) = mpsc::channel();\n\nthread::spawn(move || {\n    tx.send(String::from(\"hello\")).unwrap();\n});\n\nlet received = rx.recv().unwrap();  // \"hello\"\n```\n\n## 共享状态\n使用 `Arc<Mutex<T>>` 实现线程安全的共享可变状态：\n\n```rust\nuse std::sync::{Arc, Mutex};\n\nlet counter = Arc::new(Mutex::new(0));\nlet mut handles = vec![];\n\nfor _ in 0..10 {\n    let counter = Arc::clone(&counter);\n    let handle = thread::spawn(move || {\n        let mut num = counter.lock().unwrap();\n        *num += 1;\n    });\n    handles.push(handle);\n}\n\nfor handle in handles { handle.join().unwrap(); }\n// counter == 10\n```\n\nMutex像是一间只有一把钥匙的房间，同一时刻只有一个人能进去。\n\n## 练习\n编写函数 `parallel_sum(data: Vec<i32>) -> i32`，将数据分成两部分，分别在两个线程中求和，最后合并结果。",
+    "order": 18,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "use std::thread;\n\nfn parallel_sum(data: Vec<i32>) -> i32 {\n    // 将数据分成两部分，分别在两个线程中求和\n    0\n}",
+    "solution_code": "use std::thread;\n\nfn parallel_sum(data: Vec<i32>) -> i32 {\n    let mid = data.len() / 2;\n    let left = data[..mid].to_vec();\n    let right = data[mid..].to_vec();\n\n    let left_handle = thread::spawn(move || left.iter().sum::<i32>());\n    let right_handle = thread::spawn(move || right.iter().sum::<i32>());\n\n    let left_sum = left_handle.join().unwrap();\n    let right_sum = right_handle.join().unwrap();\n\n    left_sum + right_sum\n}",
+    "test_cases": [
+      {
+        "input": "parallel_sum(vec![1, 2, 3, 4, 5, 6])",
+        "expected_output": "21",
+        "description": "1+2+3+4+5+6 = 21"
+      },
+      {
+        "input": "parallel_sum(vec![10, 20, 30, 40])",
+        "expected_output": "100",
+        "description": "10+20+30+40 = 100"
+      }
+    ],
+    "hint": "将数据分成两半，用 thread::spawn 分别求和，join 后相加"
+  },
+  {
+    "title": "异步编程",
+    "slug": "rust-19-async",
+    "description": "学习async/await语法、Future trait和Tokio异步运行时",
+    "content": "# 异步编程\n\n## 为什么需要异步？\n在I/O密集型场景（网络请求、文件读写），同步操作会阻塞线程。异步编程允许在等待I/O时执行其他任务，极大提高效率。\n\n## async/await\nRust的异步编程基于 `async/await` 语法：\n\n```rust\nasync fn fetch_data(url: &str) -> Result<String, reqwest::Error> {\n    let response = reqwest::get(url).await?;\n    let body = response.text().await?;\n    Ok(body)\n}\n```\n\n- `async fn` 定义异步函数，返回一个 `Future`\n- `.await` 等待Future完成，但不阻塞线程\n\n## Future trait\n```rust\ntrait Future {\n    type Output;\n    fn poll(self: Pin<&mut Self>, cx: &mut Context) -> Poll<Self::Output>;\n}\n```\n\nFuture是惰性的——只有被 `.await` 或轮询时才会执行。\n\n## Tokio运行时\nRust标准库只提供Future基础设施，需要异步运行时来执行：\n\n```rust\n#[tokio::main]\nasync fn main() {\n    println!(\"Hello, async Rust!\");\n}\n\n// 等价于\nfn main() {\n    tokio::runtime::Runtime::new()\n        .unwrap()\n        .block_on(async {\n            println!(\"Hello, async Rust!\");\n        });\n}\n```\n\n## 并发执行\n```rust\nuse tokio;\n\n#[tokio::main]\nasync fn main() {\n    let (r1, r2) = tokio::join!(task1(), task2());  // 并发执行\n}\n\n// 或使用select!\ntokio::select! {\n    result = task1() => { /* task1先完成 */ }\n    result = task2() => { /* task2先完成 */ }\n}\n```\n\n## 异步 vs 线程\n- 线程：操作系统调度，开销大（~8MB栈），适合CPU密集型\n- 异步：用户态调度，开销极小（~几百字节），适合I/O密集型\n\n## 练习\n编写异步函数 `async_add(a: i32, b: i32) -> i32`，返回两数之和。",
+    "order": 19,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "async fn async_add(a: i32, b: i32) -> i32 {\n    // 异步返回两数之和\n    0\n}",
+    "solution_code": "async fn async_add(a: i32, b: i32) -> i32 {\n    a + b\n}",
+    "test_cases": [
+      {
+        "input": "async_add(3, 5)",
+        "expected_output": "8",
+        "description": "async_add(3, 5) 应返回 8"
+      },
+      {
+        "input": "async_add(-1, 1)",
+        "expected_output": "0",
+        "description": "async_add(-1, 1) 应返回 0"
+      }
+    ],
+    "hint": "async fn 中直接返回 a + b 即可"
+  },
+  {
+    "title": "网络编程",
+    "slug": "rust-20-networking",
+    "description": "学习TCP/UDP编程、HTTP客户端reqwest和简单服务器",
+    "content": "# 网络编程\n\n## TCP服务器\n```rust\nuse std::net::{TcpListener, TcpStream};\nuse std::io::{Read, Write};\n\nfn main() {\n    let listener = TcpListener::bind(\"127.0.0.1:8080\").unwrap();\n    for stream in listener.incoming() {\n        let mut stream = stream.unwrap();\n        let mut buf = [0; 1024];\n        let n = stream.read(&mut buf).unwrap();\n        let request = String::from_utf8_lossy(&buf[..n]);\n        stream.write(b\"HTTP/1.1 200 OK\\r\\n\\r\\nHello!\").unwrap();\n    }\n}\n```\n\n## TCP客户端\n```rust\nuse std::net::TcpStream;\nuse std::io::{Read, Write};\n\nlet mut stream = TcpStream::connect(\"127.0.0.1:8080\").unwrap();\nstream.write(b\"Hello, server!\").unwrap();\nlet mut buf = [0; 1024];\nlet n = stream.read(&mut buf).unwrap();\nprintln!(\"收到: {}\", String::from_utf8_lossy(&buf[..n]));\n```\n\n## UDP\n```rust\nuse std::net::UdpSocket;\n\nlet socket = UdpSocket::bind(\"127.0.0.1:8080\").unwrap();\nsocket.send_to(b\"Hello\", \"127.0.0.1:9090\").unwrap();\nlet mut buf = [0; 1024];\nlet (n, addr) = socket.recv_from(&mut buf).unwrap();\n```\n\n## HTTP客户端 (reqwest)\n```rust\n// Cargo.toml: reqwest = { version = \"0.11\", features = [\"blocking\"] }\nlet body = reqwest::blocking::get(\"https://httpbin.org/get\")\n    .unwrap()\n    .text()\n    .unwrap();\n```\n\n异步版本：\n```rust\nlet body = reqwest::get(\"https://httpbin.org/get\")\n    .await?\n    .text()\n    .await?;\n```\n\n## 练习\n编写函数 `parse_url(url: &str) -> Option<(&str, &str, &str)>`，解析URL为 (协议, 主机, 路径) 三部分。",
+    "order": 20,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "fn parse_url(url: &str) -> Option<(&str, &str, &str)> {\n    // 解析URL为 (协议, 主机, 路径)\n    None\n}",
+    "solution_code": "fn parse_url(url: &str) -> Option<(&str, &str, &str)> {\n    let protocol_end = url.find(\"://\")?;\n    let protocol = &url[..protocol_end];\n    let rest = &url[protocol_end + 3..];\n    let host_end = rest.find('/').unwrap_or(rest.len());\n    let host = &rest[..host_end];\n    let path = if host_end < rest.len() { &rest[host_end..] } else { \"/\" };\n    Some((protocol, host, path))\n}",
+    "test_cases": [
+      {
+        "input": "parse_url(\"https://example.com/path\")",
+        "expected_output": "Some((\"https\", \"example.com\", \"/path\"))",
+        "description": "解析完整URL"
+      },
+      {
+        "input": "parse_url(\"http://localhost/\")",
+        "expected_output": "Some((\"http\", \"localhost\", \"/\"))",
+        "description": "解析localhost URL"
+      },
+      {
+        "input": "parse_url(\"invalid-url\")",
+        "expected_output": "None",
+        "description": "无效URL应返回None"
+      }
+    ],
+    "hint": "使用 find(\"://\") 分离协议，再 find('/') 分离主机和路径"
+  },
+  {
+    "title": "unsafe Rust",
+    "slug": "rust-21-unsafe",
+    "description": "学习原始指针、unsafe块、FFI和调用C库",
+    "content": "# unsafe Rust\n\n## 为什么需要unsafe？\nRust的安全保证在编译期检查，但有时需要绕过这些检查：\n- 与C代码交互（FFI）\n- 操作硬件\n- 实现底层抽象（如Vec内部实现）\n\nunsafe不是\"不安全\"，而是\"编译器不再帮你检查安全，程序员需自行保证\"。\n\n## unsafe能做的5件事\n1. 解引用原始指针\n2. 调用unsafe函数\n3. 访问或修改可变静态变量\n4. 实现unsafe trait\n5. 访问union字段\n\n## 原始指针\n```rust\nlet mut num = 5;\nlet r1 = &num as *const i32;   // 不可变原始指针\nlet r2 = &mut num as *mut i32; // 可变原始指针\n\nunsafe {\n    println!(\"r1: {}\", *r1);  // 解引用需要unsafe\n    *r2 = 10;\n}\n```\n\n原始指针 `*const T` 和 `*mut T` 类似C的指针，不受借用规则约束，可能为空。\n\n## unsafe函数\n```rust\nunsafe fn dangerous() {\n    // 危险操作\n}\n\nunsafe {\n    dangerous();  // 调用unsafe函数必须在unsafe块中\n}\n```\n\n## FFI — 调用C代码\n```rust\nextern \"C\" {\n    fn abs(input: i32) -> i32;\n}\n\nunsafe {\n    let result = abs(-5);  // 调用C标准库函数\n}\n```\n\n## 安全抽象\nunsafe代码应该封装在安全API中：\n\n```rust\nfn safe_split_at(values: &[i32], mid: usize) -> (&[i32], &[i32]) {\n    // 内部可能使用unsafe，但对外接口是安全的\n    values.split_at(mid)\n}\n```\n\n## 练习\n编写函数 `unsafe_swap(a: *mut i32, b: *mut i32)`，在unsafe块中交换两个指针指向的值。",
+    "order": 21,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "fn unsafe_swap(a: *mut i32, b: *mut i32) {\n    // 在unsafe块中交换两个指针指向的值\n}",
+    "solution_code": "fn unsafe_swap(a: *mut i32, b: *mut i32) {\n    unsafe {\n        let temp = *a;\n        *a = *b;\n        *b = temp;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "let mut x = 1; let mut y = 2; unsafe_swap(&mut x, &mut y); format!(\"{},{}\", x, y)",
+        "expected_output": "2,1",
+        "description": "交换后 x=2, y=1"
+      },
+      {
+        "input": "let mut x = 1; let mut y = 2; unsafe_swap(&mut x, &mut y); format!(\"{},{}\", x, y)",
+        "expected_output": "2,1",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "在unsafe块中用临时变量保存*a，然后 *a = *b; *b = temp;"
+  },
+  {
+    "title": "Web开发",
+    "slug": "rust-22-web-dev",
+    "description": "学习Actix-web框架、路由、中间件和JSON处理",
+    "content": "# Web开发\n\n## Rust Web框架\nRust有多个优秀的Web框架：\n- **Actix-web**：基于Actor模型，性能极高\n- **Rocket**：类型安全，API优雅\n- **Axum**：Tower生态，与Tokio深度集成\n\n## Actix-web 基础\n```rust\nuse actix_web::{web, App, HttpServer, HttpResponse};\n\nasync fn index() -> HttpResponse {\n    HttpResponse::Ok().body(\"Hello, World!\")\n}\n\nasync fn greet(name: web::Path<String>) -> HttpResponse {\n    HttpResponse::Ok().body(format!(\"Hello, {}!\", name))\n}\n\n#[actix_web::main]\nasync fn main() -> std::io::Result<()> {\n    HttpServer::new(|| {\n        App::new()\n            .route(\"/\", web::get().to(index))\n            .route(\"/{name}\", web::get().to(greet))\n    })\n    .bind(\"127.0.0.1:8080\")?\n    .run()\n    .await\n}\n```\n\n## JSON处理\n```rust\nuse actix_web::web::Json;\nuse serde::{Deserialize, Serialize};\n\n#[derive(Serialize, Deserialize)]\nstruct User {\n    name: String,\n    age: u32,\n}\n\nasync fn create_user(user: Json<User>) -> HttpResponse {\n    HttpResponse::Created().json(user.into_inner())\n}\n```\n\n## 中间件\n```rust\nuse actix_web::middleware::Logger;\n\nApp::new()\n    .wrap(Logger::default())  // 日志中间件\n    .route(\"/\", web::get().to(index))\n```\n\n## 状态共享\n```rust\nstruct AppState {\n    counter: Mutex<u32>,\n}\n\nasync fn increment(data: web::Data<AppState>) -> HttpResponse {\n    let mut counter = data.counter.lock().unwrap();\n    *counter += 1;\n    HttpResponse::Ok().body(format!(\"Count: {}\", counter))\n}\n```\n\n## 练习\n编写函数 `build_json_response(name: &str, age: u32) -> String`，构建JSON格式字符串 `{\"name\":\"...\",\"age\":...}`。",
+    "order": 22,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "// 模拟 Actix-web 路由处理器\nuse std::collections::HashMap;\n\nfn parse_query_string(query: &str) -> HashMap<String, String> {\n    // TODO: 将 \"key1=val1&key2=val2\" 解析为 HashMap\n    HashMap::new()\n}\n\nfn handle_hello(params: &HashMap<String, String>) -> String {\n    // TODO: 提取 name 参数，返回问候 JSON\n    String::new()\n}",
+    "solution_code": "use std::collections::HashMap;\n\nfn parse_query_string(query: &str) -> HashMap<String, String> {\n    let mut map = HashMap::new();\n    if query.is_empty() {\n        return map;\n    }\n    for pair in query.split('&') {\n        let mut parts = pair.splitn(2, '=');\n        let key = parts.next().unwrap_or(\"\").to_string();\n        let val = parts.next().unwrap_or(\"\").to_string();\n        if !key.is_empty() {\n            map.insert(key, val);\n        }\n    }\n    map\n}\n\nfn handle_hello(params: &HashMap<String, String>) -> String {\n    let name = params.get(\"name\").map(|s| s.as_str()).unwrap_or(\"World\");\n    format!(\"{{\"message\":\"Hello, {}!\",\"status\":200}}\", name)\n}",
+    "test_cases": [
+      {
+        "input": "handle_hello(&parse_query_string(\"name=Alice\"))",
+        "expected_output": "{\"message\":\"Hello, Alice!\",\"status\":200}",
+        "description": "应解析name参数并返回JSON响应"
+      },
+      {
+        "input": "handle_hello(&parse_query_string(\"\"))",
+        "expected_output": "{\"message\":\"Hello, World!\",\"status\":200}",
+        "description": "缺少name时应使用默认值World"
+      },
+      {
+        "input": "parse_query_string(\"a=1&b=2&c=3\").len()",
+        "expected_output": "3",
+        "description": "应正确解析多参数查询字符串"
+      }
+    ],
+    "hint": "使用 format! 宏，注意JSON中花括号需要用 {{ }} 转义"
+  },
+  {
+    "title": "数据库",
+    "slug": "rust-23-database",
+    "description": "学习SQLx异步查询、Diesel ORM和查询构建器",
+    "content": "# 数据库\n\n## Rust数据库生态\n- **SQLx**：异步、编译期SQL检查、纯Rust实现\n- **Diesel**：类型安全ORM、编译期查询检查\n- **SeaORM**：基于SQLx的异步ORM\n\n## SQLx 异步查询\n```rust\nuse sqlx::postgres::PgPool;\n\nasync fn get_users(pool: &PgPool) -> Result<Vec<User>, sqlx::Error> {\n    sqlx::query_as!(\n        User,\n        \"SELECT id, name, email FROM users WHERE active = $1\",\n        true\n    )\n    .fetch_all(pool)\n    .await\n}\n```\n\nSQLx支持编译期SQL验证（`cargo sqlx prepare`），在编译时就能发现SQL语法错误。\n\n## Diesel ORM\n```rust\n// schema.rs\ndiesel::table! {\n    users (id) {\n        id -> Int4,\n        name -> Varchar,\n        email -> Varchar,\n    }\n}\n\n// model.rs\n#[derive(Queryable)]\nstruct User {\n    id: i32,\n    name: String,\n    email: String,\n}\n\n// 查询\nuse crate::schema::users::dsl::*;\nlet results = users\n    .filter(active.eq(true))\n    .limit(5)\n    .load::<User>(&mut conn)\n    .expect(\"查询失败\");\n```\n\n## 插入数据\n```rust\n#[derive(Insertable)]\n#[diesel(table_name = users)]\nstruct NewUser<'a> {\n    name: &'a str,\n    email: &'a str,\n}\n\ndiesel::insert_into(users)\n    .values(&NewUser { name: \"Alice\", email: \"a@b.com\" })\n    .execute(&mut conn)\n    .expect(\"插入失败\");\n```\n\n## 连接池\n```rust\nlet pool = sqlx::postgres::PgPoolOptions::new()\n    .max_connections(5)\n    .connect(\"postgres://user:pass@localhost/db\")\n    .await?;\n```\n\n## 练习\n编写函数 `build_query(table: &str, conditions: &Vec<(&str, &str)>) -> String`，构建简单的SELECT查询语句，如 `\"SELECT * FROM users WHERE name='Alice' AND age='30'\"`。",
+    "order": 23,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "fn build_query(table: &str, conditions: &Vec<(&str, &str)>) -> String {\n    // 构建SELECT查询语句\n    String::new()\n}",
+    "solution_code": "fn build_query(table: &str, conditions: &Vec<(&str, &str)>) -> String {\n    if conditions.is_empty() {\n        format!(\"SELECT * FROM {}\", table)\n    } else {\n        let where_clause: Vec<String> = conditions\n            .iter()\n            .map(|(k, v)| format!(\"{}='{}'\", k, v))\n            .collect();\n        format!(\"SELECT * FROM {} WHERE {}\", table, where_clause.join(\" AND \"))\n    }\n}",
+    "test_cases": [
+      {
+        "input": "build_query(\"users\", &vec![(\"name\", \"Alice\"), (\"age\", \"30\")])",
+        "expected_output": "SELECT * FROM users WHERE name='Alice' AND age='30'",
+        "description": "应构建带条件的查询"
+      },
+      {
+        "input": "build_query(\"products\", &vec![])",
+        "expected_output": "SELECT * FROM products",
+        "description": "无条件时应构建简单查询"
+      },
+      {
+        "input": "build_query(\"orders\", &vec![(\"status\", \"pending\")])",
+        "expected_output": "SELECT * FROM orders WHERE status='pending'",
+        "description": "单条件查询"
+      }
+    ],
+    "hint": "使用 iter().map() 构建条件字符串，join(\" AND \") 连接，注意空条件时不需要WHERE"
+  },
+  {
+    "title": "综合项目：键值存储引擎",
+    "slug": "rust-24-kv-store",
+    "description": "综合运用所学知识，构建一个内存安全的键值存储引擎",
+    "content": "# 综合项目：键值存储引擎\n\n## 项目概述\n综合运用前面学到的所有知识，构建一个简单但功能完整的键值存储引擎（Key-Value Store），支持基本的CRUD操作和持久化。\n\n## 涉及的知识点\n- **结构体与枚举**：定义存储引擎的数据结构\n- **所有权与借用**：安全地管理数据访问\n- **泛型与Trait**：设计灵活的接口\n- **错误处理**：优雅处理各种异常\n- **迭代器**：遍历和过滤数据\n- **并发**：线程安全的读写\n- **文件系统**：数据持久化\n\n## 设计思路\n\n### 核心数据结构\n```rust\nuse std::collections::HashMap;\nuse std::sync::{Arc, Mutex};\n\npub struct KvStore {\n    data: Arc<Mutex<HashMap<String, String>>>,\n}\n```\n\n### 操作方法\n```rust\nimpl KvStore {\n    pub fn new() -> Self { /* ... */ }\n    pub fn set(&self, key: String, value: String) { /* ... */ }\n    pub fn get(&self, key: &str) -> Option<String> { /* ... */ }\n    pub fn remove(&self, key: &str) { /* ... */ }\n}\n```\n\n### 为什么用Arc<Mutex<>>？\n- `Mutex` 保证同一时刻只有一个线程修改数据\n- `Arc` 允许多个线程共享所有权\n- 组合使用实现线程安全的共享可变状态\n\n### 持久化\n```rust\nimpl KvStore {\n    pub fn save_to_file(&self, path: &str) -> std::io::Result<()> {\n        let data = self.data.lock().unwrap();\n        let json = serde_json::to_string(&*data)?;\n        std::fs::write(path, json)\n    }\n}\n```\n\n## 练习\n实现 `KvStore` 的 `new`、`set`、`get`、`remove` 方法。",
+    "order": 24,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "use std::collections::HashMap;\nuse std::sync::{Arc, Mutex};\n\npub struct KvStore {\n    data: Arc<Mutex<HashMap<String, String>>>,\n}\n\nimpl KvStore {\n    pub fn new() -> Self {\n        // 创建新的KvStore\n        KvStore { data: Arc::new(Mutex::new(HashMap::new())) }\n    }\n\n    pub fn set(&self, key: String, value: String) {\n        // 设置键值对\n    }\n\n    pub fn get(&self, key: &str) -> Option<String> {\n        // 获取值\n        None\n    }\n\n    pub fn remove(&self, key: &str) {\n        // 删除键值对\n    }\n}",
+    "solution_code": "use std::collections::HashMap;\nuse std::sync::{Arc, Mutex};\n\npub struct KvStore {\n    data: Arc<Mutex<HashMap<String, String>>>,\n}\n\nimpl KvStore {\n    pub fn new() -> Self {\n        KvStore { data: Arc::new(Mutex::new(HashMap::new())) }\n    }\n\n    pub fn set(&self, key: String, value: String) {\n        let mut data = self.data.lock().unwrap();\n        data.insert(key, value);\n    }\n\n    pub fn get(&self, key: &str) -> Option<String> {\n        let data = self.data.lock().unwrap();\n        data.get(key).cloned()\n    }\n\n    pub fn remove(&self, key: &str) {\n        let mut data = self.data.lock().unwrap();\n        data.remove(key);\n    }\n}",
+    "test_cases": [
+      {
+        "input": "let store = KvStore::new(); store.set(String::from(\"name\"), String::from(\"Rust\")); store.get(\"name\")",
+        "expected_output": "Some(\"Rust\")",
+        "description": "set后get应返回正确值"
+      },
+      {
+        "input": "let store = KvStore::new(); store.get(\"missing\")",
+        "expected_output": "None",
+        "description": "获取不存在的键应返回None"
+      },
+      {
+        "input": "let store = KvStore::new(); store.set(String::from(\"k\"), String::from(\"v\")); store.remove(\"k\"); store.get(\"k\")",
+        "expected_output": "None",
+        "description": "remove后get应返回None"
+      }
+    ],
+    "hint": "使用 self.data.lock().unwrap() 获取MutexGuard，然后调用HashMap的insert/get/remove方法"
+  }
+]

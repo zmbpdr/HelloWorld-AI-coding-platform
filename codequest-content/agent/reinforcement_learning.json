@@ -1,0 +1,232 @@
+[
+  {
+    "title": "马尔可夫决策过程",
+    "slug": "rl-01-mdp",
+    "description": "MDP五元组与强化学习基础",
+    "content": "# 马尔可夫决策过程\n\n## MDP五元组\n(S, A, P, R, gamma)\n\n## 策略与价值\n策略pi(a|s)是状态s选择动作a的概率。\n\n```python\nimport numpy as np\n\nclass GridWorld:\n    def __init__(self, size=4):\n        self.size = size\n        self.n_states = size * size\n        self.n_actions = 4\n        self.goal = size * size - 1\n\n    def step(self, state, action):\n        x, y = state // self.size, state % self.size\n        if action == 0: x = max(0, x-1)\n        elif action == 1: x = min(self.size-1, x+1)\n        elif action == 2: y = max(0, y-1)\n        elif action == 3: y = min(self.size-1, y+1)\n        next_s = x * self.size + y\n        reward = 1.0 if next_s == self.goal else -0.01\n        done = next_s == self.goal\n        return next_s, reward, done\n\n    def reset(self):\n        return 0\n```",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "rl",
+    "section": "Q-Learning基础",
+    "starter_code": "import numpy as np\n\nclass GridWorld:\n    def __init__(self, size=4):\n        self.size = size\n        self.n_states = size * size\n        self.n_actions = 4\n        self.goal = size * size - 1\n\n    def step(self, state, action):\n        x, y = state // self.size, state % self.size\n        if action == 0: x = max(0, x-1)\n        elif action == 1: x = min(self.size-1, x+1)\n        elif action == 2: y = max(0, y-1)\n        elif action == 3: y = min(self.size-1, y+1)\n        next_s = x * self.size + y\n        pass\n\n    def reset(self):\n        return 0",
+    "solution_code": "import numpy as np\n\nclass GridWorld:\n    def __init__(self, size=4):\n        self.size = size\n        self.n_states = size * size\n        self.n_actions = 4\n        self.goal = size * size - 1\n    def step(self, state, action):\n        x, y = state // self.size, state % self.size\n        if action == 0: x = max(0, x-1)\n        elif action == 1: x = min(self.size-1, x+1)\n        elif action == 2: y = max(0, y-1)\n        elif action == 3: y = min(self.size-1, y+1)\n        next_s = x * self.size + y\n        reward = 1.0 if next_s == self.goal else -0.01\n        done = next_s == self.goal\n        return next_s, reward, done\n    def reset(self):\n        return 0",
+    "test_cases": [
+      {
+        "input": "import numpy as np; env=GridWorld(4); env.reset()",
+        "expected_output": "0",
+        "description": "重置到起点"
+      },
+      {
+        "input": "import numpy as np; env=GridWorld(2); env.step(0,1)",
+        "expected_output": "(2, -0.01, False)",
+        "description": "2x2网格向下移动"
+      }
+    ],
+    "hint": "MDP中奖励函数决定策略方向",
+    "prerequisites": []
+  },
+  {
+    "title": "Q-Table更新",
+    "slug": "rl-02-q-table",
+    "description": "Q-Learning算法的Q表更新",
+    "content": "# Q-Learning算法\n\n## 更新公式\nQ(s,a) <- Q(s,a) + alpha * [r + gamma * max Q(s',a') - Q(s,a)]\n\n```python\nimport numpy as np\n\nclass QLearning:\n    def __init__(self, n_states, n_actions, lr=0.1, gamma=0.99):\n        self.q = np.zeros((n_states, n_actions))\n        self.lr = lr\n        self.gamma = gamma\n\n    def update(self, state, action, reward, next_state):\n        td_target = reward + self.gamma * np.max(self.q[next_state])\n        td_error = td_target - self.q[state, action]\n        self.q[state, action] += self.lr * td_error\n\n    def get_q(self, state):\n        return self.q[state]\n```",
+    "order": 2,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "rl",
+    "section": "Q-Learning基础",
+    "starter_code": "import numpy as np\n\nclass QLearning:\n    def __init__(self, n_states, n_actions, lr=0.1, gamma=0.99):\n        self.q = np.zeros((n_states, n_actions))\n        self.lr = lr\n        self.gamma = gamma\n\n    def update(self, state, action, reward, next_state):\n        pass\n\n    def get_q(self, state):\n        pass",
+    "solution_code": "import numpy as np\n\nclass QLearning:\n    def __init__(self, n_states, n_actions, lr=0.1, gamma=0.99):\n        self.q = np.zeros((n_states, n_actions))\n        self.lr = lr\n        self.gamma = gamma\n    def update(self, state, action, reward, next_state):\n        td_target = reward + self.gamma * np.max(self.q[next_state])\n        td_error = td_target - self.q[state, action]\n        self.q[state, action] += self.lr * td_error\n    def get_q(self, state):\n        return self.q[state]",
+    "test_cases": [
+      {
+        "input": "import numpy as np; agent=QLearning(5,2); agent.update(0,0,1,1); float(agent.q[0,0])",
+        "expected_output": "0.1",
+        "description": "Q值初始更新"
+      },
+      {
+        "input": "import numpy as np; agent=QLearning(3,2); agent.q[1]=[0.5,0.3]; list(agent.get_q(1))",
+        "expected_output": "[0.5, 0.3]",
+        "description": "获取Q值"
+      }
+    ],
+    "hint": "TD target = r + gamma * max Q(next_state)",
+    "prerequisites": [
+      "rl-01-mdp"
+    ]
+  },
+  {
+    "title": "ε-贪婪策略",
+    "slug": "rl-03-epsilon-greedy",
+    "description": "探索与利用的平衡策略",
+    "content": "# ε-贪婪策略\n\n## 探索 vs 利用\n- 利用：选当前最优\n- 探索：尝试新动作\n\n## ε-贪婪\n以epsilon概率随机探索，1-epsilon概率利用。\n\n```python\nimport numpy as np\n\ndef epsilon_greedy(q_values, epsilon):\n    if np.random.random() < epsilon:\n        return np.random.randint(len(q_values))\n    return np.argmax(q_values)\n\ndef epsilon_decay(episode, rate=0.995, min_eps=0.01):\n    return max(min_eps, 0.5 * (rate ** episode))\n```",
+    "order": 3,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "track": "rl",
+    "section": "Q-Learning基础",
+    "starter_code": "import numpy as np\n\ndef epsilon_greedy(q_values, epsilon):\n    if np.random.random() < epsilon:\n        pass\n    return np.argmax(q_values)\n\ndef epsilon_decay(episode, rate=0.995, min_eps=0.01):\n    pass",
+    "solution_code": "import numpy as np\n\ndef epsilon_greedy(q_values, epsilon):\n    if np.random.random() < epsilon:\n        return np.random.randint(len(q_values))\n    return np.argmax(q_values)\n\ndef epsilon_decay(episode, rate=0.995, min_eps=0.01):\n    return max(min_eps, 0.5 * (rate ** episode))",
+    "test_cases": [
+      {
+        "input": "import numpy as np; np.random.seed(42); epsilon_greedy(np.array([0.1,0.9]), 1.0)",
+        "expected_output": "1",
+        "description": "epsilon=1时随机选择"
+      },
+      {
+        "input": "import numpy as np; epsilon_decay(0) > 0.4",
+        "expected_output": "True",
+        "description": "初始epsilon大于0.4"
+      }
+    ],
+    "hint": "训练初期epsilon大鼓励探索",
+    "prerequisites": [
+      "rl-02-q-table"
+    ]
+  },
+  {
+    "title": "深度Q网络DQN",
+    "slug": "rl-04-dqn",
+    "description": "使用神经网络近似Q函数",
+    "content": "# 深度Q网络 (DQN)\n\n## 从Q表到DQN\n当状态空间大或连续时，用神经网络近似Q函数。\n\n```python\nimport numpy as np\n\nclass DQN:\n    def __init__(self, state_dim, action_dim, hidden_dim=128):\n        self.W1 = np.random.randn(state_dim, hidden_dim) * 0.1\n        self.b1 = np.zeros((1, hidden_dim))\n        self.W2 = np.random.randn(hidden_dim, action_dim) * 0.1\n        self.b2 = np.zeros((1, action_dim))\n        self.lr = 0.001\n\n    def forward(self, state):\n        h = np.maximum(0, np.dot(state.reshape(1,-1), self.W1) + self.b1)\n        return (np.dot(h, self.W2) + self.b2).flatten()\n```",
+    "order": 4,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "rl",
+    "section": "深度强化学习",
+    "starter_code": "import numpy as np\n\nclass DQN:\n    def __init__(self, state_dim, action_dim, hidden_dim=128):\n        self.W1 = np.random.randn(state_dim, hidden_dim) * 0.1\n        self.b1 = np.zeros((1, hidden_dim))\n        self.W2 = np.random.randn(hidden_dim, action_dim) * 0.1\n        self.b2 = np.zeros((1, action_dim))\n\n    def forward(self, state):\n        pass",
+    "solution_code": "import numpy as np\n\nclass DQN:\n    def __init__(self, state_dim, action_dim, hidden_dim=128):\n        self.W1 = np.random.randn(state_dim, hidden_dim) * 0.1\n        self.b1 = np.zeros((1, hidden_dim))\n        self.W2 = np.random.randn(hidden_dim, action_dim) * 0.1\n        self.b2 = np.zeros((1, action_dim))\n    def forward(self, state):\n        h = np.maximum(0, np.dot(state.reshape(1,-1), self.W1) + self.b1)\n        return (np.dot(h, self.W2) + self.b2).flatten()",
+    "test_cases": [
+      {
+        "input": "import numpy as np; dqn=DQN(4,2); len(dqn.forward(np.array([0,0,0,0])))",
+        "expected_output": "2",
+        "description": "输出2个动作的Q值"
+      },
+      {
+        "input": "import numpy as np; dqn=DQN(4,2); isinstance(dqn.forward(np.array([0.1,0.2,0.3,0.4]))[0], float)",
+        "expected_output": "True",
+        "description": "Q值为浮点数"
+      }
+    ],
+    "hint": "DQN输出每个动作的Q值",
+    "prerequisites": [
+      "rl-03-epsilon-greedy"
+    ]
+  },
+  {
+    "title": "经验回放",
+    "slug": "rl-05-replay-buffer",
+    "description": "经验回放打破数据相关性",
+    "content": "# 经验回放\n\n## 为什么需要\n- 打破样本相关性\n- 提高数据效率\n- 稳定训练\n\n```python\nimport numpy as np\nfrom collections import deque\n\nclass ReplayBuffer:\n    def __init__(self, capacity=10000):\n        self.buffer = deque(maxlen=capacity)\n\n    def push(self, s, a, r, ns, d):\n        self.buffer.append((s, a, r, ns, d))\n\n    def sample(self, batch_size):\n        idx = np.random.choice(len(self.buffer), batch_size, replace=False)\n        batch = [self.buffer[i] for i in idx]\n        return [np.array([b[j] for b in batch]) for j in range(5)]\n\n    def __len__(self):\n        return len(self.buffer)\n```",
+    "order": 5,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "track": "rl",
+    "section": "深度强化学习",
+    "starter_code": "import numpy as np\nfrom collections import deque\n\nclass ReplayBuffer:\n    def __init__(self, capacity=10000):\n        self.buffer = deque(maxlen=capacity)\n\n    def push(self, s, a, r, ns, d):\n        pass\n\n    def sample(self, batch_size):\n        pass\n\n    def __len__(self):\n        pass",
+    "solution_code": "import numpy as np\nfrom collections import deque\n\nclass ReplayBuffer:\n    def __init__(self, capacity=10000):\n        self.buffer = deque(maxlen=capacity)\n    def push(self, s, a, r, ns, d):\n        self.buffer.append((s, a, r, ns, d))\n    def sample(self, batch_size):\n        idx = np.random.choice(len(self.buffer), batch_size, replace=False)\n        batch = [self.buffer[i] for i in idx]\n        return [np.array([b[j] for b in batch]) for j in range(5)]\n    def __len__(self):\n        return len(self.buffer)",
+    "test_cases": [
+      {
+        "input": "import numpy as np; buf=ReplayBuffer(100); buf.push(0,1,1.0,0,False); len(buf)",
+        "expected_output": "1",
+        "description": "存储一条经验"
+      },
+      {
+        "input": "import numpy as np; buf=ReplayBuffer(100); buf.push(0,0,0,0,False); buf.push(1,1,1,1,False); s,_,_,_,_=buf.sample(2); len(s)",
+        "expected_output": "2",
+        "description": "采样2条经验"
+      }
+    ],
+    "hint": "经验回放随机采样打破时间相关性",
+    "prerequisites": [
+      "rl-04-dqn"
+    ]
+  },
+  {
+    "title": "Double DQN",
+    "slug": "rl-06-double-dqn",
+    "description": "解决DQN过估计问题",
+    "content": "# Double DQN\n\n## 过估计问题\n标准DQN用同一网络选择和评估动作导致过估计。\n\n## Double DQN\n- 当前网络选动作\n- 目标网络评价值\n\n```python\nimport numpy as np\n\ndef soft_update(target, online, tau=0.01):\n    target.W1 = (1-tau)*target.W1 + tau*online.W1\n    target.b1 = (1-tau)*target.b1 + tau*online.b1\n    target.W2 = (1-tau)*target.W2 + tau*online.W2\n    target.b2 = (1-tau)*target.b2 + tau*online.b2\n\ndef double_dqn_target(rewards, next_states, dones, online, target, gamma=0.99):\n    next_q = np.array([online.forward(s) for s in next_states])\n    best_a = np.argmax(next_q, axis=1)\n    target_q = np.array([target.forward(s) for s in next_states])\n    selected = target_q[np.arange(len(best_a)), best_a]\n    return rewards + gamma * selected * (1 - np.array(dones, float))\n```",
+    "order": 6,
+    "difficulty": "advanced",
+    "xp_reward": 30,
+    "track": "rl",
+    "section": "深度强化学习",
+    "starter_code": "import numpy as np\n\ndef soft_update(target, online, tau=0.01):\n    pass\n\ndef double_dqn_target(rewards, next_states, dones, online, target, gamma=0.99):\n    pass",
+    "solution_code": "import numpy as np\n\ndef soft_update(target, online, tau=0.01):\n    target.W1 = (1-tau)*target.W1 + tau*online.W1\n    target.b1 = (1-tau)*target.b1 + tau*online.b1\n    target.W2 = (1-tau)*target.W2 + tau*online.W2\n    target.b2 = (1-tau)*target.b2 + tau*online.b2\n\ndef double_dqn_target(rewards, next_states, dones, online, target, gamma=0.99):\n    next_q = np.array([online.forward(s) for s in next_states])\n    best_a = np.argmax(next_q, axis=1)\n    target_q = np.array([target.forward(s) for s in next_states])\n    selected = target_q[np.arange(len(best_a)), best_a]\n    return rewards + gamma * selected * (1 - np.array(dones, float))",
+    "test_cases": [
+      {
+        "input": "import numpy as np; np.array((True == True), float)",
+        "expected_output": "1.0",
+        "description": "布尔转浮点"
+      },
+      {
+        "input": "import numpy as np; np.argmax(np.array([[0.1,0.9],[0.8,0.2]]), axis=1).tolist()",
+        "expected_output": "[1, 0]",
+        "description": "每行最优动作索引"
+      }
+    ],
+    "hint": "Double DQN用当前网络选动作目标网络评估",
+    "prerequisites": [
+      "rl-05-replay-buffer"
+    ]
+  },
+  {
+    "title": "REINFORCE算法",
+    "slug": "rl-07-reinforce",
+    "description": "策略梯度基础REINFORCE",
+    "content": "# REINFORCE算法\n\n## 策略梯度\n直接优化策略函数，无需Q值。\n\n## 更新\n梯度 = E[ sum_t grad log pi(a_t|s_t) * G_t ]\n\n```python\nimport numpy as np\n\nclass PolicyNetwork:\n    def __init__(self, state_dim, action_dim, hidden_dim=64):\n        self.W1 = np.random.randn(state_dim, hidden_dim) * 0.1\n        self.b1 = np.zeros((1, hidden_dim))\n        self.W2 = np.random.randn(hidden_dim, action_dim) * 0.1\n        self.b2 = np.zeros((1, action_dim))\n\n    def forward(self, state):\n        h = np.tanh(np.dot(state.reshape(1,-1), self.W1) + self.b1)\n        logits = np.dot(h, self.W2) + self.b2\n        exp = np.exp(logits - np.max(logits))\n        return (exp / np.sum(exp)).flatten()\n\ndef compute_returns(rewards, gamma=0.99):\n    G = 0\n    returns = np.zeros(len(rewards))\n    for t in reversed(range(len(rewards))):\n        G = rewards[t] + gamma * G\n        returns[t] = G\n    return (returns - np.mean(returns)) / (np.std(returns) + 1e-8)\n```",
+    "order": 7,
+    "difficulty": "advanced",
+    "xp_reward": 30,
+    "track": "rl",
+    "section": "策略梯度",
+    "starter_code": "import numpy as np\n\ndef compute_returns(rewards, gamma=0.99):\n    G = 0\n    returns = np.zeros(len(rewards))\n    for t in reversed(range(len(rewards))):\n        pass\n    return (returns - np.mean(returns)) / (np.std(returns) + 1e-8)",
+    "solution_code": "import numpy as np\n\ndef compute_returns(rewards, gamma=0.99):\n    G = 0\n    returns = np.zeros(len(rewards))\n    for t in reversed(range(len(rewards))):\n        G = rewards[t] + gamma * G\n        returns[t] = G\n    return (returns - np.mean(returns)) / (np.std(returns) + 1e-8)",
+    "test_cases": [
+      {
+        "input": "import numpy as np; compute_returns([1,0,0], 0.9).tolist()",
+        "expected_output": "[0.9999999999999998, -0.9999999999999997, -1.0]",
+        "description": "折扣回报计算"
+      },
+      {
+        "input": "import numpy as np; len(compute_returns([1]*10))",
+        "expected_output": "10",
+        "description": "返回序列长度一致"
+      }
+    ],
+    "hint": "Returns是折扣累积奖励并标准化",
+    "prerequisites": [
+      "rl-06-double-dqn"
+    ]
+  },
+  {
+    "title": "PPO算法",
+    "slug": "rl-08-ppo",
+    "description": "近端策略优化PPO",
+    "content": "# PPO算法\n\n## 从REINFORCE到PPO\nREINFORCE方差大，PPO通过裁剪限制策略更新幅度。\n\n## 裁剪目标\nL = E[min(r*A, clip(r,1-e,1+e)*A)]\n\n```python\nimport numpy as np\n\nclass PPO:\n    def __init__(self, state_dim, action_dim, hidden_dim=64, clip_eps=0.2):\n        self.W1 = np.random.randn(state_dim, hidden_dim) * 0.1\n        self.b1 = np.zeros((1, hidden_dim))\n        self.W2 = np.random.randn(hidden_dim, action_dim) * 0.1\n        self.b2 = np.zeros((1, action_dim))\n        self.clip_eps = clip_eps\n        self.lr = 0.0003\n\n    def forward(self, state):\n        h = np.tanh(np.dot(state.reshape(1,-1), self.W1) + self.b1)\n        logits = np.dot(h, self.W2) + self.b2\n        exp = np.exp(logits - np.max(logits))\n        return (exp / np.sum(exp)).flatten()\n```",
+    "order": 8,
+    "difficulty": "expert",
+    "xp_reward": 40,
+    "track": "rl",
+    "section": "策略梯度",
+    "starter_code": "import numpy as np\n\nclass PPO:\n    def __init__(self, state_dim, action_dim, hidden_dim=64, clip_eps=0.2):\n        self.W1 = np.random.randn(state_dim, hidden_dim) * 0.1\n        self.b1 = np.zeros((1, hidden_dim))\n        self.W2 = np.random.randn(hidden_dim, action_dim) * 0.1\n        self.b2 = np.zeros((1, action_dim))\n        self.clip_eps = clip_eps\n\n    def forward(self, state):\n        pass",
+    "solution_code": "import numpy as np\n\nclass PPO:\n    def __init__(self, state_dim, action_dim, hidden_dim=64, clip_eps=0.2):\n        self.W1 = np.random.randn(state_dim, hidden_dim) * 0.1\n        self.b1 = np.zeros((1, hidden_dim))\n        self.W2 = np.random.randn(hidden_dim, action_dim) * 0.1\n        self.b2 = np.zeros((1, action_dim))\n        self.clip_eps = clip_eps\n    def forward(self, state):\n        h = np.tanh(np.dot(state.reshape(1,-1), self.W1) + self.b1)\n        logits = np.dot(h, self.W2) + self.b2\n        exp = np.exp(logits - np.max(logits))\n        return (exp / np.sum(exp)).flatten()",
+    "test_cases": [
+      {
+        "input": "import numpy as np; ppo=PPO(4,2); np.sum(ppo.forward(np.array([0,0,0,0])))",
+        "expected_output": "1.0",
+        "description": "策略输出概率和为1"
+      },
+      {
+        "input": "import numpy as np; ppo=PPO(4,2); len(ppo.forward(np.array([0.1,0.2,0.3,0.4])))",
+        "expected_output": "2",
+        "description": "输出2个动作概率"
+      }
+    ],
+    "hint": "PPO核心是裁剪概率比防止策略突变",
+    "prerequisites": [
+      "rl-07-reinforce"
+    ]
+  }
+]

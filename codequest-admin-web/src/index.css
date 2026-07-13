@@ -1,0 +1,135 @@
+body {
+  margin: 0;
+  background: #0b0f1a;
+  color: #f1f5f9;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 页面入场 ===== */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: page-enter 0.25s ease-out both;
+}
+
+/* ===== 登录页背景动画 ===== */
+@keyframes floating-blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(20px, -20px) scale(1.04); }
+  50% { transform: translate(-10px, 10px) scale(0.97); }
+  75% { transform: translate(-15px, -10px) scale(1.02); }
+}
+
+@keyframes logo-ring-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.06); }
+}
+
+@keyframes shake-in {
+  0% { opacity: 0; transform: translateX(-6px); }
+  20% { transform: translateX(4px); }
+  40% { transform: translateX(-3px); }
+  60% { transform: translateX(2px); }
+  80% { transform: translateX(-1px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.shake-in {
+  animation: shake-in 0.4s ease-out both;
+}
+
+/* ===== 登录输入框聚焦发光 ===== */
+.login-input-glow:focus,
+.login-input-glow .ant-input:focus,
+.login-input-glow .ant-input-affix-wrapper-focused {
+  border-color: rgba(99,102,241,0.45) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12), 0 0 20px rgba(99,102,241,0.06) !important;
+}
+
+.login-input-glow:hover {
+  border-color: rgba(99,102,241,0.22) !important;
+}
+
+/* ===== 登录按钮悬浮抬升 ===== */
+.login-btn-lift:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(99,102,241,0.55), 0 0 4px rgba(139,92,246,0.5) !important;
+}
+
+.login-btn-lift:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.35), 0 0 2px rgba(139,92,246,0.3) !important;
+}
+
+/* ===== 登录卡片边框呼吸 ===== */
+@keyframes card-border-breathe {
+  0%, 100% { border-color: rgba(99,102,241,0.12); }
+  50% { border-color: rgba(99,102,241,0.18); }
+}
+
+.login-card {
+  animation: card-border-breathe 5s ease-in-out infinite;
+}
+
+/* ===== Ant Design 深色主题全局微调 ===== */
+.ant-table-cell { border-bottom-color: rgba(255,255,255,0.04) !important; }
+.ant-card-head { border-bottom-color: rgba(255,255,255,0.05) !important; }
+.ant-modal-header { border-bottom-color: rgba(255,255,255,0.05) !important; }
+.ant-drawer-header { border-bottom-color: rgba(255,255,255,0.05) !important; }
+.ant-divider { border-color: rgba(255,255,255,0.05) !important; }
+
+/* ===== 滚动条优化 ===== */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: rgba(15,19,34,0.6); border-radius: 10px; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #4b5563 0%, #374151 100%); }
+::-webkit-scrollbar-thumb:active { background: #4b5563; }
+
+/* ===== 侧边栏菜单项悬浮优化 ===== */
+.ant-menu-dark .ant-menu-item:hover {
+  background: rgba(99,102,241,0.1) !important;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background: linear-gradient(90deg, rgba(99,102,241,0.18) 0%, rgba(99,102,241,0.06) 100%) !important;
+  border-right: 2px solid #6366f1 !important;
+}
+
+/* ===== 头部阴影 ===== */
+.admin-header {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 8px rgba(0,0,0,0.15);
+}
+
+/* ===== 内容区域顶部淡入 ===== */
+@keyframes content-fade-top {
+  from { mask-image: linear-gradient(0deg, black 100%, transparent 100%); }
+  to { mask-image: linear-gradient(0deg, black 100%, black 100%); }
+}
+
+/* ===== 平滑过渡工具 ===== */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== 卡片悬浮微抬 ===== */
+.card-lift {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+/* ===== 提交审计行高亮 ===== */
+.abnormal-row td { background: rgba(239,68,68,0.06) !important; }
+.abnormal-row:hover td { background: rgba(239,68,68,0.1) !important; }
+.warning-row td { background: rgba(245,158,11,0.06) !important; }
+.warning-row:hover td { background: rgba(245,158,11,0.1) !important; }

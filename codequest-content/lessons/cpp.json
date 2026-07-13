@@ -1,0 +1,439 @@
+[
+  {
+    "title": "Hello World",
+    "slug": "cpp-01-hello-world",
+    "description": "学习C++基本语法，编写你的第一个程序",
+    "content": "# Hello World - 你的第一个C++程序\n\nC++是高性能的系统编程语言。\n\n```cpp\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, World!\" << endl;\n    return 0;\n}\n```\n\n## 练习\n编写函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#include <string>\nusing namespace std;\n\nstring hello() {\n    // 在这里编写你的代码\n    return \"\";\n}",
+    "solution_code": "#include <string>\nusing namespace std;\n\nstring hello() {\n    return \"Hello, World!\";\n}",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      },
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 return 语句返回字符串"
+  },
+  {
+    "title": "变量与数据类型",
+    "slug": "cpp-02-variables",
+    "description": "学习C++的变量声明和数据类型",
+    "content": "# 变量与数据类型\n\n```cpp\nint age = 25;\ndouble height = 1.68;\nstring name = \"Alice\";\nbool isStudent = true;\n```\n\n## 练习\n编写函数 `greet(string name)`，返回 `\"你好, {name}!\"`。\n\n## 数据类型的重要性\n选择正确的数据类型是编程的基础能力：\n- 整数和浮点数用于数学计算\n- 字符串用于文本处理\n- 布尔值用于逻辑判断\n\n## 类型安全\n不同语言对类型的处理方式不同：\n- **强类型**（如Python、Java）：类型不匹配会报错\n- **弱类型**（如JavaScript）：自动进行类型转换\n- **静态类型**：编译时检查类型\n- **动态类型**：运行时确定类型\n\n## 编程建议\n- 变量名要有描述性\n- 避免使用魔法数字（应定义为常量）\n- 注意类型转换可能带来的精度损失\n",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#include <string>\nusing namespace std;\n\nstring greet(string name) {\n    // 返回问候语\n    return \"\";\n}",
+    "solution_code": "#include <string>\nusing namespace std;\n\nstring greet(string name) {\n    return \"你好, \" + name + \"!\";\n}",
+    "test_cases": [
+      {
+        "input": "greet('Alice')",
+        "expected_output": "你好, Alice!",
+        "description": "greet('Alice')"
+      },
+      {
+        "input": "greet('Bob')",
+        "expected_output": "你好, Bob!",
+        "description": "greet('Bob')"
+      }
+    ],
+    "hint": "使用 + 拼接字符串"
+  },
+  {
+    "title": "运算符",
+    "slug": "cpp-03-operators",
+    "description": "学习算术、比较和逻辑运算符",
+    "content": "# 运算符\n\n```cpp\nint a = 10 + 3;  // 13\nbool b = (5 > 3) && (2 < 4); // true\n```\n\n## 练习\n编写函数 `isEven(int n)`，判断是否为偶数。\n\n## 运算符优先级\n理解运算符的优先级对编写正确的表达式至关重要。当不确定时，使用括号 `()` 明确优先级。\n\n## 常见陷阱\n- 整数除法 vs 浮点除法（不同语言行为不同）\n- 取余运算中负数的处理\n- 比较浮点数时不要用 `==`（精度问题）\n- 逻辑运算符的短路求值特性\n",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "bool isEven(int n) {\n    // 判断偶数\n    return false;\n}",
+    "solution_code": "bool isEven(int n) {\n    return n % 2 == 0;\n}",
+    "test_cases": [
+      {
+        "input": "isEven(4)",
+        "expected_output": "true",
+        "description": "4是偶数"
+      },
+      {
+        "input": "isEven(7)",
+        "expected_output": "false",
+        "description": "7不是偶数"
+      }
+    ],
+    "hint": "使用 % 取余运算符"
+  },
+  {
+    "title": "条件语句",
+    "slug": "cpp-04-conditionals",
+    "description": "学习 if/else if/else",
+    "content": "# 条件语句\n\n```cpp\nif (score >= 90) {\n    return \"优秀\";\n} else if (score >= 60) {\n    return \"及格\";\n} else {\n    return \"不及格\";\n}\n```\n\n## 练习\n编写函数 `gradeScore(int score)`，根据分数返回等级。\n\n## 条件语句的设计模式\n```text\n1. 卫语句模式：先处理特殊情况，提前返回\n2. 策略模式：用字典/映射替代多重if-else\n3. 早返回：在函数开头检查无效输入并立即返回\n```\n\n## 代码可读性\n- 条件表达式不要太复杂，可以拆分为多个变量\n- 使用有意义的布尔变量名：`is_valid` > `flag`\n- 避免深度嵌套（超过3层应重构）\n",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#include <string>\nusing namespace std;\n\nstring gradeScore(int score) {\n    // 根据分数返回等级\n    return \"\";\n}",
+    "solution_code": "#include <string>\nusing namespace std;\n\nstring gradeScore(int score) {\n    if (score >= 90) return \"优秀\";\n    else if (score >= 80) return \"良好\";\n    else if (score >= 60) return \"及格\";\n    else return \"不及格\";\n}",
+    "test_cases": [
+      {
+        "input": "gradeScore(95)",
+        "expected_output": "优秀",
+        "description": "90分以上"
+      },
+      {
+        "input": "gradeScore(70)",
+        "expected_output": "及格",
+        "description": "60-79分"
+      },
+      {
+        "input": "gradeScore(50)",
+        "expected_output": "不及格",
+        "description": "60分以下"
+      }
+    ],
+    "hint": "从高到低依次判断"
+  },
+  {
+    "title": "循环",
+    "slug": "cpp-05-loops",
+    "description": "学习 for 和 while 循环",
+    "content": "# 循环\n\n```cpp\nfor (int i = 1; i <= n; i++) {\n    sum += i;\n}\n```\n\n## 练习\n编写函数 `sumRange(int n)`，返回1到n的整数和。\n\n## 循环的性能考量\n- 避免在循环中进行重复计算\n- 尽量减少循环体内的函数调用\n- 考虑使用更高效的数据结构\n\n## 循环 vs 递归 vs 高阶函数\n| 方式 | 适用场景 |\n|------|---------|\n| for/while | 明确次数、简单遍历 |\n| 递归 | 树形结构、分治问题 |\n| map/filter | 数据转换和过滤 |\n\n## 常见错误\n- 死循环（循环条件永远为真）\n- 差一错误（off-by-one）\n- 在遍历时修改集合\n",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "int sumRange(int n) {\n    // 返回1到n的和\n    return 0;\n}",
+    "solution_code": "int sumRange(int n) {\n    int sum = 0;\n    for (int i = 1; i <= n; i++) {\n        sum += i;\n    }\n    return sum;\n}",
+    "test_cases": [
+      {
+        "input": "sumRange(5)",
+        "expected_output": "15",
+        "description": "1到5的和"
+      },
+      {
+        "input": "sumRange(10)",
+        "expected_output": "55",
+        "description": "1到10的和"
+      }
+    ],
+    "hint": "使用 for 循环累加"
+  },
+  {
+    "title": "函数",
+    "slug": "cpp-06-functions",
+    "description": "学习函数的定义和调用",
+    "content": "# 函数\n\n```cpp\nint add(int a, int b) {\n    return a + b;\n}\n```\n\n## 练习\n编写函数 `calculateBMI(double weight, double height)`，计算BMI并保留1位小数。\n\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#include <cmath>\n\ndouble calculateBMI(double weight, double height) {\n    // 计算BMI\n    return 0;\n}",
+    "solution_code": "#include <cmath>\n\ndouble calculateBMI(double weight, double height) {\n    double bmi = weight / (height * height);\n    return round(bmi * 10.0) / 10.0;\n}",
+    "test_cases": [
+      {
+        "input": "calculateBMI(70, 1.75)",
+        "expected_output": "22.9",
+        "description": "BMI计算"
+      },
+      {
+        "input": "calculateBMI(70, 1.75)",
+        "expected_output": "22.9",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 round 函数保留小数"
+  },
+  {
+    "title": "数组",
+    "slug": "cpp-07-arrays",
+    "description": "学习数组的创建和操作",
+    "content": "# 数组\n\n```cpp\nint arr[] = {3, 7, 2, 9, 1};\nint n = sizeof(arr) / sizeof(arr[0]);\n```\n\n## 练习\n编写函数 `findMax(int arr[], int n)`，找出数组中的最大值。\n",
+    "order": 7,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "int findMax(int arr[], int n) {\n    // 找出最大值\n    return 0;\n}",
+    "solution_code": "int findMax(int arr[], int n) {\n    int maxVal = arr[0];\n    for (int i = 1; i < n; i++) {\n        if (arr[i] > maxVal) maxVal = arr[i];\n    }\n    return maxVal;\n}",
+    "test_cases": [
+      {
+        "input": "findMax([3,7,2,9,1], 5)",
+        "expected_output": "9",
+        "description": "找最大值"
+      },
+      {
+        "input": "findMax([3,7,2,9,1], 5)",
+        "expected_output": "9",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "遍历数组逐一比较"
+  },
+  {
+    "title": "字符串操作",
+    "slug": "cpp-08-strings",
+    "description": "学习string类的常用方法",
+    "content": "# 字符串操作\n\n```cpp\nstring s = \"hello\";\ns.length();       // 5\ns.substr(1, 3);   // \"ell\"\ns + \" world\";     // \"hello world\"\n```\n\n## 练习\n编写函数 `reverseString(string s)`，返回反转后的字符串。\n",
+    "order": 8,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#include <string>\n#include <algorithm>\nusing namespace std;\n\nstring reverseString(string s) {\n    // 反转字符串\n    return \"\";\n}",
+    "solution_code": "#include <string>\n#include <algorithm>\nusing namespace std;\n\nstring reverseString(string s) {\n    reverse(s.begin(), s.end());\n    return s;\n}",
+    "test_cases": [
+      {
+        "input": "reverseString('hello')",
+        "expected_output": "olleh",
+        "description": "反转字符串"
+      },
+      {
+        "input": "reverseString('hello')",
+        "expected_output": "olleh",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 reverse 算法"
+  },
+  {
+    "title": "面向对象",
+    "slug": "cpp-09-oop",
+    "description": "学习类和对象",
+    "content": "# 面向对象\n\n```cpp\nclass Circle {\n    double radius;\npublic:\n    Circle(double r) : radius(r) {}\n    double area() { return 3.14159 * radius * radius; }\n};\n```\n\n## 练习\n编写 `Circle` 类，包含 area() 和 circumference() 方法。\n",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "class Circle {\n    double radius;\npublic:\n    Circle(double r) {\n        // 初始化\n    }\n    double area() {\n        // 面积\n        return 0;\n    }\n    double circumference() {\n        // 周长\n        return 0;\n    }\n};",
+    "solution_code": "class Circle {\n    double radius;\npublic:\n    Circle(double r) : radius(r) {}\n    double area() { return 3.14159265358979 * radius * radius; }\n    double circumference() { return 2 * 3.14159265358979 * radius; }\n};",
+    "test_cases": [
+      {
+        "input": "Circle(1).area()",
+        "expected_output": "3.14159265358979",
+        "description": "圆面积"
+      },
+      {
+        "input": "Circle(1).area()",
+        "expected_output": "3.14159265358979",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "面积=πr²，周长=2πr"
+  },
+  {
+    "title": "STL容器",
+    "slug": "cpp-10-stl-containers",
+    "description": "学习vector、map、set",
+    "content": "# STL容器\n\n```cpp\n#include <vector>\n#include <map>\n#include <set>\n\nvector<int> v = {1, 2, 3};\nmap<string, int> m;\nset<int> s;\n```\n\n## 练习\n编写函数 `removeDuplicates(vector<int> v)`，去重并返回新vector。\n",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "#include <vector>\n#include <set>\nusing namespace std;\n\nvector<int> removeDuplicates(vector<int> v) {\n    // 去重\n    return v;\n}",
+    "solution_code": "#include <vector>\n#include <set>\nusing namespace std;\n\nvector<int> removeDuplicates(vector<int> v) {\n    set<int> seen;\n    vector<int> result;\n    for (int x : v) {\n        if (seen.insert(x).second) {\n            result.push_back(x);\n        }\n    }\n    return result;\n}",
+    "test_cases": [
+      {
+        "input": "removeDuplicates([1,2,3,2,1,4])",
+        "expected_output": "[1,2,3,4]",
+        "description": "去重保持顺序"
+      },
+      {
+        "input": "removeDuplicates([1,2,3,2,1,4])",
+        "expected_output": "[1,2,3,4]",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 set 记录已见元素"
+  },
+  {
+    "title": "指针与引用",
+    "slug": "cpp-11-pointers",
+    "description": "学习指针和引用的概念",
+    "content": "# 指针与引用\n\n```cpp\nint x = 10;\nint* ptr = &x;   // 指针\nint& ref = x;    // 引用\n*ptr = 20;       // 通过指针修改\nref = 30;        // 通过引用修改\n```\n\n## 练习\n编写函数 `swap(int& a, int& b)`，交换两个变量的值。\n",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "void swap(int& a, int& b) {\n    // 交换值\n}",
+    "solution_code": "void swap(int& a, int& b) {\n    int temp = a;\n    a = b;\n    b = temp;\n}",
+    "test_cases": [
+      {
+        "input": "int a=3, b=5; swap(a,b); a",
+        "expected_output": "5",
+        "description": "交换后a=5"
+      },
+      {
+        "input": "int a=3, b=5; swap(a,b); a",
+        "expected_output": "5",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用临时变量交换"
+  },
+  {
+    "title": "模板",
+    "slug": "cpp-12-templates",
+    "description": "学习函数模板和类模板",
+    "content": "# 模板\n\n```cpp\ntemplate<typename T>\nT getMax(T a, T b) {\n    return (a > b) ? a : b;\n}\n```\n\n## 练习\n编写模板函数 `findMax(T arr[], int n)`，找出数组中的最大值。\n",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "template<typename T>\nT findMax(T arr[], int n) {\n    // 找出最大值\n    return arr[0];\n}",
+    "solution_code": "template<typename T>\nT findMax(T arr[], int n) {\n    T maxVal = arr[0];\n    for (int i = 1; i < n; i++) {\n        if (arr[i] > maxVal) maxVal = arr[i];\n    }\n    return maxVal;\n}",
+    "test_cases": [
+      {
+        "input": "int a[]={3,7,2}; findMax(a,3)",
+        "expected_output": "7",
+        "description": "找int数组最大值"
+      },
+      {
+        "input": "int a[]={3,7,2}; findMax(a,3)",
+        "expected_output": "7",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "遍历数组比较"
+  },
+  {
+    "title": "异常处理",
+    "slug": "cpp-13-exceptions",
+    "description": "学习try/catch异常处理",
+    "content": "# 异常处理\n\n```cpp\ntry {\n    throw runtime_error(\"错误\");\n} catch (const exception& e) {\n    cout << e.what();\n}\n```\n\n## 练习\n编写函数 `safeDivide(int a, int b)`，除零时抛出异常。\n",
+    "order": 13,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "#include <stdexcept>\n\nint safeDivide(int a, int b) {\n    // 安全除法\n    return 0;\n}",
+    "solution_code": "#include <stdexcept>\n\nint safeDivide(int a, int b) {\n    if (b == 0) throw runtime_error(\"除零错误\");\n    return a / b;\n}",
+    "test_cases": [
+      {
+        "input": "safeDivide(10, 2)",
+        "expected_output": "5",
+        "description": "正常除法"
+      },
+      {
+        "input": "safeDivide(10, 2)",
+        "expected_output": "5",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 throw 抛出异常"
+  },
+  {
+    "title": "STL算法",
+    "slug": "cpp-14-stl-algorithms",
+    "description": "学习sort、find、transform等算法",
+    "content": "# STL算法\n\n```cpp\n#include <algorithm>\nsort(v.begin(), v.end());\nfind(v.begin(), v.end(), target);\ntransform(v.begin(), v.end(), v.begin(), op);\n```\n\n## 练习\n编写函数 `sortVector(vector<int> v)`，返回排序后的vector。\n",
+    "order": 14,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nvector<int> sortVector(vector<int> v) {\n    // 排序\n    return v;\n}",
+    "solution_code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nvector<int> sortVector(vector<int> v) {\n    sort(v.begin(), v.end());\n    return v;\n}",
+    "test_cases": [
+      {
+        "input": "sortVector([5,3,8,1])",
+        "expected_output": "[1,3,5,8]",
+        "description": "排序"
+      },
+      {
+        "input": "sortVector([5,3,8,1])",
+        "expected_output": "[1,3,5,8]",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 sort 算法"
+  },
+  {
+    "title": "排序算法",
+    "slug": "cpp-15-sorting",
+    "description": "实现冒泡排序",
+    "content": "# 排序算法\n\n## 练习\n编写函数 `bubbleSort(int arr[], int n)`，原地排序。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
+    "order": 15,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "void bubbleSort(int arr[], int n) {\n    // 冒泡排序\n}",
+    "solution_code": "void bubbleSort(int arr[], int n) {\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < n - i - 1; j++) {\n            if (arr[j] > arr[j + 1]) {\n                int temp = arr[j];\n                arr[j] = arr[j + 1];\n                arr[j + 1] = temp;\n            }\n        }\n    }\n}",
+    "test_cases": [
+      {
+        "input": "int a[]={5,3,8,1}; bubbleSort(a,4); a[0]",
+        "expected_output": "1",
+        "description": "冒泡排序后首元素"
+      },
+      {
+        "input": "int a[]={5,3,8,1}; bubbleSort(a,4); a[0]",
+        "expected_output": "1",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "双重循环比较交换"
+  },
+  {
+    "title": "二分查找",
+    "slug": "cpp-16-binary-search",
+    "description": "实现二分查找",
+    "content": "# 二分查找\n\n## 练习\n编写函数 `binarySearch(int arr[], int n, int target)`，返回索引或-1。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
+    "order": 16,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "int binarySearch(int arr[], int n, int target) {\n    // 二分查找\n    return -1;\n}",
+    "solution_code": "int binarySearch(int arr[], int n, int target) {\n    int left = 0, right = n - 1;\n    while (left <= right) {\n        int mid = (left + right) / 2;\n        if (arr[mid] == target) return mid;\n        if (arr[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}",
+    "test_cases": [
+      {
+        "input": "int a[]={1,3,5,7,9}; binarySearch(a,5,5)",
+        "expected_output": "2",
+        "description": "查找存在的元素"
+      },
+      {
+        "input": "int a[]={1,3,5,7,9}; binarySearch(a,5,4)",
+        "expected_output": "-1",
+        "description": "查找不存在的元素"
+      }
+    ],
+    "hint": "使用左右指针缩小范围"
+  },
+  {
+    "title": "递归",
+    "slug": "cpp-17-recursion",
+    "description": "学习递归思想",
+    "content": "# 递归\n\n## 练习\n编写函数 `fibonacci(int n)` 和 `factorial(int n)`。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
+    "order": 17,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "int fibonacci(int n) {\n    // 斐波那契\n    return 0;\n}\n\nint factorial(int n) {\n    // 阶乘\n    return 0;\n}",
+    "solution_code": "int fibonacci(int n) {\n    if (n <= 1) return n;\n    return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nint factorial(int n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}",
+    "test_cases": [
+      {
+        "input": "fibonacci(5)",
+        "expected_output": "5",
+        "description": "F(5)=5"
+      },
+      {
+        "input": "factorial(5)",
+        "expected_output": "120",
+        "description": "5!=120"
+      }
+    ],
+    "hint": "确定基线条件后递归调用"
+  },
+  {
+    "title": "综合实战 - 学生管理",
+    "slug": "cpp-18-student-manager",
+    "description": "综合运用所学知识实现学生管理系统",
+    "content": "# 综合实战 - 学生管理系统\n\n## 练习\n实现 `StudentManager` 类，包含 addStudent、getAverage、getTopStudent 方法。\n",
+    "order": 18,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "starter_code": "#include <string>\n#include <vector>\n#include <map>\nusing namespace std;\n\nclass StudentManager {\n    map<string, vector<int>> students;\npublic:\n    void addStudent(string name, vector<int> scores) {\n        // 添加学生\n    }\n    double getAverage(string name) {\n        // 返回平均分\n        return 0;\n    }\n    string getTopStudent() {\n        // 返回最高平均分学生\n        return \"\";\n    }\n};",
+    "solution_code": "#include <string>\n#include <vector>\n#include <map>\nusing namespace std;\n\nclass StudentManager {\n    map<string, vector<int>> students;\npublic:\n    void addStudent(string name, vector<int> scores) {\n        students[name] = scores;\n    }\n    double getAverage(string name) {\n        if (students.find(name) == students.end()) return -1;\n        auto& scores = students[name];\n        double sum = 0;\n        for (int s : scores) sum += s;\n        return sum / scores.size();\n    }\n    string getTopStudent() {\n        string top;\n        double maxAvg = -1;\n        for (auto& [name, scores] : students) {\n            double avg = getAverage(name);\n            if (avg > maxAvg) { maxAvg = avg; top = name; }\n        }\n        return top;\n    }\n};",
+    "test_cases": [
+      {
+        "input": "sm.addStudent('Alice', [90,85]); sm.getAverage('Alice')",
+        "expected_output": "87.5",
+        "description": "学生平均分"
+      },
+      {
+        "input": "sm.addStudent('Alice', [90,85]); sm.getAverage('Alice')",
+        "expected_output": "87.5",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 map 存储学生数据"
+  }
+]

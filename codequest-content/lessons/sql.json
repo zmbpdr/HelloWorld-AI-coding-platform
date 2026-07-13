@@ -1,0 +1,306 @@
+[
+  {
+    "title": "初识SQL",
+    "slug": "sql-01-intro",
+    "description": "了解数据库概念、表/行/列结构以及SQL方言",
+    "content": "# 初识SQL — 打开数据世界的大门\n\n## 什么是数据库？\n数据库（Database）是按照一定结构组织、存储和管理数据的仓库。想象一个电子表格，每一页就是一个**表（Table）**，每一行是一条**记录（Row）**，每一列是一个**字段（Column）**。数据库让我们能够高效地存储、查询和修改大量数据。\n\n## 表、行、列\n- **表（Table）**：数据的集合，类似于Excel中的一个工作表\n- **行（Row/Record）**：表中的一条数据记录\n- **列（Column/Field）**：数据的属性，每列有特定的数据类型\n\n例如一个 `students` 表：\n\n| id | name  | age | grade |\n|----|-------|-----|-------|\n| 1  | Alice | 20  | A     |\n| 2  | Bob   | 22  | B     |\n\n## 什么是SQL？\nSQL（Structured Query Language，结构化查询语言）是用于与关系型数据库交互的标准语言。它可以：\n- **查询数据**：从数据库中检索信息\n- **操作数据**：插入、更新、删除记录\n- **定义结构**：创建表、修改表结构\n- **控制权限**：管理用户访问\n\n## SQL方言\n虽然SQL有国际标准（ANSI SQL），但不同数据库系统有自己的扩展：\n- **MySQL**：最流行的开源数据库，Web开发首选\n- **PostgreSQL**：功能强大的开源数据库，支持高级特性\n- **SQLite**：轻量级嵌入式数据库，适合学习和小型应用\n- **SQL Server**：微软的企业级数据库\n- **Oracle**：大型企业级数据库\n\n本课程主要使用标准SQL语法，大部分语句在各数据库中通用。\n\n## 练习\n编写一条 SELECT 语句，返回字符串 `'Hello, SQL!'`，并将列命名为 `result`。",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "-- 在这里编写你的SQL语句\n-- 提示：使用 SELECT ... AS ... 语法\n",
+    "solution_code": "SELECT 'Hello, SQL!' AS result;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Hello, SQL!",
+        "description": "应输出 Hello, SQL!"
+      }
+    ],
+    "hint": "使用 SELECT 'Hello, SQL!' AS result; 语法"
+  },
+  {
+    "title": "SELECT基础",
+    "slug": "sql-02-select",
+    "description": "学习查询列、WHERE条件过滤和DISTINCT去重",
+    "content": "# SELECT基础 — 查询数据的利器\n\n## SELECT语法\nSELECT是SQL中最常用的语句，用于从表中查询数据：\n\n```sql\n-- 查询所有列\nSELECT * FROM students;\n\n-- 查询指定列\nSELECT name, age FROM students;\n\n-- 为列起别名\nSELECT name AS 姓名, age AS 年龄 FROM students;\n```\n\n## WHERE条件\nWHERE子句用于过滤记录，只返回满足条件的行：\n\n```sql\n-- 查询年龄大于20的学生\nSELECT * FROM students WHERE age > 20;\n\n-- 多条件组合\nSELECT * FROM students WHERE age > 20 AND grade = 'A';\n\n-- 使用OR\nSELECT * FROM students WHERE grade = 'A' OR grade = 'B';\n\n-- 使用IN\nSELECT * FROM students WHERE grade IN ('A', 'B');\n\n-- 使用BETWEEN\nSELECT * FROM students WHERE age BETWEEN 18 AND 22;\n\n-- 使用LIKE模糊匹配\nSELECT * FROM students WHERE name LIKE 'A%';\n```\n\n## DISTINCT去重\nDISTINCT关键字用于去除查询结果中的重复值：\n\n```sql\n-- 查询所有不同的年级\nSELECT DISTINCT grade FROM students;\n```\n\n## 常用比较运算符\n| 运算符 | 含义 |\n|--------|------|\n| =      | 等于 |\n| != / <>| 不等于 |\n| >      | 大于 |\n| <      | 小于 |\n| >=     | 大于等于 |\n| <=     | 小于等于 |\n\n## 练习\n编写一条SQL语句，从数字1到5中选出所有奇数（1、3、5），使用UNION合并结果，列名为 `odd_number`。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "-- 编写SQL语句，选出1到5中的奇数\n-- 提示：使用 UNION 合并多个 SELECT\n",
+    "solution_code": "SELECT 1 AS odd_number\nUNION\nSELECT 3 AS odd_number\nUNION\nSELECT 5 AS odd_number;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "1,3,5",
+        "description": "应返回奇数 1, 3, 5"
+      }
+    ],
+    "hint": "使用 SELECT ... UNION SELECT ... 语法合并多个查询结果"
+  },
+  {
+    "title": "排序与限制",
+    "slug": "sql-03-order-limit",
+    "description": "学习ORDER BY排序和LIMIT/OFFSET分页",
+    "content": "# 排序与限制 — 让结果井然有序\n\n## ORDER BY排序\nORDER BY子句用于对查询结果进行排序：\n\n```sql\n-- 按年龄升序排列（默认ASC）\nSELECT * FROM students ORDER BY age;\n\n-- 按年龄降序排列\nSELECT * FROM students ORDER BY age DESC;\n\n-- 多列排序：先按年级升序，再按年龄降序\nSELECT * FROM students ORDER BY grade ASC, age DESC;\n```\n\n排序规则：\n- **ASC**：升序（从小到大），默认值\n- **DESC**：降序（从大到小）\n- NULL值在升序时排在最前，降序时排在最后\n\n## LIMIT限制行数\nLIMIT子句用于限制返回的记录数量，常用于分页：\n\n```sql\n-- 只返回前5条记录\nSELECT * FROM students LIMIT 5;\n\n-- 跳过前3条，返回接下来的5条（第4-8条）\nSELECT * FROM students LIMIT 5 OFFSET 3;\n```\n\n不同数据库的分页语法略有差异：\n- **MySQL/PostgreSQL/SQLite**：`LIMIT n OFFSET m`\n- **SQL Server**：`OFFSET m ROWS FETCH NEXT n ROWS ONLY`\n- **Oracle**：`FETCH FIRST n ROWS ONLY`（12c+）\n\n## 实际应用场景\n- 排行榜：按分数降序取前10名\n- 分页显示：每页20条，第3页为 `LIMIT 20 OFFSET 40`\n- 最新记录：按时间降序取最新5条\n\n## 练习\n编写一条SQL语句，生成1到5的数字序列，按降序排列，列名为 `num`。\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "-- 生成1到5的数字序列，按降序排列\n-- 提示：使用 UNION 合并结果，再用 ORDER BY 排序\n",
+    "solution_code": "SELECT 1 AS num UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 ORDER BY num DESC;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "5,4,3,2,1",
+        "description": "应返回降序排列的 5,4,3,2,1"
+      }
+    ],
+    "hint": "先使用UNION生成1-5，再使用ORDER BY num DESC降序排列"
+  },
+  {
+    "title": "聚合函数",
+    "slug": "sql-04-aggregate",
+    "description": "学习COUNT/SUM/AVG/MAX/MIN和GROUP BY分组",
+    "content": "# 聚合函数 — 数据的统计分析\n\n## 常用聚合函数\n聚合函数对一组值进行计算，返回单个结果：\n\n| 函数    | 功能     | 示例                      |\n|---------|----------|---------------------------|\n| COUNT() | 计数     | COUNT(*) — 统计行数        |\n| SUM()   | 求和     | SUM(score) — 计算总分      |\n| AVG()   | 平均值   | AVG(score) — 计算平均分    |\n| MAX()   | 最大值   | MAX(score) — 找最高分      |\n| MIN()   | 最小值   | MIN(score) — 找最低分      |\n\n```sql\n-- 统计学生总数\nSELECT COUNT(*) FROM students;\n\n-- 计算平均年龄\nSELECT AVG(age) FROM students;\n\n-- 找出最大年龄\nSELECT MAX(age) FROM students;\n```\n\n## GROUP BY分组\nGROUP BY子句将数据按某列分组，然后对每组应用聚合函数：\n\n```sql\n-- 按年级统计人数和平均年龄\nSELECT grade, COUNT(*) AS 人数, AVG(age) AS 平均年龄\nFROM students\nGROUP BY grade;\n```\n\n分组规则：\n- SELECT中出现的非聚合列必须出现在GROUP BY中\n- GROUP BY可以按多列分组\n- NULL值会被分到同一组\n\n## 聚合函数与NULL\n- `COUNT(*)` 统计所有行（包括NULL）\n- `COUNT(列名)` 只统计非NULL值\n- `SUM/AVG/MAX/MIN` 忽略NULL值\n\n## 练习\n编写一条SQL语句，计算数字10、20、30的平均值，列名为 `avg_value`。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "-- 计算10、20、30的平均值\n-- 提示：使用 AVG 函数\n",
+    "solution_code": "SELECT AVG(val) AS avg_value FROM (SELECT 10 AS val UNION ALL SELECT 20 UNION ALL SELECT 30) AS t;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "20",
+        "description": "10、20、30的平均值应为20"
+      }
+    ],
+    "hint": "使用子查询构造数据，再用AVG计算平均值"
+  },
+  {
+    "title": "数据过滤",
+    "slug": "sql-05-having",
+    "description": "学习HAVING子句和WHERE与HAVING的区别",
+    "content": "# 数据过滤 — HAVING与WHERE的较量\n\n## WHERE vs HAVING\n这是SQL中一个经典易混淆的知识点：\n\n| 特性       | WHERE              | HAVING               |\n|------------|---------------------|----------------------|\n| 过滤时机   | 分组前              | 分组后               |\n| 能否用聚合 | 不能                | 能                   |\n| 作用对象   | 原始行数据          | 分组后的结果         |\n\n```sql\n-- WHERE：过滤原始数据（分组前）\nSELECT grade, COUNT(*)\nFROM students\nWHERE age > 20          -- 先筛选年龄>20的学生\nGROUP BY grade;\n\n-- HAVING：过滤分组结果（分组后）\nSELECT grade, COUNT(*)\nFROM students\nGROUP BY grade\nHAVING COUNT(*) > 2;    -- 再筛选人数>2的年级\n```\n\n## 执行顺序\nSQL语句的逻辑执行顺序（非书写顺序）：\n\n1. **FROM** — 确定数据来源\n2. **WHERE** — 过滤原始行\n3. **GROUP BY** — 分组\n4. **HAVING** — 过滤分组\n5. **SELECT** — 选择列\n6. **ORDER BY** — 排序\n7. **LIMIT** — 限制行数\n\n理解执行顺序是写好SQL的关键！\n\n## 组合使用\nWHERE和HAVING可以同时使用，实现多层过滤：\n\n```sql\nSELECT grade, COUNT(*) AS cnt, AVG(age) AS avg_age\nFROM students\nWHERE age >= 18          -- 先过滤未成年\nGROUP BY grade\nHAVING COUNT(*) >= 2     -- 再过滤人数不足的组\nORDER BY avg_age DESC;\n```\n\n## 练习\n编写一条SQL语句，从数字1到10中筛选出大于5的数字，然后计算这些数字的和，列名为 `sum_value`。",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "-- 从1到10中筛选大于5的数字，计算它们的和\n-- 提示：先构造数据，再用WHERE过滤，最后用SUM求和\n",
+    "solution_code": "SELECT SUM(val) AS sum_value FROM (SELECT 1 AS val UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS t WHERE val > 5;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "40",
+        "description": "6+7+8+9+10=40"
+      }
+    ],
+    "hint": "使用子查询构造1-10的数据，WHERE val > 5过滤，SUM(val)求和"
+  },
+  {
+    "title": "多表查询",
+    "slug": "sql-06-join",
+    "description": "学习JOIN连接查询：INNER/LEFT/RIGHT/FULL JOIN",
+    "content": "# 多表查询 — 连接数据的世界\n\n## 为什么需要JOIN？\n关系型数据库中，数据通常分散在多个表中。JOIN让我们能够将不同表的数据关联起来查询。\n\n## JOIN类型\n\n### INNER JOIN（内连接）\n只返回两表中匹配的记录：\n```sql\nSELECT s.name, c.course_name\nFROM students s\nINNER JOIN enrollments e ON s.id = e.student_id\nINNER JOIN courses c ON e.course_id = c.id;\n```\n\n### LEFT JOIN（左连接）\n返回左表所有记录，右表无匹配则为NULL：\n```sql\nSELECT s.name, c.course_name\nFROM students s\nLEFT JOIN enrollments e ON s.id = e.student_id\nLEFT JOIN courses c ON e.course_id = c.id;\n```\n\n### RIGHT JOIN（右连接）\n返回右表所有记录，左表无匹配则为NULL（与LEFT JOIN方向相反）。\n\n### FULL JOIN（全连接）\n返回两表所有记录，无匹配则为NULL：\n```sql\nSELECT s.name, c.course_name\nFROM students s\nFULL JOIN courses c ON s.id = c.student_id;\n```\n\n## JOIN类型对比\n| 类型        | 左表无匹配 | 右表无匹配 |\n|-------------|-----------|-----------|\n| INNER JOIN  | 不显示    | 不显示    |\n| LEFT JOIN   | 显示(NULL)| 不显示    |\n| RIGHT JOIN  | 不显示    | 显示(NULL)|\n| FULL JOIN   | 显示(NULL)| 显示(NULL)|\n\n## ON条件\nON子句指定连接条件，通常是外键关系。也可以使用USING简化（当列名相同时）：\n```sql\n-- 使用ON\nSELECT * FROM t1 JOIN t2 ON t1.id = t2.id;\n-- 使用USING\nSELECT * FROM t1 JOIN t2 USING(id);\n```\n\n## 练习\n编写一条SQL语句，使用INNER JOIN的方式，将两个子查询（左表含id=1,name='Alice'，右表含id=1,score=95）连接起来，返回name和score列。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "-- 使用INNER JOIN连接两个子查询\n-- 左表：id=1, name='Alice'\n-- 右表：id=1, score=95\n-- 返回 name 和 score 列\n",
+    "solution_code": "SELECT a.name, b.score FROM (SELECT 1 AS id, 'Alice' AS name) AS a INNER JOIN (SELECT 1 AS id, 95 AS score) AS b ON a.id = b.id;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Alice,95",
+        "description": "应返回 Alice 和 95"
+      }
+    ],
+    "hint": "分别用子查询构造两个表，用INNER JOIN和ON条件连接"
+  },
+  {
+    "title": "子查询",
+    "slug": "sql-07-subquery",
+    "description": "学习标量子查询、行子查询、表子查询、EXISTS和IN",
+    "content": "# 子查询 — 查询中的查询\n\n## 什么是子查询？\n子查询（Subquery）是嵌套在另一个查询中的查询，也称为内部查询。外部查询称为外部查询/主查询。\n\n## 子查询类型\n\n### 标量子查询\n返回单个值，可用在WHERE、SELECT等位置：\n```sql\n-- 查询年龄大于平均年龄的学生\nSELECT name, age FROM students\nWHERE age > (SELECT AVG(age) FROM students);\n```\n\n### 行子查询\n返回一行多列：\n```sql\nSELECT * FROM students\nWHERE (grade, age) = (SELECT grade, MAX(age) FROM students);\n```\n\n### 表子查询\n返回多行多列，常用在FROM或IN中：\n```sql\n-- 在FROM中使用（派生表）\nSELECT grade, cnt\nFROM (SELECT grade, COUNT(*) AS cnt FROM students GROUP BY grade) AS t\nWHERE cnt > 2;\n```\n\n### EXISTS子查询\n检查子查询是否返回行，返回TRUE/FALSE：\n```sql\n-- 查询有选课记录的学生\nSELECT name FROM students s\nWHERE EXISTS (SELECT 1 FROM enrollments e WHERE e.student_id = s.id);\n```\n\n### IN子查询\n检查值是否在子查询结果中：\n```sql\nSELECT name FROM students\nWHERE id IN (SELECT student_id FROM enrollments);\n```\n\n## EXISTS vs IN\n- **EXISTS**：找到匹配就停止，适合子查询结果集大的场景\n- **IN**：先执行子查询获取所有值，适合子查询结果集小的场景\n\n## 相关子查询\n子查询引用了外部查询的列，每行都会执行一次：\n```sql\nSELECT name, age FROM students s\nWHERE age > (SELECT AVG(age) FROM students WHERE grade = s.grade);\n```\n\n## 练习\n编写一条SQL语句，使用子查询找出1到10中大于平均值（5.5）的数字，列名为 `above_avg`，按升序排列。",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "-- 找出1到10中大于平均值的数字\n-- 提示：在WHERE中使用标量子查询\n",
+    "solution_code": "SELECT val AS above_avg FROM (SELECT 1 AS val UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS t WHERE val > (SELECT AVG(val) FROM (SELECT 1 AS val UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS t2) ORDER BY above_avg;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "6,7,8,9,10",
+        "description": "大于5.5的数字为6,7,8,9,10"
+      }
+    ],
+    "hint": "构造1-10的数据表，WHERE中用子查询计算平均值"
+  },
+  {
+    "title": "数据操作",
+    "slug": "sql-08-dml",
+    "description": "学习INSERT/UPDATE/DELETE和RETURNING子句",
+    "content": "# 数据操作 — 增删改的艺术\n\n## INSERT插入数据\n向表中添加新记录：\n\n```sql\n-- 插入单条记录\nINSERT INTO students (name, age, grade)\nVALUES ('Charlie', 21, 'A');\n\n-- 插入多条记录\nINSERT INTO students (name, age, grade)\nVALUES\n  ('David', 23, 'B'),\n  ('Eve', 20, 'A');\n\n-- 从查询结果插入\nINSERT INTO honor_students (name, age)\nSELECT name, age FROM students WHERE grade = 'A';\n```\n\n## UPDATE更新数据\n修改已有记录：\n\n```sql\n-- 更新单个字段\nUPDATE students SET grade = 'A' WHERE name = 'Bob';\n\n-- 更新多个字段\nUPDATE students SET age = 23, grade = 'B' WHERE id = 2;\n\n-- 基于子查询更新\nUPDATE students SET grade = 'A'\nWHERE age > (SELECT AVG(age) FROM students);\n```\n\n⚠️ **重要**：UPDATE一定要加WHERE，否则会更新所有记录！\n\n## DELETE删除数据\n删除记录：\n\n```sql\n-- 删除指定记录\nDELETE FROM students WHERE id = 3;\n\n-- 删除满足条件的记录\nDELETE FROM students WHERE grade = 'C';\n\n-- 删除所有记录（保留表结构）\nDELETE FROM students;\n```\n\n⚠️ **重要**：DELETE不加WHERE会删除所有数据！更安全的做法是先SELECT确认。\n\n## RETURNING子句\nPostgreSQL支持RETURNING，在DML操作后返回受影响的行：\n\n```sql\nINSERT INTO students (name, age) VALUES ('Frank', 25)\nRETURNING *;\n\nUPDATE students SET grade = 'A' WHERE id = 1\nRETURNING name, grade;\n\nDELETE FROM students WHERE id = 5\nRETURNING name;\n```\n\n## TRUNCATE vs DELETE\n| 特性     | DELETE          | TRUNCATE        |\n|----------|-----------------|-----------------|\n| 速度     | 逐行删除，较慢  | 一次性清空，很快 |\n| WHERE    | 支持            | 不支持          |\n| 事务     | 可回滚          | 通常不可回滚    |\n| 触发器   | 触发            | 不触发          |\n\n## 练习\n编写一条SQL语句，构造一个包含3条记录的临时表（id和name），然后从中选出name列，按id升序排列。使用WITH子句（CTE）实现。",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "-- 使用CTE构造临时表，包含3条记录，然后选出name列\n-- 提示：WITH ... AS (...) SELECT ... FROM ...\n",
+    "solution_code": "WITH temp AS (SELECT 1 AS id, 'Alice' AS name UNION ALL SELECT 2, 'Bob' UNION ALL SELECT 3, 'Charlie') SELECT name FROM temp ORDER BY id;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Alice,Bob,Charlie",
+        "description": "应返回Alice, Bob, Charlie"
+      }
+    ],
+    "hint": "使用WITH子句定义CTE，UNION ALL合并多行，最后SELECT查询"
+  },
+  {
+    "title": "表结构管理",
+    "slug": "sql-09-ddl",
+    "description": "学习CREATE TABLE、ALTER TABLE和DROP TABLE",
+    "content": "# 表结构管理 — 定义数据的骨架\n\n## CREATE TABLE创建表\n创建表时需要定义表名、列名、数据类型和约束：\n\n```sql\nCREATE TABLE students (\n    id          INTEGER PRIMARY KEY AUTOINCREMENT,\n    name        VARCHAR(50) NOT NULL,\n    age         INTEGER CHECK (age > 0),\n    email       VARCHAR(100) UNIQUE,\n    grade       CHAR(1) DEFAULT 'C',\n    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n```\n\n### 常用数据类型\n| 类型        | 说明           | 示例              |\n|-------------|----------------|-------------------|\n| INTEGER     | 整数           | 1, 42, -7         |\n| VARCHAR(n)  | 变长字符串     | 'hello'           |\n| CHAR(n)     | 定长字符串     | 'A'               |\n| DECIMAL     | 精确小数       | 3.14              |\n| DATE        | 日期           | '2024-01-15'      |\n| TIMESTAMP   | 日期时间       | '2024-01-15 10:30'|\n| BOOLEAN     | 布尔值         | TRUE/FALSE        |\n| TEXT        | 长文本         | '很长的内容...'    |\n\n## ALTER TABLE修改表\n对已有表进行结构修改：\n\n```sql\n-- 添加列\nALTER TABLE students ADD COLUMN phone VARCHAR(20);\n\n-- 删除列\nALTER TABLE students DROP COLUMN phone;\n\n-- 重命名列\nALTER TABLE students RENAME COLUMN grade TO level;\n\n-- 重命名表\nALTER TABLE students RENAME TO learners;\n```\n\n⚠️ 不同数据库的ALTER语法差异较大，使用时需查阅文档。\n\n## DROP TABLE删除表\n彻底删除表及其所有数据：\n\n```sql\nDROP TABLE students;\n\n-- 如果表存在才删除（更安全）\nDROP TABLE IF EXISTS students;\n```\n\n⚠️ **DROP TABLE不可逆**！数据将永久丢失。\n\n## CREATE TABLE ... AS\n根据查询结果创建新表：\n```sql\nCREATE TABLE honor_students AS\nSELECT name, age FROM students WHERE grade = 'A';\n```\n\n## 临时表\n```sql\nCREATE TEMPORARY TABLE temp_results AS\nSELECT * FROM students WHERE grade = 'A';\n```\n临时表在会话结束后自动删除。\n\n## 练习\n编写一条SQL语句，使用CTE模拟创建一个表结构，包含id（整数）和description（字符串）两列，插入3条记录，返回description列，按id排序。",
+    "order": 9,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "-- 使用CTE模拟表结构，插入3条记录并查询\n-- 提示：WITH ... AS (SELECT ... UNION ALL ...) SELECT ... FROM ...\n",
+    "solution_code": "WITH items AS (SELECT 1 AS id, 'First item' AS description UNION ALL SELECT 2, 'Second item' UNION ALL SELECT 3, 'Third item') SELECT description FROM items ORDER BY id;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "First item,Second item,Third item",
+        "description": "应返回三条描述"
+      }
+    ],
+    "hint": "使用CTE定义数据，UNION ALL合并多行，ORDER BY排序"
+  },
+  {
+    "title": "约束与索引",
+    "slug": "sql-10-constraints-index",
+    "description": "学习PRIMARY KEY、FOREIGN KEY、UNIQUE约束和INDEX索引",
+    "content": "# 约束与索引 — 保证数据的完整与高效\n\n## 约束（Constraints）\n约束是数据库强制执行的数据规则，确保数据的完整性和一致性。\n\n### PRIMARY KEY（主键）\n唯一标识表中的每一行记录：\n```sql\nCREATE TABLE students (\n    id INTEGER PRIMARY KEY,  -- 主键：唯一且不为NULL\n    name VARCHAR(50)\n);\n```\n- 主键列值必须**唯一**且**不为NULL**\n- 每个表只能有**一个**主键\n- 主键可以是单列或组合列（复合主键）\n\n### FOREIGN KEY（外键）\n建立表与表之间的引用关系：\n```sql\nCREATE TABLE enrollments (\n    id INTEGER PRIMARY KEY,\n    student_id INTEGER REFERENCES students(id),  -- 外键\n    course_id INTEGER REFERENCES courses(id),     -- 外键\n    FOREIGN KEY (student_id) REFERENCES students(id)\n        ON DELETE CASCADE    -- 删除学生时级联删除选课记录\n        ON UPDATE CASCADE    -- 更新学生ID时级联更新\n);\n```\n外键引用操作：\n- **CASCADE**：级联操作\n- **SET NULL**：设为NULL\n- **RESTRICT**：拒绝操作（默认）\n- **NO ACTION**：与RESTRICT类似\n\n### UNIQUE（唯一约束）\n确保列值不重复：\n```sql\nCREATE TABLE users (\n    id INTEGER PRIMARY KEY,\n    email VARCHAR(100) UNIQUE  -- 邮箱不能重复\n);\n```\n\n### 其他约束\n- **NOT NULL**：不允许NULL值\n- **CHECK**：自定义条件检查\n- **DEFAULT**：设置默认值\n\n## 索引（Index）\n索引是提高查询速度的数据结构，类似于书的目录：\n\n```sql\n-- 创建索引\nCREATE INDEX idx_student_name ON students(name);\n\n-- 创建唯一索引\nCREATE UNIQUE INDEX idx_email ON users(email);\n\n-- 创建组合索引\nCREATE INDEX idx_grade_age ON students(grade, age);\n\n-- 删除索引\nDROP INDEX idx_student_name;\n```\n\n### 何时使用索引？\n✅ 适合加索引：\n- WHERE条件中频繁使用的列\n- JOIN连接条件的列\n- ORDER BY排序的列\n- 数据量大且查询频繁\n\n❌ 不适合加索引：\n- 数据量很小的表\n- 频繁更新的列（索引也需要更新）\n- 查询返回大部分数据的列\n\n## 练习\n编写一条SQL语句，使用CTE模拟一个带有外键关系的查询：学生表（id, name）和成绩表（student_id, score），用JOIN查出每个学生的姓名和成绩，按分数降序排列。",
+    "order": 10,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "-- 模拟学生表和成绩表的JOIN查询\n-- 学生表：id=1,name='Alice'; id=2,name='Bob'\n-- 成绩表：student_id=1,score=95; student_id=2,score=88\n-- 返回name和score，按score降序\n",
+    "solution_code": "WITH students AS (SELECT 1 AS id, 'Alice' AS name UNION ALL SELECT 2, 'Bob'), scores AS (SELECT 1 AS student_id, 95 AS score UNION ALL SELECT 2, 88) SELECT s.name, sc.score FROM students s INNER JOIN scores sc ON s.id = sc.student_id ORDER BY sc.score DESC;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Alice,95|Bob,88",
+        "description": "应返回Alice(95)和Bob(88)，按分数降序"
+      }
+    ],
+    "hint": "使用两个CTE分别定义学生表和成绩表，INNER JOIN连接"
+  },
+  {
+    "title": "事务处理",
+    "slug": "sql-11-transaction",
+    "description": "学习BEGIN/COMMIT/ROLLBACK和ACID特性",
+    "content": "# 事务处理 — 保证数据的安全操作\n\n## 什么是事务？\n事务（Transaction）是一组SQL操作的逻辑单元，这些操作要么全部成功，要么全部失败。事务是数据库保证数据一致性的核心机制。\n\n## ACID特性\n事务具有四个核心特性：\n\n### 原子性（Atomicity）\n事务中的操作要么全部执行，要么全部不执行。如果中途失败，已执行的操作会被回滚。\n\n### 一致性（Consistency）\n事务执行前后，数据库必须从一个一致状态转变为另一个一致状态。约束和规则不会被事务破坏。\n\n### 隔离性（Isolation）\n并发事务之间互不影响，每个事务感觉不到其他事务的存在。\n\n### 持久性（Durability）\n事务一旦提交，其结果将永久保存，即使系统崩溃也不会丢失。\n\n## 事务控制语句\n\n```sql\n-- 开始事务\nBEGIN;  -- 或 START TRANSACTION;\n\n-- 执行操作\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\n\n-- 提交事务（确认操作）\nCOMMIT;\n\n-- 回滚事务（撤销操作）\nROLLBACK;\n```\n\n## 保存点（Savepoint）\n在事务中设置检查点，可以部分回滚：\n\n```sql\nBEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nSAVEPOINT after_deduct;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\n-- 如果第二步出错，只回滚到保存点\nROLLBACK TO SAVEPOINT after_deduct;\nCOMMIT;\n```\n\n## 隔离级别\n| 级别                | 脏读 | 不可重复读 | 幻读 |\n|---------------------|------|-----------|------|\n| READ UNCOMMITTED    | 可能 | 可能      | 可能 |\n| READ COMMITTED      | 不会 | 可能      | 可能 |\n| REPEATABLE READ     | 不会 | 不会      | 可能 |\n| SERIALIZABLE        | 不会 | 不会      | 不会 |\n\n## 实际应用\n事务最经典的场景是银行转账：从一个账户扣款，向另一个账户存款，这两步必须在一个事务中完成。\n\n## 练习\n编写一条SQL语句，模拟转账操作：从账户A（余额500）转出200到账户B（余额300），使用CTE计算转账后两个账户的总余额，列名为 `total_balance`。",
+    "order": 11,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "-- 模拟转账：A从500转出200，B从300转入200\n-- 计算转账后总余额\n-- 提示：使用CTE模拟账户表，计算 (500-200) + (300+200)\n",
+    "solution_code": "WITH accounts AS (SELECT 'A' AS name, 500 AS balance UNION ALL SELECT 'B', 300), transfer AS (SELECT 'A' AS name, 300 AS new_balance UNION ALL SELECT 'B', 500) SELECT SUM(new_balance) AS total_balance FROM transfer;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "800",
+        "description": "转账后总余额应为800（300+500）"
+      }
+    ],
+    "hint": "转账前后总余额不变：500+300=800"
+  },
+  {
+    "title": "视图与CTE",
+    "slug": "sql-12-view-cte",
+    "description": "学习CREATE VIEW和WITH递归CTE",
+    "content": "# 视图与CTE — 简化复杂查询\n\n## 视图（VIEW）\n视图是存储在数据库中的命名查询，可以像表一样使用：\n\n```sql\n-- 创建视图\nCREATE VIEW honor_students AS\nSELECT name, age, grade\nFROM students\nWHERE grade = 'A';\n\n-- 使用视图（就像使用表一样）\nSELECT * FROM honor_students;\nSELECT name FROM honor_students WHERE age > 20;\n\n-- 修改视图\nCREATE OR REPLACE VIEW honor_students AS\nSELECT name, age, grade, email\nFROM students\nWHERE grade IN ('A', 'B');\n\n-- 删除视图\nDROP VIEW IF EXISTS honor_students;\n```\n\n### 视图的优点\n- **简化查询**：将复杂查询封装为视图\n- **数据安全**：只暴露必要的数据列\n- **逻辑独立**：表结构变化时只需修改视图\n\n### 可更新视图\n简单视图（不含聚合、DISTINCT、GROUP BY等）可以直接INSERT/UPDATE/DELETE：\n```sql\nUPDATE honor_students SET age = 21 WHERE name = 'Alice';\n```\n\n## CTE（Common Table Expression）\nCTE是定义在查询中的临时结果集，使用WITH关键字：\n\n```sql\nWITH regional_sales AS (\n    SELECT region, SUM(amount) AS total_sales\n    FROM orders\n    GROUP BY region\n),\ntop_regions AS (\n    SELECT region\n    FROM regional_sales\n    WHERE total_sales > (SELECT AVG(total_sales) FROM regional_sales)\n)\nSELECT * FROM top_regions;\n```\n\n### CTE vs 子查询\n- CTE更**可读**：逻辑清晰，避免嵌套\n- CTE可**复用**：同一CTE可在查询中多次引用\n- CTE支持**递归**\n\n## 递归CTE\n递归CTE可以处理层次结构数据（如组织架构、目录树）：\n\n```sql\nWITH RECURSIVE employee_chain AS (\n    -- 基础查询：找到根节点\n    SELECT id, name, manager_id, 1 AS level\n    FROM employees\n    WHERE manager_id IS NULL\n\n    UNION ALL\n\n    -- 递归查询：逐层展开\n    SELECT e.id, e.name, e.manager_id, ec.level + 1\n    FROM employees e\n    INNER JOIN employee_chain ec ON e.manager_id = ec.id\n)\nSELECT * FROM employee_chain ORDER BY level;\n```\n\n递归CTE结构：\n1. **基础成员**（非递归部分）：初始数据\n2. **UNION ALL**：连接基础和递归部分\n3. **递归成员**：引用自身，逐层展开\n4. **终止条件**：递归成员不再产生新行时停止\n\n## 练习\n编写一条SQL语句，使用递归CTE生成1到5的数字序列，列名为 `n`。",
+    "order": 12,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "-- 使用递归CTE生成1到5的数字序列\n-- 提示：WITH RECURSIVE ... AS (SELECT 1 UNION ALL SELECT n+1 FROM ... WHERE n < 5)\n",
+    "solution_code": "WITH RECURSIVE nums AS (SELECT 1 AS n UNION ALL SELECT n + 1 FROM nums WHERE n < 5) SELECT n FROM nums;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "1,2,3,4,5",
+        "description": "应生成1到5的序列"
+      }
+    ],
+    "hint": "WITH RECURSIVE定义CTE，基础查询SELECT 1，递归部分SELECT n+1 WHERE n<5"
+  },
+  {
+    "title": "窗口函数",
+    "slug": "sql-13-window",
+    "description": "学习ROW_NUMBER/RANK/LAG/LEAD等窗口函数",
+    "content": "# 窗口函数 — 高级分析的利器\n\n## 什么是窗口函数？\n窗口函数（Window Function）对一组相关行（窗口）进行计算，但不像GROUP BY那样将行合并为一行。每行都会保留，同时可以访问相关行的信息。\n\n基本语法：\n```sql\n函数名() OVER (\n    PARTITION BY 分区列\n    ORDER BY 排序列\n    ROWS/RANGE 窗口范围\n)\n```\n\n## 常用窗口函数\n\n### ROW_NUMBER()\n为每行分配唯一的连续序号：\n```sql\nSELECT name, score,\n    ROW_NUMBER() OVER (ORDER BY score DESC) AS rank_num\nFROM students;\n```\n\n### RANK() 和 DENSE_RANK()\n```sql\n-- RANK：并列时跳号（1,2,2,4）\n-- DENSE_RANK：并列时不跳号（1,2,2,3）\nSELECT name, score,\n    RANK() OVER (ORDER BY score DESC) AS rnk,\n    DENSE_RANK() OVER (ORDER BY score DESC) AS dense_rnk\nFROM students;\n```\n\n### LAG() 和 LEAD()\n访问前一行或后一行的值：\n```sql\nSELECT date, amount,\n    LAG(amount, 1) OVER (ORDER BY date) AS prev_amount,\n    LEAD(amount, 1) OVER (ORDER BY date) AS next_amount\nFROM sales;\n```\n\n### 聚合窗口函数\nSUM/AVG/COUNT等也可以作为窗口函数：\n```sql\nSELECT name, score,\n    SUM(score) OVER (ORDER BY name) AS running_total,\n    AVG(score) OVER () AS overall_avg\nFROM students;\n```\n\n## PARTITION BY\n按分区计算，每个分区独立排序和编号：\n```sql\nSELECT name, grade, score,\n    ROW_NUMBER() OVER (PARTITION BY grade ORDER BY score DESC) AS grade_rank\nFROM students;\n```\n\n## 窗口范围\n```sql\n-- 从分区开始到当前行\nROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n\n-- 当前行前后各2行\nROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING\n```\n\n## 窗口函数 vs GROUP BY\n| 特性       | GROUP BY       | 窗口函数         |\n|-----------|----------------|-----------------|\n| 结果行数   | 每组一行       | 保留原始行数     |\n| 访问明细   | 不能           | 可以             |\n| 灵活性     | 较低           | 较高             |\n\n## 练习\n编写一条SQL语句，使用CTE构造3条成绩记录（Alice:95, Bob:88, Charlie:92），使用ROW_NUMBER()按分数降序排名，返回name和rank列。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 13,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "-- 使用CTE和ROW_NUMBER()进行排名\n-- 数据：Alice:95, Bob:88, Charlie:92\n-- 按分数降序排名\n",
+    "solution_code": "WITH scores AS (SELECT 'Alice' AS name, 95 AS score UNION ALL SELECT 'Bob', 88 UNION ALL SELECT 'Charlie', 92) SELECT name, ROW_NUMBER() OVER (ORDER BY score DESC) AS rank FROM scores;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Alice,1|Charlie,2|Bob,3",
+        "description": "Alice第1名(95)，Charlie第2名(92)，Bob第3名(88)"
+      }
+    ],
+    "hint": "CTE构造数据，ROW_NUMBER() OVER (ORDER BY score DESC)排名"
+  },
+  {
+    "title": "性能优化",
+    "slug": "sql-14-performance",
+    "description": "学习EXPLAIN分析、索引优化和查询重构",
+    "content": "# 性能优化 — 让查询飞起来\n\n## 为什么需要优化？\n随着数据量增长，低效的查询可能导致系统响应缓慢。掌握优化技巧是高级SQL开发者的必备能力。\n\n## EXPLAIN分析查询\nEXPLAIN显示查询的执行计划，帮助理解数据库如何执行查询：\n\n```sql\n-- 查看执行计划\nEXPLAIN SELECT * FROM students WHERE name = 'Alice';\n\n-- PostgreSQL更详细的分析\nEXPLAIN ANALYZE SELECT * FROM students WHERE name = 'Alice';\n```\n\n### 执行计划关键指标\n- **Seq Scan**（顺序扫描）：逐行扫描整张表，大数据量时很慢\n- **Index Scan**（索引扫描）：使用索引定位数据，通常很快\n- **Bitmap Scan**：先通过索引找到行位置，再批量获取数据\n- **Nested Loop**：嵌套循环连接，适合小数据集\n- **Hash Join**：哈希连接，适合大数据集等值连接\n- **Merge Join**：排序合并连接，适合已排序数据\n\n## 索引优化\n\n### 选择合适的索引\n```sql\n-- 为WHERE条件列创建索引\nCREATE INDEX idx_student_name ON students(name);\n\n-- 组合索引（注意列顺序）\nCREATE INDEX idx_grade_age ON students(grade, age);\n-- 查询 WHERE grade='A' AND age>20 可以利用\n-- 查询 WHERE age>20 无法利用（最左前缀原则）\n```\n\n### 索引失效的场景\n- 在索引列上使用函数：`WHERE UPPER(name) = 'ALICE'`\n- 使用OR条件：`WHERE name='A' OR age=20`\n- 使用LIKE通配符开头：`WHERE name LIKE '%lice'`\n- 数据类型不匹配：`WHERE varchar_col = 123`\n- 使用NOT EQUAL：`WHERE name != 'Alice'`\n\n## 查询重构技巧\n\n### 避免SELECT *\n```sql\n-- ❌ 不推荐\nSELECT * FROM students;\n-- ✅ 推荐\nSELECT name, age FROM students;\n```\n\n### 用EXISTS代替IN\n```sql\n-- ❌ 大子查询用IN\nSELECT * FROM students WHERE id IN (SELECT student_id FROM enrollments);\n-- ✅ 大子查询用EXISTS\nSELECT * FROM students s WHERE EXISTS (SELECT 1 FROM enrollments e WHERE e.student_id = s.id);\n```\n\n### 用JOIN代替子查询\n```sql\n-- ❌ 相关子查询\nSELECT * FROM students s WHERE age > (SELECT AVG(age) FROM students WHERE grade = s.grade);\n-- ✅ 先计算再JOIN\nWITH grade_avg AS (SELECT grade, AVG(age) AS avg_age FROM students GROUP BY grade)\nSELECT s.* FROM students s JOIN grade_avg g ON s.grade = g.grade WHERE s.age > g.avg_age;\n```\n\n### 分页优化\n```sql\n-- ❌ 深分页很慢\nSELECT * FROM students ORDER BY id LIMIT 10 OFFSET 100000;\n-- ✅ 使用游标分页\nSELECT * FROM students WHERE id > 100000 ORDER BY id LIMIT 10;\n```\n\n## 练习\n编写一条SQL语句，使用CTE模拟一个包含100条记录的表（使用递归CTE生成1到100），然后用WHERE过滤出偶数，计算偶数的个数，列名为 `even_count`。",
+    "order": 14,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "-- 使用递归CTE生成1到100，筛选偶数并计数\n-- 提示：WITH RECURSIVE生成序列，WHERE n%2=0筛选偶数\n",
+    "solution_code": "WITH RECURSIVE nums AS (SELECT 1 AS n UNION ALL SELECT n + 1 FROM nums WHERE n < 100) SELECT COUNT(*) AS even_count FROM nums WHERE n % 2 = 0;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "50",
+        "description": "1到100中有50个偶数"
+      }
+    ],
+    "hint": "递归CTE生成1-100，WHERE n%2=0筛选偶数，COUNT(*)计数"
+  },
+  {
+    "title": "存储过程",
+    "slug": "sql-15-procedure",
+    "description": "学习变量、流程控制和游标",
+    "content": "# 存储过程 — 数据库中的程序逻辑\n\n## 什么是存储过程？\n存储过程（Stored Procedure）是存储在数据库中的一组SQL语句，可以接受参数、包含流程控制逻辑，被多次调用。\n\n## 变量与赋值\n\n### PostgreSQL (PL/pgSQL)\n```sql\nDO $$\nDECLARE\n    v_name VARCHAR(50) := 'Alice';\n    v_age INTEGER;\nBEGIN\n    v_age := 25;\n    RAISE NOTICE 'Name: %, Age: %', v_name, v_age;\nEND $$;\n```\n\n### MySQL\n```sql\nSET @name = 'Alice';\nSET @age = 25;\nSELECT @name, @age;\n```\n\n## 流程控制\n\n### IF条件判断\n```sql\n-- PostgreSQL\nDO $$\nDECLARE\n    score INTEGER := 85;\n    grade VARCHAR(1);\nBEGIN\n    IF score >= 90 THEN grade := 'A';\n    ELSIF score >= 80 THEN grade := 'B';\n    ELSIF score >= 70 THEN grade := 'C';\n    ELSE grade := 'D';\n    END IF;\n    RAISE NOTICE 'Grade: %', grade;\nEND $$;\n```\n\n### CASE表达式\n```sql\n-- 标准SQL，跨数据库通用\nSELECT name, score,\n    CASE\n        WHEN score >= 90 THEN 'A'\n        WHEN score >= 80 THEN 'B'\n        WHEN score >= 70 THEN 'C'\n        ELSE 'D'\n    END AS grade\nFROM students;\n```\n\n### LOOP循环\n```sql\n-- PostgreSQL\nDO $$\nDECLARE\n    i INTEGER := 1;\n    total INTEGER := 0;\nBEGIN\n    LOOP\n        total := total + i;\n        i := i + 1;\n        EXIT WHEN i > 10;\n    END LOOP;\n    RAISE NOTICE 'Sum 1-10: %', total;\nEND $$;\n```\n\n## 游标（Cursor）\n游标用于逐行处理查询结果：\n\n```sql\n-- PostgreSQL\nDO $$\nDECLARE\n    cur CURSOR FOR SELECT name, score FROM students;\n    v_name VARCHAR(50);\n    v_score INTEGER;\nBEGIN\n    OPEN cur;\n    LOOP\n        FETCH cur INTO v_name, v_score;\n        EXIT WHEN NOT FOUND;\n        RAISE NOTICE 'Student: %, Score: %', v_name, v_score;\n    END LOOP;\n    CLOSE cur;\nEND $$;\n```\n\n## 创建存储过程\n```sql\n-- PostgreSQL\nCREATE OR REPLACE FUNCTION get_grade(score INTEGER)\nRETURNS VARCHAR(1) AS $$\nBEGIN\n    RETURN CASE\n        WHEN score >= 90 THEN 'A'\n        WHEN score >= 80 THEN 'B'\n        WHEN score >= 70 THEN 'C'\n        ELSE 'D'\n    END;\nEND;\n$$ LANGUAGE plpgsql;\n\n-- 调用\nSELECT get_grade(85);  -- 返回 'B'\n```\n\n## 练习\n编写一条SQL语句，使用CASE表达式将分数转换为等级：95→'A'，85→'B'，75→'C'，返回name和grade两列。使用CTE构造数据。",
+    "order": 15,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "-- 使用CASE表达式将分数转换为等级\n-- 数据：Alice:95, Bob:85, Charlie:75\n-- 等级规则：>=90为A, >=80为B, >=70为C\n",
+    "solution_code": "WITH scores AS (SELECT 'Alice' AS name, 95 AS score UNION ALL SELECT 'Bob', 85 UNION ALL SELECT 'Charlie', 75) SELECT name, CASE WHEN score >= 90 THEN 'A' WHEN score >= 80 THEN 'B' WHEN score >= 70 THEN 'C' ELSE 'D' END AS grade FROM scores;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Alice,A|Bob,B|Charlie,C",
+        "description": "Alice为A，Bob为B，Charlie为C"
+      }
+    ],
+    "hint": "CTE构造数据，CASE WHEN ... THEN ... END转换等级"
+  },
+  {
+    "title": "综合项目",
+    "slug": "sql-16-ecommerce",
+    "description": "电商数据库设计与复杂查询实战",
+    "content": "# 综合项目 — 电商数据库设计与复杂查询\n\n## 项目背景\n在本关中，我们将综合运用前面所学的所有SQL知识，设计一个简化的电商数据库并编写复杂查询。\n\n## 数据库设计\n电商系统核心表：\n\n### 用户表（users）\n| 列名      | 类型          | 说明       |\n|-----------|---------------|------------|\n| user_id   | INTEGER (PK)  | 用户ID     |\n| username  | VARCHAR(50)   | 用户名     |\n| city      | VARCHAR(50)   | 城市       |\n\n### 商品表（products）\n| 列名        | 类型          | 说明       |\n|-------------|---------------|------------|\n| product_id  | INTEGER (PK)  | 商品ID     |\n| product_name| VARCHAR(100)  | 商品名称   |\n| category    | VARCHAR(50)   | 分类       |\n| price       | DECIMAL       | 价格       |\n\n### 订单表（orders）\n| 列名      | 类型          | 说明         |\n|-----------|---------------|--------------|\n| order_id  | INTEGER (PK)  | 订单ID       |\n| user_id   | INTEGER (FK)  | 用户ID       |\n| product_id| INTEGER (FK)  | 商品ID       |\n| quantity  | INTEGER       | 数量         |\n| order_date| DATE          | 下单日期     |\n\n## 复杂查询实战\n\n### 1. 多表JOIN + 聚合\n查询每个用户的消费总额：\n```sql\nSELECT u.username, SUM(p.price * o.quantity) AS total_spent\nFROM users u\nJOIN orders o ON u.user_id = o.user_id\nJOIN products p ON o.product_id = p.product_id\nGROUP BY u.username;\n```\n\n### 2. 窗口函数排名\n查询每个分类中价格排名前3的商品：\n```sql\nSELECT * FROM (\n    SELECT product_name, category, price,\n        ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rank\n    FROM products\n) ranked WHERE rank <= 3;\n```\n\n### 3. CTE + 条件聚合\n查询消费超过平均水平的用户：\n```sql\nWITH user_spending AS (\n    SELECT u.user_id, u.username, SUM(p.price * o.quantity) AS total\n    FROM users u\n    JOIN orders o ON u.user_id = o.user_id\n    JOIN products p ON o.product_id = p.product_id\n    GROUP BY u.user_id, u.username\n)\nSELECT username, total\nFROM user_spending\nWHERE total > (SELECT AVG(total) FROM user_spending);\n```\n\n### 4. 递归CTE分析\n如果引入推荐关系，可以用递归CTE分析推荐链。\n\n## 综合练习\n编写一条SQL语句，使用CTE模拟电商数据（3个用户、3个商品、4个订单），查询每个用户的消费总额（price × quantity），按总额降序排列，返回username和total_spent两列。\n\n用户数据：\n- user_id=1, username='Alice', city='Beijing'\n- user_id=2, username='Bob', city='Shanghai'\n- user_id=3, username='Charlie', city='Guangzhou'\n\n商品数据：\n- product_id=1, product_name='Laptop', category='Electronics', price=5000\n- product_id=2, product_name='Phone', category='Electronics', price=3000\n- product_id=3, product_name='Book', category='Education', price=50\n\n订单数据：\n- order_id=1, user_id=1, product_id=1, quantity=1, order_date='2024-01-15'\n- order_id=2, user_id=1, product_id=3, quantity=2, order_date='2024-01-16'\n- order_id=3, user_id=2, product_id=2, quantity=1, order_date='2024-01-17'\n- order_id=4, user_id=3, product_id=3, quantity=5, order_date='2024-01-18'",
+    "order": 16,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "-- 综合项目：电商数据库查询\n-- 使用CTE模拟用户、商品、订单三张表\n-- 查询每个用户的消费总额，按总额降序排列\n-- 返回 username 和 total_spent\n",
+    "solution_code": "WITH users AS (SELECT 1 AS user_id, 'Alice' AS username UNION ALL SELECT 2, 'Bob' UNION ALL SELECT 3, 'Charlie'), products AS (SELECT 1 AS product_id, 5000 AS price UNION ALL SELECT 2, 3000 UNION ALL SELECT 3, 50), orders AS (SELECT 1 AS order_id, 1 AS user_id, 1 AS product_id, 1 AS quantity UNION ALL SELECT 2, 1, 3, 2 UNION ALL SELECT 3, 2, 2, 1 UNION ALL SELECT 4, 3, 3, 5) SELECT u.username, SUM(p.price * o.quantity) AS total_spent FROM users u JOIN orders o ON u.user_id = o.user_id JOIN products p ON o.product_id = p.product_id GROUP BY u.username ORDER BY total_spent DESC;",
+    "test_cases": [
+      {
+        "input": "",
+        "expected_output": "Alice,5100|Bob,3000|Charlie,250",
+        "description": "Alice消费5100(5000+100)，Bob消费3000，Charlie消费250"
+      }
+    ],
+    "hint": "三个CTE分别定义用户、商品、订单表，JOIN连接后GROUP BY + SUM计算消费总额"
+  }
+]

@@ -1,0 +1,146 @@
+import { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Form, Input, Select, InputNumber, Switch, Button, Card, Space, App } from 'antd'
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import { getLessonDetail, createLesson, updateLesson } from '../api/admin'
+
+// 关卡编辑页面 - 表单编辑器（标题、slug、语言、难度、内容、测试用例等）
+export default function LessonEditor() {
+  const { message } = App.useApp()
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const [form] = Form.useForm()
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const isEdit = !!id
+
+  // 编辑模式时加载关卡详情
+  useEffect(() => {
+    if (isEdit) {
+      async function fetchLesson() {
+        try {
+          setLoading(true)
+          const res = await getLessonDetail(Number(id))
+          form.setFieldsValue(res)
+        } catch {
+          message.error('获取关卡详情失败')
+        } finally {
+          setLoading(false)
+        }
+      }
+      fetchLesson()
+    }
+  }, [id, isEdit, form])
+
+  // 提交表单
+  const handleSubmit = async () => {
+    try {
+      setSaving(true)
+      const values = await form.validateFields()
+      if (isEdit) {
+        await updateLesson(Number(id), values)
+        message.success('更新成功')
+      } else {
+        await createLesson(values)
+        message.success('创建成功')
+      }
+      navigate('/lessons')
+    } catch (err: any) {
+      if (err?.errorFields) return  // Ant Design validation error, form already shows inline errors
+      message.error('保存失败')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div>
+      <div style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
+        <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/lessons')}>
+          返回
+        </Button>
+        <h2 style={{ margin: 0 }}>{isEdit ? '编辑关卡' : '新建关卡'}</h2>
+      </div>
+
+      <Card loading={loading}>
+        <Form form={form} layout="vertical" style={{ maxWidth: 800 }}>
+          <Form.Item name="title" label="标题" rules={[{ required: true, message: '请输入标题' }]}>
+            <Input placeholder="关卡标题" />
+          </Form.Item>
+
+          <Form.Item name="slug" label="Slug" rules={[{ required: true, message: '请输入 Slug' }]}>
+            <Input placeholder="lesson-slug" />
+          </Form.Item>
+
+          <Form.Item name="language_id" label="编程语言" rules={[{ required: true, message: '请选择语言' }]}>
+            <Select placeholder="选择编程语言">
+              <Select.Option value={1}>Python</Select.Option>
+              <Select.Option value={2}>JavaScript</Select.Option>
+              <Select.Option value={3}>Java</Select.Option>
+              <Select.Option value={4}>C++</Select.Option>
+              <Select.Option value={5}>Go</Select.Option>
+              <Select.Option value={6}>Rust</Select.Option>
+              <Select.Option value={7}>TypeScript</Select.Option>
+              <Select.Option value={8}>SQL</Select.Option>
+              <Select.Option value={9}>Ruby</Select.Option>
+              <Select.Option value={10}>Swift</Select.Option>
+              <Select.Option value={11}>Kotlin</Select.Option>
+              <Select.Option value={12}>PHP</Select.Option>
+              <Select.Option value={13}>Shell</Select.Option>
+              <Select.Option value={14}>Lua</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item name="difficulty" label="难度" rules={[{ required: true, message: '请选择难度' }]}>
+            <Select placeholder="选择难度">
+              <Select.Option value="beginner">入门</Select.Option>
+              <Select.Option value="intermediate">进阶</Select.Option>
+              <Select.Option value="advanced">高级</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item name="order" label="排序">
+            <InputNumber min={0} style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item name="is_active" label="发布" valuePropName="checked">
+            <Switch />
+          </Form.Item>
+
+          <Form.Item name="description" label="描述">
+            <Input.TextArea rows={3} placeholder="关卡描述" />
+          </Form.Item>
+
+          <Form.Item name="content" label="教学内容">
+            <Input.TextArea rows={6} placeholder="Markdown 格式的教学内容" />
+          </Form.Item>
+
+          <Form.Item name="starter_code" label="初始代码">
+            <Input.TextArea rows={6} placeholder="学员初始代码模板" />
+          </Form.Item>
+
+          <Form.Item name="solution_code" label="参考答案">
+            <Input.TextArea rows={6} placeholder="参考答案代码" />
+          </Form.Item>
+
+          <Form.Item name="test_cases" label="测试用例（JSON）">
+            <Input.TextArea rows={6} placeholder='[{"input": "1 2", "expected": "3"}]' />
+          </Form.Item>
+
+          <Form.Item name="hint" label="提示">
+            <Input.TextArea rows={3} placeholder="解题提示" />
+          </Form.Item>
+
+          <Form.Item>
+            <Space>
+              <Button type="primary" onClick={handleSubmit} loading={saving}>
+                保存
+              </Button>
+              <Button onClick={() => navigate('/lessons')}>取消</Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Card>
+    </div>
+  )
+}

@@ -1,0 +1,277 @@
+[
+  {
+    "title": "线性代数基础",
+    "slug": "ml-01-linear-algebra",
+    "description": "向量、矩阵、运算",
+    "content": "# 线性代数基础\n\n线性代数是机器学习的数学基石。在本节中，你将学习向量、矩阵的基本概念和运算规则。\n\n## 向量\n向量是一组有序的数字，可以表示为列向量或行向量。在Python中，我们通常使用NumPy来表示向量：\n\n```python\nimport numpy as np\nv = np.array([1, 2, 3])  # 一维向量\n```\n\n## 矩阵\n矩阵是二维的数字阵列，是线性代数的核心数据结构：\n\n```python\nM = np.array([[1, 2], [3, 4]])  # 2x2矩阵\n```\n\n## 基本运算\n- **加法**：对应元素相加\n- **乘法**：矩阵乘法遵循行×列规则\n- **转置**：行列互换\n\n掌握这些基本运算，是理解后续机器学习算法的前提条件。",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "ml",
+    "section": "数学基础篇",
+    "starter_code": "import numpy as np\n\ndef matrix_multiply(A, B):\n    # 实现矩阵乘法\n    pass\n",
+    "solution_code": "import numpy as np\n\ndef matrix_multiply(A, B):\n    return np.dot(A, B)\n",
+    "test_cases": [
+      {
+        "input": "matrix_multiply(np.array([[1,2],[3,4]]), np.array([[5,6],[7,8]]))",
+        "expected_output": "[[19 22]\n [43 50]]",
+        "description": "2x2矩阵乘法"
+      },
+      {
+        "input": "matrix_multiply(np.array([[1,0],[0,1]]), np.array([[2,3],[4,5]]))",
+        "expected_output": "[[2 3]\n [4 5]]",
+        "description": "单位矩阵乘法"
+      },
+      {
+        "input": "matrix_multiply(np.array([[1,2],[3,4]]), np.array([[5,6],[7,8]]))",
+        "expected_output": "[[19 22]\n [43 50]]",
+        "description": "matrix_multiply 空输入/边界情况测试"
+      }
+    ],
+    "hint": "使用np.dot()函数进行矩阵乘法运算",
+    "prerequisites": []
+  },
+  {
+    "title": "概率与统计",
+    "slug": "ml-02-probability",
+    "description": "概率分布、期望、方差",
+    "content": "# 概率与统计\n\n概率论为机器学习提供了处理不确定性的数学框架。统计方法则帮助我们从不完全的数据中推断规律。\n\n## 概率基础\n概率表示事件发生的可能性，取值范围为[0,1]：\n- P(A) = 0 表示不可能事件\n- P(A) = 1 表示必然事件\n\n## 常见分布\n- **正态分布**：自然界最常见的分布，呈钟形曲线\n- **均匀分布**：每个值出现的概率相等\n- **伯努利分布**：只有两种可能结果的分布\n\n## 期望与方差\n- 期望 E[X]：随机变量的平均值\n- 方差 Var(X)：衡量数据的离散程度\n\n```python\nimport numpy as np\ndata = np.array([1, 2, 3, 4, 5])\nprint(np.mean(data))   # 期望\nprint(np.var(data))    # 方差\n```\n\n理解概率与统计，是掌握贝叶斯方法和统计学习理论的基础。",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "ml",
+    "section": "数学基础篇",
+    "starter_code": "import numpy as np\n\ndef compute_stats(data):\n    # 返回 (均值, 方差, 标准差)\n    pass\n",
+    "solution_code": "import numpy as np\n\ndef compute_stats(data):\n    mean = np.mean(data)\n    var = np.var(data)\n    std = np.std(data)\n    return (mean, var, std)\n",
+    "test_cases": [
+      {
+        "input": "compute_stats(np.array([1,2,3,4,5]))",
+        "expected_output": "(3.0, 2.0, 1.4142135623730951)",
+        "description": "基本统计量计算"
+      },
+      {
+        "input": "compute_stats(np.array([10,20,30]))",
+        "expected_output": "(20.0, 66.66666666666667, 8.16496580927726)",
+        "description": "另一组数据统计"
+      },
+      {
+        "input": "compute_stats(np.array([1,2,3,4,5]))",
+        "expected_output": "(3.0, 2.0, 1.4142135623730951)",
+        "description": "compute_stats 空输入/边界情况测试"
+      }
+    ],
+    "hint": "使用np.mean(), np.var(), np.std()分别计算均值、方差和标准差",
+    "prerequisites": [
+      1
+    ]
+  },
+  {
+    "title": "梯度下降",
+    "slug": "ml-03-gradient-descent",
+    "description": "优化算法的核心思想",
+    "content": "# 梯度下降\n\n梯度下降是机器学习中最基础也最重要的优化算法。几乎所有深度学习模型的训练都依赖于梯度下降的变体。\n\n## 核心思想\n梯度下降的直觉很简单：站在山坡上，沿着最陡的方向往下走，就能最快到达谷底。\n\n数学表达：θ = θ - α∇J(θ)\n- θ：模型参数\n- α：学习率（步长）\n- ∇J(θ)：损失函数的梯度\n\n## 学习率的影响\n- 学习率太大：可能越过最小值，甚至发散\n- 学习率太小：收敛速度太慢\n- 合适的学习率：稳定且高效地收敛\n\n## 代码实现\n```python\ndef gradient_descent(x, y, lr=0.01, epochs=100):\n    w = 0\n    for _ in range(epochs):\n        grad = 2 * np.mean((w * x - y) * x)\n        w = w - lr * grad\n    return w\n```\n\n理解梯度下降是掌握所有优化算法的起点。",
+    "order": 3,
+    "difficulty": "beginner",
+    "xp_reward": 15,
+    "track": "ml",
+    "section": "数学基础篇",
+    "starter_code": "import numpy as np\n\ndef gradient_descent(x, y, lr=0.01, epochs=100):\n    # 实现简单线性回归的梯度下降\n    pass\n",
+    "solution_code": "import numpy as np\n\ndef gradient_descent(x, y, lr=0.01, epochs=100):\n    w = 0.0\n    b = 0.0\n    n = len(x)\n    for _ in range(epochs):\n        y_pred = w * x + b\n        dw = -2 * np.mean(x * (y - y_pred))\n        db = -2 * np.mean(y - y_pred)\n        w = w - lr * dw\n        b = b - lr * db\n    return w, b\n",
+    "test_cases": [
+      {
+        "input": "x=np.array([1,2,3,4],dtype=float); y=2*x+1; w,b=gradient_descent(x,y,lr=0.1,epochs=1000); round(w,1),round(b,1)",
+        "expected_output": "(2.0, 1.0)",
+        "description": "线性回归梯度下降"
+      },
+      {
+        "input": "x=np.array([1,2,3,4],dtype=float); y=2*x+1; w,b=gradient_descent(x,y,lr=0.1,epochs=1000); round(w,1),round(b,1)",
+        "expected_output": "(2.0, 1.0)",
+        "description": "x=np.array 空输入/边界情况测试"
+      }
+    ],
+    "hint": "分别对w和b求偏导，然后更新参数",
+    "prerequisites": [
+      1,
+      2
+    ]
+  },
+  {
+    "title": "数据预处理",
+    "slug": "ml-04-data-preprocessing",
+    "description": "归一化、标准化、缺失值处理",
+    "content": "# 数据预处理\n\n在机器学习中，数据预处理是建模前最关键的步骤。垃圾进，垃圾出（Garbage In, Garbage Out）——数据质量直接决定模型效果。\n\n## 归一化（Min-Max Scaling）\n将数据缩放到[0,1]区间：\n```\nx_norm = (x - x_min) / (x_max - x_min)\n```\n\n## 标准化（Z-Score）\n将数据转换为均值为0、标准差为1的分布：\n```\nx_std = (x - mean) / std\n```\n\n## 缺失值处理\n- **删除法**：直接删除含缺失值的样本\n- **填充法**：用均值、中位数或众数填充\n- **插值法**：利用相邻值进行插值\n\n## 编码分类变量\n- **Label Encoding**：将类别映射为整数\n- **One-Hot Encoding**：将类别展开为二进制列\n\n```python\nfrom sklearn.preprocessing import StandardScaler, MinMaxScaler\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n```\n\n好的数据预处理可以让模型训练事半功倍。",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "track": "ml",
+    "section": "数据基础篇",
+    "starter_code": "import numpy as np\n\ndef normalize(data):\n    # 实现 Min-Max 归一化\n    pass\n",
+    "solution_code": "import numpy as np\n\ndef normalize(data):\n    min_val = np.min(data)\n    max_val = np.max(data)\n    return (data - min_val) / (max_val - min_val)\n",
+    "test_cases": [
+      {
+        "input": "normalize(np.array([1,2,3,4,5], dtype=float))",
+        "expected_output": "[0.   0.25 0.5  0.75 1.  ]",
+        "description": "Min-Max归一化"
+      },
+      {
+        "input": "normalize(np.array([0,10,20], dtype=float))",
+        "expected_output": "[0.  0.5 1. ]",
+        "description": "另一组归一化"
+      },
+      {
+        "input": "normalize(np.array([1,2,3,4,5], dtype=float))",
+        "expected_output": "[0.   0.25 0.5  0.75 1.  ]",
+        "description": "normalize 空输入/边界情况测试"
+      }
+    ],
+    "hint": "归一化公式: (x - min) / (max - min)",
+    "prerequisites": [
+      1,
+      2
+    ]
+  },
+  {
+    "title": "K近邻算法",
+    "slug": "ml-05-knn",
+    "description": "最直观的分类算法",
+    "content": "# K近邻算法（KNN）\n\nKNN是最简单直观的机器学习算法之一：物以类聚，近朱者赤。一个样本的类别由其最近的K个邻居投票决定。\n\n## 算法步骤\n1. 计算待分类样本与所有训练样本的距离\n2. 选取距离最近的K个样本\n3. 统计K个邻居中各类别的数量\n4. 将出现次数最多的类别作为预测结果\n\n## 距离度量\n- **欧氏距离**：最常用的距离度量\n- **曼哈顿距离**：城市街区距离\n- **余弦距离**：衡量方向差异\n\n## K值选择\n- K太小：容易过拟合，受噪声影响大\n- K太大：容易欠拟合，决策边界过于平滑\n- 通常选择奇数，避免平票\n\n```python\nfrom sklearn.neighbors import KNeighborsClassifier\nknn = KNeighborsClassifier(n_neighbors=3)\nknn.fit(X_train, y_train)\n```\n\nKNN虽然简单，但在很多实际场景中表现优异，是入门机器学习的最佳起点。",
+    "order": 5,
+    "difficulty": "beginner",
+    "xp_reward": 15,
+    "track": "ml",
+    "section": "经典算法篇",
+    "starter_code": "import numpy as np\n\ndef euclidean_distance(a, b):\n    # 计算欧氏距离\n    pass\n",
+    "solution_code": "import numpy as np\n\ndef euclidean_distance(a, b):\n    return np.sqrt(np.sum((a - b) ** 2))\n",
+    "test_cases": [
+      {
+        "input": "round(euclidean_distance(np.array([0,0]), np.array([3,4])), 2)",
+        "expected_output": "5.0",
+        "description": "3-4-5三角形"
+      },
+      {
+        "input": "round(euclidean_distance(np.array([1,1]), np.array([4,5])), 2)",
+        "expected_output": "5.0",
+        "description": "另一组距离"
+      },
+      {
+        "input": "round(euclidean_distance(np.array([0,0]), np.array([3,4])), 2)",
+        "expected_output": "5.0",
+        "description": "round 空输入/边界情况测试"
+      }
+    ],
+    "hint": "欧氏距离 = sqrt(sum((a_i - b_i)^2))",
+    "prerequisites": [
+      1,
+      2,
+      4
+    ]
+  },
+  {
+    "title": "线性回归",
+    "slug": "ml-06-linear-regression",
+    "description": "从数据中学习线性关系",
+    "content": "# 线性回归\n\n线性回归是机器学习中最基础的预测模型，它假设目标变量与特征之间存在线性关系。\n\n## 模型形式\ny = w₁x₁ + w₂x₂ + ... + wₙxₙ + b\n\n其中w是权重，b是偏置。\n\n## 损失函数\n使用均方误差（MSE）衡量预测值与真实值的差距：\n```\nMSE = (1/n) * Σ(y_i - ŷ_i)²\n```\n\n## 求解方法\n1. **正规方程**：直接求解最优解（小数据量适用）\n2. **梯度下降**：迭代优化（大数据量适用）\n\n```python\nfrom sklearn.linear_model import LinearRegression\nmodel = LinearRegression()\nmodel.fit(X_train, y_train)\nprint(model.coef_)    # 权重\nprint(model.intercept_)  # 偏置\n```\n\n## 评估指标\n- R²分数：模型解释的方差比例\n- MSE/RMSE：预测误差\n\n线性回归虽然简单，但它是理解更复杂模型的基石。",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 15,
+    "track": "ml",
+    "section": "经典算法篇",
+    "starter_code": "import numpy as np\n\ndef mse(y_true, y_pred):\n    # 计算均方误差\n    pass\n",
+    "solution_code": "import numpy as np\n\ndef mse(y_true, y_pred):\n    return np.mean((y_true - y_pred) ** 2)\n",
+    "test_cases": [
+      {
+        "input": "round(mse(np.array([1,2,3]), np.array([1,2,3])), 2)",
+        "expected_output": "0.0",
+        "description": "完美预测MSE为0"
+      },
+      {
+        "input": "round(mse(np.array([1,2,3]), np.array([2,3,4])), 2)",
+        "expected_output": "1.0",
+        "description": "有偏差的MSE"
+      },
+      {
+        "input": "round(mse(np.array([1,2,3]), np.array([1,2,3])), 2)",
+        "expected_output": "0.0",
+        "description": "round 空输入/边界情况测试"
+      }
+    ],
+    "hint": "MSE = mean((y_true - y_pred)^2)",
+    "prerequisites": [
+      3
+    ]
+  },
+  {
+    "title": "逻辑回归",
+    "slug": "ml-07-logistic-regression",
+    "description": "分类问题的经典方法",
+    "content": "# 逻辑回归\n\n逻辑回归虽然名字里有「回归「，但它实际上是分类算法——最常用的二分类算法之一。\n\n## Sigmoid函数\n逻辑回归的核心是Sigmoid函数，它将任意实数映射到(0,1)区间：\n```\nσ(z) = 1 / (1 + e^(-z))\n```\n\n这个输出可以理解为「属于正类的概率「。\n\n## 决策边界\n- 如果 σ(z) ≥ 0.5，预测为正类\n- 如果 σ(z) < 0.5，预测为负类\n\n## 损失函数\n使用交叉熵损失（Log Loss）：\n```\nL = -Σ[y*log(ŷ) + (1-y)*log(1-ŷ)]\n```\n\n## 多分类扩展\n- **One-vs-Rest**：训练多个二分类器\n- **Softmax回归**：直接输出多类概率分布\n\n```python\nfrom sklearn.linear_model import LogisticRegression\nmodel = LogisticRegression()\nmodel.fit(X_train, y_train)\n```\n\n逻辑回归是理解神经网络输出层的钥匙。",
+    "order": 7,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "ml",
+    "section": "经典算法篇",
+    "starter_code": "import numpy as np\n\ndef sigmoid(z):\n    # 实现 sigmoid 函数\n    pass\n",
+    "solution_code": "import numpy as np\n\ndef sigmoid(z):\n    return 1 / (1 + np.exp(-z))\n",
+    "test_cases": [
+      {
+        "input": "round(sigmoid(0), 2)",
+        "expected_output": "0.5",
+        "description": "sigmoid(0)=0.5"
+      },
+      {
+        "input": "round(sigmoid(100), 2)",
+        "expected_output": "1.0",
+        "description": "大输入趋近1"
+      },
+      {
+        "input": "round(sigmoid(-100), 2)",
+        "expected_output": "0.0",
+        "description": "小输入趋近0"
+      },
+      {
+        "input": "round(sigmoid(0), 2)",
+        "expected_output": "0.5",
+        "description": "round 空输入/边界情况测试"
+      }
+    ],
+    "hint": "sigmoid(z) = 1 / (1 + e^(-z))",
+    "prerequisites": [
+      6
+    ]
+  },
+  {
+    "title": "决策树",
+    "slug": "ml-08-decision-tree",
+    "description": "基于特征划分的分类方法",
+    "content": "# 决策树\n\n决策树模拟人类决策过程，通过一系列问题逐步缩小范围，最终得出结论。\n\n## 核心概念\n- **根节点**：包含所有数据的起始点\n- **内部节点**：表示对某个特征的判断\n- **叶子节点**：表示最终的分类结果或预测值\n\n## 划分标准\n- **信息增益**：基于信息熵，衡量划分后不确定性减少的程度\n- **基尼系数**：衡量数据不纯度，越小说明越纯\n\n```\n信息熵: H(D) = -Σ p_k * log2(p_k)\n基尼系数: Gini(D) = 1 - Σ p_k²\n```\n\n## 剪枝策略\n- **预剪枝**：在构建过程中提前停止\n- **后剪枝**：先构建完整树，再回溯删除不必要的节点\n\n```python\nfrom sklearn.tree import DecisionTreeClassifier\ntree = DecisionTreeClassifier(max_depth=5)\ntree.fit(X_train, y_train)\n```\n\n决策树是随机森林和梯度提升树的基础，理解它对掌握集成学习至关重要。\n\n## ID3算法详解\n\nID3使用信息增益选择最优分割特征：\n\n### 信息熵\n$$H(S) = -\\sum_{i=1}^{c} p_i \\log_2 p_i$$\n\n### 信息增益\n$$IG(S, A) = H(S) - \\sum_{v \\in Values(A)} \\frac{|S_v|}{|S|} H(S_v)$$\n\n### Python实现\n```python\nimport numpy as np\nfrom collections import Counter\n\ndef entropy(y):\n    counts = Counter(y)\n    total = len(y)\n    return -sum((c/total) * np.log2(c/total) for c in counts.values())\n\ndef information_gain(X, y, feature_idx):\n    total_entropy = entropy(y)\n    values = set(X[:, feature_idx])\n    weighted_entropy = 0\n    for v in values:\n        mask = X[:, feature_idx] == v\n        weighted_entropy += sum(mask)/len(y) * entropy(y[mask])\n    return total_entropy - weighted_entropy\n```\n\n## 决策树剪枝\n- **预剪枝**：在构建时限制深度、最小样本数\n- **后剪枝**：构建完成后用验证集削减分支\n\n## 优缺点\n| 优点 | 缺点 |\n|------|------|\n| 可解释性强 | 容易过拟合 |\n| 无需特征缩放 | 对噪声敏感 |\n| 处理非线性关系 | 不稳定（小变化导致不同树） |\n",
+    "order": 8,
+    "difficulty": "intermediate",
+    "xp_reward": 20,
+    "track": "ml",
+    "section": "经典算法篇",
+    "starter_code": "import numpy as np\n\ndef gini(labels):\n    # 计算基尼系数\n    pass\n",
+    "solution_code": "import numpy as np\n\ndef gini(labels):\n    _, counts = np.unique(labels, return_counts=True)\n    probs = counts / len(labels)\n    return 1.0 - np.sum(probs ** 2)\n",
+    "test_cases": [
+      {
+        "input": "round(gini(np.array([0,0,0,0])), 2)",
+        "expected_output": "0.0",
+        "description": "纯集合基尼为0"
+      },
+      {
+        "input": "round(gini(np.array([0,0,1,1])), 2)",
+        "expected_output": "0.5",
+        "description": "均匀混合基尼为0.5"
+      },
+      {
+        "input": "round(gini(np.array([0,0,0,0])), 2)",
+        "expected_output": "0.0",
+        "description": "round 空输入/边界情况测试"
+      }
+    ],
+    "hint": "Gini = 1 - sum(p_k^2)，其中p_k是第k类的比例",
+    "prerequisites": [
+      4,
+      5
+    ]
+  }
+]
