@@ -30,7 +30,7 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Docker
-postgres_data/
-redis_data/
-ollama_data/
+#补充
+*.pyc
+*.pyo
+venv/
