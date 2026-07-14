@@ -9,6 +9,8 @@ export interface ChatRequest {
   message: string
   context?: {
     lesson_title?: string
+    language?: string
+    mode?: 'tutor' | 'reviewer'
     code?: string
     error?: string
   }

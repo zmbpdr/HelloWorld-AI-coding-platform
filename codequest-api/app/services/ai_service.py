@@ -2,6 +2,7 @@
 
 import json
 import logging
+from pathlib import Path
 from typing import AsyncGenerator, Optional
 
 import httpx
@@ -19,10 +20,31 @@ SYSTEM_PROMPT = (
     "当用户贴出代码时，你可以指出潜在问题并给出改进建议。"
 )
 
+PROMPTS_PATH = Path(__file__).resolve().parents[3] / "codequest-content" / "ai_prompts.json"
+
+
+def _load_prompts() -> dict:
+    try:
+        with PROMPTS_PATH.open("r", encoding="utf-8") as prompt_file:
+            return json.load(prompt_file)
+    except (OSError, json.JSONDecodeError) as error:
+        logger.warning("无法加载语言 Prompt，使用通用 Prompt：%s", error)
+        return {}
+
+
+LANGUAGE_PROMPTS = _load_prompts()
+
+
+def _select_system_prompt(context: Optional[dict]) -> str:
+    context = context or {}
+    language = str(context.get("language", "")).lower()
+    mode = "reviewer" if context.get("mode") == "reviewer" else "tutor"
+    return LANGUAGE_PROMPTS.get(language, {}).get(mode, SYSTEM_PROMPT)
+
 
 def _build_messages(message: str, context: Optional[dict] = None) -> list[dict]:
     """构建发送给 LLM 的消息列表"""
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages = [{"role": "system", "content": _select_system_prompt(context)}]
 
     if context:
         context_str_parts = []

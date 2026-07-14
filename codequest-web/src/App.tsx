@@ -9,6 +9,7 @@ import AgentLesson from './pages/AgentLesson'
 import Leaderboard from './pages/Leaderboard'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
+import Pricing from './pages/Pricing'
 import RequireAuth from './components/auth/RequireAuth'
 
 // 学习提醒（浏览器通知 API）
@@ -77,6 +78,9 @@ function App() {
         } />
         <Route path="/settings" element={
           <RequireAuth><Settings /></RequireAuth>
+        } />
+        <Route path="/pricing" element={
+          <RequireAuth><Pricing /></RequireAuth>
         } />
       </Routes>
     </BrowserRouter>

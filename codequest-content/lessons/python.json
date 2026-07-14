@@ -1,938 +1,192 @@
 [
   {
-    "title": "Hello World",
-    "slug": "python-01-hello-world",
-    "description": "学习Python基本语法，编写你的第一个程序",
-    "content": "# Hello World - 你的第一个Python程序\n\n## 什么是Python？\nPython是一门简洁优雅的编程语言，以\"优雅\"、\"明确\"、\"简单\"为设计哲学。\n\n## 编写第一个程序\n在Python中，输出文字使用 `print()` 函数：\n\n```python\nprint(\"Hello, World!\")\n```\n\n## 函数与返回值\n在编程闯关中，我们通过**函数**来组织代码。函数使用 `def` 关键字定义，使用 `return` 返回结果：\n\n```python\ndef hello():\n    return \"Hello, World!\"\n```\n\n## 练习\n请编写一个函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "title": "认识变量",
+    "slug": "python-01-get-age",
+    "description": "通过 getAge() 返回变量 age 的值 18。",
+    "content": "# 认识变量\n\n本关使用 **Python** 学习「变量」。\n\n## 任务\n通过 getAge() 返回变量 age 的值 18。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 1,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "def hello():\n    # 在这里编写你的代码\n    pass",
-    "solution_code": "def hello():\n    return \"Hello, World!\"",
+    "starter_code": "def getAge():\n    # age = 18\n    pass",
+    "solution_code": "def getAge():\n    age = 18\n    return age",
     "test_cases": [
       {
-        "input": "hello()",
-        "expected_output": "Hello, World!",
-        "description": "hello() 应返回 'Hello, World!'"
-      },
-      {
-        "input": "type(hello())",
-        "expected_output": "<class 'str'>",
-        "description": "返回值应为字符串类型"
-      },
-      {
-        "input": "len(hello())",
-        "expected_output": "13",
-        "description": "返回字符串长度应为13"
+        "input": "getAge()",
+        "expected_output": "18",
+        "description": "认识变量：基础用例"
       }
     ],
-    "hint": "使用 return 语句返回字符串"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "变量与数据类型",
-    "slug": "python-02-variables",
-    "description": "学习变量的声明、数据类型和类型转换",
-    "content": "# 变量与数据类型\n\n## 什么是变量？\n变量是用来存储数据的容器。在Python中，不需要声明类型，直接赋值即可：\n\n```python\nname = \"Alice\"    # 字符串\nage = 25          # 整数\nheight = 1.68     # 浮点数\nis_student = True # 布尔值\n```\n\n## 常用数据类型\n- `str` - 字符串，用引号包裹\n- `int` - 整数\n- `float` - 浮点数\n- `bool` - 布尔值（True/False）\n\n## 类型转换\n可以使用内置函数进行类型转换：\n```python\nstr(123)    # \"123\"\nint(\"456\")  # 456\nfloat(\"3.14\")  # 3.14\n```\n\n## 练习\n编写函数 `greet(name)`，返回 `\"你好, {name}!\"` 的字符串。\n编写函数 `add_strings(a, b)`，将两个数字字符串相加并返回整数结果。\n\n## 数据类型的重要性\n选择正确的数据类型是编程的基础能力：\n- 整数和浮点数用于数学计算\n- 字符串用于文本处理\n- 布尔值用于逻辑判断\n\n## 类型安全\n不同语言对类型的处理方式不同：\n- **强类型**（如Python、Java）：类型不匹配会报错\n- **弱类型**（如JavaScript）：自动进行类型转换\n- **静态类型**：编译时检查类型\n- **动态类型**：运行时确定类型\n\n## 编程建议\n- 变量名要有描述性\n- 避免使用魔法数字（应定义为常量）\n- 注意类型转换可能带来的精度损失\n",
+    "title": "基本数据类型",
+    "slug": "python-02-add",
+    "description": "实现 add(a, b)，返回两个整数之和。",
+    "content": "# 基本数据类型\n\n本关使用 **Python** 学习「基本数据类型」。\n\n## 任务\n实现 add(a, b)，返回两个整数之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 2,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "def greet(name):\n    # 返回问候语\n    pass\n\ndef add_strings(a, b):\n    # 将两个数字字符串转为整数后相加\n    pass",
-    "solution_code": "def greet(name):\n    return f\"你好, {name}!\"\n\ndef add_strings(a, b):\n    return int(a) + int(b)",
+    "starter_code": "def add(a, b):\n    # return a + b\n    pass",
+    "solution_code": "def add(a, b):\n    return a + b",
     "test_cases": [
       {
-        "input": "greet('Alice')",
-        "expected_output": "你好, Alice!",
-        "description": "greet('Alice') 应返回 '你好, Alice!'"
-      },
-      {
-        "input": "greet('Bob')",
-        "expected_output": "你好, Bob!",
-        "description": "greet('Bob') 应返回 '你好, Bob!'"
-      },
-      {
-        "input": "add_strings('10', '20')",
-        "expected_output": "30",
-        "description": "add_strings('10', '20') 应返回 30"
-      },
-      {
-        "input": "add_strings('5', '3')",
-        "expected_output": "8",
-        "description": "add_strings('5', '3') 应返回 8"
-      },
-      {
-        "input": "add_strings('0', '0')",
-        "expected_output": "0",
-        "description": "add_strings('0', '0') 应返回 0（零值边界）"
-      },
-      {
-        "input": "greet('')",
-        "expected_output": "你好, !",
-        "description": "greet('') 应返回问候语（空字符串边界）"
+        "input": "add(7, 5)",
+        "expected_output": "12",
+        "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "使用 f-string 格式化字符串，使用 int() 进行类型转换"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "运算符",
-    "slug": "python-03-operators",
-    "description": "学习算术运算符、比较运算符和逻辑运算符",
-    "content": "# 运算符\n\n## 算术运算符\n```python\n10 + 3   # 13  加法\n10 - 3   # 7   减法\n10 * 3   # 30  乘法\n10 / 3   # 3.333... 除法\n10 // 3  # 3   整除\n10 % 3   # 1   取余\n10 ** 3  # 1000 幂运算\n```\n\n## 比较运算符\n```python\n5 == 5   # True  等于\n5 != 3   # True  不等于\n5 > 3    # True  大于\n5 < 3    # False 小于\n5 >= 5   # True  大于等于\n5 <= 3   # False 小于等于\n```\n\n## 逻辑运算符\n```python\nTrue and False  # False\nTrue or False   # True\nnot True        # False\n```\n\n## 练习\n编写函数 `is_even(n)`，判断一个整数是否为偶数，返回布尔值。\n编写函数 `in_range(x, low, high)`，判断 x 是否在 [low, high] 范围内（包含边界）。\n\n\n## 赋值运算符\n```python\nx = 10\nx += 5   # x = 15 (加等)\nx -= 3   # x = 12 (减等)\nx *= 2   # x = 24 (乘等)\nx /= 4   # x = 6.0 (除等)\nx //= 2  # x = 3 (整除等)\nx %= 4   # x = 3 (取余等)\nx **= 2  # x = 9 (幂等)\n```\n\n## 运算符优先级\n从高到低：`**` > `* / // %` > `+ -` > `== != > < >= <=` > `not` > `and` > `or`\n\n> 可以使用括号 `()` 来明确优先级。\n## 运算符优先级\n理解运算符的优先级对编写正确的表达式至关重要。当不确定时，使用括号 `()` 明确优先级。\n\n## 常见陷阱\n- 整数除法 vs 浮点除法（不同语言行为不同）\n- 取余运算中负数的处理\n- 比较浮点数时不要用 `==`（精度问题）\n- 逻辑运算符的短路求值特性\n",
+    "title": "条件判断",
+    "slug": "python-03-is-adult",
+    "description": "实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。",
+    "content": "# 条件判断\n\n本关使用 **Python** 学习「条件判断」。\n\n## 任务\n实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 3,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "def is_even(n):\n    # 判断是否为偶数\n    pass\n\ndef in_range(x, low, high):\n    # 判断 x 是否在 [low, high] 范围内\n    pass",
-    "solution_code": "def is_even(n):\n    return n % 2 == 0\n\ndef in_range(x, low, high):\n    return low <= x <= high",
+    "starter_code": "def isAdult(age):\n    # return 1 if age >= 18 else 0\n    pass",
+    "solution_code": "def isAdult(age):\n    return 1 if age >= 18 else 0",
     "test_cases": [
       {
-        "input": "is_even(4)",
-        "expected_output": "True",
-        "description": "is_even(4) 应返回 True"
-      },
-      {
-        "input": "is_even(7)",
-        "expected_output": "False",
-        "description": "is_even(7) 应返回 False"
-      },
-      {
-        "input": "is_even(0)",
-        "expected_output": "True",
-        "description": "is_even(0) 应返回 True"
-      },
-      {
-        "input": "in_range(5, 1, 10)",
-        "expected_output": "True",
-        "description": "in_range(5, 1, 10) 应返回 True"
-      },
-      {
-        "input": "in_range(0, 1, 10)",
-        "expected_output": "False",
-        "description": "in_range(0, 1, 10) 应返回 False"
-      },
-      {
-        "input": "in_range(1, 1, 10)",
-        "expected_output": "True",
-        "description": "in_range(1, 1, 10) 应返回 True（包含边界）"
+        "input": "isAdult(20)",
+        "expected_output": "1",
+        "description": "条件判断：基础用例"
       }
     ],
-    "hint": "偶数除以2余数为0，使用 % 取余运算符；范围判断使用比较运算符组合"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "条件语句",
-    "slug": "python-04-conditionals",
-    "description": "学习 if/elif/else 条件判断",
-    "content": "# 条件语句\n\n## if 语句\n条件语句让程序根据不同情况执行不同代码：\n\n```python\nage = 18\nif age >= 18:\n    print(\"成年人\")\nelse:\n    print(\"未成年人\")\n```\n\n## elif 多条件判断\n```python\nscore = 85\nif score >= 90:\n    print(\"优秀\")\nelif score >= 80:\n    print(\"良好\")\nelif score >= 60:\n    print(\"及格\")\nelse:\n    print(\"不及格\")\n```\n\n## 练习\n编写函数 `grade_score(score)`，根据分数返回等级：\n- 90及以上返回 \"优秀\"\n- 80-89返回 \"良好\"\n- 60-79返回 \"及格\"\n- 60以下返回 \"不及格\"\n\n## 条件语句的设计模式\n```text\n1. 卫语句模式：先处理特殊情况，提前返回\n2. 策略模式：用字典/映射替代多重if-else\n3. 早返回：在函数开头检查无效输入并立即返回\n```\n\n## 代码可读性\n- 条件表达式不要太复杂，可以拆分为多个变量\n- 使用有意义的布尔变量名：`is_valid` > `flag`\n- 避免深度嵌套（超过3层应重构）\n",
+    "title": "循环入门",
+    "slug": "python-04-sum-to",
+    "description": "实现 sumTo(n)，计算从 1 到 n 的和。",
+    "content": "# 循环入门\n\n本关使用 **Python** 学习「循环」。\n\n## 任务\n实现 sumTo(n)，计算从 1 到 n 的和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 4,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "def grade_score(score):\n    # 根据分数返回等级\n    pass",
-    "solution_code": "def grade_score(score):\n    if score >= 90:\n        return \"优秀\"\n    elif score >= 80:\n        return \"良好\"\n    elif score >= 60:\n        return \"及格\"\n    else:\n        return \"不及格\"",
+    "starter_code": "def sumTo(n):\n    # total = 0\n    pass",
+    "solution_code": "def sumTo(n):\n    total = 0\n    for value in range(1, n + 1):\n        total += value\n    return total",
     "test_cases": [
       {
-        "input": "grade_score(95)",
-        "expected_output": "优秀",
-        "description": "grade_score(95) 应返回 '优秀'"
-      },
-      {
-        "input": "grade_score(85)",
-        "expected_output": "良好",
-        "description": "grade_score(85) 应返回 '良好'"
-      },
-      {
-        "input": "grade_score(70)",
-        "expected_output": "及格",
-        "description": "grade_score(70) 应返回 '及格'"
-      },
-      {
-        "input": "grade_score(45)",
-        "expected_output": "不及格",
-        "description": "grade_score(45) 应返回 '不及格'"
-      },
-      {
-        "input": "grade_score(90)",
-        "expected_output": "优秀",
-        "description": "grade_score(90) 应返回 '优秀'（边界值）"
-      },
-      {
-        "input": "grade_score(60)",
-        "expected_output": "及格",
-        "description": "grade_score(60) 应返回 '及格'（边界值）"
-      },
-      {
-        "input": "grade_score(0)",
-        "expected_output": "不及格",
-        "description": "grade_score(0) 应返回 '不及格'（最小值边界）"
-      },
-      {
-        "input": "grade_score(100)",
-        "expected_output": "优秀",
-        "description": "grade_score(100) 应返回 '优秀'（最大值边界）"
+        "input": "sumTo(5)",
+        "expected_output": "15",
+        "description": "循环入门：基础用例"
       }
     ],
-    "hint": "从最高分开始判断，使用 if/elif/else 依次检查"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "循环",
-    "slug": "python-05-loops",
-    "description": "学习 for 循环和 while 循环",
-    "content": "# 循环\n\n## for 循环\nfor 循环用于遍历序列或执行固定次数：\n\n```python\n# 遍历列表\nfor i in [1, 2, 3]:\n    print(i)\n\n# 使用 range\nfor i in range(5):    # 0, 1, 2, 3, 4\n    print(i)\n\nfor i in range(1, 6): # 1, 2, 3, 4, 5\n    print(i)\n```\n\n## while 循环\nwhile 循环在条件为真时持续执行：\n\n```python\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n```\n\n## 练习\n编写函数 `sum_range(n)`，返回 1 到 n 所有整数的和。\n编写函数 `count_char(s, ch)`，返回字符 ch 在字符串 s 中出现的次数。\n\n\n## break 和 continue\n```python\n# break — 终止循环\nfor i in range(10):\n    if i == 5:\n        break      # i=5时退出\n    print(i)       # 输出 0,1,2,3,4\n\n# continue — 跳过当前迭代\nfor i in range(5):\n    if i == 2:\n        continue   # 跳过i=2\n    print(i)       # 输出 0,1,3,4\n```\n\n## Python链式比较\n```python\n# 可以连续比较\nif 1 <= x <= 10:\n    print('x在1到10之间')\n\n# 等价于\nif 1 <= x and x <= 10:\n    print('x在1到10之间')\n```\n## 循环的性能考量\n- 避免在循环中进行重复计算\n- 尽量减少循环体内的函数调用\n- 考虑使用更高效的数据结构\n\n## 循环 vs 递归 vs 高阶函数\n| 方式 | 适用场景 |\n|------|---------|\n| for/while | 明确次数、简单遍历 |\n| 递归 | 树形结构、分治问题 |\n| map/filter | 数据转换和过滤 |\n\n## 常见错误\n- 死循环（循环条件永远为真）\n- 差一错误（off-by-one）\n- 在遍历时修改集合\n",
+    "title": "数组或列表",
+    "slug": "python-05-sum-array",
+    "description": "实现 sumArray(numbers)，计算数组所有元素之和。",
+    "content": "# 数组或列表\n\n本关使用 **Python** 学习「数组/列表」。\n\n## 任务\n实现 sumArray(numbers)，计算数组所有元素之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 5,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "def sum_range(n):\n    # 返回 1 到 n 的整数和\n    pass\n\ndef count_char(s, ch):\n    # 返回字符 ch 在 s 中出现的次数\n    pass",
-    "solution_code": "def sum_range(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    return total\n\ndef count_char(s, ch):\n    count = 0\n    for c in s:\n        if c == ch:\n            count += 1\n    return count",
+    "starter_code": "def sumArray(numbers):\n    # return sum(numbers)\n    pass",
+    "solution_code": "def sumArray(numbers):\n    return sum(numbers)",
     "test_cases": [
       {
-        "input": "sum_range(5)",
-        "expected_output": "15",
-        "description": "sum_range(5) 应返回 15 (1+2+3+4+5)"
-      },
-      {
-        "input": "sum_range(10)",
-        "expected_output": "55",
-        "description": "sum_range(10) 应返回 55"
-      },
-      {
-        "input": "sum_range(1)",
-        "expected_output": "1",
-        "description": "sum_range(1) 应返回 1"
-      },
-      {
-        "input": "count_char('hello', 'l')",
-        "expected_output": "2",
-        "description": "count_char('hello', 'l') 应返回 2"
-      },
-      {
-        "input": "count_char('banana', 'a')",
-        "expected_output": "3",
-        "description": "count_char('banana', 'a') 应返回 3"
-      },
-      {
-        "input": "count_char('python', 'z')",
-        "expected_output": "0",
-        "description": "count_char('python', 'z') 应返回 0"
-      },
-      {
-        "input": "sum_range(0)",
-        "expected_output": "0",
-        "description": "sum_range(0) 应返回 0（边界值）"
+        "input": "sumArray([1, 2, 3, 4])",
+        "expected_output": "10",
+        "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "使用 range(1, n+1) 生成1到n的序列，累加求和；遍历字符串逐个比较字符"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "函数",
-    "slug": "python-06-functions",
-    "description": "学习函数的定义、参数和返回值",
-    "content": "# 函数\n\n## 定义函数\n函数是可重复使用的代码块，使用 `def` 关键字定义：\n\n```python\ndef add(a, b):\n    return a + b\n```\n\n## 参数类型\n```python\n# 默认参数\ndef greet(name, greeting=\"你好\"):\n    return f\"{greeting}, {name}!\"\n\n# 可变参数\ndef total(*numbers):\n    return sum(numbers)\n```\n\n## 返回值\n函数使用 `return` 返回结果，可以返回多个值：\n\n```python\ndef min_max(lst):\n    return min(lst), max(lst)\n```\n\n## 练习\n编写函数 `calculate_bmi(weight, height)`，根据体重(kg)和身高(m)计算BMI，返回保留1位小数的BMI值。\n编写函数 `describe_bmi(bmi)`，根据BMI返回描述：\"偏瘦\"(<18.5)、\"正常\"(18.5-24.9)、\"偏胖\"(25-29.9)、\"肥胖\"(>=30)。\n\n\n## 关键字参数和默认参数\n```python\n# 默认参数必须放在非默认参数后面\ndef greet(name, greeting='你好'):\n    return f'{greeting}, {name}!'\n\ngreet('Alice')            # '你好, Alice!'\ngreet('Bob', 'Hi')        # 'Hi, Bob!'\n```\n\n## 可变参数 *args 和 **kwargs\n```python\n# *args 接收任意数量的位置参数\ndef sum_all(*args):\n    return sum(args)\n\nsum_all(1, 2, 3, 4, 5)  # 15\n\n# **kwargs 接收任意数量的关键字参数\ndef print_info(**kwargs):\n    for k, v in kwargs.items():\n        print(f'{k}: {v}')\n\nprint_info(name='Alice', age=25)\n```\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "title": "函数基础",
+    "slug": "python-06-square",
+    "description": "实现 square(n)，返回 n 的平方。",
+    "content": "# 函数基础\n\n本关使用 **Python** 学习「函数」。\n\n## 任务\n实现 square(n)，返回 n 的平方。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 6,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "def calculate_bmi(weight, height):\n    # 计算 BMI，保留1位小数\n    pass\n\ndef describe_bmi(bmi):\n    # 根据 BMI 返回描述\n    pass",
-    "solution_code": "def calculate_bmi(weight, height):\n    bmi = weight / (height ** 2)\n    return round(bmi, 1)\n\ndef describe_bmi(bmi):\n    if bmi < 18.5:\n        return \"偏瘦\"\n    elif bmi < 25:\n        return \"正常\"\n    elif bmi < 30:\n        return \"偏胖\"\n    else:\n        return \"肥胖\"",
+    "starter_code": "def square(n):\n    # return n * n\n    pass",
+    "solution_code": "def square(n):\n    return n * n",
     "test_cases": [
       {
-        "input": "calculate_bmi(70, 1.75)",
-        "expected_output": "22.9",
-        "description": "calculate_bmi(70, 1.75) 应返回 22.9"
-      },
-      {
-        "input": "calculate_bmi(60, 1.70)",
-        "expected_output": "20.8",
-        "description": "calculate_bmi(60, 1.70) 应返回 20.8"
-      },
-      {
-        "input": "describe_bmi(17.0)",
-        "expected_output": "偏瘦",
-        "description": "describe_bmi(17.0) 应返回 '偏瘦'"
-      },
-      {
-        "input": "describe_bmi(22.0)",
-        "expected_output": "正常",
-        "description": "describe_bmi(22.0) 应返回 '正常'"
-      },
-      {
-        "input": "describe_bmi(27.0)",
-        "expected_output": "偏胖",
-        "description": "describe_bmi(27.0) 应返回 '偏胖'"
-      },
-      {
-        "input": "describe_bmi(32.0)",
-        "expected_output": "肥胖",
-        "description": "describe_bmi(32.0) 应返回 '肥胖'"
+        "input": "square(9)",
+        "expected_output": "81",
+        "description": "函数基础：基础用例"
       }
     ],
-    "hint": "BMI = 体重/身高²，使用 round() 保留小数位数"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "列表",
-    "slug": "python-07-lists",
-    "description": "学习列表的创建、遍历和常用操作",
-    "content": "# 列表\n\n## 创建列表\n```python\nfruits = [\"苹果\", \"香蕉\", \"橘子\"]\nnumbers = [1, 2, 3, 4, 5]\nmixed = [1, \"hello\", True]\n```\n\n## 常用操作\n```python\nfruits.append(\"葡萄\")      # 添加元素\nfruits.remove(\"香蕉\")      # 删除元素\nfruits[0]                   # 访问第一个元素\nfruits[-1]                  # 访问最后一个元素\nlen(fruits)                 # 列表长度\nsorted(fruits)              # 排序\n```\n\n## 列表推导式\n```python\nsquares = [x**2 for x in range(10)]\nevens = [x for x in range(20) if x % 2 == 0]\n```\n\n## 练习\n编写函数 `filter_positive(numbers)`，从列表中筛选出所有正数，返回新列表。\n编写函数 `find_max(numbers)`，找出列表中的最大值（不使用内置 max 函数）。\n\n\n## 列表切片的高级用法\n```python\nnums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nnums[2:5]     # [2, 3, 4]    索引2到4\nnums[:3]      # [0, 1, 2]     前3个\nnums[-3:]     # [7, 8, 9]     后3个\nnums[::2]     # [0, 2, 4...]  步长为2\nnums[::-1]    # [9, 8, 7,...] 反转列表\n```\n\n## 列表的常用方法\n```python\nnums = [3, 1, 2]\nnums.append(4)     # 尾部添加\nnums.insert(0, 0)  # 在指定位置插入\nnums.pop()         # 弹出尾部元素\nnums.pop(0)        # 弹出指定位置元素\nnums.remove(3)     # 删除第一个匹配值\nnums.sort()        # 原地排序\nsorted(nums)       # 返回新排序列表\n```",
+    "title": "字典、对象或 Map",
+    "slug": "python-07-get-score",
+    "description": "实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。",
+    "content": "# 字典、对象或 Map\n\n本关使用 **Python** 学习「映射」。\n\n## 任务\n实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 7,
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "xp_reward": 10,
-    "starter_code": "def filter_positive(numbers):\n    # 筛选出所有正数\n    pass\n\ndef find_max(numbers):\n    # 找出最大值（不使用 max）\n    pass",
-    "solution_code": "def filter_positive(numbers):\n    return [n for n in numbers if n > 0]\n\ndef find_max(numbers):\n    max_val = numbers[0]\n    for n in numbers[1:]:\n        if n > max_val:\n            max_val = n\n    return max_val",
+    "starter_code": "def getScore(scores, name):\n    # return scores.get(name, 0)\n    pass",
+    "solution_code": "def getScore(scores, name):\n    return scores.get(name, 0)",
     "test_cases": [
       {
-        "input": "filter_positive([-1, 2, -3, 4, 0, 5])",
-        "expected_output": "[2, 4, 5]",
-        "description": "filter_positive([-1, 2, -3, 4, 0, 5]) 应返回 [2, 4, 5]"
-      },
-      {
-        "input": "filter_positive([1, 2, 3])",
-        "expected_output": "[1, 2, 3]",
-        "description": "filter_positive([1, 2, 3]) 应返回 [1, 2, 3]"
-      },
-      {
-        "input": "filter_positive([-1, -2, -3])",
-        "expected_output": "[]",
-        "description": "filter_positive([-1, -2, -3]) 应返回 []"
-      },
-      {
-        "input": "find_max([3, 7, 2, 9, 1])",
-        "expected_output": "9",
-        "description": "find_max([3, 7, 2, 9, 1]) 应返回 9"
-      },
-      {
-        "input": "find_max([5])",
-        "expected_output": "5",
-        "description": "find_max([5]) 应返回 5"
-      },
-      {
-        "input": "find_max([-3, -1, -7])",
-        "expected_output": "-1",
-        "description": "find_max([-3, -1, -7]) 应返回 -1"
-      },
-      {
-        "input": "get_even([])",
-        "expected_output": "[]",
-        "description": "get_even([]) 应返回 []（空列表边界）"
+        "input": "getScore({'Ada': 95, 'Bob': 88}, 'Ada')",
+        "expected_output": "95",
+        "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "使用列表推导式筛选；找最大值时先假设第一个元素最大，再逐一比较"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
     "title": "字符串操作",
-    "slug": "python-08-strings",
-    "description": "学习字符串的拼接、切片和格式化",
-    "content": "# 字符串操作\n\n## 字符串拼接\n```python\ngreeting = \"Hello\" + \" \" + \"World\"\nname = \"Python\"\nmessage = f\"Welcome to {name}!\"\n```\n\n## 字符串切片\n```python\ns = \"Hello, World!\"\ns[0:5]    # \"Hello\"\ns[:5]     # \"Hello\"\ns[7:]     # \"World!\"\ns[-6:]    # \"orld!\"\ns[::-1]   # \"!dlroW ,olleH\" 反转\n```\n\n## 常用方法\n```python\n\"hello\".upper()       # \"HELLO\"\n\"HELLO\".lower()       # \"hello\"\n\"  hi  \".strip()      # \"hi\"\n\"hello world\".split() # [\"hello\", \"world\"]\n\"-\".join([\"a\",\"b\"])   # \"a-b\"\n\"hello\".replace(\"l\", \"r\")  # \"herro\"\n```\n\n## 练习\n编写函数 `reverse_string(s)`，返回反转后的字符串。\n编写函数 `is_palindrome(s)`，判断字符串是否为回文（忽略大小写和空格）。\n",
+    "slug": "python-08-count-vowels",
+    "description": "实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。",
+    "content": "# 字符串操作\n\n本关使用 **Python** 学习「字符串」。\n\n## 任务\n实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 8,
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "xp_reward": 10,
-    "starter_code": "def reverse_string(s):\n    # 返回反转后的字符串\n    pass\n\ndef is_palindrome(s):\n    # 判断是否为回文（忽略大小写和空格）\n    pass",
-    "solution_code": "def reverse_string(s):\n    return s[::-1]\n\ndef is_palindrome(s):\n    cleaned = s.lower().replace(\" \", \"\")\n    return cleaned == cleaned[::-1]",
+    "starter_code": "def countVowels(text):\n    # return sum(char.lower() in 'aeiou' for char in text)\n    pass",
+    "solution_code": "def countVowels(text):\n    return sum(char.lower() in 'aeiou' for char in text)",
     "test_cases": [
       {
-        "input": "reverse_string('hello')",
-        "expected_output": "olleh",
-        "description": "reverse_string('hello') 应返回 'olleh'"
-      },
-      {
-        "input": "reverse_string('Python')",
-        "expected_output": "nohtyP",
-        "description": "reverse_string('Python') 应返回 'nohtyP'"
-      },
-      {
-        "input": "reverse_string('')",
-        "expected_output": "",
-        "description": "reverse_string('') 应返回 ''"
-      },
-      {
-        "input": "is_palindrome('racecar')",
-        "expected_output": "True",
-        "description": "is_palindrome('racecar') 应返回 True"
-      },
-      {
-        "input": "is_palindrome('A man a plan a canal Panama')",
-        "expected_output": "True",
-        "description": "is_palindrome('A man a plan a canal Panama') 应返回 True"
-      },
-      {
-        "input": "is_palindrome('hello')",
-        "expected_output": "False",
-        "description": "is_palindrome('hello') 应返回 False"
-      },
-      {
-        "input": "reverse_string('')",
-        "expected_output": "",
-        "description": "reverse_string('') 应返回 ''（空字符串边界）"
+        "input": "countVowels('CodeQuest')",
+        "expected_output": "4",
+        "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "使用切片 [::-1] 反转字符串；回文判断时先统一转小写并去除空格"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "字典",
-    "slug": "python-09-dictionaries",
-    "description": "学习字典的创建、访问和常用操作",
-    "content": "# 字典（Dictionary）\n\n## 什么是字典？\n字典是Python中存储键值对（key-value）的数据结构，使用花括号 `{}` 定义：\n\n```python\nstudent = {\n    'name': 'Alice',\n    'age': 20,\n    'scores': [85, 90, 78]\n}\n```\n\n## 字典的常用操作\n```python\n# 访问元素\nstudent['name']           # 'Alice'\nstudent.get('grade', 'N/A')  # 安全访问，不存在返回默认值\n\n# 添加/修改\nstudent['grade'] = 'A'\nstudent['age'] = 21\n\n# 删除\ndel student['grade']\nstudent.pop('age')\n\n# 遍历\nfor key in student:                    # 遍历键\n    print(key, student[key])\n\nfor key, value in student.items():     # 遍历键值对\n    print(f'{key}: {value}')\n\n# 检查键是否存在\nif 'name' in student:\n    print('找到name')\n```\n\n## 字典推导式\n```python\nsquares = {x: x**2 for x in range(5)}\n# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}\n```\n\n## 练习\n编写函数 `word_count(text)`，统计字符串中每个单词出现的次数，返回字典。\n编写函数 `merge_dicts(d1, d2)`，合并两个字典，重复键取d2的值。\n",
+    "title": "综合项目：简易计算器",
+    "slug": "python-09-calculate",
+    "description": "实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。",
+    "content": "# 综合项目：简易计算器\n\n本关使用 **Python** 学习「综合应用」。\n\n## 任务\n实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 9,
     "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "def word_count(text):\n    # 返回单词计数字典\n    pass\n\ndef merge_dicts(d1, d2):\n    # 合并两个字典\n    pass",
-    "solution_code": "def word_count(text):\n    if not text:\n        return {}\n    words = text.split()\n    result = {}\n    for w in words:\n        result[w] = result.get(w, 0) + 1\n    return result\n\ndef merge_dicts(d1, d2):\n    result = d1.copy()\n    result.update(d2)\n    return result",
+    "xp_reward": 20,
+    "starter_code": "def calculate(a, b, op):\n    # if op == '+': return a + b\n    pass",
+    "solution_code": "def calculate(a, b, op):\n    if op == '+': return a + b\n    if op == '-': return a - b\n    if op == '*': return a * b\n    if op == '/' and b != 0: return a // b\n    return 0",
     "test_cases": [
       {
-        "input": "word_count('hello world hello')",
-        "expected_output": "{'hello': 2, 'world': 1}",
-        "description": "word_count 应正确统计单词出现次数"
-      },
-      {
-        "input": "word_count('')",
-        "expected_output": "{}",
-        "description": "word_count('') 应返回空字典（空字符串边界）"
-      },
-      {
-        "input": "word_count('a a a')",
-        "expected_output": "{'a': 3}",
-        "description": "word_count 应处理全部重复的情况"
-      },
-      {
-        "input": "merge_dicts({'a':1}, {'b':2})",
-        "expected_output": "{'a': 1, 'b': 2}",
-        "description": "merge_dicts 应合并两个字典"
-      },
-      {
-        "input": "merge_dicts({'a':1}, {'a':2})",
-        "expected_output": "{'a': 2}",
-        "description": "merge_dicts 重复键应取第二个字典的值"
+        "input": "calculate(8, 2, '*')",
+        "expected_output": "16",
+        "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "使用 split() 分割字符串，使用 dict.get(key, default) 安全访问"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "元组与集合",
-    "slug": "python-10-tuples-sets",
-    "description": "学习元组和集合的特点与操作",
-    "content": "# 元组与集合\n\n## 元组（Tuple）\n元组是不可变的序列，使用圆括号 `()` 定义：\n\n```python\npoint = (3, 4)\nrgb = (255, 128, 0)\n\n# 解包（Unpacking）\nx, y = point       # x=3, y=4\nr, g, b = rgb      # 分别赋值\n\n# 交换变量（Python特色）\na, b = b, a       # 一行交换！\n\n# 函数返回多个值\ndef min_max(nums):\n    return min(nums), max(nums)\n\nlo, hi = min_max([3, 1, 4, 1, 5])  # lo=1, hi=5\n```\n\n## 集合（Set）\n集合是无序、不重复的元素集合，使用花括号 `{}` 或 `set()`：\n\n```python\n# 去重\nunique = set([1, 2, 2, 3, 3])  # {1, 2, 3}\n\n# 集合运算\na = {1, 2, 3}\nb = {3, 4, 5}\na | b       # 并集 {1, 2, 3, 4, 5}\na & b       # 交集 {3}\na - b       # 差集 {1, 2}\na ^ b       # 对称差 {1, 2, 4, 5}\n\n# 成员检查（O(1)时间复杂度）\nif 3 in a:\n    print('存在')\n```\n\n## 练习\n编写函数 `unique_sorted(nums)`，返回去重后排序的列表。\n编写函数 `common_elements(a, b)`，返回两个列表的公共元素（交集）。\n",
+    "title": "综合项目：待办事项管理器",
+    "slug": "python-10-count-completed",
+    "description": "实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。",
+    "content": "# 综合项目：待办事项管理器\n\n本关使用 **Python** 学习「综合应用」。\n\n## 任务\n实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 10,
     "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "def unique_sorted(nums):\n    # 去重并排序\n    pass\n\ndef common_elements(a, b):\n    # 返回公共元素\n    pass",
-    "solution_code": "def unique_sorted(nums):\n    return sorted(list(set(nums)))\n\ndef common_elements(a, b):\n    return sorted(list(set(a) & set(b)))",
-    "test_cases": [
-      {
-        "input": "unique_sorted([3, 1, 2, 3, 1])",
-        "expected_output": "[1, 2, 3]",
-        "description": "unique_sorted 应去重并排序"
-      },
-      {
-        "input": "unique_sorted([])",
-        "expected_output": "[]",
-        "description": "unique_sorted([]) 应返回空列表（边界）"
-      },
-      {
-        "input": "common_elements([1,2,3], [2,3,4])",
-        "expected_output": "[2, 3]",
-        "description": "common_elements 应返回两个列表的公共元素"
-      },
-      {
-        "input": "common_elements([1,2], [3,4])",
-        "expected_output": "[]",
-        "description": "无公共元素时应返回空列表"
-      }
-    ],
-    "hint": "使用 set() 去重，使用 & 求交集"
-  },
-  {
-    "title": "列表推导式",
-    "slug": "python-11-list-comprehension",
-    "description": "学习列表推导式和生成器表达式",
-    "content": "# 列表推导式\n\n列表推导式是Python最优雅的特性之一，用一行代码创建列表。\n\n## 基本语法\n```python\n# 传统写法\nsquares = []\nfor i in range(10):\n    squares.append(i ** 2)\n\n# 列表推导式\nsquares = [i ** 2 for i in range(10)]\n\n# 带条件的推导式\nevens = [i for i in range(20) if i % 2 == 0]\n\n# if-else 在推导式中\nlabels = ['even' if i % 2 == 0 else 'odd' for i in range(5)]\n# ['even', 'odd', 'even', 'odd', 'even']\n```\n\n## 嵌套列表推导式\n```python\n# 展平二维列表\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nflat = [x for row in matrix for x in row]\n# [1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n# 转置矩阵\ntransposed = [[row[i] for row in matrix] for i in range(3)]\n```\n\n## 字典推导式和集合推导式\n```python\n# 字典推导式\nword_lengths = {w: len(w) for w in ['hello', 'world']}\n# {'hello': 5, 'world': 5}\n\n# 集合推导式\nunique_lengths = {len(w) for w in ['hello', 'world']}\n# {5}\n```\n\n## 练习\n编写函数 `square_evens(nums)`，返回列表中所有偶数的平方组成的列表。\n编写函数 `flatten(matrix)`，将二维列表展平为一维列表。\n",
-    "order": 11,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "def square_evens(nums):\n    # 返回偶数平方的列表\n    pass\n\ndef flatten(matrix):\n    # 展平二维列表\n    pass",
-    "solution_code": "def square_evens(nums):\n    return [x**2 for x in nums if x % 2 == 0]\n\ndef flatten(matrix):\n    return [x for row in matrix for x in row]",
-    "test_cases": [
-      {
-        "input": "square_evens([1, 2, 3, 4])",
-        "expected_output": "[4, 16]",
-        "description": "square_evens 应返回偶数的平方"
-      },
-      {
-        "input": "square_evens([1, 3, 5])",
-        "expected_output": "[]",
-        "description": "square_evens 无偶数时应返回空列表"
-      },
-      {
-        "input": "square_evens([])",
-        "expected_output": "[]",
-        "description": "square_evens([]) 应返回空列表（边界）"
-      },
-      {
-        "input": "flatten([[1,2],[3,4]])",
-        "expected_output": "[1, 2, 3, 4]",
-        "description": "flatten 应展平二维列表"
-      },
-      {
-        "input": "flatten([])",
-        "expected_output": "[]",
-        "description": "flatten([]) 应返回空列表（边界）"
-      }
-    ],
-    "hint": "使用 [x**2 for x in nums if x % 2 == 0] 筛选偶数并平方"
-  },
-  {
-    "title": "异常处理",
-    "slug": "python-12-exceptions",
-    "description": "学习 try/except 异常处理机制",
-    "content": "# 异常处理\n\n## 为什么需要异常处理？\n程序运行时可能遇到各种错误：文件不存在、网络断开、用户输入无效等。异常处理让程序优雅地应对这些情况。\n\n## try/except 结构\n```python\ntry:\n    num = int(input('请输入数字: '))\n    result = 100 / num\n    print(f'结果: {result}')\nexcept ValueError:\n    print('输入不是有效数字！')\nexcept ZeroDivisionError:\n    print('不能除以零！')\nexcept Exception as e:\n    print(f'未知错误: {e}')\nelse:\n    print('没有异常时执行这里')\nfinally:\n    print('无论如何都会执行')\n```\n\n## 常见异常类型\n| 异常 | 触发条件 |\n|------|---------|\n| `ValueError` | 值错误（如int('abc')） |\n| `TypeError` | 类型错误 |\n| `ZeroDivisionError` | 除以零 |\n| `KeyError` | 字典键不存在 |\n| `IndexError` | 列表索引越界 |\n| `FileNotFoundError` | 文件不存在 |\n\n## 自定义异常\n```python\nclass NegativeNumberError(Exception):\n    pass\n\ndef check_positive(n):\n    if n < 0:\n        raise NegativeNumberError('不允许负数')\n    return True\n```\n\n## 练习\n编写函数 `safe_divide(a, b)`，安全地执行除法：如果b=0返回错误信息，否则返回结果。\n编写函数 `parse_int(s)`，将字符串转为整数，失败时返回None。\n",
-    "order": 12,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "def safe_divide(a, b):\n    # 安全除法\n    pass\n\ndef parse_int(s):\n    # 解析整数\n    pass",
-    "solution_code": "def safe_divide(a, b):\n    try:\n        return str(a / b)\n    except ZeroDivisionError:\n        return '除数不能为零'\n\ndef parse_int(s):\n    try:\n        return str(int(s))\n    except (ValueError, TypeError):\n        return 'None'",
-    "test_cases": [
-      {
-        "input": "safe_divide(10, 2)",
-        "expected_output": "5.0",
-        "description": "safe_divide(10, 2) 应返回 5.0"
-      },
-      {
-        "input": "safe_divide(10, 0)",
-        "expected_output": "除数不能为零",
-        "description": "safe_divide(10, 0) 应返回错误信息"
-      },
-      {
-        "input": "safe_divide(0, 5)",
-        "expected_output": "0.0",
-        "description": "safe_divide(0, 5) 应返回 0.0（分子为零）"
-      },
-      {
-        "input": "parse_int('42')",
-        "expected_output": "42",
-        "description": "parse_int('42') 应返回 42"
-      },
-      {
-        "input": "parse_int('abc')",
-        "expected_output": "None",
-        "description": "parse_int('abc') 应返回 None"
-      },
-      {
-        "input": "parse_int('')",
-        "expected_output": "None",
-        "description": "parse_int('') 应返回 None（空字符串）"
-      }
-    ],
-    "hint": "使用 try/except 捕获 ZeroDivisionError 和 ValueError"
-  },
-  {
-    "title": "文件操作",
-    "slug": "python-13-file-io",
-    "description": "学习文件的读写操作",
-    "content": "# 文件操作\n\n## 打开和读取文件\n```python\n# 使用 with 语句（推荐，自动关闭文件）\nwith open('data.txt', 'r', encoding='utf-8') as f:\n    content = f.read()          # 读取全部内容\n    # 或逐行读取\n    lines = f.readlines()       # 读取所有行\n\n# 逐行读取（大文件推荐）\nwith open('data.txt', 'r', encoding='utf-8') as f:\n    for line in f:\n        print(line.strip())\n```\n\n## 写入文件\n```python\n# 'w' — 覆盖写入\n# 'a' — 追加写入\n# 'x' — 排他创建（文件已存在则报错）\n\nwith open('output.txt', 'w', encoding='utf-8') as f:\n    f.write('Hello, World!\\n')\n    f.writelines(['line 1\\n', 'line 2\\n'])\n```\n\n## 文件模式\n| 模式 | 含义 |\n|------|------|\n| `'r'` | 只读（默认） |\n| `'w'` | 写入（覆盖） |\n| `'a'` | 追加 |\n| `'x'` | 排他创建 |\n| `'rb'`/`'wb'` | 二进制模式 |\n| `'r+'` | 读写 |\n\n## os.path 常用操作\n```python\nimport os\nos.path.exists('file.txt')     # 文件是否存在\nos.path.dirname('/a/b.txt')    # '/a'\nos.path.basename('/a/b.txt')   # 'b.txt'\nos.path.splitext('a.txt')      # ('a', '.txt')\nos.path.join('dir', 'file')    # 'dir/file'（跨平台）\n```\n\n## 练习\n编写函数 `read_lines(filename)`，读取文件并返回行数。\n编写函数 `count_words_in_file(filename)`，统计文件中单词总数。\n",
-    "order": 13,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "def read_lines(filename):\n    # 返回文件行数\n    pass\n\ndef count_words_in_file(filename):\n    # 返回文件单词数\n    pass",
-    "solution_code": "def read_lines(filename):\n    try:\n        with open(filename, 'r', encoding='utf-8') as f:\n            return len(f.readlines())\n    except FileNotFoundError:\n        return 0\n\ndef count_words_in_file(filename):\n    try:\n        with open(filename, 'r', encoding='utf-8') as f:\n            return len(f.read().split())\n    except FileNotFoundError:\n        return 0",
-    "test_cases": [
-      {
-        "input": "read_lines('python-13-input.txt')",
-        "expected_output": "3",
-        "description": "read_lines 应返回文件行数"
-      },
-      {
-        "input": "count_words_in_file('python-13-input.txt')",
-        "expected_output": "9",
-        "description": "count_words_in_file 应返回单词总数"
-      },
-      {
-        "input": "read_lines('nonexistent.txt')",
-        "expected_output": "0",
-        "description": "read_lines 文件不存在时应返回 0"
-      }
-    ],
-    "hint": "使用 with open() 安全打开文件，使用 split() 分割单词"
-  },
-  {
-    "title": "面向对象基础",
-    "slug": "python-14-oop-basics",
-    "description": "学习类和对象的基本概念",
-    "content": "# 面向对象基础\n\n## 类和对象\n类是对象的蓝图，对象是类的实例：\n\n```python\nclass Student:\n    # 类属性（所有实例共享）\n    school = 'Python Academy'\n\n    # 构造函数（初始化方法）\n    def __init__(self, name, age):\n        self.name = name      # 实例属性\n        self.age = age\n        self.scores = []\n\n    # 实例方法\n    def add_score(self, score):\n        self.scores.append(score)\n\n    def average(self):\n        if not self.scores:\n            return 0\n        return sum(self.scores) / len(self.scores)\n\n    # 特殊方法\n    def __str__(self):\n        return f'{self.name}, {self.age}岁'\n\n    def __repr__(self):\n        return f'Student(name={self.name!r}, age={self.age})'\n```\n\n## 封装\n```python\nclass BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self._balance = balance   # 下划线开头表示\"受保护\"\n\n    @property\n    def balance(self):\n        return self._balance\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError('存款金额必须大于0')\n        self._balance += amount\n        return self._balance\n```\n\n## 练习\n编写一个 `Rectangle` 类，包含 `width` 和 `height` 属性，以及 `area()` 和 `perimeter()` 方法。\n",
-    "order": 14,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        # 计算面积\n        pass\n\n    def perimeter(self):\n        # 计算周长\n        pass",
-    "solution_code": "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        return self.width * self.height\n\n    def perimeter(self):\n        return 2 * (self.width + self.height)",
-    "test_cases": [
-      {
-        "input": "Rectangle(10, 5).area()",
-        "expected_output": "50",
-        "description": "长方形面积应为宽×高"
-      },
-      {
-        "input": "Rectangle(10, 5).perimeter()",
-        "expected_output": "30",
-        "description": "长方形周长应为2×(宽+高)"
-      },
-      {
-        "input": "Rectangle(7, 3).area()",
-        "expected_output": "21",
-        "description": "不同尺寸的面积计算"
-      },
-      {
-        "input": "Rectangle(1, 1).area()",
-        "expected_output": "1",
-        "description": "正方形（特殊长方形）面积"
-      }
-    ],
-    "hint": "面积 = 宽 × 高，周长 = 2 × (宽 + 高)"
-  },
-  {
-    "title": "模块与包",
-    "slug": "python-15-modules",
-    "description": "学习模块的导入和使用",
-    "content": "# 模块与包\n\n## 什么是模块？\n模块就是一个 `.py` 文件。将相关功能组织在一起，便于复用和维护。\n\n## 导入模块\n```python\n# 方法一：导入整个模块\nimport math\nprint(math.sqrt(16))    # 4.0\n\n# 方法二：导入特定函数\nfrom math import sqrt, pi\nprint(sqrt(25))         # 5.0\nprint(pi)               # 3.14159...\n\n# 方法三：导入所有（不推荐）\nfrom math import *\n\n# 方法四：使用别名\nimport numpy as np\nfrom datetime import datetime as dt\n```\n\n## 常用内置模块\n```python\nimport datetime     # 日期时间\nimport json         # JSON处理\nimport random       # 随机数\nimport re           # 正则表达式\nimport os           # 操作系统接口\nimport sys          # 系统参数\nimport collections  # 高级数据结构\nimport itertools    # 迭代工具\nimport functools    # 函数工具\n```\n\n## 创建自己的模块\n```python\n# mymodule.py\ndef greet(name):\n    return f'Hello, {name}!'\n\n# main.py\nfrom mymodule import greet\ngreet('World')  # 'Hello, World!'\n```\n\n## 什么是包？\n包含 `__init__.py` 文件的目录就是包：\n\n```\nmypackage/\n├── __init__.py\n├── module_a.py\n└── subpackage/\n    ├── __init__.py\n    └── module_b.py\n```\n\n## 练习\n编写函数 `random_password(length)`，使用 `random` 模块生成指定长度的随机密码（包含大小写字母和数字）。\n",
-    "order": 15,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "import random\nimport string\n\ndef random_password(length):\n    # 生成随机密码\n    pass",
-    "solution_code": "import random\nimport string\n\ndef random_password(length):\n    chars = string.ascii_letters + string.digits\n    return ''.join(random.choice(chars) for _ in range(length))",
-    "test_cases": [
-      {
-        "input": "len(random_password(8))",
-        "expected_output": "8",
-        "description": "random_password(8) 返回的密码长度应为8"
-      },
-      {
-        "input": "len(random_password(12))",
-        "expected_output": "12",
-        "description": "random_password(12) 返回的密码长度应为12"
-      },
-      {
-        "input": "isinstance(random_password(5), str)",
-        "expected_output": "True",
-        "description": "返回值应为字符串类型"
-      },
-      {
-        "input": "len(set(random_password(50))) > 10",
-        "expected_output": "True",
-        "description": "长密码应包含多种字符"
-      }
-    ],
-    "hint": "使用 string.ascii_letters + string.digits 作为字符池，random.choice() 选取字符"
-  },
-  {
-    "title": "高阶函数",
-    "slug": "python-16-higher-order",
-    "description": "学习 map、filter、lambda 等高阶函数",
-    "content": "# 高阶函数\n\n高阶函数是将函数作为参数或返回值的函数。\n\n## map — 映射\n```python\n# 对序列中每个元素应用函数\nnums = [1, 2, 3, 4, 5]\nsquares = list(map(lambda x: x**2, nums))\n# [1, 4, 9, 16, 25]\n\n# 多序列map\na = [1, 2, 3]\nb = [10, 20, 30]\nsums = list(map(lambda x, y: x + y, a, b))\n# [11, 22, 33]\n```\n\n## filter — 过滤\n```python\nnums = [1, 2, 3, 4, 5, 6]\nevens = list(filter(lambda x: x % 2 == 0, nums))\n# [2, 4, 6]\n```\n\n## reduce — 归约\n```python\nfrom functools import reduce\nnums = [1, 2, 3, 4, 5]\ntotal = reduce(lambda acc, x: acc + x, nums)\n# 15\n\n# 带初始值\nproduct = reduce(lambda acc, x: acc * x, nums, 1)\n# 120\n```\n\n## sorted 的 key 参数\n```python\nstudents = [\n    {'name': 'Alice', 'score': 85},\n    {'name': 'Bob', 'score': 92},\n    {'name': 'Charlie', 'score': 78},\n]\n\n# 按分数排序\nsorted(students, key=lambda s: s['score'])\n# 按分数降序\nsorted(students, key=lambda s: s['score'], reverse=True)\n```\n\n## 练习\n编写函数 `double_all(nums)`，返回每个元素乘2的列表（使用map）。\n编写函数 `filter_positive(nums)`，返回所有正数（使用filter）。\n编写函数 `product_of_list(nums)`，返回所有元素的乘积（使用reduce）。\n\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
-    "order": 16,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "from functools import reduce\n\ndef double_all(nums):\n    # 使用 map\n    pass\n\ndef filter_positive(nums):\n    # 使用 filter\n    pass\n\ndef product_of_list(nums):\n    # 使用 reduce\n    pass",
-    "solution_code": "from functools import reduce\n\ndef double_all(nums):\n    return list(map(lambda x: x * 2, nums))\n\ndef filter_positive(nums):\n    return list(filter(lambda x: x > 0, nums))\n\ndef product_of_list(nums):\n    if not nums:\n        return 1\n    return reduce(lambda a, b: a * b, nums)",
-    "test_cases": [
-      {
-        "input": "double_all([1, 2, 3])",
-        "expected_output": "[2, 4, 6]",
-        "description": "double_all 应将每个元素乘2"
-      },
-      {
-        "input": "double_all([])",
-        "expected_output": "[]",
-        "description": "double_all([]) 应返回空列表"
-      },
-      {
-        "input": "filter_positive([-1, 0, 3, -5, 7])",
-        "expected_output": "[3, 7]",
-        "description": "filter_positive 应返回所有正数"
-      },
-      {
-        "input": "filter_positive([-1, -2])",
-        "expected_output": "[]",
-        "description": "filter_positive 无正数时应返回空列表"
-      },
-      {
-        "input": "product_of_list([1, 2, 3, 4])",
-        "expected_output": "24",
-        "description": "product_of_list 应返回连乘积"
-      },
-      {
-        "input": "product_of_list([])",
-        "expected_output": "1",
-        "description": "product_of_list([]) 应返回 1（空列表边界）"
-      }
-    ],
-    "hint": "map(func, iterable) 映射，filter(func, iterable) 过滤，reduce(func, iterable) 归约"
-  },
-  {
-    "title": "排序算法",
-    "slug": "python-17-sorting",
-    "description": "实现冒泡排序算法",
-    "content": "# 排序算法\n\n## 冒泡排序\n冒泡排序通过重复遍历列表，比较相邻元素并交换位置来排序。\n\n```python\ndef bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr\n```\n\n## 练习\n实现冒泡排序函数 `bubble_sort(arr)`，返回排序后的新列表（不修改原列表）。\n\n\n## 排序算法复杂度对比\n\n| 算法 | 平均时间 | 最坏时间 | 空间 | 稳定性 |\n|------|---------|---------|------|--------|\n| 冒泡排序 | O(n²) | O(n²) | O(1) | 稳定 |\n| 选择排序 | O(n²) | O(n²) | O(1) | 不稳定 |\n| 插入排序 | O(n²) | O(n²) | O(1) | 稳定 |\n| 快速排序 | O(n log n) | O(n²) | O(log n) | 不稳定 |\n| 归并排序 | O(n log n) | O(n log n) | O(n) | 稳定 |\n| Python sorted | O(n log n) | O(n log n) | O(n) | 稳定 |\n\n> Timsort 是 Python 内置排序算法，结合了归并排序和插入排序的优点。\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
-    "order": 17,
-    "difficulty": "advanced",
     "xp_reward": 20,
-    "starter_code": "def bubble_sort(arr):\n    # 实现冒泡排序\n    pass",
-    "solution_code": "def bubble_sort(arr):\n    result = arr[:]\n    n = len(result)\n    for i in range(n):\n        for j in range(0, n - i - 1):\n            if result[j] > result[j + 1]:\n                result[j], result[j + 1] = result[j + 1], result[j]\n    return result",
+    "starter_code": "def countCompleted(statuses):\n    # return sum(1 for status in statuses if status)\n    pass",
+    "solution_code": "def countCompleted(statuses):\n    return sum(1 for status in statuses if status)",
     "test_cases": [
       {
-        "input": "bubble_sort([5, 3, 8, 1, 9])",
-        "expected_output": "[1, 3, 5, 8, 9]",
-        "description": "冒泡排序"
-      },
-      {
-        "input": "bubble_sort([1])",
-        "expected_output": "[1]",
-        "description": "单元素列表"
-      },
-      {
-        "input": "bubble_sort([3, 2, 1])",
-        "expected_output": "[1, 2, 3]",
-        "description": "逆序列表"
-      },
-      {
-        "input": "bubble_sort([])",
-        "expected_output": "[]",
-        "description": "bubble_sort([]) 应返回 []（空列表边界）"
-      }
-    ],
-    "hint": "复制列表后排序，双重循环比较相邻元素"
-  },
-  {
-    "title": "二分查找",
-    "slug": "python-18-binary-search",
-    "description": "实现二分查找算法",
-    "content": "# 二分查找\n\n二分查找是一种在**有序数组**中查找目标值的高效算法，时间复杂度 O(log n)。\n\n## 算法原理\n1. 取数组中间元素\n2. 如果等于目标值，返回索引\n3. 如果小于目标值，在右半部分继续查找\n4. 如果大于目标值，在左半部分继续查找\n5. 重复直到找到或区间为空\n\n## 迭代实现\n```python\ndef binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = left + (right - left) // 2  # 防止溢出\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1  # 未找到\n```\n\n## 递归实现\n```python\ndef binary_search_recursive(arr, target, left=0, right=None):\n    if right is None:\n        right = len(arr) - 1\n    if left > right:\n        return -1\n    mid = left + (right - left) // 2\n    if arr[mid] == target:\n        return mid\n    elif arr[mid] < target:\n        return binary_search_recursive(arr, target, mid+1, right)\n    else:\n        return binary_search_recursive(arr, target, left, mid-1)\n```\n\n## 复杂度分析\n| 实现 | 时间复杂度 | 空间复杂度 |\n|------|-----------|-----------|\n| 迭代 | O(log n) | O(1) |\n| 递归 | O(log n) | O(log n) |\n\n## 练习\n编写函数 `search(nums, target)`，使用二分查找在有序列表中查找目标值，返回索引（不存在返回-1）。\n",
-    "order": 18,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "def search(nums, target):\n    # 使用二分查找\n    pass",
-    "solution_code": "def search(nums, target):\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
-    "test_cases": [
-      {
-        "input": "search([1,2,3,4,5], 3)",
+        "input": "countCompleted([True, False, True])",
         "expected_output": "2",
-        "description": "找到目标值索引"
-      },
-      {
-        "input": "search([1,2,3,4,5], 6)",
-        "expected_output": "-1",
-        "description": "未找到应返回 -1"
-      },
-      {
-        "input": "search([1], 1)",
-        "expected_output": "0",
-        "description": "单元素查找（找到）"
-      },
-      {
-        "input": "search([1], 0)",
-        "expected_output": "-1",
-        "description": "单元素查找（未找到）"
-      },
-      {
-        "input": "search([], 1)",
-        "expected_output": "-1",
-        "description": "空列表应返回 -1（边界）"
+        "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "使用左右指针 left/right，每次将搜索范围减半。注意 mid = left + (right - left) // 2 防止整数溢出。"
-  },
-  {
-    "title": "递归",
-    "slug": "python-19-recursion",
-    "description": "学习递归思想和经典递归问题",
-    "content": "# 递归\n\n递归是函数调用自身的编程技巧，核心是定义**终止条件**和**递推关系**。\n\n## 递归三要素\n1. **终止条件（Base Case）**：何时停止递归\n2. **递推关系（Recursive Case）**：问题如何分解为更小的子问题\n3. **向终止条件收敛**：每次递归必须向base case逼近\n\n## 经典递归示例\n```python\n# 阶乘\ndef factorial(n):\n    if n <= 1:              # 终止条件\n        return 1\n    return n * factorial(n-1)  # 递推关系\n\n# 斐波那契数列\ndef fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\n# 深度优先搜索（DFS）\ndef dfs(graph, node, visited=set()):\n    if node in visited:\n        return\n    visited.add(node)\n    for neighbor in graph[node]:\n        dfs(graph, neighbor, visited)\n```\n\n## 递归 vs 迭代\n| 特性 | 递归 | 迭代 |\n|------|------|------|\n| 代码简洁性 | 高 | 中 |\n| 栈空间 | O(n) | O(1) |\n| 适用场景 | 树、图、分治 | 线性遍历 |\n\n## 尾递归优化\n```python\n# 普通递归（可能栈溢出）\ndef factorial(n):\n    if n <= 1: return 1\n    return n * factorial(n-1)\n\n# 尾递归（Python不自动优化，但值得了解）\ndef factorial_tail(n, acc=1):\n    if n <= 1: return acc\n    return factorial_tail(n-1, acc*n)\n```\n\n## 练习\n编写函数 `gcd(a, b)`，使用辗转相除法（欧几里得算法）求最大公约数。\n",
-    "order": 19,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "def gcd(a, b):\n    # 辗转相除法求最大公约数\n    pass",
-    "solution_code": "def gcd(a, b):\n    if b == 0:\n        return a\n    return gcd(b, a % b)",
-    "test_cases": [
-      {
-        "input": "gcd(12, 8)",
-        "expected_output": "4",
-        "description": "gcd(12, 8) 应返回 4"
-      },
-      {
-        "input": "gcd(17, 13)",
-        "expected_output": "1",
-        "description": "gcd(17, 13) 应返回 1（互质）"
-      },
-      {
-        "input": "gcd(100, 10)",
-        "expected_output": "10",
-        "description": "gcd(100, 10) 应返回 10"
-      },
-      {
-        "input": "gcd(7, 7)",
-        "expected_output": "7",
-        "description": "gcd(7, 7) 应返回 7（相等）"
-      },
-      {
-        "input": "gcd(0, 5)",
-        "expected_output": "5",
-        "description": "gcd(0, 5) 应返回 5（边界：其中一个为0）"
-      }
-    ],
-    "hint": "辗转相除法：gcd(a, b) = gcd(b, a % b)，当 b=0 时 a 就是答案"
-  },
-  {
-    "title": "栈与队列",
-    "slug": "python-20-stack-queue",
-    "description": "使用列表实现栈和队列",
-    "content": "# 栈与队列\n\n## 栈（Stack）\n栈是**后进先出（LIFO）**的数据结构，Python中可用列表模拟：\n\n```python\nstack = []\nstack.append(1)    # 入栈（push）\nstack.append(2)\nstack.append(3)\nstack.pop()        # 3（出栈，pop）\nstack.pop()        # 2\nlen(stack)         # 1（栈大小）\n\n# 查看栈顶（不弹出）\nstack[-1]          # 1\n```\n\n### 栈的应用\n- 函数调用栈\n- 撤销/重做（Undo/Redo）\n- 括号匹配验证\n- 表达式求值\n\n```python\n# 括号匹配\ndef is_balanced(s):\n    stack = []\n    pairs = {')': '(', ']': '[', '}': '{'}\n    for ch in s:\n        if ch in '([{':\n            stack.append(ch)\n        elif ch in ')]}':\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n    return len(stack) == 0\n```\n\n## 队列（Queue）\n队列是**先进先出（FIFO）**的数据结构：\n\n```python\nfrom collections import deque\n\nqueue = deque()\nqueue.append(1)       # 入队\nqueue.append(2)\nqueue.append(3)\nqueue.popleft()       # 1（出队!）\nqueue.popleft()       # 2\n\n# deque 两端都可操作\nqueue.appendleft(0)   # 左端入队\nqueue.pop()           # 右端出队\n```\n\n## 练习\n编写函数 `validate_brackets(s)`，验证括号是否正确匹配。\n",
-    "order": 20,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "def validate_brackets(s):\n    # 验证括号匹配\n    pass",
-    "solution_code": "def validate_brackets(s):\n    stack = []\n    pairs = {')': '(', ']': '[', '}': '{'}\n    for ch in s:\n        if ch in pairs.values():\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n    return len(stack) == 0",
-    "test_cases": [
-      {
-        "input": "validate_brackets('()')",
-        "expected_output": "True",
-        "description": "简单括号匹配"
-      },
-      {
-        "input": "validate_brackets('([]){}')",
-        "expected_output": "True",
-        "description": "混合括号匹配"
-      },
-      {
-        "input": "validate_brackets('(]')",
-        "expected_output": "False",
-        "description": "括号类型不匹配"
-      },
-      {
-        "input": "validate_brackets('(')",
-        "expected_output": "False",
-        "description": "括号未闭合"
-      },
-      {
-        "input": "validate_brackets('')",
-        "expected_output": "True",
-        "description": "空字符串视为有效"
-      }
-    ],
-    "hint": "使用栈：遇到左括号入栈，右括号时检查栈顶是否匹配"
-  },
-  {
-    "title": "正则表达式",
-    "slug": "python-21-regex",
-    "description": "学习正则表达式的基本用法",
-    "content": "# 正则表达式\n\n正则表达式（Regex）是一种强大的模式匹配工具，用于搜索、匹配和替换文本。\n\n## re 模块基础\n```python\nimport re\n\n# re.search — 搜索第一个匹配\nre.search(r'\\d+', 'abc123def')     # Match对象\n\n# re.findall — 查找所有匹配\nre.findall(r'\\d+', 'a1b2c3')       # ['1', '2', '3']\n\n# re.sub — 替换\nre.sub(r'\\s+', ' ', 'a   b  c')    # 'a b c'\n\n# re.split — 分割\nre.split(r'[,\\s]+', 'a,b c  d')     # ['a', 'b', 'c', 'd']\n```\n\n## 常用模式\n```python\n\\d      # 数字 [0-9]\n\\w      # 字母数字下划线 [a-zA-Z0-9_]\n\\s      # 空白字符\n.        # 任意字符（除换行）\n^        # 行首\n$        # 行尾\n*        # 0次或多次\n+        # 1次或多次\n?        # 0次或1次\n{n}      # 精确n次\n{n,}     # 至少n次\n{n,m}    # n到m次\n[abc]    # 字符集\n[^abc]   # 否定字符集\n(a|b)    # 或\n```\n\n## 实用示例\n```python\n# 验证邮箱\nemail_pattern = r'^[\\w.-]+@[\\w.-]+\\.\\w+$'\nre.match(email_pattern, 'user@example.com')\n\n# 提取URL\nurl_pattern = r'https?://[\\w./-]+'\nurls = re.findall(url_pattern, text)\n\n# 提取中文字符\nchinese = re.findall(r'[\\u4e00-\\u9fff]+', 'Hello你好World世界')\n```\n\n## 练习\n编写函数 `is_valid_email(s)`，验证字符串是否为合法邮箱格式。\n编写函数 `extract_numbers(s)`，提取字符串中所有数字。\n",
-    "order": 21,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "import re\n\ndef is_valid_email(s):\n    # 验证邮箱格式\n    pass\n\ndef extract_numbers(s):\n    # 提取所有数字\n    pass",
-    "solution_code": "import re\n\ndef is_valid_email(s):\n    pattern = r'^[\\w.-]+@[\\w.-]+\\.\\w+$'\n    return bool(re.match(pattern, s))\n\ndef extract_numbers(s):\n    return re.findall(r'\\d+', s)",
-    "test_cases": [
-      {
-        "input": "is_valid_email('user@example.com')",
-        "expected_output": "True",
-        "description": "合法邮箱应返回 True"
-      },
-      {
-        "input": "is_valid_email('invalid-email')",
-        "expected_output": "False",
-        "description": "非法邮箱应返回 False"
-      },
-      {
-        "input": "is_valid_email('')",
-        "expected_output": "False",
-        "description": "空字符串应返回 False"
-      },
-      {
-        "input": "extract_numbers('a1b2c3')",
-        "expected_output": "['1', '2', '3']",
-        "description": "extract_numbers 应提取所有数字"
-      },
-      {
-        "input": "extract_numbers('no numbers here')",
-        "expected_output": "[]",
-        "description": "无数字时应返回空列表"
-      }
-    ],
-    "hint": "使用 re.match(r'^[\\w.-]+@[\\w.-]+\\.\\w+$', s) 验证邮箱，re.findall(r'\\d+', s) 提取数字"
-  },
-  {
-    "title": "装饰器",
-    "slug": "python-22-decorators",
-    "description": "学习装饰器的概念和用法",
-    "content": "# 装饰器\n\n装饰器是Python中一种强大的函数式编程工具，用于在不修改原函数代码的情况下扩展其功能。\n\n## 带参数的装饰器\n```python\ndef repeat(times):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                result = func(*args, **kwargs)\n            return result\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef greet(name):\n    print(f'Hello, {name}')\n\ngreet('Alice')  # 打印3次\n```\n\n## 常用内置装饰器\n```python\n# @staticmethod — 静态方法\nclass Math:\n    @staticmethod\n    def add(a, b):\n        return a + b\n\n# @classmethod — 类方法\nclass Person:\n    @classmethod\n    def from_birth_year(cls, name, year):\n        return cls(name, 2026 - year)\n\n# @property — 属性访问器\nclass Circle:\n    def __init__(self, radius):\n        self._radius = radius\n\n    @property\n    def area(self):\n        return 3.14159 * self._radius ** 2\n\n    @property\n    def radius(self):\n        return self._radius\n\n    @radius.setter\n    def radius(self, value):\n        if value < 0:\n            raise ValueError('半径不能为负')\n        self._radius = value\n```",
-    "order": 22,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "def log_call(func):\n    # 实现装饰器：打印函数调用信息\n    pass\n\n@log_call\ndef add(a, b):\n    return a + b",
-    "solution_code": "def log_call(func):\n    def wrapper(*args, **kwargs):\n        print(f'Calling {func.__name__} with args={args}')\n        result = func(*args, **kwargs)\n        print(f'{func.__name__} returned {result}')\n        return result\n    return wrapper",
-    "test_cases": [
-      {
-        "input": "add(1, 2)",
-        "expected_output": "3",
-        "description": "被装饰的函数应正常返回结果"
-      },
-      {
-        "input": "add.__name__",
-        "expected_output": "wrapper",
-        "description": "装饰后函数名变为wrapper"
-      }
-    ],
-    "hint": "装饰器外层接收函数，内层wrapper接收参数并调用原函数"
-  },
-  {
-    "title": "生成器",
-    "slug": "python-23-generators",
-    "description": "学习生成器和 yield 关键字",
-    "content": "# 生成器\n\n生成器使用 yield 产生值，惰性计算节省内存：\n\n```python\ndef countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\nlist(countdown(5))  # [5, 4, 3, 2, 1]\n```\n\n## 练习\n编写生成器函数 `fib_gen(n)`，生成前 n 个斐波那契数。\n",
-    "order": 23,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "def fib_gen(n):\n    # 生成前n个斐波那契数\n    pass",
-    "solution_code": "def fib_gen(n):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a + b",
-    "test_cases": [
-      {
-        "input": "list(fib_gen(6))",
-        "expected_output": "[0, 1, 1, 2, 3, 5]",
-        "description": "前6个斐波那契数"
-      },
-      {
-        "input": "list(fib_gen(1))",
-        "expected_output": "[0]",
-        "description": "前1个斐波那契数"
-      },
-      {
-        "input": "list(fib_gen(0))",
-        "expected_output": "[]",
-        "description": "前0个斐波那契数"
-      }
-    ],
-    "hint": "使用 yield 逐个产生斐波那契数"
-  },
-  {
-    "title": "综合实战 - 学生管理",
-    "slug": "python-24-student-manager",
-    "description": "综合运用所学知识，实现一个简单的学生管理系统",
-    "content": "# 综合实战 - 学生管理系统\n\n这是Python课程的毕业项目，综合运用前面学过的所有知识。\n\n## 项目需求\n实现一个学生成绩管理系统，支持：\n1. 添加学生（姓名和成绩）\n2. 查询学生成绩\n3. 计算平均分\n4. 获取最高/最低分\n5. 成绩等级评定\n\n## 数据结构设计\n```python\n# 用字典存储学生信息\nstudents = {\n    'Alice': {'scores': [85, 90, 78], 'id': 1},\n    'Bob': {'scores': [92, 88, 95], 'id': 2},\n}\n```\n\n## 实现要点\n- 使用**字典**存储学生数据\n- 使用**列表**存储成绩\n- 使用**异常处理**应对输入错误\n- 使用**列表推导式**处理数据\n- 使用**排序**展示排名\n\n## 练习\n编写 `StudentManager` 类，实现以下方法：\n\n```python\nclass StudentManager:\n    def __init__(self):\n        self.students = {}\n\n    def add(self, name, score):\n        '''添加学生成绩'''\n\n    def get_average(self, name):\n        '''获取某学生平均分'''\n\n    def get_top(self, n):\n        '''获取前n名学生（按平均分排序）'''\n\n    def get_rank(self, name):\n        '''获取某学生排名（1-based）'''\n\n    def grade_summary(self):\n        '''返回各等级人数统计：{'优秀':x, '良好':y, '及格':z, '不及格':w}'\n```\n",
-    "order": 24,
-    "difficulty": "advanced",
-    "xp_reward": 25,
-    "starter_code": "class StudentManager:\n    def __init__(self):\n        self.students = {}\n\n    def add(self, name, score):\n        # 添加学生成绩\n        pass\n\n    def get_average(self, name):\n        # 返回学生平均分\n        pass\n\n    def get_top(self, n):\n        # 返回平均分最高的前n名学生 [{name, average}]\n        pass\n\n    def get_rank(self, name):\n        # 返回学生排名（1-based）\n        pass\n\n    def grade_summary(self):\n        # 返回各等级人数统计\n        pass",
-    "solution_code": "class StudentManager:\n    def __init__(self):\n        self.students = {}\n\n    def add(self, name, score):\n        if name not in self.students:\n            self.students[name] = []\n        self.students[name].append(score)\n\n    def get_average(self, name):\n        if name not in self.students or not self.students[name]:\n            return 0\n        return sum(self.students[name]) / len(self.students[name])\n\n    def get_top(self, n):\n        result = []\n        for name, scores in self.students.items():\n            avg = sum(scores) / len(scores) if scores else 0\n            result.append({'name': name, 'average': avg})\n        result.sort(key=lambda x: x['average'], reverse=True)\n        return result[:n]\n\n    def get_rank(self, name):\n        top = self.get_top(len(self.students))\n        for i, s in enumerate(top):\n            if s['name'] == name:\n                return i + 1\n        return -1\n\n    def grade_summary(self):\n        summary = {'优秀': 0, '良好': 0, '及格': 0, '不及格': 0}\n        for name, scores in self.students.items():\n            avg = sum(scores) / len(scores) if scores else 0\n            if avg >= 90:\n                summary['优秀'] += 1\n            elif avg >= 80:\n                summary['良好'] += 1\n            elif avg >= 60:\n                summary['及格'] += 1\n            else:\n                summary['不及格'] += 1\n        return summary",
-    "test_cases": [
-      {
-        "input": "m=StudentManager(); m.add('Alice',85); m.add('Alice',92); m.get_average('Alice')",
-        "expected_output": "88.5",
-        "description": "平均分计算应正确"
-      },
-      {
-        "input": "m=StudentManager(); m.add('Alice',85); m.add('Bob',92); [s['name'] for s in m.get_top(1)]",
-        "expected_output": "['Bob']",
-        "description": "get_top 应返回最高分学生"
-      },
-      {
-        "input": "m=StudentManager(); [s['name'] for s in m.get_top(3)]",
-        "expected_output": "[]",
-        "description": "空管理器 get_top 应返回空列表"
-      },
-      {
-        "input": "m=StudentManager(); m.add('Alice',95); m.add('Bob',85); m.add('Charlie',75); m.get_rank('Alice')",
-        "expected_output": "1",
-        "description": "最高分排名应为1"
-      }
-    ],
-    "hint": "用字典存储学生-成绩列表，平均分用 sum()/len()，排名用 sorted()"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
   }
 ]
