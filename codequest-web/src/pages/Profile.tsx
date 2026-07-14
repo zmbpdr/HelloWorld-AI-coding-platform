@@ -27,6 +27,25 @@ interface AchievementData {
   unlocked_at: string | null
 }
 
+// 🆕 Mock 推荐数据 - TODO: 替换为 D 的真实推荐 API
+const mockRecommendation = {
+  recommended: [
+    { lesson_id: 5, title: '循环', reason: '你的循环知识点掌握度较低', matched_tags: ['循环'] },
+    { lesson_id: 8, title: '列表操作', reason: '列表相关题目错误率较高', matched_tags: ['列表'] }
+  ],
+  next_normal: { lesson_id: 6, title: '函数' }
+}
+
+// 🆕 Mock 知识掌握度数据 - TODO: 替换为 A 的真实知识掌握度 API
+const mockKnowledge = [
+  { name: '变量', mastery: 85 },
+  { name: '条件判断', mastery: 70 },
+  { name: '循环', mastery: 90 },
+  { name: '函数', mastery: 55 },
+  { name: '列表操作', mastery: 65 },
+  { name: '字符串处理', mastery: 45 },
+]
+
 export default function Profile() {
   const navigate = useNavigate()
   const { logout, isAuthenticated } = useUserStore()
@@ -90,6 +109,8 @@ export default function Profile() {
               <Button variant="ghost" onClick={() => navigate('/')}>返回大厅</Button>
               <Button variant="ghost" onClick={() => navigate('/settings')}>设置</Button>
               <Button variant="ghost" onClick={() => navigate('/pricing')}>会员方案</Button>
+              {/* 🆕 错题本入口 */}
+              <Button variant="ghost" onClick={() => navigate('/errors')}>📝 错题本</Button>
             </div>
           </div>
         </nav>
@@ -156,6 +177,105 @@ export default function Profile() {
           {/* 学习热力图 */}
           <div className="p-5 rounded-2xl" style={{ background: 'rgba(15,19,34,0.65)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <ActivityHeatmap />
+          </div>
+
+          {/* 🆕 知识掌握度 */}
+          <div className="p-5 rounded-2xl" style={{ background: 'rgba(15,19,34,0.65)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-lg">📊</span>
+              <h3 className="text-lg font-bold" style={{ color: '#f1f5f9' }}>知识掌握度</h3>
+              <span className="text-xs ml-2 px-2 py-0.5 rounded-full" style={{ background: 'rgba(34,197,94,0.15)', color: '#4ade80' }}>
+                基于你的学习数据
+              </span>
+            </div>
+            <div className="space-y-3">
+              {mockKnowledge.map((item) => (
+                <div key={item.name}>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span style={{ color: '#94a3b8' }}>{item.name}</span>
+                    <span style={{ color: item.mastery >= 70 ? '#4ade80' : item.mastery >= 50 ? '#fbbf24' : '#f87171' }}>
+                      {item.mastery}%
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                    <div
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{
+                        width: `${item.mastery}%`,
+                        background: item.mastery >= 70 
+                          ? 'linear-gradient(90deg, #22c55e, #4ade80)' 
+                          : item.mastery >= 50 
+                            ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
+                            : 'linear-gradient(90deg, #ef4444, #f87171)',
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 🆕 推荐学习 */}
+          <div className="p-5 rounded-2xl" style={{ background: 'rgba(15,19,34,0.65)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-lg">🤖</span>
+              <h3 className="text-lg font-bold" style={{ color: '#f1f5f9' }}>推荐学习</h3>
+              <span className="text-xs ml-2 px-2 py-0.5 rounded-full" style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}>
+                AI 智能推荐
+              </span>
+            </div>
+            {mockRecommendation.recommended.length > 0 ? (
+              <div className="space-y-2">
+                {mockRecommendation.recommended.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all hover:scale-[1.01]"
+                    style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}
+                    onClick={() => navigate(`/python/${item.lesson_id}`)}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm truncate" style={{ color: '#f1f5f9' }}>
+                        {item.title}
+                      </div>
+                      <div className="text-xs mt-0.5" style={{ color: '#94a3b8' }}>
+                        {item.reason}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0 ml-3">
+                      {item.matched_tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="text-[10px] px-2 py-0.5 rounded-full"
+                          style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24' }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      <span className="text-xs" style={{ color: '#475569' }}>→</span>
+                    </div>
+                  </div>
+                ))}
+                {mockRecommendation.next_normal && (
+                  <div
+                    className="flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all hover:scale-[1.01]"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}
+                    onClick={() => navigate(`/python/${mockRecommendation.next_normal.lesson_id}`)}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">📖</span>
+                      <span className="text-sm" style={{ color: '#94a3b8' }}>
+                        继续学习：<span style={{ color: '#f1f5f9' }}>{mockRecommendation.next_normal.title}</span>
+                      </span>
+                    </div>
+                    <span className="text-xs" style={{ color: '#475569' }}>→</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-6" style={{ color: '#475569' }}>
+                <p className="text-sm">暂无推荐，继续闯关吧 🚀</p>
+              </div>
+            )}
           </div>
 
           {/* 成就展示 */}
