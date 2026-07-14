@@ -64,6 +64,9 @@ export default function Lesson() {
     const submitResult = await runCode(Number(lessonId), code)
     if (!submitResult) return
 
+    // 提交后立即更新尝试次数
+    setLesson((prev) => prev ? { ...prev, attempts: prev.attempts + 1 } : prev)
+
     if (submitResult.score > 0) {
       recordSuccess()
       if (submitResult.stars >= 4) setShowCelebration(true)
