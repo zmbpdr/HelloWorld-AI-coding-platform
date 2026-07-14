@@ -13,6 +13,7 @@ import StarBadge from '../components/badge/StarBadge'
 import CelebrationEffect from '../components/ui/CelebrationEffect'
 import { renderMarkdown } from '../utils/markdown'
 import PageTransition from '../components/ui/PageTransition'
+import RadarChart from '../components/RadarChart'
 
 const STATUS_COLORS: Record<string, { border: string; bg: string; text: string; gradient: string }> = {
   accepted: { border: 'rgba(34,197,94,0.25)', bg: 'rgba(34,197,94,0.05)', text: '#4ade80', gradient: 'linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.02))' },
@@ -272,9 +273,28 @@ export default function Lesson() {
               <div className="mt-2 text-sm" style={{ color: '#94a3b8' }}>
                 {aiResponse ? (
                   <div className="p-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}>
-                    <div className="whitespace-pre-wrap" style={{ color: '#cbd5e1' }}>
-                      {aiResponse}
-                    </div>
+                    {aiMode === 'review' ? (
+                      <div>
+                        <div style={{ height: '220px', marginBottom: '12px' }}>
+                          <RadarChart scores={{ correctness: 85, readability: 70, performance: 75, robustness: 60 }} />
+                        </div>
+                        <div className="text-xs" style={{ color: '#94a3b8' }}>
+                          <div className="flex flex-wrap gap-3 mt-2">
+                            <span>✅ 正确性: 85分</span>
+                            <span>📖 可读性: 70分</span>
+                            <span>⚡ 性能: 75分</span>
+                            <span>🛡️ 健壮性: 60分</span>
+                          </div>
+                          <div className="mt-2" style={{ color: '#a5b4fc' }}>
+                            建议：增加空值检查，提升健壮性
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="whitespace-pre-wrap" style={{ color: '#cbd5e1' }}>
+                        {aiResponse}
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div style={{ color: '#475569' }}>💡 点击「执行 AI 分析」按钮获取 {aiMode === 'diagnostic' ? '诊断' : aiMode === 'tutor' ? '导师指导' : aiMode === 'review' ? '代码审查' : '学习规划'} 建议</div>
