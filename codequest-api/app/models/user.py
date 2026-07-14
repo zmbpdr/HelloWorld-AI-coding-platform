@@ -32,19 +32,9 @@ class User(Base):
         onupdate=lambda: datetime.now(timezone.utc), comment="更新时间"
     )
 
-    # 会员系统（P2 功能，默认 free）
-    membership: Mapped[str] = mapped_column(String(20), default="free", comment="会员等级: free/pro")
-    ai_usage_today: Mapped[int] = mapped_column(Integer, default=0, comment="今日 AI 使用次数")
-    ai_usage_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, comment="AI 使用次数日期，用于每日重置")
-
     # 关系 — 级联删除：删除用户时自动清除进度/提交/成就
     progress = relationship("Progress", back_populates="user", lazy="select", cascade="all, delete-orphan")
     submissions = relationship("Submission", back_populates="user", lazy="select", cascade="all, delete-orphan")
     achievements = relationship("UserAchievement", back_populates="user", lazy="select", cascade="all, delete-orphan")
     agent_progress = relationship("AgentProgress", back_populates="user", lazy="select", cascade="all, delete-orphan")
     snippets = relationship("CodeSnippet", back_populates="user", lazy="select", cascade="all, delete-orphan")
-
-    # 新功能关系
-    diagnostic = relationship("UserDiagnostic", back_populates="user", uselist=False, lazy="select")
-    knowledge = relationship("UserKnowledge", back_populates="user", lazy="select")
-    errors = relationship("UserError", back_populates="user", lazy="select")

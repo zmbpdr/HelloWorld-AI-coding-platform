@@ -14,9 +14,7 @@ import SnippetPanel from '../components/snippets/SnippetPanel'
 
 
 
-type TabKey = 'languages' | 'workshop' | 'ml-lab'
-
-const JUPYTER_URL = 'http://localhost:8888/lab?token=codequest'
+type TabKey = 'languages' | 'workshop'
 
 // ---- Tab definitions  -- extensible for future modules ----
 
@@ -29,8 +27,6 @@ const TABS: { key: TabKey; label: string; icon: string; description: string }[] 
   { key: 'languages', label: '编程闯关', icon: '</>', description: '14 门编程语言 · 循序渐进攻克' },
 
   { key: 'workshop', label: '智能体工坊', icon: '🧠', description: 'AI / 机器学习 / Agent开发 · 神经元网络' },
-
-  { key: 'ml-lab', label: 'ML 实验室', icon: '🧪', description: 'Jupyter + PyTorch · 内置合成数据 · 模型训练' },
 
 ]
 
@@ -293,10 +289,6 @@ export default function Lobby() {
                   key={tab.key}
 
                   onClick={() => {
-                    if (tab.key === 'ml-lab') {
-                      requireAuth(() => { window.open(JUPYTER_URL, '_blank', 'noopener,noreferrer') })
-                      return
-                    }
                     setActiveTab(tab.key)
                   }}
 
@@ -306,7 +298,6 @@ export default function Lobby() {
                     background: isActive ? 'linear-gradient(135deg, #6366f1, #4f46e5)' : 'transparent',
                     color: isActive ? '#ffffff' : '#64748b',
                     boxShadow: isActive ? '0 2px 12px rgba(99,102,241,0.35)' : 'none',
-                    ...(tab.key === 'ml-lab' ? { border: '1px solid rgba(16,185,129,0.3)' } : {}),
                   }}
 
                   onMouseEnter={e => {

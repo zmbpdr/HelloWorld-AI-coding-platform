@@ -29,11 +29,6 @@ class Lesson(Base):
     test_cases: Mapped[list | None] = mapped_column(JSON, nullable=True, comment="测试用例（JSON 数组）")
     hint: Mapped[str | None] = mapped_column(Text, nullable=True, comment="提示信息")
 
-    # AI 自适应标签
-    knowledge_tags: Mapped[list | None] = mapped_column(JSON, nullable=True, comment="知识点标签列表，如 ['循环', 'range']")
-    estimated_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True, comment="预计学习时间（分钟）")
-    prerequisites: Mapped[list | None] = mapped_column(JSON, nullable=True, comment="前置知识点，如 ['条件判断']")
-
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, comment="是否启用")
 
     created_at: Mapped[datetime] = mapped_column(
