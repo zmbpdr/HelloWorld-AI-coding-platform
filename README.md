@@ -1,8 +1,8 @@
-# CodeQuest — 闯关式 AI 编程学习平台
+# Hello World — 闯关式 AI 编程学习平台
 
 交互式编程学习平台，通过代码闯关获得经验值。集成 AI 导师、Docker 沙箱安全执行和智能体工坊。
 
-> 版本 v6.0 | 2026-06-01
+> 版本 v1.0 | 2026-07-14
 
 ---
 
@@ -17,7 +17,7 @@
 
 ```bash
 # 终端 1: 后端
-cd codequest-api && uv run uvicorn app.main:app --host 0.0.0.0 --port 8006 --reload
+cd codequest-api && uvicorn app.main:app --host 0.0.0.0 --port 8006 --reload
 
 # 终端 2: 学习前端
 cd codequest-web && npx vite --port 5173 --host
@@ -71,7 +71,7 @@ cd codequest-admin-web && npx vite --port 5174 --host
 ├── codequest-admin-web/    # 管理后台 (React + Ant Design 6)
 ├── codequest-content/      # 课程数据 (lessons/ + agent/)
 ├── docker-compose.yml
-└── CodeQuest_Architecture_Design.md
+└── Hello_World_Architecture_Design.md
 ```
 
 ---
