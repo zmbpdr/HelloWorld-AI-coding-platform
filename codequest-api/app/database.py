@@ -1,6 +1,6 @@
 """数据库模块 - SQLAlchemy 异步引擎和会话管理"""
 
-from sqlalchemy import event
+from sqlalchemy import event, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -55,6 +55,16 @@ async def init_db() -> None:
     """初始化数据库 - 创建所有表"""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # 本项目尚未维护历史 Alembic revision；为已有 SQLite 开发库补齐会员字段。
+        if settings.DATABASE_URL and "sqlite" in settings.DATABASE_URL:
+            columns = (await conn.execute(text("PRAGMA table_info(users)"))).mappings().all()
+            names = {column["name"] for column in columns}
+            if "membership" not in names:
+                await conn.execute(text("ALTER TABLE users ADD COLUMN membership VARCHAR(20) DEFAULT 'free'"))
+            if "ai_usage_today" not in names:
+                await conn.execute(text("ALTER TABLE users ADD COLUMN ai_usage_today INTEGER DEFAULT 0"))
+            if "ai_usage_date" not in names:
+                await conn.execute(text("ALTER TABLE users ADD COLUMN ai_usage_date DATE"))
 
 
 async def close_db() -> None:

@@ -205,6 +205,13 @@ export default function Lobby() {
                 >
                   个人中心
                 </button>
+                <button
+                  onClick={() => navigate('/pricing')}
+                  className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
+                  style={{ background: 'rgba(139,92,246,0.14)', color: '#c4b5fd', border: '1px solid rgba(139,92,246,0.22)' }}
+                >
+                  Pro
+                </button>
                 </>
               ) : (
 

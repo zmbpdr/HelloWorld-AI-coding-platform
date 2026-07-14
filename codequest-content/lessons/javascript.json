@@ -1,492 +1,192 @@
 [
   {
-    "title": "Hello World",
-    "slug": "javascript-01-hello-world",
-    "description": "学习JavaScript基本语法，编写你的第一个程序",
-    "content": "# Hello World - 你的第一个JavaScript程序\n\nJavaScript是Web开发的核心语言，既可以运行在浏览器中，也可以在Node.js环境下运行。\n\n## 编写第一个程序\n```javascript\nconsole.log(\"Hello, World!\");\n```\n\n## 函数定义\n```javascript\nfunction hello() {\n    return \"Hello, World!\";\n}\n```\n\n## 练习\n编写函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "title": "认识变量",
+    "slug": "javascript-01-get-age",
+    "description": "通过 getAge() 返回变量 age 的值 18。",
+    "content": "# 认识变量\n\n本关使用 **JavaScript** 学习「变量」。\n\n## 任务\n通过 getAge() 返回变量 age 的值 18。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 1,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function hello() {\n    // 在这里编写你的代码\n}",
-    "solution_code": "function hello() {\n    return \"Hello, World!\";\n}",
+    "starter_code": "function getAge() {\n  // 在这里实现 getAge\n  return 0;\n}",
+    "solution_code": "function getAge() {\n  const age = 18;\n  return age;\n}",
     "test_cases": [
       {
-        "input": "hello()",
-        "expected_output": "Hello, World!",
-        "description": "hello() 应返回 Hello, World!"
-      },
-      {
-        "input": "hello()",
-        "expected_output": "Hello, World!",
-        "description": "基本功能验证"
+        "input": "getAge()",
+        "expected_output": "18",
+        "description": "认识变量：基础用例"
       }
     ],
-    "hint": "使用 return 语句返回字符串"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "变量与数据类型",
-    "slug": "javascript-02-variables",
-    "description": "学习 let、const 和数据类型",
-    "content": "# 变量与数据类型\n\n```javascript\nlet name = \"Alice\";    // 字符串\nconst age = 25;        // 数字\nlet isStudent = true;  // 布尔值\n```\n\n## 练习\n编写函数 `greet(name)`，返回 `\"你好, {name}!\"`。\n\n## 数据类型的重要性\n选择正确的数据类型是编程的基础能力：\n- 整数和浮点数用于数学计算\n- 字符串用于文本处理\n- 布尔值用于逻辑判断\n\n## 类型安全\n不同语言对类型的处理方式不同：\n- **强类型**（如Python、Java）：类型不匹配会报错\n- **弱类型**（如JavaScript）：自动进行类型转换\n- **静态类型**：编译时检查类型\n- **动态类型**：运行时确定类型\n\n## 编程建议\n- 变量名要有描述性\n- 避免使用魔法数字（应定义为常量）\n- 注意类型转换可能带来的精度损失\n",
+    "title": "基本数据类型",
+    "slug": "javascript-02-add",
+    "description": "实现 add(a, b)，返回两个整数之和。",
+    "content": "# 基本数据类型\n\n本关使用 **JavaScript** 学习「基本数据类型」。\n\n## 任务\n实现 add(a, b)，返回两个整数之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 2,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function greet(name) {\n    // 返回问候语\n}",
-    "solution_code": "function greet(name) {\n    return `你好, ${name}!`;\n}",
+    "starter_code": "function add(a, b) {\n  // 在这里实现 add\n  return 0;\n}",
+    "solution_code": "function add(a, b) {\n  return a + b;\n}",
     "test_cases": [
       {
-        "input": "greet('Alice')",
-        "expected_output": "你好, Alice!",
-        "description": "greet('Alice') 应返回 '你好, Alice!'"
-      },
-      {
-        "input": "greet('Bob')",
-        "expected_output": "你好, Bob!",
-        "description": "greet('Bob') 应返回 '你好, Bob!'"
+        "input": "add(7, 5)",
+        "expected_output": "12",
+        "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "使用模板字符串 `${name}` 插值"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "运算符",
-    "slug": "javascript-03-operators",
-    "description": "学习算术、比较和逻辑运算符",
-    "content": "# 运算符\n\n```javascript\n10 + 3   // 13\n10 === 3 // false（严格相等）\n10 !== 3 // true\n```\n\n## 练习\n编写函数 `isEven(n)`，判断是否为偶数。\n\n## 运算符优先级\n理解运算符的优先级对编写正确的表达式至关重要。当不确定时，使用括号 `()` 明确优先级。\n\n## 常见陷阱\n- 整数除法 vs 浮点除法（不同语言行为不同）\n- 取余运算中负数的处理\n- 比较浮点数时不要用 `==`（精度问题）\n- 逻辑运算符的短路求值特性\n",
+    "title": "条件判断",
+    "slug": "javascript-03-is-adult",
+    "description": "实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。",
+    "content": "# 条件判断\n\n本关使用 **JavaScript** 学习「条件判断」。\n\n## 任务\n实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 3,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function isEven(n) {\n    // 判断是否为偶数\n}",
-    "solution_code": "function isEven(n) {\n    return n % 2 === 0;\n}",
+    "starter_code": "function isAdult(age) {\n  // 在这里实现 isAdult\n  return 0;\n}",
+    "solution_code": "function isAdult(age) {\n  return age >= 18 ? 1 : 0;\n}",
     "test_cases": [
       {
-        "input": "isEven(4)",
-        "expected_output": "true",
-        "description": "isEven(4) 应返回 true"
-      },
-      {
-        "input": "isEven(7)",
-        "expected_output": "false",
-        "description": "isEven(7) 应返回 false"
+        "input": "isAdult(20)",
+        "expected_output": "1",
+        "description": "条件判断：基础用例"
       }
     ],
-    "hint": "使用 % 取余运算符判断偶数"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "条件语句",
-    "slug": "javascript-04-conditionals",
-    "description": "学习 if/else if/else 条件判断",
-    "content": "# 条件语句\n\n```javascript\nif (score >= 90) {\n    return \"优秀\";\n} else if (score >= 60) {\n    return \"及格\";\n} else {\n    return \"不及格\";\n}\n```\n\n## 练习\n编写函数 `gradeScore(score)`，根据分数返回等级。\n\n## 条件语句的设计模式\n```text\n1. 卫语句模式：先处理特殊情况，提前返回\n2. 策略模式：用字典/映射替代多重if-else\n3. 早返回：在函数开头检查无效输入并立即返回\n```\n\n## 代码可读性\n- 条件表达式不要太复杂，可以拆分为多个变量\n- 使用有意义的布尔变量名：`is_valid` > `flag`\n- 避免深度嵌套（超过3层应重构）\n",
+    "title": "循环入门",
+    "slug": "javascript-04-sum-to",
+    "description": "实现 sumTo(n)，计算从 1 到 n 的和。",
+    "content": "# 循环入门\n\n本关使用 **JavaScript** 学习「循环」。\n\n## 任务\n实现 sumTo(n)，计算从 1 到 n 的和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 4,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function gradeScore(score) {\n    // 根据分数返回等级\n}",
-    "solution_code": "function gradeScore(score) {\n    if (score >= 90) return \"优秀\";\n    if (score >= 80) return \"良好\";\n    if (score >= 60) return \"及格\";\n    return \"不及格\";\n}",
+    "starter_code": "function sumTo(n) {\n  // 在这里实现 sumTo\n  return 0;\n}",
+    "solution_code": "function sumTo(n) {\n  let total = 0;\n  for (let value = 1; value <= n; value += 1) total += value;\n  return total;\n}",
     "test_cases": [
       {
-        "input": "gradeScore(95)",
-        "expected_output": "优秀",
-        "description": "90分以上优秀"
-      },
-      {
-        "input": "gradeScore(70)",
-        "expected_output": "及格",
-        "description": "60-79及格"
-      },
-      {
-        "input": "gradeScore(50)",
-        "expected_output": "不及格",
-        "description": "60以下不及格"
+        "input": "sumTo(5)",
+        "expected_output": "15",
+        "description": "循环入门：基础用例"
       }
     ],
-    "hint": "从高到低依次判断"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "循环",
-    "slug": "javascript-05-loops",
-    "description": "学习 for 和 while 循环",
-    "content": "# 循环\n\n```javascript\nfor (let i = 0; i < 5; i++) {\n    console.log(i);\n}\n```\n\n## 练习\n编写函数 `sumRange(n)`，返回1到n的整数和。\n\n## 循环的性能考量\n- 避免在循环中进行重复计算\n- 尽量减少循环体内的函数调用\n- 考虑使用更高效的数据结构\n\n## 循环 vs 递归 vs 高阶函数\n| 方式 | 适用场景 |\n|------|---------|\n| for/while | 明确次数、简单遍历 |\n| 递归 | 树形结构、分治问题 |\n| map/filter | 数据转换和过滤 |\n\n## 常见错误\n- 死循环（循环条件永远为真）\n- 差一错误（off-by-one）\n- 在遍历时修改集合\n",
+    "title": "数组或列表",
+    "slug": "javascript-05-sum-array",
+    "description": "实现 sumArray(numbers)，计算数组所有元素之和。",
+    "content": "# 数组或列表\n\n本关使用 **JavaScript** 学习「数组/列表」。\n\n## 任务\n实现 sumArray(numbers)，计算数组所有元素之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 5,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function sumRange(n) {\n    // 返回1到n的整数和\n}",
-    "solution_code": "function sumRange(n) {\n    let sum = 0;\n    for (let i = 1; i <= n; i++) {\n        sum += i;\n    }\n    return sum;\n}",
+    "starter_code": "function sumArray(numbers) {\n  // 在这里实现 sumArray\n  return 0;\n}",
+    "solution_code": "function sumArray(numbers) {\n  return numbers.reduce((total, value) => total + value, 0);\n}",
     "test_cases": [
       {
-        "input": "sumRange(5)",
-        "expected_output": "15",
-        "description": "1+2+3+4+5=15"
-      },
-      {
-        "input": "sumRange(10)",
-        "expected_output": "55",
-        "description": "1到10的和"
+        "input": "sumArray([1, 2, 3, 4])",
+        "expected_output": "10",
+        "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "使用 for 循环累加"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "函数",
-    "slug": "javascript-06-functions",
-    "description": "学习函数定义、箭头函数和参数",
-    "content": "# 函数\n\n```javascript\n// 函数声明\nfunction add(a, b) { return a + b; }\n\n// 箭头函数\nconst add = (a, b) => a + b;\n```\n\n## 练习\n编写函数 `calculateBMI(weight, height)`，计算BMI并保留1位小数。\n\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "title": "函数基础",
+    "slug": "javascript-06-square",
+    "description": "实现 square(n)，返回 n 的平方。",
+    "content": "# 函数基础\n\n本关使用 **JavaScript** 学习「函数」。\n\n## 任务\n实现 square(n)，返回 n 的平方。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 6,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function calculateBMI(weight, height) {\n    // 计算BMI，保留1位小数\n}",
-    "solution_code": "function calculateBMI(weight, height) {\n    return Math.round(weight / (height * height) * 10) / 10;\n}",
+    "starter_code": "function square(n) {\n  // 在这里实现 square\n  return 0;\n}",
+    "solution_code": "function square(n) {\n  return n * n;\n}",
     "test_cases": [
       {
-        "input": "calculateBMI(70, 1.75)",
-        "expected_output": "22.9",
-        "description": "BMI计算"
-      },
-      {
-        "input": "calculateBMI(60, 1.70)",
-        "expected_output": "20.8",
-        "description": "BMI计算"
+        "input": "square(9)",
+        "expected_output": "81",
+        "description": "函数基础：基础用例"
       }
     ],
-    "hint": "BMI = 体重/身高²，使用 Math.round 保留小数"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "数组",
-    "slug": "javascript-07-arrays",
-    "description": "学习数组的创建和常用方法",
-    "content": "# 数组\n\n```javascript\nlet arr = [1, 2, 3];\narr.push(4);       // 添加\narr.map(x => x*2); // 映射\narr.filter(x => x>1); // 过滤\narr.reduce((a,b) => a+b, 0); // 归纳\n```\n\n## 练习\n编写函数 `filterPositive(numbers)`，筛选出所有正数。\n",
+    "title": "字典、对象或 Map",
+    "slug": "javascript-07-get-score",
+    "description": "实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。",
+    "content": "# 字典、对象或 Map\n\n本关使用 **JavaScript** 学习「映射」。\n\n## 任务\n实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 7,
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "xp_reward": 10,
-    "starter_code": "function filterPositive(numbers) {\n    // 筛选正数\n}",
-    "solution_code": "function filterPositive(numbers) {\n    return numbers.filter(n => n > 0);\n}",
+    "starter_code": "function getScore(scores, name) {\n  // 在这里实现 getScore\n  return 0;\n}",
+    "solution_code": "function getScore(scores, name) {\n  return scores[name] ?? 0;\n}",
     "test_cases": [
       {
-        "input": "filterPositive([-1, 2, -3, 4, 0, 5])",
-        "expected_output": "[2,4,5]",
-        "description": "筛选正数"
-      },
-      {
-        "input": "filterPositive([-1, -2])",
-        "expected_output": "[]",
-        "description": "无正数时返回空数组"
+        "input": "getScore({Ada: 95, Bob: 88}, 'Ada')",
+        "expected_output": "95",
+        "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "使用 filter 方法"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
     "title": "字符串操作",
-    "slug": "javascript-08-strings",
-    "description": "学习字符串的拼接、切片和常用方法",
-    "content": "# 字符串操作\n\n```javascript\n\"hello\".toUpperCase();  // \"HELLO\"\n\"hello\".split(\"\");      // [\"h\",\"e\",\"l\",\"l\",\"o\"]\n\"hello\".slice(1, 3);    // \"el\"\n\"hello\".includes(\"ell\"); // true\n```\n\n## 练习\n编写函数 `reverseString(s)`，返回反转后的字符串。\n编写函数 `isPalindrome(s)`，判断是否为回文（忽略大小写和空格）。\n",
+    "slug": "javascript-08-count-vowels",
+    "description": "实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。",
+    "content": "# 字符串操作\n\n本关使用 **JavaScript** 学习「字符串」。\n\n## 任务\n实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 8,
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "xp_reward": 10,
-    "starter_code": "function reverseString(s) {\n    // 反转字符串\n}\n\nfunction isPalindrome(s) {\n    // 判断回文\n}",
-    "solution_code": "function reverseString(s) {\n    return s.split(\"\").reverse().join(\"\");\n}\n\nfunction isPalindrome(s) {\n    const cleaned = s.toLowerCase().replace(/\\s/g, \"\");\n    return cleaned === cleaned.split(\"\").reverse().join(\"\");\n}",
+    "starter_code": "function countVowels(text) {\n  // 在这里实现 countVowels\n  return 0;\n}",
+    "solution_code": "function countVowels(text) {\n  return [...text].filter(char => 'aeiou'.includes(char.toLowerCase())).length;\n}",
     "test_cases": [
       {
-        "input": "reverseString('hello')",
-        "expected_output": "olleh",
-        "description": "反转字符串"
-      },
-      {
-        "input": "isPalindrome('racecar')",
-        "expected_output": "true",
-        "description": "回文判断"
-      },
-      {
-        "input": "isPalindrome('hello')",
-        "expected_output": "false",
-        "description": "非回文判断"
+        "input": "countVowels('CodeQuest')",
+        "expected_output": "4",
+        "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "使用 split/reverse/join 反转字符串"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "对象",
-    "slug": "javascript-09-objects",
-    "description": "学习对象的创建和操作",
-    "content": "# 对象\n\n```javascript\nconst student = { name: \"Alice\", age: 20 };\nstudent.grade = \"A\";\ndelete student.age;\nObject.keys(student);\n```\n\n## 练习\n编写函数 `countWords(text)`，统计每个单词出现次数，返回对象。\n",
+    "title": "综合项目：简易计算器",
+    "slug": "javascript-09-calculate",
+    "description": "实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。",
+    "content": "# 综合项目：简易计算器\n\n本关使用 **JavaScript** 学习「综合应用」。\n\n## 任务\n实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 9,
     "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function countWords(text) {\n    // 统计单词出现次数\n}",
-    "solution_code": "function countWords(text) {\n    const counts = {};\n    text.split(' ').forEach(word => {\n        counts[word] = (counts[word] || 0) + 1;\n    });\n    return counts;\n}",
+    "xp_reward": 20,
+    "starter_code": "function calculate(a, b, op) {\n  // 在这里实现 calculate\n  return 0;\n}",
+    "solution_code": "function calculate(a, b, op) {\n  if (op === '+') return a + b;\n  if (op === '-') return a - b;\n  if (op === '*') return a * b;\n  if (op === '/' && b !== 0) return Math.trunc(a / b);\n  return 0;\n}",
     "test_cases": [
       {
-        "input": "countWords('hello world hello')",
-        "expected_output": "{\"hello\":2,\"world\":1}",
-        "description": "统计单词次数"
-      },
-      {
-        "input": "countWords('hello world hello')",
-        "expected_output": "{\"hello\":2,\"world\":1}",
-        "description": "基本功能验证"
+        "input": "calculate(8, 2, '*')",
+        "expected_output": "16",
+        "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "使用对象存储计数"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "数组高阶方法",
-    "slug": "javascript-10-array-methods",
-    "description": "深入学习 map、filter、reduce",
-    "content": "# 数组高阶方法\n\n```javascript\nconst nums = [1, 2, 3, 4, 5];\nnums.map(x => x * 2);           // [2, 4, 6, 8, 10]\nnums.filter(x => x % 2 === 0);  // [2, 4]\nnums.reduce((a, b) => a + b);   // 15\n```\n\n## 练习\n编写函数 `sumEvenSquares(numbers)`，计算所有偶数的平方和。\n",
+    "title": "综合项目：待办事项管理器",
+    "slug": "javascript-10-count-completed",
+    "description": "实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。",
+    "content": "# 综合项目：待办事项管理器\n\n本关使用 **JavaScript** 学习「综合应用」。\n\n## 任务\n实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 10,
     "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function sumEvenSquares(numbers) {\n    // 偶数的平方和\n}",
-    "solution_code": "function sumEvenSquares(numbers) {\n    return numbers.filter(n => n % 2 === 0).map(n => n * n).reduce((a, b) => a + b, 0);\n}",
-    "test_cases": [
-      {
-        "input": "sumEvenSquares([1, 2, 3, 4, 5])",
-        "expected_output": "20",
-        "description": "2²+4²=20"
-      },
-      {
-        "input": "sumEvenSquares([1, 3, 5])",
-        "expected_output": "0",
-        "description": "无偶数时为0"
-      }
-    ],
-    "hint": "链式调用 filter → map → reduce"
-  },
-  {
-    "title": "解构与展开",
-    "slug": "javascript-11-destructuring",
-    "description": "学习解构赋值和展开运算符",
-    "content": "# 解构与展开\n\n```javascript\nconst [a, b, ...rest] = [1, 2, 3, 4];\nconst { name, age } = { name: \"Alice\", age: 20 };\nconst arr1 = [1, 2];\nconst arr2 = [...arr1, 3, 4]; // [1, 2, 3, 4]\n```\n\n## 练习\n编写函数 `mergeUnique(arr1, arr2)`，合并两个数组并去重。\n",
-    "order": 11,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function mergeUnique(arr1, arr2) {\n    // 合并去重\n}",
-    "solution_code": "function mergeUnique(arr1, arr2) {\n    return [...new Set([...arr1, ...arr2])];\n}",
-    "test_cases": [
-      {
-        "input": "mergeUnique([1, 2, 3], [2, 3, 4])",
-        "expected_output": "[1,2,3,4]",
-        "description": "合并去重"
-      },
-      {
-        "input": "mergeUnique([1, 2, 3], [2, 3, 4])",
-        "expected_output": "[1,2,3,4]",
-        "description": "基本功能验证"
-      }
-    ],
-    "hint": "使用展开运算符和 Set 去重"
-  },
-  {
-    "title": "Promise与异步",
-    "slug": "javascript-12-promises",
-    "description": "学习Promise和async/await",
-    "content": "# Promise与异步\n\n```javascript\nconst promise = new Promise((resolve) => {\n    resolve(42);\n});\npromise.then(val => console.log(val));\n\nasync function getData() {\n    const result = await promise;\n    return result;\n}\n```\n\n## 练习\n编写函数 `delayedGreet(name, ms)`，返回一个Promise，在ms毫秒后resolve问候语。\n",
-    "order": 12,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function delayedGreet(name, ms) {\n    // 延迟返回问候语\n}",
-    "solution_code": "function delayedGreet(name, ms) {\n    return new Promise(resolve => {\n        setTimeout(() => resolve(`你好, ${name}!`), ms);\n    });\n}",
-    "test_cases": [
-      {
-        "input": "typeof delayedGreet('Alice', 100)",
-        "expected_output": "object",
-        "description": "应返回Promise对象"
-      },
-      {
-        "input": "typeof delayedGreet('Alice', 100)",
-        "expected_output": "object",
-        "description": "基本功能验证"
-      }
-    ],
-    "hint": "使用 new Promise 和 setTimeout"
-  },
-  {
-    "title": "类与继承",
-    "slug": "javascript-13-classes",
-    "description": "学习ES6类和继承",
-    "content": "# 类与继承\n\n```javascript\nclass Animal {\n    constructor(name) { this.name = name; }\n    speak() { return `${this.name} makes a sound`; }\n}\nclass Dog extends Animal {\n    speak() { return `${this.name} barks`; }\n}\n```\n\n## 练习\n编写 `Rectangle` 类，包含 width/height 属性，以及 area() 和 perimeter() 方法。\n",
-    "order": 13,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "class Rectangle {\n    constructor(width, height) {\n        // 初始化\n    }\n    area() {\n        // 面积\n    }\n    perimeter() {\n        // 周长\n    }\n}",
-    "solution_code": "class Rectangle {\n    constructor(width, height) {\n        this.width = width;\n        this.height = height;\n    }\n    area() { return this.width * this.height; }\n    perimeter() { return 2 * (this.width + this.height); }\n}",
-    "test_cases": [
-      {
-        "input": "new Rectangle(3, 4).area()",
-        "expected_output": "12",
-        "description": "矩形面积"
-      },
-      {
-        "input": "new Rectangle(3, 4).perimeter()",
-        "expected_output": "14",
-        "description": "矩形周长"
-      }
-    ],
-    "hint": "面积=宽×高，周长=2×(宽+高)"
-  },
-  {
-    "title": "闭包",
-    "slug": "javascript-14-closures",
-    "description": "学习闭包的概念和应用",
-    "content": "# 闭包\n\n闭包是函数与其词法环境的组合：\n\n```javascript\nfunction counter() {\n    let count = 0;\n    return function() {\n        return ++count;\n    };\n}\nconst inc = counter();\ninc(); // 1\ninc(); // 2\n```\n\n## 练习\n编写函数 `createMultiplier(factor)`，返回一个将参数乘以factor的函数。\n",
-    "order": 14,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function createMultiplier(factor) {\n    // 返回乘法函数\n}",
-    "solution_code": "function createMultiplier(factor) {\n    return function(n) {\n        return n * factor;\n    };\n}",
-    "test_cases": [
-      {
-        "input": "const double = createMultiplier(2); double(5)",
-        "expected_output": "10",
-        "description": "乘法器"
-      },
-      {
-        "input": "const triple = createMultiplier(3); triple(4)",
-        "expected_output": "12",
-        "description": "三倍乘法器"
-      }
-    ],
-    "hint": "返回一个使用外部 factor 变量的函数"
-  },
-  {
-    "title": "错误处理",
-    "slug": "javascript-15-error-handling",
-    "description": "学习 try/catch 错误处理",
-    "content": "# 错误处理\n\n```javascript\ntry {\n    JSON.parse(\"invalid\");\n} catch (e) {\n    console.log(\"解析失败:\", e.message);\n}\n```\n\n## 练习\n编写函数 `safeParse(jsonStr)`，安全解析JSON字符串，失败返回 null。\n",
-    "order": 15,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function safeParse(jsonStr) {\n    // 安全解析JSON\n}",
-    "solution_code": "function safeParse(jsonStr) {\n    try {\n        return JSON.parse(jsonStr);\n    } catch (e) {\n        return null;\n    }\n}",
-    "test_cases": [
-      {
-        "input": "safeParse('{\"a\":1}')",
-        "expected_output": "{\"a\":1}",
-        "description": "有效JSON"
-      },
-      {
-        "input": "safeParse('invalid')",
-        "expected_output": "null",
-        "description": "无效JSON返回null"
-      }
-    ],
-    "hint": "使用 try/catch 包裹 JSON.parse"
-  },
-  {
-    "title": "模块化",
-    "slug": "javascript-16-modules",
-    "description": "学习ES6模块的导入导出",
-    "content": "# 模块化\n\n```javascript\n// 导出\nexport function add(a, b) { return a + b; }\nexport default class Calculator { }\n\n// 导入\nimport Calculator, { add } from './calculator.js';\n```\n\n## 练习\n编写函数 `createStack()`，使用闭包实现一个栈数据结构，包含 push、pop、peek、size 方法。\n",
-    "order": 16,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function createStack() {\n    // 使用闭包实现栈\n}",
-    "solution_code": "function createStack() {\n    const items = [];\n    return {\n        push: (item) => items.push(item),\n        pop: () => items.pop(),\n        peek: () => items[items.length - 1],\n        size: () => items.length\n    };\n}",
-    "test_cases": [
-      {
-        "input": "const s = createStack(); s.push(1); s.push(2); s.size()",
-        "expected_output": "2",
-        "description": "栈大小"
-      },
-      {
-        "input": "const s = createStack(); s.push(1); s.push(2); s.pop()",
-        "expected_output": "2",
-        "description": "栈弹出"
-      }
-    ],
-    "hint": "使用闭包保护内部数组"
-  },
-  {
-    "title": "排序算法",
-    "slug": "javascript-17-sorting",
-    "description": "实现冒泡排序",
-    "content": "# 排序算法\n\n实现冒泡排序。\n\n## 练习\n编写函数 `bubbleSort(arr)`，返回排序后的新数组。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
-    "order": 17,
-    "difficulty": "advanced",
     "xp_reward": 20,
-    "starter_code": "function bubbleSort(arr) {\n    // 冒泡排序\n}",
-    "solution_code": "function bubbleSort(arr) {\n    const result = [...arr];\n    for (let i = 0; i < result.length; i++) {\n        for (let j = 0; j < result.length - i - 1; j++) {\n            if (result[j] > result[j + 1]) {\n                [result[j], result[j + 1]] = [result[j + 1], result[j]];\n            }\n        }\n    }\n    return result;\n}",
+    "starter_code": "function countCompleted(statuses) {\n  // 在这里实现 countCompleted\n  return 0;\n}",
+    "solution_code": "function countCompleted(statuses) {\n  return statuses.filter(Boolean).length;\n}",
     "test_cases": [
       {
-        "input": "bubbleSort([5, 3, 8, 1])",
-        "expected_output": "[1,3,5,8]",
-        "description": "冒泡排序"
-      },
-      {
-        "input": "bubbleSort([5, 3, 8, 1])",
-        "expected_output": "[1,3,5,8]",
-        "description": "基本功能验证"
-      }
-    ],
-    "hint": "双重循环比较相邻元素"
-  },
-  {
-    "title": "二分查找",
-    "slug": "javascript-18-binary-search",
-    "description": "实现二分查找",
-    "content": "# 二分查找\n\n## 练习\n编写函数 `binarySearch(arr, target)`，在有序数组中查找目标值，返回索引或-1。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
-    "order": 18,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "function binarySearch(arr, target) {\n    // 二分查找\n}",
-    "solution_code": "function binarySearch(arr, target) {\n    let left = 0, right = arr.length - 1;\n    while (left <= right) {\n        const mid = Math.floor((left + right) / 2);\n        if (arr[mid] === target) return mid;\n        if (arr[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}",
-    "test_cases": [
-      {
-        "input": "binarySearch([1, 3, 5, 7, 9], 5)",
+        "input": "countCompleted([true, false, true])",
         "expected_output": "2",
-        "description": "查找存在的元素"
-      },
-      {
-        "input": "binarySearch([1, 3, 5, 7, 9], 4)",
-        "expected_output": "-1",
-        "description": "查找不存在的元素"
+        "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "使用左右指针缩小范围"
-  },
-  {
-    "title": "递归",
-    "slug": "javascript-19-recursion",
-    "description": "学习递归思想",
-    "content": "# 递归\n\n## 练习\n编写函数 `fibonacci(n)`，返回第n个斐波那契数。\n编写函数 `factorial(n)`，返回n的阶乘。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
-    "order": 19,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "function fibonacci(n) {\n    // 斐波那契数\n}\n\nfunction factorial(n) {\n    // 阶乘\n}",
-    "solution_code": "function fibonacci(n) {\n    if (n <= 1) return n;\n    return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nfunction factorial(n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}",
-    "test_cases": [
-      {
-        "input": "fibonacci(5)",
-        "expected_output": "5",
-        "description": "F(5)=5"
-      },
-      {
-        "input": "factorial(5)",
-        "expected_output": "120",
-        "description": "5!=120"
-      }
-    ],
-    "hint": "确定基线条件后递归调用"
-  },
-  {
-    "title": "综合实战 - 待办列表",
-    "slug": "javascript-20-todo-app",
-    "description": "综合运用所学知识实现待办列表管理",
-    "content": "# 综合实战 - 待办列表\n\n## 练习\n实现 `TodoList` 类，包含：\n- `add(task)` - 添加待办\n- `complete(index)` - 标记完成\n- `getPending()` - 返回未完成列表\n",
-    "order": 20,
-    "difficulty": "advanced",
-    "xp_reward": 25,
-    "starter_code": "class TodoList {\n    constructor() {\n        // 初始化\n    }\n    add(task) {\n        // 添加待办\n    }\n    complete(index) {\n        // 标记完成\n    }\n    getPending() {\n        // 返回未完成列表\n    }\n}",
-    "solution_code": "class TodoList {\n    constructor() {\n        this.todos = [];\n    }\n    add(task) {\n        this.todos.push({ task, done: false });\n    }\n    complete(index) {\n        if (index >= 0 && index < this.todos.length) {\n            this.todos[index].done = true;\n        }\n    }\n    getPending() {\n        return this.todos.filter(t => !t.done).map(t => t.task);\n    }\n}",
-    "test_cases": [
-      {
-        "input": "const tl = new TodoList(); tl.add('学习'); tl.add('运动'); tl.complete(0); tl.getPending()",
-        "expected_output": "[\"运动\"]",
-        "description": "待办列表管理"
-      },
-      {
-        "input": "const tl = new TodoList(); tl.add('学习'); tl.add('运动'); tl.complete(0); tl.getPending()",
-        "expected_output": "[\"运动\"]",
-        "description": "基本功能验证"
-      }
-    ],
-    "hint": "使用数组存储待办对象，用 done 属性标记状态"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
   }
 ]
