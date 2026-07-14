@@ -1,507 +1,192 @@
 [
   {
-    "title": "Hello World",
-    "slug": "typescript-01-hello-world",
-    "description": "学习TypeScript基础配置、类型注解与编译流程",
-    "content": "# Hello World — TypeScript 的第一步\n\n欢迎来到 TypeScript 的世界！TypeScript 是 JavaScript 的超集，就像给 JavaScript 穿上了一件「类型安全」的防弹衣。它在你写代码时就能发现潜在错误，而不是等到运行时才报错。\n\n## tsconfig — TypeScript 的配置中心\n\n`tsconfig.json` 是 TypeScript 项目的配置文件，就像餐厅的菜单，告诉编译器如何处理你的代码：\n```json\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"strict\": true,\n    \"outDir\": \"./dist\"\n  }\n}\n```\n- `target`：编译后的 JS 版本\n- `strict`：开启所有严格类型检查\n- `outDir`：编译输出目录\n\n## 类型注解 — 给变量贴标签\n\n类型注解就像给快递包裹贴上「易碎品」标签，明确告诉 TypeScript 这个变量是什么类型：\n```typescript\nlet message: string = \"Hello, World!\";\nlet count: number = 42;\nlet isActive: boolean = true;\n```\n\n## 编译 — 从 TS 到 JS\n\nTypeScript 不能直接运行，需要编译成 JavaScript：\n```bash\ntsc hello.ts    # 编译生成 hello.js\nnode hello.js   # 运行\n```\n\n## 练习\n编写函数 `hello()`，添加返回值类型注解，返回字符串 `\"Hello, TypeScript!\"`。\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "title": "认识变量",
+    "slug": "typescript-01-get-age",
+    "description": "通过 getAge() 返回变量 age 的值 18。",
+    "content": "# 认识变量\n\n本关使用 **TypeScript** 学习「变量」。\n\n## 任务\n通过 getAge() 返回变量 age 的值 18。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 1,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function hello(): string {\n    // 在这里编写你的代码\n    return \"\";\n}",
-    "solution_code": "function hello(): string {\n    return \"Hello, TypeScript!\";\n}",
+    "starter_code": "function getAge(): number {\n  // 在这里实现 getAge\n  return 0;\n}",
+    "solution_code": "function getAge(): number {\n  const age = 18;\n  return age;\n}",
     "test_cases": [
       {
-        "input": "hello()",
-        "expected_output": "Hello, TypeScript!",
-        "description": "hello() 应返回 Hello, TypeScript!"
-      },
-      {
-        "input": "hello()",
-        "expected_output": "Hello, TypeScript!",
-        "description": "基本功能验证"
+        "input": "getAge()",
+        "expected_output": "18",
+        "description": "认识变量：基础用例"
       }
     ],
-    "hint": "在函数参数列表后用 `: string` 声明返回值类型，然后用 return 返回字符串"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "基础类型",
-    "slug": "typescript-02-basic-types",
-    "description": "学习 string、number、boolean、null、undefined 类型",
-    "content": "# 基础类型 — TypeScript 的五种基本积木\n\n就像乐高有不同形状的基础积木，TypeScript 有五种基本类型来构建你的程序。\n\n## string — 文字类型\n用单引号、双引号或反引号包裹的文本：\n```typescript\nlet name: string = \"TypeScript\";\nlet greeting: string = `Hello, ${name}`;  // 模板字符串\n```\n\n## number — 数字类型\nTypeScript 中所有数字都是 number，不区分整数和浮点数：\n```typescript\nlet age: number = 25;\nlet price: number = 9.99;\nlet hex: number = 0xff;    // 十六进制也行\n```\n\n## boolean — 布尔类型\n只有两个值：true 或 false，就像开关只有开和关：\n```typescript\nlet isValid: boolean = true;\nlet isEmpty: boolean = false;\n```\n\n## null 与 undefined — 空值类型\n它们是「空」的两种形态：\n- `undefined`：变量声明了但没赋值，就像空房间还没放家具\n- `null`：明确表示「没有值」，就像房间里的家具被搬走了\n```typescript\nlet notAssigned: undefined = undefined;\nlet empty: null = null;\n```\n\n## 练习\n编写函数 `getTypeLabel(value: string | number | boolean)`，根据值的类型返回对应的类型标签字符串：\n- 字符串返回 `\"string\"`\n- 数字返回 `\"number\"`\n- 布尔值返回 `\"boolean\"`",
+    "title": "基本数据类型",
+    "slug": "typescript-02-add",
+    "description": "实现 add(a, b)，返回两个整数之和。",
+    "content": "# 基本数据类型\n\n本关使用 **TypeScript** 学习「基本数据类型」。\n\n## 任务\n实现 add(a, b)，返回两个整数之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 2,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function getTypeLabel(value: string | number | boolean): string {\n    // 根据值的类型返回标签\n    return \"\";\n}",
-    "solution_code": "function getTypeLabel(value: string | number | boolean): string {\n    if (typeof value === \"string\") return \"string\";\n    if (typeof value === \"number\") return \"number\";\n    return \"boolean\";\n}",
+    "starter_code": "function add(a: number, b: number): number {\n  // 在这里实现 add\n  return 0;\n}",
+    "solution_code": "function add(a: number, b: number): number {\n  return a + b;\n}",
     "test_cases": [
       {
-        "input": "getTypeLabel(\"hello\")",
-        "expected_output": "string",
-        "description": "getTypeLabel('hello') 应返回 'string'"
-      },
-      {
-        "input": "getTypeLabel(42)",
-        "expected_output": "number",
-        "description": "getTypeLabel(42) 应返回 'number'"
-      },
-      {
-        "input": "getTypeLabel(true)",
-        "expected_output": "boolean",
-        "description": "getTypeLabel(true) 应返回 'boolean'"
+        "input": "add(7, 5)",
+        "expected_output": "12",
+        "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "使用 typeof 运算符判断类型，注意 typeof 的返回值是小写字符串"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "数组与元组",
-    "slug": "typescript-03-arrays-tuples",
-    "description": "学习 Array<T>、readonly 数组与元组类型",
-    "content": "# 数组与元组 — 有序的数据容器\n\n## 数组 — 同类元素的集合\n\n数组就像一排相同规格的储物柜，每个柜子里放的都是同一种类型的物品：\n```typescript\nlet numbers: number[] = [1, 2, 3];\nlet strings: Array<string> = [\"a\", \"b\", \"c\"];\n```\n两种写法等价，`number[]` 更常用，`Array<T>` 在泛型场景更灵活。\n\n## readonly 数组 — 只读的展示柜\n\n`readonly` 数组就像博物馆的展品——只能看，不能碰：\n```typescript\nlet readonlyArr: readonly number[] = [1, 2, 3];\n// readonlyArr.push(4);  // 报错！不允许修改\n// readonlyArr[0] = 10;  // 报错！不允许修改\n```\n\n## 元组 — 固定长度、固定类型的数组\n\n元组就像一张火车票，有固定的字段：车次、座位号、日期，每个位置的类型都不同：\n```typescript\nlet ticket: [string, number, string] = [\"G123\", 15, \"2024-01-01\"];\nlet coordinate: [number, number] = [39.9, 116.4];\n```\n\n元组也可以标记为 readonly：\n```typescript\nlet fixedPoint: readonly [number, number] = [0, 0];\n```\n\n## 练习\n编写函数 `parseCoordinate(input: [number, number])`，接收一个元组表示坐标，返回格式化字符串 `\"x: {x}, y: {y}\"`。",
+    "title": "条件判断",
+    "slug": "typescript-03-is-adult",
+    "description": "实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。",
+    "content": "# 条件判断\n\n本关使用 **TypeScript** 学习「条件判断」。\n\n## 任务\n实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 3,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function parseCoordinate(input: [number, number]): string {\n    // 将坐标元组格式化为字符串\n    return \"\";\n}",
-    "solution_code": "function parseCoordinate(input: [number, number]): string {\n    return `x: ${input[0]}, y: ${input[1]}`;\n}",
+    "starter_code": "function isAdult(age: number): number {\n  // 在这里实现 isAdult\n  return 0;\n}",
+    "solution_code": "function isAdult(age: number): number {\n  return age >= 18 ? 1 : 0;\n}",
     "test_cases": [
       {
-        "input": "parseCoordinate([3, 5])",
-        "expected_output": "x: 3, y: 5",
-        "description": "parseCoordinate([3, 5]) 应返回 'x: 3, y: 5'"
-      },
-      {
-        "input": "parseCoordinate([0, 0])",
-        "expected_output": "x: 0, y: 0",
-        "description": "parseCoordinate([0, 0]) 应返回 'x: 0, y: 0'"
+        "input": "isAdult(20)",
+        "expected_output": "1",
+        "description": "条件判断：基础用例"
       }
     ],
-    "hint": "元组通过索引访问元素，input[0] 是 x，input[1] 是 y"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "对象与接口",
-    "slug": "typescript-04-interfaces",
-    "description": "学习 interface、可选属性与索引签名",
-    "content": "# 对象与接口 — 给对象画蓝图\n\n## 接口 — 对象的蓝图\n\n接口就像建筑图纸，规定了对象必须有哪些属性、什么类型。没有图纸，工人就不知道怎么盖楼：\n```typescript\ninterface User {\n    name: string;\n    age: number;\n}\n\nlet user: User = { name: \"Alice\", age: 25 };\n```\n\n## 可选属性 — 可有可无的房间\n\n有些属性不是必须的，就像房子里的书房——有更好，没有也行。用 `?` 标记：\n```typescript\ninterface User {\n    name: string;\n    age: number;\n    email?: string;   // 可选属性\n}\n\nlet user1: User = { name: \"Bob\", age: 30 };         // 合法\nlet user2: User = { name: \"Bob\", age: 30, email: \"bob@test.com\" }; // 也合法\n```\n\n## 索引签名 — 灵活的属性名\n\n当你不确定对象会有哪些属性名时，用索引签名，就像酒店房间号不固定但格式统一：\n```typescript\ninterface Dictionary {\n    [key: string]: string;  // 任意字符串键，值为字符串\n}\n\nlet dict: Dictionary = {\n    hello: \"你好\",\n    goodbye: \"再见\"\n};\n```\n\n## 练习\n编写函数 `describeUser(user: User)`，根据 User 接口描述用户信息。接口定义：\n- `name: string`（必填）\n- `age: number`（必填）\n- `email?: string`（可选）\n\n如果有 email，返回 `\"{name}, {age}岁, 邮箱: {email}\"`；没有则返回 `\"{name}, {age}岁\"`。",
+    "title": "循环入门",
+    "slug": "typescript-04-sum-to",
+    "description": "实现 sumTo(n)，计算从 1 到 n 的和。",
+    "content": "# 循环入门\n\n本关使用 **TypeScript** 学习「循环」。\n\n## 任务\n实现 sumTo(n)，计算从 1 到 n 的和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 4,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "interface User {\n    name: string;\n    age: number;\n    email?: string;\n}\n\nfunction describeUser(user: User): string {\n    // 描述用户信息\n    return \"\";\n}",
-    "solution_code": "interface User {\n    name: string;\n    age: number;\n    email?: string;\n}\n\nfunction describeUser(user: User): string {\n    if (user.email) {\n        return `${user.name}, ${user.age}岁, 邮箱: ${user.email}`;\n    }\n    return `${user.name}, ${user.age}岁`;\n}",
+    "starter_code": "function sumTo(n: number): number {\n  // 在这里实现 sumTo\n  return 0;\n}",
+    "solution_code": "function sumTo(n: number): number {\n  let total = 0;\n  for (let value = 1; value <= n; value += 1) total += value;\n  return total;\n}",
     "test_cases": [
       {
-        "input": "describeUser({ name: 'Alice', age: 25, email: 'alice@test.com' })",
-        "expected_output": "Alice, 25岁, 邮箱: alice@test.com",
-        "description": "带邮箱的用户描述"
-      },
-      {
-        "input": "describeUser({ name: 'Bob', age: 30 })",
-        "expected_output": "Bob, 30岁",
-        "description": "不带邮箱的用户描述"
+        "input": "sumTo(5)",
+        "expected_output": "15",
+        "description": "循环入门：基础用例"
       }
     ],
-    "hint": "用 if 语句检查可选属性是否存在，模板字符串拼接输出"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "函数类型",
-    "slug": "typescript-05-function-types",
-    "description": "学习参数类型、返回值类型、可选参数与默认参数",
-    "content": "# 函数类型 — 给函数立规矩\n\n函数就像一台机器：原料从入口进（参数），成品从出口出（返回值）。TypeScript 让你精确标注这台机器的输入和输出。\n\n## 参数与返回值类型\n```typescript\nfunction add(a: number, b: number): number {\n    return a + b;\n}\n```\n每个参数都要标注类型，返回值类型写在参数列表之后。\n\n## 可选参数 — 可以不传的原料\n\n用 `?` 标记，可选参数必须放在必选参数后面：\n```typescript\nfunction greet(name: string, title?: string): string {\n    if (title) return `Hello, ${title} ${name}`;\n    return `Hello, ${name}`;\n}\n```\n\n## 默认参数 — 自带默认值的原料\n\n当调用者不传值时，使用默认值：\n```typescript\nfunction greet(name: string, greeting: string = \"Hello\"): string {\n    return `${greeting}, ${name}`;\n}\n\ngreet(\"Alice\");            // \"Hello, Alice\"\ngreet(\"Alice\", \"Hi\");     // \"Hi, Alice\"\n```\n\n## 函数类型表达式\n\n可以把函数类型单独定义出来，像签合同一样：\n```typescript\ntype MathFn = (a: number, b: number) => number;\nlet multiply: MathFn = (a, b) => a * b;\n```\n\n## 练习\n编写函数 `buildProfile(name: string, age: number, role?: string)`，构建用户简介字符串。如果有 role，返回 `\"{name} ({age}) - {role}\"`；没有则返回 `\"{name} ({age})\"`。\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "title": "数组或列表",
+    "slug": "typescript-05-sum-array",
+    "description": "实现 sumArray(numbers)，计算数组所有元素之和。",
+    "content": "# 数组或列表\n\n本关使用 **TypeScript** 学习「数组/列表」。\n\n## 任务\n实现 sumArray(numbers)，计算数组所有元素之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 5,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function buildProfile(name: string, age: number, role?: string): string {\n    // 构建用户简介\n    return \"\";\n}",
-    "solution_code": "function buildProfile(name: string, age: number, role?: string): string {\n    if (role) {\n        return `${name} (${age}) - ${role}`;\n    }\n    return `${name} (${age})`;\n}",
+    "starter_code": "function sumArray(numbers: number[]): number {\n  // 在这里实现 sumArray\n  return 0;\n}",
+    "solution_code": "function sumArray(numbers: number[]): number {\n  return numbers.reduce((total, value) => total + value, 0);\n}",
     "test_cases": [
       {
-        "input": "buildProfile('Alice', 25, 'Engineer')",
-        "expected_output": "Alice (25) - Engineer",
-        "description": "带角色的用户简介"
-      },
-      {
-        "input": "buildProfile('Bob', 30)",
-        "expected_output": "Bob (30)",
-        "description": "不带角色的用户简介"
+        "input": "sumArray([1, 2, 3, 4])",
+        "expected_output": "10",
+        "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "可选参数用 ? 标记，在函数体内用 if 检查是否存在"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "联合与交叉",
-    "slug": "typescript-06-union-intersection",
-    "description": "学习 Union 类型、Intersection 类型与类型守卫",
-    "content": "# 联合与交叉 — 类型的「或」与「且」\n\n## 联合类型 (Union) — 或者是A，或者是B\n\n联合类型用 `|` 连接，就像餐厅的「套餐A或套餐B」——你只能选一个：\n```typescript\nlet id: string | number;\nid = \"abc\";   // 合法\nid = 123;    // 也合法\n// id = true; // 报错！\n```\n\n## 类型守卫 — 区分联合类型\n\n面对联合类型，TypeScript 不知道当前是哪种类型，需要你用类型守卫来「验明正身」：\n```typescript\nfunction process(value: string | number): string {\n    if (typeof value === \"string\") {\n        return value.toUpperCase();  // TypeScript 知道这里是 string\n    }\n    return value.toFixed(2);        // TypeScript 知道这里是 number\n}\n```\n\n## 交叉类型 (Intersection) — 既是A，又是B\n\n交叉类型用 `&` 连接，就像一个人同时拥有两个身份——既是员工又是学生：\n```typescript\ninterface Employee {\n    employeeId: string;\n}\n\ninterface Student {\n    studentId: string;\n}\n\ntype WorkingStudent = Employee & Student;\n\nlet person: WorkingStudent = {\n    employeeId: \"E001\",\n    studentId: \"S001\"\n};\n```\n\n## 练习\n编写函数 `formatInput(input: string | number)`，如果是字符串则转大写，如果是数字则保留两位小数返回字符串。",
+    "title": "函数基础",
+    "slug": "typescript-06-square",
+    "description": "实现 square(n)，返回 n 的平方。",
+    "content": "# 函数基础\n\n本关使用 **TypeScript** 学习「函数」。\n\n## 任务\n实现 square(n)，返回 n 的平方。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 6,
     "difficulty": "beginner",
     "xp_reward": 10,
-    "starter_code": "function formatInput(input: string | number): string {\n    // 根据类型格式化输入\n    return \"\";\n}",
-    "solution_code": "function formatInput(input: string | number): string {\n    if (typeof input === \"string\") {\n        return input.toUpperCase();\n    }\n    return input.toFixed(2);\n}",
+    "starter_code": "function square(n: number): number {\n  // 在这里实现 square\n  return 0;\n}",
+    "solution_code": "function square(n: number): number {\n  return n * n;\n}",
     "test_cases": [
       {
-        "input": "formatInput('hello')",
-        "expected_output": "HELLO",
-        "description": "字符串输入应转大写"
-      },
-      {
-        "input": "formatInput(3.14159)",
-        "expected_output": "3.14",
-        "description": "数字输入应保留两位小数"
-      },
-      {
-        "input": "formatInput(42)",
-        "expected_output": "42.00",
-        "description": "整数也应保留两位小数"
+        "input": "square(9)",
+        "expected_output": "81",
+        "description": "函数基础：基础用例"
       }
     ],
-    "hint": "用 typeof 进行类型守卫，字符串用 toUpperCase()，数字用 toFixed(2)"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "枚举与字面量",
-    "slug": "typescript-07-enums-literals",
-    "description": "学习 enum、const enum 与字面量类型",
-    "content": "# 枚举与字面量 — 限定选择的范围\n\n## 枚举 (enum) — 有名字的常量集合\n\n枚举就像餐厅菜单上的菜品编号，每个编号对应一道菜，比直接记数字好理解多了：\n```typescript\nenum Direction {\n    Up = \"UP\",\n    Down = \"DOWN\",\n    Left = \"LEFT\",\n    Right = \"RIGHT\"\n}\n\nlet move: Direction = Direction.Up;\n```\n\n数字枚举（不赋值时自动从0递增）：\n```typescript\nenum Status {\n    Pending,    // 0\n    Active,     // 1\n    Closed      // 2\n}\n```\n\n## const enum — 编译时内联\n\n`const enum` 在编译时直接替换为值，不会生成额外的 JS 代码，更轻量：\n```typescript\nconst enum Color {\n    Red = \"RED\",\n    Green = \"GREEN\",\n    Blue = \"BLUE\"\n}\n\nlet c: Color = Color.Red;  // 编译后直接变成 \"RED\"\n```\n\n## 字面量类型 — 精确到某个值\n\n字面量类型把类型限定到具体的值，就像密码锁只能输入特定数字：\n```typescript\nlet answer: \"yes\" | \"no\" | \"maybe\";\nanswer = \"yes\";    // 合法\n// answer = \"ok\";  // 报错！\n```\n\n数字字面量类型：\n```typescript\ntype DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;\n```\n\n## 练习\n编写函数 `getSeason(month: number)`，根据月份返回季节。使用字面量类型限定返回值为 `\"春\" | \"夏\" | \"秋\" | \"冬\"`：\n- 3-5月：春\n- 6-8月：夏\n- 9-11月：秋\n- 12、1、2月：冬",
+    "title": "字典、对象或 Map",
+    "slug": "typescript-07-get-score",
+    "description": "实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。",
+    "content": "# 字典、对象或 Map\n\n本关使用 **TypeScript** 学习「映射」。\n\n## 任务\n实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 7,
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "xp_reward": 10,
-    "starter_code": "function getSeason(month: number): \"春\" | \"夏\" | \"秋\" | \"冬\" {\n    // 根据月份返回季节\n    return \"春\";\n}",
-    "solution_code": "function getSeason(month: number): \"春\" | \"夏\" | \"秋\" | \"冬\" {\n    if (month >= 3 && month <= 5) return \"春\";\n    if (month >= 6 && month <= 8) return \"夏\";\n    if (month >= 9 && month <= 11) return \"秋\";\n    return \"冬\";\n}",
+    "starter_code": "function getScore(scores: Record<string, number>, name: string): number {\n  // 在这里实现 getScore\n  return 0;\n}",
+    "solution_code": "function getScore(scores: Record<string, number>, name: string): number {\n  return scores[name] ?? 0;\n}",
     "test_cases": [
       {
-        "input": "getSeason(4)",
-        "expected_output": "春",
-        "description": "4月是春天"
-      },
-      {
-        "input": "getSeason(7)",
-        "expected_output": "夏",
-        "description": "7月是夏天"
-      },
-      {
-        "input": "getSeason(10)",
-        "expected_output": "秋",
-        "description": "10月是秋天"
-      },
-      {
-        "input": "getSeason(1)",
-        "expected_output": "冬",
-        "description": "1月是冬天"
+        "input": "getScore({Ada: 95, Bob: 88}, 'Ada')",
+        "expected_output": "95",
+        "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "用 if 判断月份范围，返回值类型是字面量联合类型"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "类型推断与断言",
-    "slug": "typescript-08-inference-assertions",
-    "description": "学习类型推断、as 断言与非空断言",
-    "content": "# 类型推断与断言 — TypeScript 的「读心术」与「担保书」\n\n## 类型推断 — TypeScript 帮你猜\n\nTypeScript 很聪明，很多时候你不用写类型，它能自动推断出来，就像一个经验丰富的收银员看到商品就知道价格：\n```typescript\nlet name = \"Alice\";     // 推断为 string\nlet age = 25;          // 推断为 number\nlet items = [1, 2, 3]; // 推断为 number[]\n```\n\n最佳实践：能推断的就不写，需要明确的才标注。\n\n## as 断言 — 你向 TypeScript 担保\n\n有时候你比 TypeScript 更了解类型，用 `as` 告诉它「相信我，我知道这是什么类型」——就像给海关出示担保书：\n```typescript\nlet value: unknown = \"hello\";\nlet len: number = (value as string).length;\n```\n\n⚠️ as 断言不会做运行时转换，只是绕过类型检查，使用不当会导致运行时错误！\n\n## 非空断言 — 担保不是 null/undefined\n\n用 `!` 后缀告诉 TypeScript「我确定这个值不是 null 或 undefined」：\n```typescript\nlet input: string | null = document.getElementById(\"name\") as HTMLInputElement | null;\nlet value: string = input!.value;  // 非空断言\n```\n\n## 练习\n编写函数 `getLength(value: unknown)`，使用 as 断言判断 value 是否为字符串或数组，返回其长度；其他类型返回 0。",
+    "title": "字符串操作",
+    "slug": "typescript-08-count-vowels",
+    "description": "实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。",
+    "content": "# 字符串操作\n\n本关使用 **TypeScript** 学习「字符串」。\n\n## 任务\n实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 8,
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "xp_reward": 10,
-    "starter_code": "function getLength(value: unknown): number {\n    // 使用 as 断言获取长度\n    return 0;\n}",
-    "solution_code": "function getLength(value: unknown): number {\n    if (typeof value === \"string\") {\n        return (value as string).length;\n    }\n    if (Array.isArray(value)) {\n        return (value as unknown[]).length;\n    }\n    return 0;\n}",
+    "starter_code": "function countVowels(text: string): number {\n  // 在这里实现 countVowels\n  return 0;\n}",
+    "solution_code": "function countVowels(text: string): number {\n  return [...text].filter(char => 'aeiou'.includes(char.toLowerCase())).length;\n}",
     "test_cases": [
       {
-        "input": "getLength('hello')",
-        "expected_output": "5",
-        "description": "字符串长度"
-      },
-      {
-        "input": "getLength([1, 2, 3])",
-        "expected_output": "3",
-        "description": "数组长度"
-      },
-      {
-        "input": "getLength(42)",
-        "expected_output": "0",
-        "description": "非字符串非数组返回0"
+        "input": "countVowels('CodeQuest')",
+        "expected_output": "4",
+        "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "先用 typeof 或 Array.isArray 检查类型，再用 as 断言告诉 TypeScript 具体类型"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "泛型",
-    "slug": "typescript-09-generics",
-    "description": "学习泛型函数、泛型接口、泛型类、约束与默认类型",
-    "content": "# 泛型 — 类型的「模板」\n\n泛型就像一个万能模具——你往里面倒入不同材料（类型），就能生产出不同产品。一次编写，多种类型复用。\n\n## 泛型函数\n\n```typescript\nfunction identity<T>(value: T): T {\n    return value;\n}\n\nidentity<string>(\"hello\");  // 返回 string\nidentity<number>(42);       // 返回 number\n```\n`T` 是类型参数，调用时指定具体类型。\n\n## 泛型接口\n\n```typescript\ninterface Box<T> {\n    value: T;\n}\n\nlet stringBox: Box<string> = { value: \"hello\" };\nlet numberBox: Box<number> = { value: 42 };\n```\n\n## 泛型约束 — 给类型参数加限制\n\n用 `extends` 限制 T 必须满足某些条件，就像招聘要求「必须有本科学历」：\n```typescript\ninterface HasLength {\n    length: number;\n}\n\nfunction getLength<T extends HasLength>(value: T): number {\n    return value.length;\n}\n```\n\n## 默认类型参数\n\n```typescript\ninterface ApiResponse<T = string> {\n    data: T;\n    status: number;\n}\n```\n\n## 练习\n编写泛型函数 `wrapInArray<T>(value: T)`，将任意值包装成单元素数组返回。",
+    "title": "综合项目：简易计算器",
+    "slug": "typescript-09-calculate",
+    "description": "实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。",
+    "content": "# 综合项目：简易计算器\n\n本关使用 **TypeScript** 学习「综合应用」。\n\n## 任务\n实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 9,
     "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function wrapInArray<T>(value: T): T[] {\n    // 将值包装成数组\n    return [];\n}",
-    "solution_code": "function wrapInArray<T>(value: T): T[] {\n    return [value];\n}",
+    "xp_reward": 20,
+    "starter_code": "function calculate(a: number, b: number, op: string): number {\n  // 在这里实现 calculate\n  return 0;\n}",
+    "solution_code": "function calculate(a: number, b: number, op: string): number {\n  if (op === '+') return a + b;\n  if (op === '-') return a - b;\n  if (op === '*') return a * b;\n  if (op === '/' && b !== 0) return Math.trunc(a / b);\n  return 0;\n}",
     "test_cases": [
       {
-        "input": "wrapInArray(42)",
-        "expected_output": "[42]",
-        "description": "数字包装成数组"
-      },
-      {
-        "input": "wrapInArray('hello')",
-        "expected_output": "[\"hello\"]",
-        "description": "字符串包装成数组"
+        "input": "calculate(8, 2, '*')",
+        "expected_output": "16",
+        "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "直接返回 [value]，TypeScript 会自动推断 T[] 为返回类型"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
-    "title": "类与OOP",
-    "slug": "typescript-10-classes-oop",
-    "description": "学习 class、继承、访问修饰符与抽象类",
-    "content": "# 类与OOP — 面向对象的 TypeScript\n\n类就像一张设计图，根据设计图制造出来的产品就是对象实例。\n\n## 基本类\n\n```typescript\nclass Animal {\n    name: string;\n    constructor(name: string) {\n        this.name = name;\n    }\n    speak(): string {\n        return `${this.name} makes a sound`;\n    }\n}\n```\n\n## 访问修饰符 — 控制谁能访问\n\n- `public`：谁都能访问（默认），就像公园\n- `private`：只有类内部能访问，就像私人日记\n- `protected`：类内部和子类能访问，就像家族秘方\n\n```typescript\nclass Person {\n    public name: string;\n    private age: number;\n    protected id: string;\n}\n```\n\n## 继承 — 子承父业\n\n```typescript\nclass Dog extends Animal {\n    breed: string;\n    constructor(name: string, breed: string) {\n        super(name);  // 调用父类构造函数\n        this.breed = breed;\n    }\n    speak(): string {\n        return `${this.name} barks`;\n    }\n}\n```\n\n## 抽象类 — 不完整的蓝图\n\n抽象类就像只画了一半的设计图，必须由子类补全才能使用：\n```typescript\nabstract class Shape {\n    abstract getArea(): number;  // 子类必须实现\n    describe(): string {\n        return `面积: ${this.getArea()}`;\n    }\n}\n```\n\n## 练习\n编写一个 `Rectangle` 类，包含 `width` 和 `height` 属性（public），以及 `getArea()` 方法返回面积（width * height）。",
+    "title": "综合项目：待办事项管理器",
+    "slug": "typescript-10-count-completed",
+    "description": "实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。",
+    "content": "# 综合项目：待办事项管理器\n\n本关使用 **TypeScript** 学习「综合应用」。\n\n## 任务\n实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
     "order": 10,
     "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "class Rectangle {\n    constructor(public width: number, public height: number) {\n    }\n\n    getArea(): number {\n        // 计算矩形面积\n        return 0;\n    }\n}",
-    "solution_code": "class Rectangle {\n    constructor(public width: number, public height: number) {\n    }\n\n    getArea(): number {\n        return this.width * this.height;\n    }\n}",
-    "test_cases": [
-      {
-        "input": "new Rectangle(3, 4).getArea()",
-        "expected_output": "12",
-        "description": "3x4 矩形面积为 12"
-      },
-      {
-        "input": "new Rectangle(5, 5).getArea()",
-        "expected_output": "25",
-        "description": "5x5 正方形面积为 25"
-      }
-    ],
-    "hint": "面积 = width * height，用 this 访问实例属性"
-  },
-  {
-    "title": "高级类型",
-    "slug": "typescript-11-advanced-types",
-    "description": "学习映射类型、条件类型与 infer 关键字",
-    "content": "# 高级类型 — 类型系统的魔法\n\n## 映射类型 — 批量改造类型\n\n映射类型就像流水线，对类型的每个属性进行统一加工：\n```typescript\ntype Readonly<T> = {\n    readonly [K in keyof T]: T[K];\n};\n\n// 把所有属性变成只读\ntype ReadonlyUser = Readonly<{ name: string; age: number }>;\n// 等价于 { readonly name: string; readonly age: number }\n```\n\n## 条件类型 — 类型中的 if-else\n\n条件类型根据条件选择不同类型，就像三目运算符：\n```typescript\ntype IsString<T> = T extends string ? \"yes\" : \"no\";\n\ntype A = IsString<string>;  // \"yes\"\ntype B = IsString<number>;  // \"no\"\n```\n\n## infer — 在条件类型中「捕获」类型\n\n`infer` 就像在类型推断中放一个「陷阱」，捕获你想要的类型：\n```typescript\ntype ReturnTypeOf<T> = T extends (...args: any[]) => infer R ? R : never;\n\ntype FnReturn = ReturnTypeOf<() => string>;  // string\n```\n\n`infer` 只能在 `extends` 条件类型的右侧使用。\n\n## 实用示例\n\n```typescript\n// 提取数组元素类型\ntype ElementOf<T> = T extends (infer E)[] ? E : never;\ntype Num = ElementOf<number[]>;  // number\n\n// 提取 Promise 值类型\ntype Awaited<T> = T extends Promise<infer V> ? V : T;\ntype Val = Awaited<Promise<string>>;  // string\n```\n\n## 练习\n编写类型 `ExtractArrayType<T>`，如果 T 是数组则提取元素类型，否则返回 never。然后编写函数 `getFirstElement<T>(arr: T)`，使用条件类型约束，当 T 是数组时返回第一个元素。",
-    "order": 11,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "type ExtractArrayType<T> = T extends (infer E)[] ? E : never;\n\nfunction getFirstElement<T extends any[]>(arr: T): ExtractArrayType<T> | undefined {\n    // 返回数组第一个元素\n    return undefined;\n}",
-    "solution_code": "type ExtractArrayType<T> = T extends (infer E)[] ? E : never;\n\nfunction getFirstElement<T extends any[]>(arr: T): ExtractArrayType<T> | undefined {\n    return arr[0];\n}",
-    "test_cases": [
-      {
-        "input": "getFirstElement([10, 20, 30])",
-        "expected_output": "10",
-        "description": "数字数组第一个元素"
-      },
-      {
-        "input": "getFirstElement(['a', 'b', 'c'])",
-        "expected_output": "a",
-        "description": "字符串数组第一个元素"
-      }
-    ],
-    "hint": "直接返回 arr[0]，ExtractArrayType 会自动推断元素类型"
-  },
-  {
-    "title": "装饰器",
-    "slug": "typescript-12-decorators",
-    "description": "学习类装饰器、方法装饰器、属性装饰器与元数据",
-    "content": "# 装饰器 — 给代码「穿衣服」\n\n装饰器就像给手机贴膜、戴壳——不改变手机本身，但增加了新功能。装饰器是一种特殊函数，用来修改类、方法或属性的行为。\n\n> 注意：装饰器是实验性特性，需要在 tsconfig.json 中启用 `\"experimentalDecorators\": true`。\n\n## 类装饰器 — 给类加功能\n\n类装饰器接收类的构造函数，可以修改或替换类定义：\n```typescript\nfunction LogClass(target: Function) {\n    console.log(`类 ${target.name} 被创建`);\n}\n\n@LogClass\nclass MyClass {}\n```\n\n## 方法装饰器 — 拦截方法调用\n\n方法装饰器可以记录日志、控制权限等：\n```typescript\nfunction LogMethod(target: any, key: string, descriptor: PropertyDescriptor) {\n    const original = descriptor.value;\n    descriptor.value = function (...args: any[]) {\n        console.log(`调用 ${key}，参数: ${args}`);\n        return original.apply(this, args);\n    };\n}\n\nclass Calculator {\n    @LogMethod\n    add(a: number, b: number): number {\n        return a + b;\n    }\n}\n```\n\n## 属性装饰器 — 监控属性\n\n```typescript\nfunction DefaultValue(value: any) {\n    return function (target: any, key: string) {\n        Object.defineProperty(target, key, {\n            value: value,\n            writable: true\n        });\n    };\n}\n\nclass User {\n    @DefaultValue(\"未知\")\n    name: string = \"\";\n}\n```\n\n## 练习\n编写方法装饰器 `Timer`，记录方法执行时间。然后编写类 `Task`，其 `run()` 方法使用该装饰器，`run()` 方法返回 `\"done\"`。",
-    "order": 12,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function Timer(target: any, key: string, descriptor: PropertyDescriptor): void {\n    const original = descriptor.value;\n    descriptor.value = function (this: any, ...args: any[]) {\n        const start = Date.now();\n        const result = original.apply(this, args);\n        const end = Date.now();\n        console.log(`${key} 执行耗时: ${end - start}ms`);\n        return result;\n    };\n}\n\nclass Task {\n    @Timer\n    run(): string {\n        // 返回 \"done\"\n        return \"\";\n    }\n}",
-    "solution_code": "function Timer(target: any, key: string, descriptor: PropertyDescriptor): void {\n    const original = descriptor.value;\n    descriptor.value = function (this: any, ...args: any[]) {\n        const start = Date.now();\n        const result = original.apply(this, args);\n        const end = Date.now();\n        console.log(`${key} 执行耗时: ${end - start}ms`);\n        return result;\n    };\n}\n\nclass Task {\n    @Timer\n    run(): string {\n        return \"done\";\n    }\n}",
-    "test_cases": [
-      {
-        "input": "new Task().run()",
-        "expected_output": "done",
-        "description": "Task.run() 应返回 'done'"
-      },
-      {
-        "input": "new Task().run()",
-        "expected_output": "done",
-        "description": "基本功能验证"
-      }
-    ],
-    "hint": "装饰器已经写好，只需在 run() 方法中 return \"done\""
-  },
-  {
-    "title": "模块系统",
-    "slug": "typescript-13-modules",
-    "description": "学习 ES Module、命名空间与声明合并",
-    "content": "# 模块系统 — 代码的「房间划分」\n\n大型项目就像一栋大楼，模块就是不同的房间——每个房间有自己的功能，通过门（export/import）连接。\n\n## ES Module — 标准模块系统\n\n```typescript\n// math.ts — 导出\nexport function add(a: number, b: number): number {\n    return a + b;\n}\nexport const PI = 3.14;\n\n// app.ts — 导入\nimport { add, PI } from \"./math\";\nconsole.log(add(1, 2));  // 3\n```\n\n默认导出：\n```typescript\n// logger.ts\nexport default function log(msg: string): void {\n    console.log(msg);\n}\n\n// app.ts\nimport log from \"./logger\";\n```\n\n## 命名空间 — 内部模块\n\n命名空间就像在一个大房间里用隔板划出小区域：\n```typescript\nnamespace Utils {\n    export function format(str: string): string {\n        return str.trim().toLowerCase();\n    }\n}\n\nUtils.format(\"  Hello  \");  // \"hello\"\n```\n\n## 声明合并 — 接口的特殊能力\n\n同名接口会自动合并，就像两个人各自写了一部分合同，最终合并成完整版：\n```typescript\ninterface Config {\n    host: string;\n}\ninterface Config {\n    port: number;\n}\n// 合并后: { host: string; port: number }\n```\n\n命名空间也可以与类、函数合并：\n```typescript\nclass Album {\n    label: string = \"\";\n}\nnamespace Album {\n    export const defaultLabel = \"Unknown\";\n}\n```\n\n## 练习\n编写函数 `createModuleInfo(name: string, version: string)`，返回格式化的模块信息字符串 `\"{name}@{version}\"`。",
-    "order": 13,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "// 模拟 ES Module 导出/导入模式\n\n// 定义数学工具模块的导出接口\ninterface MathModule {\n    add(a: number, b: number): number;\n    multiply(a: number, b: number): number;\n    PI: number;\n}\n\n// TODO: 创建并导出 math 模块对象\nfunction createMathModule(): MathModule {\n    // 返回符合 MathModule 接口的对象\n    return { add: (a, b) => 0, multiply: (a, b) => 0, PI: 0 };\n}\n\n// TODO: 解构导入模块成员\nfunction calcArea(radius: number): number {\n    // 使用模块的 PI 和 multiply 计算圆面积\n    return 0;\n}",
-    "solution_code": "interface MathModule {\n    add(a: number, b: number): number;\n    multiply(a: number, b: number): number;\n    PI: number;\n}\n\nfunction createMathModule(): MathModule {\n    const PI = 3.14159;\n    return {\n        add: (a: number, b: number): number => a + b,\n        multiply: (a: number, b: number): number => a * b,\n        PI,\n    };\n}\n\nfunction calcArea(radius: number): number {\n    const { PI, multiply } = createMathModule();\n    return multiply(PI, multiply(radius, radius));\n}",
-    "test_cases": [
-      {
-        "input": "calcArea(2).toFixed(2)",
-        "expected_output": "12.57",
-        "description": "模块解构后应正确计算圆面积"
-      },
-      {
-        "input": "createMathModule().add(10, 20).toString()",
-        "expected_output": "30",
-        "description": "模块导出add应正确工作"
-      }
-    ],
-    "hint": "使用模板字符串拼接 name、@ 符号和 version"
-  },
-  {
-    "title": "类型兼容与逆变",
-    "slug": "typescript-14-type-compatibility",
-    "description": "学习结构化类型、协变与逆变",
-    "content": "# 类型兼容与逆变 — TypeScript 的「像不像」规则\n\n## 结构化类型 — 看长相不看身份证\n\nTypeScript 用结构化类型系统（也叫「鸭子类型」）：如果它走起来像鸭子、叫起来像鸭子，那它就是鸭子。不关心类的名字，只关心形状：\n```typescript\ninterface Named {\n    name: string;\n}\n\nlet person = { name: \"Alice\", age: 25 };\nlet named: Named = person;  // 合法！person 有 name 属性\n```\n\n多余属性在赋值时是允许的，但字面量直接赋值会报错（多余属性检查）。\n\n## 协变 — 子类型可以替代父类型\n\n协变就像「小号可以装进大号盒子里」——更具体的类型可以赋给更宽泛的类型：\n```typescript\ninterface Animal {\n    name: string;\n}\ninterface Dog extends Animal {\n    breed: string;\n}\n\nlet animal: Animal = { name: \"Buddy\", breed: \"Lab\" } as Dog;  // Dog 可以赋给 Animal\n```\n\n## 逆变 — 函数参数的反向规则\n\n逆变比较反直觉：函数参数类型是逆变的，就像「能处理大动物的笼子也能装小狗」：\n```typescript\ntype AnimalHandler = (animal: Animal) => void;\ntype DogHandler = (dog: Dog) => void;\n\n// DogHandler 不能赋给 AnimalHandler\n// 因为 AnimalHandler 可能传入 Cat，而 DogHandler 只能处理 Dog\n```\n\n## 实践原则\n- 属性赋值：协变（子→父）\n- 函数参数：逆变（父→子）\n- 函数返回值：协变（子→父）\n\n## 练习\n编写函数 `isCompatible(obj: { name: string })`，检查传入对象是否有 name 属性，返回 `\"兼容\"` 或 `\"不兼容\"`。",
-    "order": 14,
-    "difficulty": "intermediate",
-    "xp_reward": 15,
-    "starter_code": "function isCompatible(obj: { name: string }): string {\n    // 检查是否兼容\n    return \"\";\n}",
-    "solution_code": "function isCompatible(obj: { name: string }): string {\n    if (obj && typeof obj.name === \"string\") {\n        return \"兼容\";\n    }\n    return \"不兼容\";\n}",
-    "test_cases": [
-      {
-        "input": "isCompatible({ name: 'Alice' })",
-        "expected_output": "兼容",
-        "description": "有 name 属性的对象兼容"
-      },
-      {
-        "input": "isCompatible({ name: 'Bob', age: 30 })",
-        "expected_output": "兼容",
-        "description": "多余属性也兼容（结构化类型）"
-      }
-    ],
-    "hint": "TypeScript 的结构化类型系统只看形状，检查 obj.name 是否存在且为 string"
-  },
-  {
-    "title": "工具类型",
-    "slug": "typescript-15-utility-types",
-    "description": "学习 Partial、Required、Pick、Omit、Record 等内置工具类型",
-    "content": "# 工具类型 — TypeScript 自带的「瑞士军刀」\n\nTypeScript 内置了许多工具类型，就像瑞士军刀里的各种小工具，每种都有特定用途。\n\n## Partial<T> — 所有属性变可选\n\n就像把「必填表格」变成「选填表格」：\n```typescript\ninterface User {\n    name: string;\n    age: number;\n}\ntype PartialUser = Partial<User>;\n// { name?: string; age?: number }\n```\n\n## Required<T> — 所有属性变必填\n与 Partial 相反，把可选属性全部变成必填。\n\n## Pick<T, K> — 只挑需要的属性\n\n就像从自助餐中只选几道菜：\n```typescript\ntype UserName = Pick<User, \"name\">;\n// { name: string }\n```\n\n## Omit<T, K> — 排除不需要的属性\n\n与 Pick 相反，排除指定属性：\n```typescript\ntype UserWithoutAge = Omit<User, \"age\">;\n// { name: string }\n```\n\n## Record<K, V> — 批量创建键值对\n\n就像批量生产同规格的抽屉：\n```typescript\ntype RoleMap = Record<\"admin\" | \"user\" | \"guest\", string>;\n// { admin: string; user: string; guest: string }\n```\n\n## 其他常用工具类型\n- `Readonly<T>`：所有属性变只读\n- `ReturnType<T>`：获取函数返回值类型\n- `Parameters<T>`：获取函数参数类型元组\n\n## 练习\n编写函数 `updateUser(user: User, updates: Partial<User>)`，用 updates 中的字段覆盖 user 中的对应字段，返回更新后的用户对象。",
-    "order": 15,
-    "difficulty": "advanced",
     "xp_reward": 20,
-    "starter_code": "interface User {\n    name: string;\n    age: number;\n    email: string;\n}\n\nfunction updateUser(user: User, updates: Partial<User>): User {\n    // 用 updates 覆盖 user 的对应字段\n    return user;\n}",
-    "solution_code": "interface User {\n    name: string;\n    age: number;\n    email: string;\n}\n\nfunction updateUser(user: User, updates: Partial<User>): User {\n    return { ...user, ...updates };\n}",
+    "starter_code": "function countCompleted(statuses: boolean[]): number {\n  // 在这里实现 countCompleted\n  return 0;\n}",
+    "solution_code": "function countCompleted(statuses: boolean[]): number {\n  return statuses.filter(Boolean).length;\n}",
     "test_cases": [
       {
-        "input": "JSON.stringify(updateUser({name: \"Alice\", age: 30, email: \"alice@test.com\"}, {age: 26}))",
-        "expected_output": "{\"name\":\"Alice\",\"age\":26,\"email\":\"alice@test.com\"}",
-        "description": "Partial<User> 应更新age字段，保留其他字段"
-      },
-      {
-        "input": "JSON.stringify(updateUser({name: \"Bob\", age: 25, email: \"bob@test.com\"}, {name: \"Robert\"}))",
-        "expected_output": "{\"name\":\"Robert\",\"age\":25,\"email\":\"bob@test.com\"}",
-        "description": "Partial<User> 应更新name字段"
+        "input": "countCompleted([true, false, true])",
+        "expected_output": "2",
+        "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "使用展开运算符 ... 合并对象，后面的属性会覆盖前面的"
-  },
-  {
-    "title": "类型体操",
-    "slug": "typescript-16-type-gymnastics",
-    "description": "学习递归类型与模板字面量类型",
-    "content": "# 类型体操 — 在类型系统里做运动\n\n## 递归类型 — 类型调用自己\n\n递归类型就像俄罗斯套娃——一层套一层，直到遇到终止条件：\n```typescript\ntype DeepReadonly<T> = {\n    readonly [K in keyof T]: T[K] extends object\n        ? DeepReadonly<T[K]>\n        : T[K];\n};\n```\n\n## 模板字面量类型 — 类型中的字符串拼接\n\n就像 JS 的模板字符串，但在类型层面操作：\n```typescript\ntype EventName = `on${Capitalize<string>}`;\n// \"onClick\" | \"onChange\" | ... 等等\n\ntype CSSProperty = `margin-${\"top\" | \"right\" | \"bottom\" | \"left\"}`;\n// \"margin-top\" | \"margin-right\" | \"margin-bottom\" | \"margin-left\"\n```\n\n## 内置字符串工具类型\n- `Uppercase<S>`：全大写\n- `Lowercase<S>`：全小写\n- `Capitalize<S>`：首字母大写\n- `Uncapitalize<S>`：首字母小写\n\n```typescript\ntype Upper = Uppercase<\"hello\">;      // \"HELLO\"\ntype Cap = Capitalize<\"hello\">;      // \"Hello\"\n```\n\n## 递归元组操作\n\n```typescript\ntype Length<T extends any[]> = T['length'];\ntype Reverse<T extends any[]> = T extends [infer First, ...infer Rest]\n    ? [...Reverse<Rest>, First]\n    : [];\n```\n\n## 练习\n编写类型 `AppendHello<S>`，在字符串前加上 \"Hello, \"。然后编写函数 `greetFormatted(name: string)`，返回 `\"Hello, {name}!\"` 格式的字符串。",
-    "order": 16,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "type AppendHello<S extends string> = `Hello, ${S}`;\n\nfunction greetFormatted(name: string): AppendHello<typeof name> {\n    // 返回格式化问候语\n    return \"\" as any;\n}",
-    "solution_code": "type AppendHello<S extends string> = `Hello, ${S}`;\n\nfunction greetFormatted(name: string): AppendHello<typeof name> {\n    return `Hello, ${name}` as AppendHello<typeof name>;\n}",
-    "test_cases": [
-      {
-        "input": "greetFormatted('World')",
-        "expected_output": "Hello, World",
-        "description": "模板字面量类型拼接"
-      },
-      {
-        "input": "greetFormatted('TypeScript')",
-        "expected_output": "Hello, TypeScript",
-        "description": "模板字面量类型拼接2"
-      }
-    ],
-    "hint": "模板字面量类型用反引号和 ${} 语法，运行时也用模板字符串拼接"
-  },
-  {
-    "title": "与React结合",
-    "slug": "typescript-17-react",
-    "description": "学习 FC、Props 类型与 Hooks 类型标注",
-    "content": "# TypeScript 与 React — 类型安全的组件开发\n\nTypeScript 和 React 是天作之合，类型系统让组件的 Props、State 和 Hooks 都有了明确约束。\n\n## FC — 函数组件类型\n\n`FC` 是 `FunctionComponent` 的缩写，给函数组件标注类型：\n```typescript\nimport { FC } from \"react\";\n\nconst Greeting: FC<{ name: string }> = ({ name }) => {\n    return <h1>Hello, {name}</h1>;\n};\n```\n\n## Props 类型 — 组件的「接口协议」\n\nProps 接口定义了组件接收什么数据，就像合同条款：\n```typescript\ninterface ButtonProps {\n    label: string;\n    onClick: () => void;\n    disabled?: boolean;\n}\n\nconst Button: FC<ButtonProps> = ({ label, onClick, disabled = false }) => {\n    return <button onClick={onClick} disabled={disabled}>{label}</button>;\n};\n```\n\n## Hooks 类型标注\n\n```typescript\nconst [count, setCount] = useState<number>(0);           // 泛型参数\nconst inputRef = useRef<HTMLInputElement>(null);           // ref 类型\nconst [user, setUser] = useState<User | null>(null);       // 联合类型\n```\n\n## 事件类型\n\n```typescript\nconst handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    setValue(e.target.value);\n};\n\nconst handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {\n    // ...\n};\n```\n\n## 练习\n编写函数 `createProps(label: string, count: number)`，返回一个符合 `ButtonProps` 接口的对象（label、count 属性和 onClick 方法，onClick 返回 count 的字符串形式）。",
-    "order": 17,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "interface ButtonProps {\n    label: string;\n    count: number;\n    onClick: () => string;\n}\n\nfunction createProps(label: string, count: number): ButtonProps {\n    // 创建 ButtonProps 对象\n    return { label: \"\", count: 0, onClick: () => \"\" };\n}",
-    "solution_code": "interface ButtonProps {\n    label: string;\n    count: number;\n    onClick: () => string;\n}\n\nfunction createProps(label: string, count: number): ButtonProps {\n    return {\n        label,\n        count,\n        onClick: () => String(count)\n    };\n}",
-    "test_cases": [
-      {
-        "input": "createProps('Submit', 5).onClick()",
-        "expected_output": "5",
-        "description": "onClick 应返回 count 的字符串形式"
-      },
-      {
-        "input": "createProps('Click', 10).label",
-        "expected_output": "Click",
-        "description": "label 属性应正确赋值"
-      }
-    ],
-    "hint": "对象简写 { label, count } 等价于 { label: label, count: count }"
-  },
-  {
-    "title": "Node.js开发",
-    "slug": "typescript-18-nodejs",
-    "description": "学习 Express/Koa 类型标注与环境变量类型",
-    "content": "# TypeScript 与 Node.js — 类型安全的后端开发\n\n## Express 类型标注\n\nExpress 是最流行的 Node.js 框架，配合 TypeScript 可以让路由、中间件都有类型保护：\n```typescript\nimport express, { Request, Response, NextFunction } from \"express\";\n\nconst app = express();\n\napp.get(\"/users/:id\", (req: Request, res: Response) => {\n    const id = req.params.id;\n    res.json({ id, name: \"User\" + id });\n});\n```\n\n## 自定义请求类型\n\n扩展 Express 的 Request 类型来添加自定义属性：\n```typescript\ninterface AuthRequest extends Request {\n    userId?: string;\n}\n\napp.get(\"/profile\", (req: AuthRequest, res: Response) => {\n    res.json({ userId: req.userId });\n});\n```\n\n## 环境变量类型安全\n\n```typescript\ninterface EnvConfig {\n    PORT: number;\n    DB_URL: string;\n    NODE_ENV: \"development\" | \"production\";\n}\n\nfunction getEnv(): EnvConfig {\n    return {\n        PORT: Number(process.env.PORT) || 3000,\n        DB_URL: process.env.DB_URL || \"localhost\",\n        NODE_ENV: (process.env.NODE_ENV as \"development\" | \"production\") || \"development\"\n    };\n}\n```\n\n## 中间件类型\n\n```typescript\nfunction logger(req: Request, res: Response, next: NextFunction): void {\n    console.log(`${req.method} ${req.url}`);\n    next();\n}\n```\n\n## 练习\n编写函数 `parseEnvConfig(env: Record<string, string | undefined>)`，从环境变量对象中解析配置，返回 `{ port: number, host: string }`，port 默认 3000，host 默认 \"localhost\"。",
-    "order": 18,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "interface EnvConfig {\n    port: number;\n    host: string;\n}\n\nfunction parseEnvConfig(env: Record<string, string | undefined>): EnvConfig {\n    // 从环境变量解析配置\n    return { port: 0, host: \"\" };\n}",
-    "solution_code": "interface EnvConfig {\n    port: number;\n    host: string;\n}\n\nfunction parseEnvConfig(env: Record<string, string | undefined>): EnvConfig {\n    return {\n        port: env.PORT ? Number(env.PORT) : 3000,\n        host: env.HOST || \"localhost\"\n    };\n}",
-    "test_cases": [
-      {
-        "input": "JSON.stringify(parseEnvConfig(\"PORT=3000\nHOST=localhost\"))",
-        "expected_output": "{\"PORT\":\"3000\",\"HOST\":\"localhost\"}",
-        "description": "应正确解析键值对配置"
-      },
-      {
-        "input": "JSON.stringify(parseEnvConfig(\"DEBUG=true\nLOG_LEVEL=info\"))",
-        "expected_output": "{\"DEBUG\":\"true\",\"LOG_LEVEL\":\"info\"}",
-        "description": "应正确解析多行环境变量"
-      }
-    ],
-    "hint": "用条件表达式检查环境变量是否存在，不存在则使用默认值"
-  },
-  {
-    "title": "测试类型",
-    "slug": "typescript-19-testing",
-    "description": "学习 Jest 类型、Mock 类型与类型覆盖率",
-    "content": "# 测试类型 — 让测试也类型安全\n\n## Jest 类型标注\n\nJest 是最流行的 JavaScript 测试框架，TypeScript 让测试代码也有类型保护：\n```typescript\ndescribe(\"Calculator\", () => {\n    test(\"adds two numbers\", () => {\n        expect(add(1, 2)).toBe(3);\n    });\n\n    test(\"handles negative numbers\", () => {\n        expect(add(-1, 1)).toBe(0);\n    });\n});\n```\n\n## Mock 类型\n\nMock 就像请替身演员——用假对象替代真实对象进行测试：\n```typescript\ninterface UserRepository {\n    findById(id: string): Promise<User | null>;\n    save(user: User): Promise<void>;\n}\n\nfunction createMockRepo(): UserRepository {\n    return {\n        findById: jest.fn(),\n        save: jest.fn()\n    };\n}\n```\n\n## 类型测试 — 测试类型本身\n\n用 `expectType` 或断言来验证类型是否正确：\n```typescript\nimport { expectType } from 'tsd';\n\nexpectType<string>(toUpperCase('hello'));\nexpectType<number[]>(filterNumbers([1, 'a', 2]));\n```\n\n## 类型覆盖率\n\n`typescript` 编译器的 `--noUnusedLocals` 和 `--noUnusedParameters` 选项可以帮助发现未使用的类型。使用 `type-coverage` 工具可以测量类型覆盖率：\n```bash\nnpx type-coverage\n```\n\n## 练习\n编写函数 `createTestResult(passed: boolean, message: string)`，返回一个测试结果对象 `{ passed, message, timestamp }`，timestamp 为当前时间的 ISO 字符串。",
-    "order": 19,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "interface TestResult {\n    passed: boolean;\n    message: string;\n    timestamp: string;\n}\n\nfunction createTestResult(passed: boolean, message: string): TestResult {\n    // 创建测试结果对象\n    return { passed: false, message: \"\", timestamp: \"\" };\n}",
-    "solution_code": "interface TestResult {\n    passed: boolean;\n    message: string;\n    timestamp: string;\n}\n\nfunction createTestResult(passed: boolean, message: string): TestResult {\n    return {\n        passed,\n        message,\n        timestamp: new Date().toISOString()\n    };\n}",
-    "test_cases": [
-      {
-        "input": "createTestResult(true, 'all passed').passed",
-        "expected_output": "true",
-        "description": "passed 属性应正确设置"
-      },
-      {
-        "input": "createTestResult(false, 'failed').message",
-        "expected_output": "failed",
-        "description": "message 属性应正确设置"
-      }
-    ],
-    "hint": "对象简写 { passed, message } 可以直接使用参数名，timestamp 用 new Date().toISOString()"
-  },
-  {
-    "title": "综合项目",
-    "slug": "typescript-20-api-client-sdk",
-    "description": "构建类型安全的 API 客户端 SDK",
-    "content": "# 综合项目 — 类型安全的 API 客户端 SDK\n\n这一关将综合运用前面学到的所有知识，构建一个类型安全的 API 客户端 SDK。\n\n## 项目需求\n\n一个 API 客户端需要：\n1. **泛型请求方法**：支持不同返回类型\n2. **类型安全的端点定义**：每个 API 路径有明确的参数和返回类型\n3. **错误处理**：统一的错误类型\n4. **请求配置**：可自定义 headers、timeout 等\n\n## 核心类型设计\n\n```typescript\n// API 响应类型\ninterface ApiResponse<T> {\n    data: T;\n    status: number;\n    message: string;\n}\n\n// 请求配置\ninterface RequestConfig {\n    headers?: Record<string, string>;\n    timeout?: number;\n}\n\n// 端点定义\ninterface Endpoint<TParams, TResponse> {\n    method: \"GET\" | \"POST\" | \"PUT\" | \"DELETE\";\n    path: string;\n    params?: TParams;\n}\n```\n\n## 泛型客户端\n\n```typescript\nclass ApiClient {\n    constructor(private baseUrl: string, private config?: RequestConfig) {}\n\n    async request<T>(endpoint: Endpoint<any, T>): Promise<ApiResponse<T>> {\n        // 发送请求...\n    }\n}\n```\n\n## 实际应用\n\n```typescript\nconst getUserEndpoint: Endpoint<{ id: string }, User> = {\n    method: \"GET\",\n    path: \"/users/:id\"\n};\n\nconst client = new ApiClient(\"https://api.example.com\");\nconst response = await client.request(getUserEndpoint);\n// response.data 的类型是 User\n```\n\n## 练习\n编写函数 `createApiClient(baseUrl: string)`，返回一个对象，包含 `getEndpoint(path: string)` 方法，该方法返回 `\"{baseUrl}{path}\"` 格式的完整 URL 字符串。",
-    "order": 20,
-    "difficulty": "advanced",
-    "xp_reward": 20,
-    "starter_code": "interface ApiClient {\n    getEndpoint: (path: string) => string;\n}\n\nfunction createApiClient(baseUrl: string): ApiClient {\n    // 创建 API 客户端\n    return {\n        getEndpoint: (path) => \"\"\n    };\n}",
-    "solution_code": "interface ApiClient {\n    getEndpoint: (path: string) => string;\n}\n\nfunction createApiClient(baseUrl: string): ApiClient {\n    return {\n        getEndpoint: (path) => `${baseUrl}${path}`\n    };\n}",
-    "test_cases": [
-      {
-        "input": "createApiClient('https://api.example.com').getEndpoint('/users')",
-        "expected_output": "https://api.example.com/users",
-        "description": "拼接完整 API 端点"
-      },
-      {
-        "input": "createApiClient('http://localhost:3000').getEndpoint('/api/posts')",
-        "expected_output": "http://localhost:3000/api/posts",
-        "description": "拼接本地开发端点"
-      }
-    ],
-    "hint": "用模板字符串拼接 baseUrl 和 path，接口定义了方法的签名"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
   }
 ]

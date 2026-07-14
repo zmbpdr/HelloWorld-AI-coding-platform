@@ -68,12 +68,19 @@ async def seed_database():
         existing = result.scalars().all()
         existing_slugs = {lang.slug for lang in existing}
         lang_map = {lang.slug: lang for lang in existing}
+        # 旧数据库可保留历史课程，但学习端只展示本期六条主推路线。
+        for language in existing:
+            language.is_active = False
         for lang_data in LANGUAGES_DATA:
             if lang_data["slug"] not in existing_slugs:
                 language = Language(**lang_data)
                 session.add(language)
                 await session.flush()
                 lang_map[language.slug] = language
+            else:
+                language = lang_map[lang_data["slug"]]
+                for key, value in lang_data.items():
+                    setattr(language, key, value)
         exist_lessons = await session.execute(select(Lesson.slug))
         exist_lesson_slugs = set(exist_lessons.scalars().all())
         for slug in ALL_LANGUAGE_SLUGS:
