@@ -56,10 +56,6 @@ async def login(request: Request, user_data: UserLogin, db: AsyncSession = Depen
         reason = getattr(user, 'banned_reason', None) or "账号已被禁用"
         raise HTTPException(status_code=403, detail=f"账号已被禁用：{reason}")
 
-    # 更新最后登录时间
-    from datetime import datetime, timezone
-    user.last_login_at = datetime.now(timezone.utc)
-
     # 生成 JWT
     access_token = create_access_token(data={"sub": str(user.id)})
     await db.commit()
