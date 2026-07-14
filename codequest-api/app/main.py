@@ -64,8 +64,9 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
     )
 
 # 路由注册
-from app.routers import auth, courses, lessons, ai, achievements, progress, leaderboard, submissions, agent, snippets
+from app.routers import auth, courses, lessons, ai, achievements, progress, leaderboard, submissions, agent, snippets, diagnostic, errors
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["认证"])
+app.include_router(diagnostic.router, prefix="/api/v1", tags=["能力诊断"])
 app.include_router(courses.router, prefix="/api/v1", tags=["课程"])
 app.include_router(lessons.router, prefix="/api/v1", tags=["课时"])
 app.include_router(ai.router, prefix="/api/v1", tags=["AI 助手"])
@@ -75,6 +76,7 @@ app.include_router(leaderboard.router, prefix="/api/v1", tags=["排行榜"])
 app.include_router(submissions.router, prefix="/api/v1", tags=["提交记录"])
 app.include_router(agent.router, prefix="/api/v1/agent", tags=["智能体工坊"])
 app.include_router(snippets.router, prefix="/api/v1", tags=["代码收藏"])
+app.include_router(errors.router, prefix="/api/v1", tags=["错题本"])
 
 # 管理后台路由
 from app.routers.admin import auth_router, dashboard_router, lessons_router, users_router, achievements_router, submissions_router, settings_router
