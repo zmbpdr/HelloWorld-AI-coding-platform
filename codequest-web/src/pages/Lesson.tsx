@@ -421,7 +421,7 @@ export default function Lesson() {
           </div>
         </div>
 
-        <AIChat lessonId={Number(lessonId)} context={{ lesson_title: lesson.title, code, error: error || undefined }} />
+        <AIChat lessonId={Number(lessonId)} context={{ lesson_title: lesson.title, language: languageSlug, code, error: error || undefined }} />
         <AchievementToast achievement={unlockedAchievement} onClose={() => setUnlockedAchievement(null)} />
         <CelebrationEffect
           active={showCelebration}

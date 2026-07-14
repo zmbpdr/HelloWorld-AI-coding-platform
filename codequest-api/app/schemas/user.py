@@ -48,3 +48,14 @@ class RefreshToken(BaseModel):
 class TokenData(BaseModel):
     """JWT 令牌数据"""
     user_id: Optional[int] = None
+
+
+class MembershipResponse(BaseModel):
+    membership_tier: str
+    ai_calls_used: int
+    ai_calls_limit: Optional[int] = None
+    is_unlimited: bool = False
+
+
+class UpgradeRequest(BaseModel):
+    plan: str = Field(default="pro", pattern="^pro$")

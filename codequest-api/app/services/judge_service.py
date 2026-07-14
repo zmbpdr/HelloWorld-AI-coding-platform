@@ -1,5 +1,5 @@
 """评测服务 - 代码提交评测"""
-import asyncio, json, subprocess, tempfile, os, logging
+import asyncio, json, subprocess, tempfile, os, logging, shutil
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,7 +25,8 @@ WRAPPER_TEMPLATES = {
     "typescript": "\n\n// ---- test harness ----\nconsole.log({expr});\n",
     "c": '\n\n/* ---- test harness ---- */\n#include <stdio.h>\n#include <string.h>\n\nint main() {{\n    printf("%s\\n", {expr});\n    return 0;\n}}\n',
     "cpp": '\n\n// ---- test harness ----\n#include <iostream>\n#include <string>\n#include <vector>\nusing namespace std;\n\nint main() {{\n    auto __result = {expr};\n    cout << __result << endl;\n    return 0;\n}}\n',
-    "java": '\n\n// ---- test harness ----\npublic static void main(String[] args) {{ System.out.println({expr}); }}\n',
+    "c": '\n\n// ---- test harness ----\n#include <stdio.h>\nint main(void) {{\n    printf("%d\\n", {expr});\n    return 0;\n}}\n',
+    "java": '\n\n// ---- test harness ----\nclass Main {{ public static void main(String[] args) {{ System.out.println({expr}); }} }}\n',
 }
 
 
@@ -173,11 +174,10 @@ class JudgeService:
 
         ext = LANGUAGE_EXTENSIONS.get(language, ".txt")
 
-        syntax_check = self._execute_code(code, ext, language)
-        if syntax_check["status"] == SubmissionStatus.error:
-            return {"status": SubmissionStatus.error, "score": 0, "stdout": syntax_check["stdout"], "stderr": syntax_check["stderr"], "execution_time": syntax_check["execution_time"], "test_results": [], "error_type": "syntax"}
-
         if not test_cases:
+            syntax_check = self._execute_code(code, ext, language)
+            if syntax_check["status"] != SubmissionStatus.accepted:
+                return {"status": syntax_check["status"], "score": 0, "stdout": syntax_check["stdout"], "stderr": syntax_check["stderr"], "execution_time": syntax_check["execution_time"], "test_results": [], "error_type": "syntax"}
             return {"status": SubmissionStatus.accepted, "score": 100, "stdout": syntax_check["stdout"], "stderr": syntax_check["stderr"], "execution_time": syntax_check["execution_time"], "test_results": []}
 
         wrapper_template = WRAPPER_TEMPLATES.get(language, WRAPPER_TEMPLATES["python"])
@@ -259,16 +259,23 @@ class JudgeService:
     def _execute_direct(self, code: str, ext: str, language: str) -> dict:
         files_to_clean = []
         try:
-            with tempfile.NamedTemporaryFile(mode="w", suffix=ext, delete=False, encoding="utf-8") as f:
+            if language == "java":
+                work_dir = tempfile.mkdtemp(prefix="codequest_java_")
+                temp_path = os.path.join(work_dir, "Main.java")
+                f = open(temp_path, "w", encoding="utf-8")
+                files_to_clean.append(work_dir)
+            else:
+                f = tempfile.NamedTemporaryFile(mode="w", suffix=ext, delete=False, encoding="utf-8")
+                temp_path = f.name
+                work_dir = os.path.dirname(temp_path)
+                files_to_clean.append(temp_path)
+            with f:
                 # Python 文件加上编码声明，避免 Windows GBK 问题
                 if language == "python" and not code.startswith("# -*- coding:"):
                     f.write("# -*- coding: utf-8 -*-\n" + code)
                 else:
                     f.write(code)
-                temp_path = f.name
-            files_to_clean.append(temp_path)
             run_cmd, compile_cmd = LANGUAGE_COMMANDS.get(language, (["python", "{file}"], None))
-            work_dir = os.path.dirname(temp_path)
             start_time = datetime.now()
 
             if compile_cmd is not None:
@@ -277,7 +284,8 @@ class JudgeService:
                         content = src.read()
                     with open(temp_path, "w", encoding="utf-8") as dst:
                         dst.write(content.replace("public class", "class"))
-                compile_cmd = [c.replace("{file}", temp_path).replace("{output}", temp_path + ".out") for c in compile_cmd]
+                js_output = os.path.splitext(temp_path)[0] + ".js"
+                compile_cmd = [c.replace("{file}", temp_path).replace("{output}", temp_path + ".out").replace("{dir}", work_dir).replace("{js_output}", js_output) for c in compile_cmd]
                 proc = subprocess.run(compile_cmd, capture_output=True, timeout=10, cwd=work_dir)
                 compile_time = (datetime.now() - start_time).total_seconds() * 1000
                 if proc.returncode != 0:
@@ -285,8 +293,12 @@ class JudgeService:
                 out_path = temp_path + ".out"
                 if os.path.exists(out_path):
                     files_to_clean.append(out_path)
+                if language == "typescript" and os.path.exists(js_output):
+                    files_to_clean.append(js_output)
 
-            run_cmd = [c.replace("{file}", temp_path).replace("{output}", temp_path + ".out").replace("{dir}", work_dir).replace("{classname}", os.path.splitext(os.path.basename(temp_path))[0]) for c in run_cmd]
+            class_name = "Main" if language == "java" else os.path.splitext(os.path.basename(temp_path))[0]
+            js_output = os.path.splitext(temp_path)[0] + ".js"
+            run_cmd = [c.replace("{file}", temp_path).replace("{output}", temp_path + ".out").replace("{dir}", work_dir).replace("{classname}", class_name).replace("{js_output}", js_output) for c in run_cmd]
             proc = subprocess.run(run_cmd, capture_output=True, timeout=10, cwd=work_dir)
             elapsed = (datetime.now() - start_time).total_seconds() * 1000
             if proc.returncode == 0:
@@ -300,7 +312,9 @@ class JudgeService:
         finally:
             for fp in files_to_clean:
                 try:
-                    if os.path.exists(fp):
+                    if os.path.isdir(fp):
+                        shutil.rmtree(fp, ignore_errors=True)
+                    elif os.path.exists(fp):
                         os.unlink(fp)
                 except OSError:
                     pass

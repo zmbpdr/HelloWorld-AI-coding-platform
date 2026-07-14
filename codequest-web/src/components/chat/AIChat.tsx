@@ -1,13 +1,10 @@
 import { useState, useRef, useEffect, type FormEvent } from 'react'
 import { useAI } from '../../hooks/useAI'
+import type { ChatRequest } from '../../api/ai'
 
 interface AIChatProps {
   lessonId?: number
-  context?: {
-    lesson_title?: string
-    code?: string
-    error?: string
-  }
+  context?: ChatRequest['context']
 }
 
 export default function AIChat({ lessonId, context }: AIChatProps) {

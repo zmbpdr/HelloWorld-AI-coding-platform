@@ -89,6 +89,7 @@ export default function Profile() {
             <div className="flex items-center gap-3">
               <Button variant="ghost" onClick={() => navigate('/')}>返回大厅</Button>
               <Button variant="ghost" onClick={() => navigate('/settings')}>设置</Button>
+              <Button variant="ghost" onClick={() => navigate('/pricing')}>会员方案</Button>
             </div>
           </div>
         </nav>

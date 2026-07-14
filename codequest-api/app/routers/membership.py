@@ -1,0 +1,29 @@
+"""会员 Mock 路由：不接真实支付，仅用于产品演示。"""
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database import get_db
+from app.core.deps import get_current_user
+from app.models.user import User
+from app.schemas.user import MembershipResponse, UpgradeRequest
+from app.services.membership_service import membership_payload
+
+router = APIRouter()
+
+
+@router.get("/users/me/membership", response_model=MembershipResponse)
+async def get_membership(current_user: User = Depends(get_current_user)):
+    return membership_payload(current_user)
+
+
+@router.post("/users/me/upgrade", response_model=MembershipResponse)
+async def upgrade_membership(
+    _request: UpgradeRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """模拟升级为 Pro；真实支付接入前仅改变会员状态。"""
+    current_user.membership = "pro"
+    await db.commit()
+    await db.refresh(current_user)
+    return membership_payload(current_user)
