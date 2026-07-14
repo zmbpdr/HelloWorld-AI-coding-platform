@@ -1,4 +1,4 @@
-# CodeQuest — 闯关式 AI 编程学习平台
+# Hello World — 闯关式 AI 编程学习平台
 
 交互式编程学习平台，通过代码闯关获得经验值。集成 AI 导师、Docker 沙箱安全执行和智能体工坊。
 
@@ -71,7 +71,7 @@ cd codequest-admin-web && npx vite --port 5174 --host
 ├── codequest-admin-web/    # 管理后台 (React + Ant Design 6)
 ├── codequest-content/      # 课程数据 (lessons/ + agent/)
 ├── docker-compose.yml
-└── CodeQuest_Architecture_Design.md
+└── Hello_World_Architecture_Design.md
 ```
 
 ---
