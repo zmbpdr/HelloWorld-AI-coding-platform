@@ -35,6 +35,8 @@ export default function Lesson() {
     slug: string; name: string; rarity: string
   } | null>(null)
   const [showCelebration, setShowCelebration] = useState(false)
+  const [aiMode, setAiMode] = useState<'diagnostic' | 'tutor' | 'review' | 'plan'>('tutor')
+  const [aiResponse, setAiResponse] = useState('')
 
   useEffect(() => {
     if (lessonId) {
@@ -77,6 +79,16 @@ export default function Lesson() {
       state: lessonId ? { fromLessonId: Number(lessonId), ts: Date.now() } : undefined,
     })
   }
+
+  const handleAIAction = () => {
+  const mockResponses = {
+    diagnostic: '🔍 诊断结果：\n• 代码语法正确\n• 建议增加边界条件处理\n• 变量命名可以更清晰',
+    tutor: '🧑‍🏫 导师建议：\n这个问题可以用循环来解决。\n试试这样想：\n1. 先确定循环条件\n2. 再处理每次迭代的逻辑',
+    review: '📋 代码审查评分：\n• 正确性: 85分\n• 可读性: 70分\n• 性能: 75分\n• 健壮性: 60分\n建议：增加空值检查',
+    plan: '📈 学习规划：\n基于你的进度，推荐学习：\n1. 下一关：循环嵌套\n2. 本周目标：完成函数章节\n3. 建议每天练习30分钟',
+  }
+  setAiResponse(mockResponses[aiMode] || '请选择有效模式')
+}
 
   if (isLoading) return <LessonSkeleton />
 
@@ -135,6 +147,7 @@ export default function Lesson() {
         </nav>
 
         <div className="flex-1 flex overflow-hidden">
+          {/* 左侧：题目描述 */}
           <div className="w-1/2 border-r overflow-y-auto p-6" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
             <div className="prose max-w-none">
               <div dangerouslySetInnerHTML={{ __html: renderMarkdown(lesson.content || '') }} />
@@ -160,11 +173,38 @@ export default function Lesson() {
             </div>
           </div>
 
+          {/* 右侧：编辑器 + 按钮 + AI 回复 + 结果 */}
           <div className="w-1/2 flex flex-col">
+            {/* 代码编辑器 */}
             <div className="flex-1 p-4 min-h-0">
               <CodeEditor value={code} onChange={setCode} language={languageSlug || 'python'} height="100%" />
             </div>
 
+            {/* AI 模式切换按钮 */}
+            <div className="px-4 pt-2 flex items-center gap-2 shrink-0 flex-wrap" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+              <span className="text-xs mr-1" style={{ color: '#64748b' }}>🤖 AI 模式</span>
+              {[
+                { key: 'diagnostic', label: '诊断', icon: '🔍' },
+                { key: 'tutor', label: '导师', icon: '🧑‍🏫' },
+                { key: 'review', label: '审查', icon: '📋' },
+                { key: 'plan', label: '规划', icon: '📈' },
+              ].map((mode) => (
+                <button
+                  key={mode.key}
+                  onClick={() => setAiMode(mode.key as any)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                  style={{
+                    background: aiMode === mode.key ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.04)',
+                    border: aiMode === mode.key ? '1px solid rgba(99,102,241,0.4)' : '1px solid transparent',
+                    color: aiMode === mode.key ? '#a5b4fc' : '#94a3b8',
+                  }}
+                >
+                  {mode.icon} {mode.label}
+                </button>
+              ))}
+            </div>
+
+            {/* 原有按钮栏：运行 / 重置 / 收藏 */}
             <div
               className="px-4 py-3 flex items-center gap-3 shrink-0"
               style={{ borderTop: '1px solid rgba(255,255,255,0.04)', background: 'rgba(8,12,23,0.6)' }}
@@ -186,10 +226,10 @@ export default function Lesson() {
                       title, code, language: languageSlug || 'python',
                       tags: [], lesson_id: Number(lessonId)
                     })
-                  alert(res.data?.message || '收藏成功')
-                } catch (err: any) {
-                  alert('收藏失败: ' + (err?.response?.data?.detail || err?.message || '未知错误'))
-                }
+                    alert(res.data?.message || '收藏成功')
+                  } catch (err: any) {
+                    alert('收藏失败: ' + (err?.response?.data?.detail || err?.message || '未知错误'))
+                  }
                 }}
               >
                 ⭐ 收藏
@@ -200,6 +240,46 @@ export default function Lesson() {
               <StreakIndicator count={streak.count} best={streak.best} />
             </div>
 
+            {/* 🆕 AI 回复区域 */}
+            <div
+              className="px-4 py-3 shrink-0"
+              style={{ borderTop: '1px solid rgba(255,255,255,0.04)', background: 'rgba(8,12,23,0.3)' }}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-xs" style={{ color: '#64748b' }}>
+                  <span className="font-medium" style={{ color: '#818cf8' }}>
+                    {aiMode === 'diagnostic' && '🔍 诊断模式'}
+                    {aiMode === 'tutor' && '🧑‍🏫 导师模式'}
+                    {aiMode === 'review' && '📋 审查模式'}
+                    {aiMode === 'plan' && '📈 规划模式'}
+                  </span>
+                </div>
+                <button
+                  onClick={handleAIAction}
+                  className="px-3 py-1 rounded-lg text-xs font-medium transition-all"
+                  style={{
+                    background: 'rgba(99,102,241,0.15)',
+                    border: '1px solid rgba(99,102,241,0.2)',
+                    color: '#a5b4fc',
+                  }}
+                >
+                  🚀 执行 AI 分析
+                </button>
+              </div>
+              <div className="mt-2 text-sm" style={{ color: '#94a3b8' }}>
+                {aiResponse ? (
+                  <div className="p-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}>
+                    <div className="whitespace-pre-wrap" style={{ color: '#cbd5e1' }}>
+                      {aiResponse}
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ color: '#475569' }}>💡 点击「执行 AI 分析」按钮获取 {aiMode === 'diagnostic' ? '诊断' : aiMode === 'tutor' ? '导师指导' : aiMode === 'review' ? '代码审查' : '学习规划'} 建议</div>
+                )}
+              </div>
+            </div>
+
+            {/* 原有的结果显示区 */}
             {(result || error) && (
               <div
                 className="p-4 max-h-72 overflow-y-auto shrink-0"
@@ -232,6 +312,7 @@ export default function Lesson() {
                         boxShadow: statusCfg ? `inset 0 1px 0 ${statusCfg.border}` : 'none',
                       }}
                     >
+                      {/* 星级和得分 */}
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <StarBadge stars={result.stars} size="md" animated />
@@ -256,6 +337,7 @@ export default function Lesson() {
                         </div>
                       </div>
 
+                      {/* AI 分析（原有的） */}
                       {result.ai_analysis && (
                         <div
                           className="p-3.5 rounded-xl"
@@ -270,6 +352,7 @@ export default function Lesson() {
                         </div>
                       )}
 
+                      {/* 测试结果 */}
                       {result.test_results && result.test_results.length > 0 && (
                         <div className="mt-3 space-y-1.5">
                           <span className="text-xs" style={{ color: '#64748b' }}>
@@ -321,6 +404,7 @@ export default function Lesson() {
                         </div>
                       )}
 
+                      {/* 控制台输出 */}
                       {(result.stdout || result.stderr) && (
                         <div className="mt-2">
                           <span className="text-xs" style={{ color: '#64748b' }}>执行输出:</span>
@@ -348,7 +432,6 @@ export default function Lesson() {
     </PageTransition>
   )
 }
-
 function LessonSkeleton() {
   return (
     <div className="animate-pulse h-screen flex flex-col" style={{ background: '#080c17' }}>
@@ -373,3 +456,5 @@ function LessonSkeleton() {
     </div>
   )
 }
+
+
