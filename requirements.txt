@@ -1,7 +1,0 @@
-fastapi
-uvicorn
-pymysql
-bcrypt
-pyjwt
-python-jose
-requests
