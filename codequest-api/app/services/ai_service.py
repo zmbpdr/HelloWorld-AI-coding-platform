@@ -90,12 +90,15 @@ async def chat_with_ai(
                     "temperature": 0.7,
                 },
             )
-            response.raise_for_status()
+            if response.status_code >= 400:
+                error_body = response.text
+                logger.error(f"DeepSeek API 返回错误 {response.status_code}: {error_body}")
+                raise RuntimeError(f"AI 服务返回错误 ({response.status_code})")
             data = response.json()
             return data["choices"][0]["message"]["content"]
         except httpx.HTTPError as e:
             logger.error(f"DeepSeek API 请求失败: {e}")
-            raise RuntimeError("AI 服务不可用") from e
+            raise RuntimeError(f"AI 服务连接失败: {e}") from e
 
 
 async def chat_with_ai_stream(
