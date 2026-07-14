@@ -102,24 +102,28 @@ class JudgeService:
             except Exception:
                 logger.exception("错题记录保存失败")
         xp_earned = 0
-        if score > 0:
-            xp_earned = max(1, int((score / 100) * (lesson.xp_reward or 10)))
-            user_result = await self.db.execute(select(User).where(User.id == user_id))
-            user = user_result.scalars().first()
-            if user:
+        # 更新用户统计（每次提交都更新 streak，XP 只在得分时给）
+        user_result = await self.db.execute(select(User).where(User.id == user_id))
+        user = user_result.scalars().first()
+        if user:
+            # 连续打卡
+            today = datetime.now(timezone.utc).date()
+            last = user.last_login_at.date() if user.last_login_at else None
+            if last is None:
+                user.streak_days = 1
+            elif last == today:
+                if (user.streak_days or 0) == 0:
+                    user.streak_days = 1
+            elif last == today - timedelta(days=1):
+                user.streak_days = (user.streak_days or 0) + 1
+            else:
+                user.streak_days = 1
+            user.last_login_at = datetime.now(timezone.utc)
+            # XP 和等级
+            if score > 0:
+                xp_earned = max(1, int((score / 100) * (lesson.xp_reward or 10)))
                 user.xp = (user.xp or 0) + xp_earned
                 user.level = max(1, (user.xp or 0) // 100 + 1)
-                today = datetime.now(timezone.utc).date()
-                last = user.last_login_at.date() if user.last_login_at else None
-                if last is None:
-                    user.streak_days = 1
-                elif last == today:
-                    pass
-                elif last == today - timedelta(days=1):
-                    user.streak_days = (user.streak_days or 0) + 1
-                else:
-                    user.streak_days = 1
-                user.last_login_at = datetime.now(timezone.utc)
 
         if score == 100:
             encouragement = "完美通关！所有测试用例通过！"
