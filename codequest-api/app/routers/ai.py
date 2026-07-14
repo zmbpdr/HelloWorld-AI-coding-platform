@@ -27,13 +27,14 @@ async def chat(
 ):
     """发送消息（非流式）"""
     await ai_limiter(request=req, identifier=str(current_user.id))
-    consume_ai_quota(current_user)
-    await db.commit()
     try:
         reply = await chat_with_ai(
             message=request.message,
             context=request.context,
         )
+        # AI 调用成功后才扣配额，避免失败也扣
+        consume_ai_quota(current_user)
+        await db.commit()
         return ChatResponse(reply=reply)
     except Exception as e:
         logger.exception(f"AI 对话异常: {type(e).__name__}: {e}")
