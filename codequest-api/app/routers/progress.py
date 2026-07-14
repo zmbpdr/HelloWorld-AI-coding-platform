@@ -13,6 +13,7 @@ from app.models.progress import Progress
 from app.models.enums import ProgressStatus
 from app.core.deps import get_current_user
 from app.schemas.user import UserResponse
+from app.services.knowledge_service import get_user_knowledge
 
 router = APIRouter()
 
@@ -130,3 +131,13 @@ async def get_activity_heatmap(
         activity.append({"date": key, "count": daily.get(key, 0)})
 
     return {"activity": activity}
+
+
+@router.get("/progress/knowledge")
+async def get_knowledge(
+    current_user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """获取当前用户的知识掌握度"""
+    knowledge = await get_user_knowledge(db, current_user.id)
+    return {"knowledge": knowledge}

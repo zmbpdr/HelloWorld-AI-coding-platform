@@ -11,6 +11,8 @@ from app.models.user import User
 from app.models.enums import SubmissionStatus, ProgressStatus
 from app.config import settings
 from app.judge.language_config import LANGUAGE_COMMANDS, LANGUAGE_EXTENSIONS
+from app.services.knowledge_service import update_knowledge
+from app.services.error_service import save_error
 
 logger = logging.getLogger(__name__)
 
@@ -21,16 +23,8 @@ WRAPPER_TEMPLATES = {
     "python": "\n\n# ---- test harness ----\nprint({expr})\n",
     "javascript": "\n\n// ---- test harness ----\nconsole.log({expr});\n",
     "typescript": "\n\n// ---- test harness ----\nconsole.log({expr});\n",
+    "c": '\n\n/* ---- test harness ---- */\n#include <stdio.h>\n#include <string.h>\n\nint main() {{\n    printf("%s\\n", {expr});\n    return 0;\n}}\n',
     "cpp": '\n\n// ---- test harness ----\n#include <iostream>\n#include <string>\n#include <vector>\nusing namespace std;\n\nint main() {{\n    auto __result = {expr};\n    cout << __result << endl;\n    return 0;\n}}\n',
-    "go": 'package main\n\nimport "fmt"\n\n{user_code}\n\nfunc main() {{\n\tfmt.Println({expr})\n}}\n',
-    "rust": '\n\n// ---- test harness ----\nfn main() {{\n    println!("{{:?}}", {expr});\n}}\n',
-    "ruby": "\n\n# ---- test harness ----\nputs {expr}\n",
-    "swift": "\n\n// ---- test harness ----\nprint({expr})\n",
-    "kotlin": "\n\n// ---- test harness ----\nfun main() {{ println({expr}) }}\n",
-    "php": '\n\n// ---- test harness ----\necho {expr};\n',
-    "shell": "\n\n# ---- test harness ----\necho {expr}\n",
-    "lua": "\n\n-- ---- test harness ----\nprint({expr})\n",
-    "sql": "\n\n-- ---- test harness ----\n-- SQL uses direct execution\n",
     "java": '\n\n// ---- test harness ----\npublic static void main(String[] args) {{ System.out.println({expr}); }}\n',
 }
 
@@ -86,6 +80,27 @@ class JudgeService:
         await self._update_progress(user_id, lesson_id, judge_result, code, lesson)
 
         score = judge_result.get("score", 0)
+
+        # 更新知识掌握度（仅 Python 关卡，且 lesson 有 knowledge_tags）
+        if language == "python":
+            tags = getattr(lesson, 'knowledge_tags', None)
+            if tags:
+                try:
+                    await update_knowledge(self.db, user_id, tags, score > 0)
+                except Exception:
+                    logger.exception("知识掌握度更新失败")
+
+        # 错题记录（score < 100 时保存错误）
+        if score < 100:
+            try:
+                await save_error(
+                    self.db, user_id, lesson_id, code,
+                    stderr=judge_result.get("stderr", ""),
+                    score=score,
+                    test_results=judge_result.get("test_results"),
+                )
+            except Exception:
+                logger.exception("错题记录保存失败")
         xp_earned = 0
         if score > 0:
             xp_earned = max(1, int((score / 100) * (lesson.xp_reward or 10)))

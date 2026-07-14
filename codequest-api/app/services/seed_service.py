@@ -38,20 +38,12 @@ ACHIEVEMENTS_DATA = [
 ]
 
 LANGUAGES_DATA = [
-    {"name": "Python", "slug": "python", "icon_url": "/icons/python.svg", "description": "简洁优雅的编程语言", "color": "#3776AB", "difficulty": "beginner", "is_active": True, "sort_order": 1},
-    {"name": "JavaScript", "slug": "javascript", "icon_url": "/icons/javascript.svg", "description": "Web开发核心语言", "color": "#F7DF1E", "difficulty": "beginner", "is_active": True, "sort_order": 2},
-    {"name": "Java", "slug": "java", "icon_url": "/icons/java.svg", "description": "企业级应用主力语言", "color": "#ED8B00", "difficulty": "intermediate", "is_active": True, "sort_order": 3},
-    {"name": "C++", "slug": "cpp", "icon_url": "/icons/cpp.svg", "description": "高性能系统编程", "color": "#00599C", "difficulty": "advanced", "is_active": True, "sort_order": 4},
-    {"name": "Go", "slug": "go", "icon_url": "/icons/go.svg", "description": "高性能并发编程语言", "color": "#00ADD8", "difficulty": "intermediate", "is_active": True, "sort_order": 5},
-    {"name": "Rust", "slug": "rust", "icon_url": "/icons/rust.svg", "description": "安全系统编程语言", "color": "#DEA584", "difficulty": "advanced", "is_active": True, "sort_order": 6},
-    {"name": "TypeScript", "slug": "typescript", "icon_url": "/icons/typescript.svg", "description": "JavaScript的超集，类型安全", "color": "#3178C6", "difficulty": "intermediate", "is_active": True, "sort_order": 7},
-    {"name": "SQL", "slug": "sql", "icon_url": "/icons/sql.svg", "description": "数据库查询语言", "color": "#4479A1", "difficulty": "beginner", "is_active": True, "sort_order": 8},
-    {"name": "Ruby", "slug": "ruby", "icon_url": "/icons/ruby.svg", "description": "优雅的动态编程语言", "color": "#CC342D", "difficulty": "beginner", "is_active": True, "sort_order": 9},
-    {"name": "Swift", "slug": "swift", "icon_url": "/icons/swift.svg", "description": "Apple平台开发语言", "color": "#F05138", "difficulty": "intermediate", "is_active": True, "sort_order": 10},
-    {"name": "Kotlin", "slug": "kotlin", "icon_url": "/icons/kotlin.svg", "description": "现代JVM语言", "color": "#7F52FF", "difficulty": "intermediate", "is_active": True, "sort_order": 11},
-    {"name": "PHP", "slug": "php", "icon_url": "/icons/php.svg", "description": "Web服务端脚本语言", "color": "#777BB4", "difficulty": "beginner", "is_active": True, "sort_order": 12},
-    {"name": "Shell", "slug": "shell", "icon_url": "/icons/shell.svg", "description": "命令行脚本语言", "color": "#4EAA25", "difficulty": "beginner", "is_active": True, "sort_order": 13},
-    {"name": "Lua", "slug": "lua", "icon_url": "/icons/lua.svg", "description": "轻量级嵌入式脚本语言", "color": "#000080", "difficulty": "beginner", "is_active": True, "sort_order": 14},
+    {"name": "Python", "slug": "python", "icon_url": "/icons/python.svg", "description": "简洁优雅的编程语言，AI时代首选入门", "color": "#3776AB", "difficulty": "beginner", "is_active": True, "sort_order": 1},
+    {"name": "JavaScript", "slug": "javascript", "icon_url": "/icons/javascript.svg", "description": "Web开发核心语言，实用性最强", "color": "#F7DF1E", "difficulty": "beginner", "is_active": True, "sort_order": 2},
+    {"name": "Java", "slug": "java", "icon_url": "/icons/java.svg", "description": "企业级应用主力，校招面试刚需", "color": "#ED8B00", "difficulty": "intermediate", "is_active": True, "sort_order": 3},
+    {"name": "C", "slug": "c", "icon_url": "/icons/c.svg", "description": "计算机科学基石，科班必修", "color": "#A8B9CC", "difficulty": "beginner", "is_active": True, "sort_order": 4},
+    {"name": "C++", "slug": "cpp", "icon_url": "/icons/cpp.svg", "description": "从C过渡，高性能系统编程", "color": "#00599C", "difficulty": "intermediate", "is_active": True, "sort_order": 5},
+    {"name": "TypeScript", "slug": "typescript", "icon_url": "/icons/typescript.svg", "description": "从JavaScript自然过渡，类型安全", "color": "#3178C6", "difficulty": "intermediate", "is_active": True, "sort_order": 6},
 ]
 
 def _load_lessons_from_json(slug: str) -> list[dict]:
@@ -69,7 +61,7 @@ def _load_agent_nodes_from_json(file_name: str) -> list[dict]:
         return json.load(f)
 
 async def seed_database():
-    ALL_LANGUAGE_SLUGS = ("python", "javascript", "java", "cpp", "go", "rust", "typescript", "sql", "ruby", "swift", "kotlin", "php", "shell", "lua")
+    ALL_LANGUAGE_SLUGS = ("python", "javascript", "java", "c", "cpp", "typescript")
     async with async_session() as session:
         result = await session.execute(select(Language))
         existing = result.scalars().all()

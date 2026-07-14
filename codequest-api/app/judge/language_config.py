@@ -3,22 +3,14 @@
 直接执行命令使用主机路径占位符：{file}、{output}、{dir}、{classname}
 沙盒执行命令使用 Docker 容器内路径。"""
 
-# 语言文件后缀（14 种语言）
+# 语言文件后缀（6 种语言）
 LANGUAGE_EXTENSIONS = {
     "python": ".py",
     "javascript": ".js",
     "java": ".java",
+    "c": ".c",
     "cpp": ".cpp",
-    "go": ".go",
-    "rust": ".rs",
     "typescript": ".ts",
-    "sql": ".sql",
-    "ruby": ".rb",
-    "swift": ".swift",
-    "kotlin": ".kt",
-    "php": ".php",
-    "shell": ".sh",
-    "lua": ".lua",
 }
 
 # 直接执行命令 (run_cmd_list, compile_cmd_list_or_None)
@@ -27,17 +19,9 @@ LANGUAGE_COMMANDS = {
     "python": (["python", "{file}"], None),
     "javascript": (["node", "{file}"], None),
     "java": (["java", "-cp", "{dir}", "{classname}"], ["javac", "{file}"]),
+    "c": (["{output}"], ["gcc", "-o", "{output}", "{file}"]),
     "cpp": (["{output}"], ["g++", "-o", "{output}", "{file}"]),
-    "go": (["go", "run", "{file}"], None),
-    "rust": (["{output}"], ["rustc", "-o", "{output}", "{file}"]),
     "typescript": (["npx", "ts-node", "{file}"], None),
-    "sql": (["python", "-c", "import sqlite3; conn=sqlite3.connect(':memory:'); cursor=conn.executescript(open('{file}').read()); [print(row[0]) for row in cursor.execute('SELECT * FROM __result__').fetchall()]"], None),
-    "ruby": (["ruby", "{file}"], None),
-    "swift": (["swift", "{file}"], None),
-    "kotlin": (["kotlin", "{file}"], None),
-    "php": (["php", "{file}"], None),
-    "shell": (["bash", "{file}"], None),
-    "lua": (["lua", "{file}"], None),
 }
 
 # Docker 沙盒执行命令（Docker 容器内路径）
@@ -49,26 +33,13 @@ SANDBOX_LANGUAGE_COMMANDS = {
         ["java", "-cp", "/tmp", "Main"],
         ["javac", "-d", "/tmp", "/code/user_code.java"],
     ),
+    "c": (
+        ["/tmp/user_code.out"],
+        ["gcc", "-o", "/tmp/user_code.out", "/code/user_code.c"],
+    ),
     "cpp": (
         ["/tmp/user_code.out"],
         ["g++", "-std=c++17", "-o", "/tmp/user_code.out", "/code/user_code.cpp"],
     ),
-    "go": (["go", "run", "/code/user_code.go"], None),
     "typescript": (["npx", "ts-node", "/code/user_code.ts"], None),
-    "rust": (
-        ["/tmp/user_code.out"],
-        ["rustc", "-o", "/tmp/user_code.out", "/code/user_code.rs"],
-    ),
-    "ruby": (["ruby", "/code/user_code.rb"], None),
-    "php": (["php", "/code/user_code.php"], None),
-    "shell": (["bash", "/code/user_code.sh"], None),
-    "lua": (["lua", "/code/user_code.lua"], None),
-    "sql": (
-        ["python3", "-c",
-         "import sqlite3; conn=sqlite3.connect(':memory:'); exec(open('/code/user_code.sql').read())"],
-        None,
-    ),
-    # Kotlin / Swift 未安装在沙盒镜像中，回退到直接执行
-    "kotlin": (["kotlin", "/code/user_code.kt"], None),
-    "swift": (["swift", "/code/user_code.swift"], None),
 }
