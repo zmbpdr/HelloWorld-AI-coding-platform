@@ -29,6 +29,11 @@ class Lesson(Base):
     test_cases: Mapped[list | None] = mapped_column(JSON, nullable=True, comment="测试用例（JSON 数组）")
     hint: Mapped[str | None] = mapped_column(Text, nullable=True, comment="提示信息")
 
+    # 知识标签（D 负责打标签）
+    knowledge_tags: Mapped[list | None] = mapped_column(JSON, nullable=True, comment="知识点标签")
+    estimated_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True, comment="预计完成时间（分钟）")
+    prerequisites: Mapped[list | None] = mapped_column(JSON, nullable=True, comment="前置关卡 slug 列表")
+
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, comment="是否启用")
 
     created_at: Mapped[datetime] = mapped_column(

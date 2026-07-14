@@ -37,13 +37,14 @@ ACHIEVEMENTS_DATA = [
     {"slug": "streak-7", "name": "习惯养成", "description": "连续学习7天", "condition_type": "streak", "condition_value": 7, "rarity": "rare"},
 ]
 
+# 方案C：6种语言全部完整开发
 LANGUAGES_DATA = [
-    {"name": "Python", "slug": "python", "icon_url": "/icons/python.svg", "description": "简洁优雅的编程语言，AI时代首选入门", "color": "#3776AB", "difficulty": "beginner", "is_active": True, "sort_order": 1},
-    {"name": "JavaScript", "slug": "javascript", "icon_url": "/icons/javascript.svg", "description": "Web开发核心语言，实用性最强", "color": "#F7DF1E", "difficulty": "beginner", "is_active": True, "sort_order": 2},
+    {"name": "Python", "slug": "python", "icon_url": "/icons/python.svg", "description": "AI与数据科学首选，简洁优雅", "color": "#3776AB", "difficulty": "beginner", "is_active": True, "sort_order": 1},
+    {"name": "JavaScript", "slug": "javascript", "icon_url": "/icons/javascript.svg", "description": "Web开发核心语言，全栈必备", "color": "#F7DF1E", "difficulty": "beginner", "is_active": True, "sort_order": 2},
     {"name": "Java", "slug": "java", "icon_url": "/icons/java.svg", "description": "企业级应用主力，校招面试刚需", "color": "#ED8B00", "difficulty": "intermediate", "is_active": True, "sort_order": 3},
-    {"name": "C", "slug": "c", "icon_url": "/icons/c.svg", "description": "计算机科学基石，科班必修", "color": "#A8B9CC", "difficulty": "beginner", "is_active": True, "sort_order": 4},
+    {"name": "C", "slug": "c", "icon_url": "/icons/c.svg", "description": "编程语言基石，CS科班必修", "color": "#555555", "difficulty": "beginner", "is_active": True, "sort_order": 4},
     {"name": "C++", "slug": "cpp", "icon_url": "/icons/cpp.svg", "description": "从C过渡，高性能系统编程", "color": "#00599C", "difficulty": "intermediate", "is_active": True, "sort_order": 5},
-    {"name": "TypeScript", "slug": "typescript", "icon_url": "/icons/typescript.svg", "description": "从JavaScript自然过渡，类型安全", "color": "#3178C6", "difficulty": "intermediate", "is_active": True, "sort_order": 6},
+    {"name": "TypeScript", "slug": "typescript", "icon_url": "/icons/typescript.svg", "description": "从JS自然过渡，类型安全", "color": "#3178C6", "difficulty": "intermediate", "is_active": True, "sort_order": 6},
 ]
 
 def _load_lessons_from_json(slug: str) -> list[dict]:
@@ -82,7 +83,7 @@ async def seed_database():
             for lesson_data in _load_lessons_from_json(slug):
                 if lesson_data["slug"] in exist_lesson_slugs:
                     continue
-                lesson = Lesson(language_id=language.id, title=lesson_data["title"], slug=lesson_data["slug"], description=lesson_data.get("description"), content=lesson_data.get("content"), order=lesson_data.get("order", 0), difficulty=lesson_data.get("difficulty", "beginner"), xp_reward=lesson_data.get("xp_reward", 10), starter_code=lesson_data.get("starter_code"), solution_code=lesson_data.get("solution_code"), test_cases=lesson_data.get("test_cases"), hint=lesson_data.get("hint"))
+                lesson = Lesson(language_id=language.id, title=lesson_data["title"], slug=lesson_data["slug"], description=lesson_data.get("description"), content=lesson_data.get("content"), order=lesson_data.get("order", 0), difficulty=lesson_data.get("difficulty", "beginner"), xp_reward=lesson_data.get("xp_reward", 10), starter_code=lesson_data.get("starter_code"), solution_code=lesson_data.get("solution_code"), test_cases=lesson_data.get("test_cases"), hint=lesson_data.get("hint"), knowledge_tags=lesson_data.get("knowledge_tags"), estimated_minutes=lesson_data.get("estimated_minutes"), prerequisites=lesson_data.get("prerequisites"))
                 session.add(lesson)
         exist_ach = await session.execute(select(Achievement.slug))
         exist_ach_slugs = set(exist_ach.scalars().all())

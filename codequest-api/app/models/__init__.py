@@ -9,6 +9,9 @@ from app.models.achievement import Achievement, UserAchievement
 from app.models.admin import AdminUser, SystemSettings, ContentAuditLog, UserStatsDaily
 from app.models.agent import NeuronNode, AgentProgress
 from app.models.snippet import CodeSnippet
+from app.models.diagnostic import UserDiagnostic
+from app.models.knowledge import UserKnowledge
+from app.models.error import UserError
 
 __all__ = [
     "User",
@@ -25,4 +28,7 @@ __all__ = [
     "NeuronNode",
     "AgentProgress",
     "CodeSnippet",
+    "UserDiagnostic",
+    "UserKnowledge",
+    "UserError",
 ]
