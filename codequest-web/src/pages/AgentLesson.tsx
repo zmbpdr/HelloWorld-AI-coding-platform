@@ -118,6 +118,8 @@ export default function AgentLesson() {
   const handleSubmit = async () => {
     if (!nodeId) return
     await runCode(Number(nodeId), code)
+    // 提交后立即更新尝试次数
+    setNode((prev) => prev ? { ...prev, attempts: prev.attempts + 1 } : prev)
   }
 
   const goBack = () => navigate('/workshop')
