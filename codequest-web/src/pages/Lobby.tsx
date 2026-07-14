@@ -295,7 +295,7 @@ export default function Lobby() {
         </section>
 
 
-                /* 🆕 能力诊断入口 - 插在这里 */
+{/* 🆕 能力诊断入口 - 插在这里 */}
         {isAuthenticated && !localStorage.getItem('diagnostic_completed') && (
           <div className="relative max-w-7xl mx-auto px-6 pb-4">
             <div 
