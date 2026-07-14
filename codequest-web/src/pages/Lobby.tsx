@@ -276,8 +276,40 @@ export default function Lobby() {
           </p>
 
         </section>
+                /* 🆕 能力诊断入口 - 插在这里 */
 
 
+        {isAuthenticated && !localStorage.getItem('diagnostic_completed') && (
+          <div className="relative max-w-7xl mx-auto px-6 pb-4">
+            <div 
+              className="p-4 rounded-2xl flex items-center justify-between"
+              style={{ 
+                background: 'rgba(99,102,241,0.08)', 
+                border: '1px solid rgba(99,102,241,0.15)',
+                backdropFilter: 'blur(12px)',
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🧠</span>
+                <div>
+                  <span className="font-medium" style={{ color: '#a5b4fc' }}>能力诊断</span>
+                  <span className="text-sm ml-2" style={{ color: '#94a3b8' }}>首次使用？测测你的水平，获取个性化学习起点</span>
+                </div>
+              </div>
+              <button 
+                onClick={() => navigate('/diagnostic')}
+                className="px-4 py-1.5 rounded-lg text-sm font-medium transition-all hover:scale-105"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                  color: '#fff',
+                  boxShadow: '0 2px 12px rgba(99,102,241,0.3)',
+                }}
+              >
+                开始诊断 →
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* 内容切换区 */}
 

@@ -9,8 +9,8 @@ import AgentLesson from './pages/AgentLesson'
 import Leaderboard from './pages/Leaderboard'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
-import Pricing from './pages/Pricing'
 import RequireAuth from './components/auth/RequireAuth'
+import Diagnostic from './pages/Diagnostic'
 
 // 学习提醒（浏览器通知 API）
 function StudyReminder() {
@@ -34,7 +34,7 @@ function StudyReminder() {
         await Notification.requestPermission()
       }
       if (Notification.permission === 'granted') {
-        new Notification('CodeQuest', {
+        new Notification('Hello World', {
           body: '今天还没有开始编程闯关哦，快来挑战吧！🚀',
           icon: '/favicon.ico',
           tag: 'codequest-reminder',
@@ -79,9 +79,7 @@ function App() {
         <Route path="/settings" element={
           <RequireAuth><Settings /></RequireAuth>
         } />
-        <Route path="/pricing" element={
-          <RequireAuth><Pricing /></RequireAuth>
-        } />
+        <Route path="/diagnostic" element={<RequireAuth><Diagnostic /></RequireAuth>} />
       </Routes>
     </BrowserRouter>
   )
