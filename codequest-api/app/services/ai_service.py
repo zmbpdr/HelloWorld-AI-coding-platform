@@ -1,4 +1,4 @@
-"""AI 对话服务 - 本地大模型聊天与流式响应"""
+"""AI 对话服务 - DeepSeek API 聊天与流式响应"""
 
 import json
 import logging
@@ -11,10 +11,10 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-OLLAMA_CHAT_URL = f"{settings.OLLAMA_BASE_URL}/api/chat"
+DEEPSEEK_CHAT_URL = "https://api.deepseek.com/v1/chat/completions"
 
 SYSTEM_PROMPT = (
-    "你是一个友好的编程学习助手 CodeQuest AI。"
+    "你是一个友好的编程学习助手 Hello World AI。"
     "你帮助用户解决编程问题，提供思路引导而非直接给出答案。"
     "你的回答应简洁、鼓励性强，适合编程初学者理解。"
     "当用户贴出代码时，你可以指出潜在问题并给出改进建议。"
@@ -61,6 +61,13 @@ def _build_messages(message: str, context: Optional[dict] = None) -> list[dict]:
     return messages
 
 
+def _api_key() -> str:
+    key = settings.DEEPSEEK_API_KEY
+    if not key:
+        raise RuntimeError("DeepSeek API Key 未配置，请在 .env 中设置 DEEPSEEK_API_KEY")
+    return key
+
+
 async def chat_with_ai(
     message: str,
     context: Optional[dict] = None,
@@ -71,19 +78,23 @@ async def chat_with_ai(
     async with httpx.AsyncClient(timeout=60.0) as client:
         try:
             response = await client.post(
-                OLLAMA_CHAT_URL,
+                DEEPSEEK_CHAT_URL,
+                headers={
+                    "Authorization": f"Bearer {_api_key()}",
+                    "Content-Type": "application/json",
+                },
                 json={
-                    "model": "qwen2.5:7b",
+                    "model": settings.DEEPSEEK_MODEL,
                     "messages": messages,
                     "stream": False,
-                    "options": {"temperature": 0.7},
+                    "temperature": 0.7,
                 },
             )
             response.raise_for_status()
             data = response.json()
-            return data.get("message", {}).get("content", "抱歉，AI 服务暂时无响应。")
+            return data["choices"][0]["message"]["content"]
         except httpx.HTTPError as e:
-            logger.error(f"Ollama API 请求失败: {e}")
+            logger.error(f"DeepSeek API 请求失败: {e}")
             raise RuntimeError("AI 服务不可用") from e
 
 
@@ -98,25 +109,33 @@ async def chat_with_ai_stream(
         try:
             async with client.stream(
                 "POST",
-                OLLAMA_CHAT_URL,
+                DEEPSEEK_CHAT_URL,
+                headers={
+                    "Authorization": f"Bearer {_api_key()}",
+                    "Content-Type": "application/json",
+                },
                 json={
-                    "model": "qwen2.5:7b",
+                    "model": settings.DEEPSEEK_MODEL,
                     "messages": messages,
                     "stream": True,
-                    "options": {"temperature": 0.7},
+                    "temperature": 0.7,
                 },
             ) as response:
                 response.raise_for_status()
                 async for line in response.aiter_lines():
-                    if not line:
+                    if not line or not line.startswith("data: "):
                         continue
+                    data_str = line[6:]  # 去掉 "data: " 前缀
+                    if data_str.strip() == "[DONE]":
+                        break
                     try:
-                        chunk = json.loads(line)
-                        content = chunk.get("message", {}).get("content", "")
+                        chunk = json.loads(data_str)
+                        delta = chunk["choices"][0].get("delta", {})
+                        content = delta.get("content", "")
                         if content:
                             yield content
-                    except json.JSONDecodeError:
+                    except (json.JSONDecodeError, KeyError, IndexError):
                         continue
         except httpx.HTTPError as e:
-            logger.error(f"Ollama 流式请求失败: {e}")
+            logger.error(f"DeepSeek 流式请求失败: {e}")
             yield "AI 服务暂时不可用，请稍后重试。"
