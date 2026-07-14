@@ -38,6 +38,11 @@ export default function Lesson() {
   const [showCelebration, setShowCelebration] = useState(false)
   const [aiMode, setAiMode] = useState<'diagnostic' | 'tutor' | 'review' | 'plan'>('tutor')
   const [aiResponse, setAiResponse] = useState('')
+  const [reviewIssues, setReviewIssues] = useState<Array<{
+  line: number
+  message: string
+  severity: 'error' | 'warning' | 'info'
+}>>([])
 
   useEffect(() => {
     if (lessonId) {
@@ -92,7 +97,17 @@ export default function Lesson() {
     plan: '📈 学习规划：\n基于你的进度，推荐学习：\n1. 下一关：循环嵌套\n2. 本周目标：完成函数章节\n3. 建议每天练习30分钟',
   }
   setAiResponse(mockResponses[aiMode] || '请选择有效模式')
-}
+
+  // 🆕 审查模式生成标注
+  if (aiMode === 'review') {
+    setReviewIssues([
+      { line: 3, message: '⚠️ 变量名不够清晰，建议使用更描述性的名称', severity: 'warning' },
+      { line: 5, message: '❌ 缺少边界条件检查，可能导致运行时错误', severity: 'error' },
+    ])
+  } else {
+    setReviewIssues([])
+  }
+} 
 
   if (isLoading) return <LessonSkeleton />
 
@@ -181,7 +196,7 @@ export default function Lesson() {
           <div className="w-1/2 flex flex-col">
             {/* 代码编辑器 */}
             <div className="flex-1 p-4 min-h-0">
-              <CodeEditor value={code} onChange={setCode} language={languageSlug || 'python'} height="100%" />
+              <CodeEditor value={code} onChange={setCode} language={languageSlug || 'python'} height="100%" decorations={reviewIssues} />
             </div>
 
             {/* AI 模式切换按钮 */}
