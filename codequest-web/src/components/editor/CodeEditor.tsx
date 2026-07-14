@@ -8,6 +8,12 @@ interface CodeEditorProps {
   language?: string
   readOnly?: boolean
   height?: string
+  // 🆕 新增：标注数据
+  decorations?: Array<{
+    line: number
+    message: string
+    severity: 'error' | 'warning' | 'info'
+  }>
 }
 
 // Monaco Editor 语言标识映射（14 种语言全覆盖）
@@ -43,9 +49,12 @@ export default function CodeEditor({
   language = 'python',
   readOnly = false,
   height = '400px',
+  decorations = [], // 🆕 接收标注数据
 }: CodeEditorProps) {
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null)
+  const monacoRef = useRef<typeof Monaco | null>(null)
   const ignoreChangeRef = useRef(false)
+  const decorationIdsRef = useRef<string[]>([])
   const [container, setContainer] = useState<HTMLDivElement | null>(null)
   const [containerReady, setContainerReady] = useState(false)
   const [editorPixelHeight, setEditorPixelHeight] = useState(400)
@@ -86,9 +95,44 @@ export default function CodeEditor({
     }
   }, [value])
 
+  // 🆕 当 decorations 变化时更新标注
+  useEffect(() => {
+    if (!editorRef.current || !monacoRef.current) return
+
+    // 清除旧标注
+    if (decorationIdsRef.current.length > 0) {
+      editorRef.current.deltaDecorations(decorationIdsRef.current, [])
+      decorationIdsRef.current = []
+    }
+
+    // 如果没有标注，直接返回
+    if (decorations.length === 0) return
+
+    // 生成新标注
+    const monaco = monacoRef.current
+    const newDecorations = decorations.map((dec) => {
+      const isError = dec.severity === 'error'
+      const isWarning = dec.severity === 'warning'
+      return {
+        range: new monaco.Range(dec.line, 1, dec.line, 1),
+        options: {
+          isWholeLine: true,
+          className: isError ? 'error-line' : isWarning ? 'warning-line' : 'info-line',
+          glyphMarginClassName: isError ? 'error-glyph' : isWarning ? 'warning-glyph' : 'info-glyph',
+          glyphMarginHoverMessage: { value: dec.message },
+          hoverMessage: { value: dec.message },
+        }
+      }
+    })
+
+    decorationIdsRef.current = editorRef.current.deltaDecorations([], newDecorations)
+  }, [decorations])
+
   const handleMount: OnMount = (editor, monaco) => {
     editorRef.current = editor
+    monacoRef.current = monaco
 
+    // 自定义主题
     monaco.editor.defineTheme('codequest-dark', {
       base: 'vs-dark',
       inherit: true,
@@ -151,6 +195,8 @@ export default function CodeEditor({
             fontSize,
             fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
             lineNumbers: 'on',
+            // 🆕 开启行号左侧标记区域
+            glyphMargin: true,
             scrollBeyondLastLine: false,
             automaticLayout: false,
             tabSize: 4,

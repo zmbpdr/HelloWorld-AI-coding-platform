@@ -63,3 +63,33 @@ body {
 .prose h1,.prose h2,.prose h3 { color: #f1f5f9; }
 .prose p,.prose li { color: #cbd5e1; line-height: 1.8; }
 .prose strong { color: #e2e8f0; }
+
+
+/* 代码行标注样式 */
+.error-line {
+  background: rgba(239, 68, 68, 0.15) !important;
+}
+.error-glyph {
+  background: #ef4444 !important;
+  width: 4px !important;
+  margin-left: 3px !important;
+  border-radius: 2px !important;
+}
+.warning-line {
+  background: rgba(245, 158, 11, 0.12) !important;
+}
+.warning-glyph {
+  background: #f59e0b !important;
+  width: 4px !important;
+  margin-left: 3px !important;
+  border-radius: 2px !important;
+}
+.info-line {
+  background: rgba(99, 102, 241, 0.10) !important;
+}
+.info-glyph {
+  background: #6366f1 !important;
+  width: 4px !important;
+  margin-left: 3px !important;
+  border-radius: 2px !important;
+}
