@@ -11,6 +11,7 @@ from app.core.deps import get_current_user
 from app.core.rate_limit import ai_limiter
 from app.core.security import decode_access_token
 from app.services.ai_service import chat_with_ai, chat_with_ai_stream
+from app.services.membership_service import consume_ai_quota
 from app.schemas.ai import ChatRequest, ChatResponse
 
 router = APIRouter()
@@ -22,9 +23,12 @@ async def chat(
     request: ChatRequest,
     req: Request,
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
 ):
     """发送消息（非流式）"""
     await ai_limiter(request=req, identifier=str(current_user.id))
+    consume_ai_quota(current_user)
+    await db.commit()
     try:
         reply = await chat_with_ai(
             message=request.message,
