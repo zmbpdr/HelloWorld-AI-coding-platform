@@ -17,7 +17,7 @@
 
 ```bash
 # 终端 1: 后端
-cd codequest-api && uv run uvicorn app.main:app --host 0.0.0.0 --port 8006 --reload
+cd codequest-api && uvicorn app.main:app --host 0.0.0.0 --port 8006 --reload
 
 # 终端 2: 学习前端
 cd codequest-web && npx vite --port 5173 --host

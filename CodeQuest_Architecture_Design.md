@@ -8,10 +8,9 @@
 
 CodeQuest 是一个**闯关式 AI 编程学习平台**，通过代码闯关获得 XP，集成 AI 导师和 Docker 沙箱。
 
-三大学习板块：
+两大学习板块：
 - **编程闯关** — 14 门编程语言，258 个关卡
 - **智能体工坊** — 8 条 AI/ML 学习主线，92 个神经元节点
-- **机器学习实验室** — JupyterLab + PyTorch，内置合成数据
 
 ### 技术栈
 
@@ -22,7 +21,6 @@ CodeQuest 是一个**闯关式 AI 编程学习平台**，通过代码闯关获�
 | 管理前端 | React 19 + TypeScript + Ant Design 6 + Zustand |
 | 数据库 | SQLite (dev) |
 | AI | DeepSeek API → Ollama 降级 |
-| ML 实验室 | JupyterLab + PyTorch (容器化) |
 | 沙箱 | Docker 容器 (优先) / 直接执行 (需配置) |
 
 ---
@@ -197,7 +195,7 @@ GET    /agent/tracks             # 8 条主线概览
 ```
 Lobby 导航: [📌 收藏] [🏆 排行] [个人中心]
 
-TabKey = 'languages' | 'workshop' | 'ml-lab'
+TabKey = 'languages' | 'workshop'
 
 编程闯关 (</>) → 14语言卡片网格
 智能体工坊 (🧠) → 8条主线卡片网格
@@ -268,36 +266,3 @@ cd codequest-admin-web && npx vite --port 5174 --host
 
 ---
 
-## 9. 机器学习实验室（Jupyter）
-
-### 架构
-
-```
-宿主机 notebooks/   → 容器 /home/jovyan/templates:ro  (只读模板)
-宿主机 student-work/ → 容器 /home/jovyan/student-work  (可写)
-宿主机 outputs/      → 容器 /home/jovyan/outputs       (训练产出)
-```
-
-### 启动
-
-```bash
-docker run -d --name codequest-ml-lab -p 8888:8888   -v ./notebooks:/home/jovyan/templates:ro   -v ./student-work:/home/jovyan/student-work   -v ./outputs:/home/jovyan/outputs   -e JUPYTER_ENABLE_LAB=yes -e JUPYTER_TOKEN=codequest   quay.io/jupyter/pytorch-notebook:latest
-```
-
-### 模板设计
-
-| 模板 | 内容 | 数据方式 |
-|------|------|----------|
-| 01_neural_network | 神经网络基础 (XOR) | 内置合成数据 |
-| 02_cnn | CNN (MNIST 合成) | torchvision 自动下载 |
-| 03_rnn | RNN (文本生成) | 内置莎士比亚文本 |
-| 04_nlp | NLP (情感分析) | 内置示例文本 |
-| 05_recommendation | 推荐系统 (协同过滤) | 内置评分矩阵 |
-
-### 学生流程
-
-1. 点击 Lobby 标签「ML 实验室」→ 新窗口打开 JupyterLab
-2. 复制模板到 student-work/
-3. 运行内置合成数据代码 → 查看效果
-4. 可选：上传自己的 CSV 数据
-5. 训练完成 → outputs/ 下载模型和图表

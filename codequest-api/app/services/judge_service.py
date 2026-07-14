@@ -244,8 +244,12 @@ class JudgeService:
     def _execute_direct(self, code: str, ext: str, language: str) -> dict:
         files_to_clean = []
         try:
-            with tempfile.NamedTemporaryFile(mode="w", suffix=ext, delete=False) as f:
-                f.write(code)
+            with tempfile.NamedTemporaryFile(mode="w", suffix=ext, delete=False, encoding="utf-8") as f:
+                # Python 文件加上编码声明，避免 Windows GBK 问题
+                if language == "python" and not code.startswith("# -*- coding:"):
+                    f.write("# -*- coding: utf-8 -*-\n" + code)
+                else:
+                    f.write(code)
                 temp_path = f.name
             files_to_clean.append(temp_path)
             run_cmd, compile_cmd = LANGUAGE_COMMANDS.get(language, (["python", "{file}"], None))
@@ -254,9 +258,9 @@ class JudgeService:
 
             if compile_cmd is not None:
                 if language == "java":
-                    with open(temp_path, "r") as src:
+                    with open(temp_path, "r", encoding="utf-8") as src:
                         content = src.read()
-                    with open(temp_path, "w") as dst:
+                    with open(temp_path, "w", encoding="utf-8") as dst:
                         dst.write(content.replace("public class", "class"))
                 compile_cmd = [c.replace("{file}", temp_path).replace("{output}", temp_path + ".out") for c in compile_cmd]
                 proc = subprocess.run(compile_cmd, capture_output=True, timeout=10, cwd=work_dir)
