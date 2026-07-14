@@ -23,9 +23,8 @@ WRAPPER_TEMPLATES = {
     "python": "\n\n# ---- test harness ----\nprint({expr})\n",
     "javascript": "\n\n// ---- test harness ----\nconsole.log({expr});\n",
     "typescript": "\n\n// ---- test harness ----\nconsole.log({expr});\n",
-    "c": '\n\n/* ---- test harness ---- */\n#include <stdio.h>\n#include <string.h>\n\nint main() {{\n    printf("%s\\n", {expr});\n    return 0;\n}}\n',
+    "c": '\n\n/* ---- test harness ---- */\n#include <stdio.h>\n#include <string.h>\n\nint main() {{\n    printf("{fmt}\\n", {expr});\n    return 0;\n}}\n',
     "cpp": '\n\n// ---- test harness ----\n#include <iostream>\n#include <string>\n#include <vector>\nusing namespace std;\n\nint main() {{\n    auto __result = {expr};\n    cout << __result << endl;\n    return 0;\n}}\n',
-    "c": '\n\n// ---- test harness ----\n#include <stdio.h>\nint main(void) {{\n    printf("%d\\n", {expr});\n    return 0;\n}}\n',
     "java": '\n\n// ---- test harness ----\nclass Main {{ public static void main(String[] args) {{ System.out.println({expr}); }} }}\n',
 }
 
@@ -191,7 +190,12 @@ class JudgeService:
             description = tc.get("description", f"测试用例 {i+1}")
 
             if expr:
-                if language == "go":
+                # C 语言根据期望输出类型选择 %d 或 %s
+                if language == "c":
+                    is_numeric = self._is_numeric(expected)
+                    fmt = "%d" if is_numeric else "%s"
+                    full_code = code + wrapper_template.format(expr=expr, fmt=fmt)
+                elif language == "go":
                     full_code = wrapper_template.format(expr=expr, user_code=code)
                 else:
                     full_code = code + wrapper_template.format(expr=expr)
@@ -229,6 +233,14 @@ class JudgeService:
             status = SubmissionStatus.error
 
         return {"status": status, "score": score, "stdout": "", "stderr": "", "execution_time": total_time, "test_results": test_results}
+
+    def _is_numeric(self, s: str) -> bool:
+        """判断字符串是否表示数值"""
+        try:
+            float(s)
+            return True
+        except (ValueError, TypeError):
+            return False
 
     def _smart_match(self, actual: str, expected: str) -> bool:
         if actual == expected:
