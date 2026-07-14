@@ -52,8 +52,6 @@ const AGENT_TRACKS = [
 
 ]
 
-
-
 export default function Lobby() {
 
   const navigate = useNavigate()
@@ -179,6 +177,25 @@ export default function Lobby() {
               {isAuthenticated ? (
                 <>
                 <button
+                  onClick={() => navigate('/errors')}
+                  className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
+                  style={{ 
+                    background: 'rgba(255,255,255,0.04)', 
+                    color: '#f87171', 
+                    border: '1px solid rgba(255,255,255,0.06)' 
+                  }}
+                  onMouseEnter={e => { 
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; 
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)' 
+                  }}
+                  onMouseLeave={e => { 
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; 
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)' 
+                  }}
+                >
+                  📝 错题本
+                </button>
+                <button
                   onClick={() => setShowSnippets(true)}
                   className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
                   style={{ background: 'rgba(255,255,255,0.04)', color: '#818cf8', border: '1px solid rgba(255,255,255,0.06)' }}
@@ -276,9 +293,9 @@ export default function Lobby() {
           </p>
 
         </section>
+
+
                 /* 🆕 能力诊断入口 - 插在这里 */
-
-
         {isAuthenticated && !localStorage.getItem('diagnostic_completed') && (
           <div className="relative max-w-7xl mx-auto px-6 pb-4">
             <div 

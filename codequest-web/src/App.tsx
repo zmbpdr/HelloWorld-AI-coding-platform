@@ -11,6 +11,7 @@ import Profile from './pages/Profile'
 import Settings from './pages/Settings'
 import RequireAuth from './components/auth/RequireAuth'
 import Diagnostic from './pages/Diagnostic'
+import Errors from './pages/Errors'
 
 // 学习提醒（浏览器通知 API）
 function StudyReminder() {
@@ -78,6 +79,9 @@ function App() {
         } />
         <Route path="/settings" element={
           <RequireAuth><Settings /></RequireAuth>
+        } />
+        <Route path="/errors" element={
+          <RequireAuth><Errors /></RequireAuth>
         } />
         <Route path="/diagnostic" element={<RequireAuth><Diagnostic /></RequireAuth>} />
       </Routes>
