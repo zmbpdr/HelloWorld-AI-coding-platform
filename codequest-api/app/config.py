@@ -59,7 +59,8 @@ class Settings(BaseSettings):
     FEATURE_STRUCTURED_REVIEW: bool = True
     FEATURE_RECOMMEND: bool = True
     FEATURE_WEEKLY_REPORT: bool = False
-    FEATURE_MEMBERSHIP: bool = False
+    FEATURE_MEMBERSHIP: bool = True
+    FREE_DAILY_AI_QUOTA: int = 5
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
