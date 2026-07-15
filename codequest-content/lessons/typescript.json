@@ -1,5 +1,29 @@
 [
   {
+    "title": "Hello World",
+    "slug": "typescript-01-hello-world",
+    "description": "实现 hello() 函数，返回字符串 Hello, World!",
+    "content": "# Hello World — TypeScript 的第一关\n\n欢迎进入 TypeScript 的世界！\n\n## 任务\n实现 hello() 函数，让它返回 \"Hello, World!\"。\n\n## 要求\n- 函数的返回值类型是 string\n- 返回字符串 \"Hello, World!\"\n- 通过下方测试后即可通关。",
+    "order": 1,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "function hello(): string {\n  // 在这里编写你的代码\n  return \"\";\n}",
+    "solution_code": "function hello(): string {\n  return \"Hello, World!\";\n}",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      },
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 return 语句返回字符串 \"Hello, World!\""
+  },
+  {
     "title": "认识变量",
     "slug": "typescript-01-get-age",
     "description": "通过 getAge() 返回变量 age 的值 18。",
