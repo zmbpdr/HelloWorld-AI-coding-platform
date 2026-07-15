@@ -16,7 +16,12 @@
         "description": "认识变量：基础用例"
       }
     ],
-    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": []
   },
   {
     "title": "Hello World",
@@ -40,7 +45,15 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "在函数参数列表后用 `: string` 声明返回值类型，然后用 return 返回字符串"
+    "hint": "在函数参数列表后用 `: string` 声明返回值类型，然后用 return 返回字符串",
+    "knowledge_tags": [
+      "基础语法",
+      "输出"
+    ],
+    "estimated_minutes": 8,
+    "prerequisites": [
+      "typescript-01-get-age"
+    ]
   },
   {
     "title": "基本数据类型",
@@ -59,7 +72,14 @@
         "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "typescript-01-hello-world"
+    ]
   },
   {
     "title": "基础类型",
@@ -88,7 +108,14 @@
         "description": "getTypeLabel(true) 应返回 'boolean'"
       }
     ],
-    "hint": "使用 typeof 运算符判断类型，注意 typeof 的返回值是小写字符串"
+    "hint": "使用 typeof 运算符判断类型，注意 typeof 的返回值是小写字符串",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "typescript-02-add"
+    ]
   },
   {
     "title": "数组与元组",
@@ -112,7 +139,14 @@
         "description": "parseCoordinate([0, 0]) 应返回 'x: 0, y: 0'"
       }
     ],
-    "hint": "元组通过索引访问元素，input[0] 是 x，input[1] 是 y"
+    "hint": "元组通过索引访问元素，input[0] 是 x，input[1] 是 y",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "typescript-02-basic-types"
+    ]
   },
   {
     "title": "条件判断",
@@ -131,7 +165,14 @@
         "description": "条件判断：基础用例"
       }
     ],
-    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "typescript-03-arrays-tuples"
+    ]
   },
   {
     "title": "对象与接口",
@@ -155,7 +196,14 @@
         "description": "不带邮箱的用户描述"
       }
     ],
-    "hint": "用 if 语句检查可选属性是否存在，模板字符串拼接输出"
+    "hint": "用 if 语句检查可选属性是否存在，模板字符串拼接输出",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "typescript-03-is-adult"
+    ]
   },
   {
     "title": "循环入门",
@@ -174,7 +222,14 @@
         "description": "循环入门：基础用例"
       }
     ],
-    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "typescript-04-interfaces"
+    ]
   },
   {
     "title": "函数类型",
@@ -198,7 +253,14 @@
         "description": "不带角色的用户简介"
       }
     ],
-    "hint": "可选参数用 ? 标记，在函数体内用 if 检查是否存在"
+    "hint": "可选参数用 ? 标记，在函数体内用 if 检查是否存在",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "typescript-04-sum-to"
+    ]
   },
   {
     "title": "数组或列表",
@@ -217,7 +279,14 @@
         "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "typescript-05-function-types"
+    ]
   },
   {
     "title": "函数基础",
@@ -236,7 +305,14 @@
         "description": "函数基础：基础用例"
       }
     ],
-    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "typescript-05-sum-array"
+    ]
   },
   {
     "title": "联合与交叉",
@@ -265,7 +341,14 @@
         "description": "整数也应保留两位小数"
       }
     ],
-    "hint": "用 typeof 进行类型守卫，字符串用 toUpperCase()，数字用 toFixed(2)"
+    "hint": "用 typeof 进行类型守卫，字符串用 toUpperCase()，数字用 toFixed(2)",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-06-square"
+    ]
   },
   {
     "title": "枚举与字面量",
@@ -299,7 +382,14 @@
         "description": "1月是冬天"
       }
     ],
-    "hint": "用 if 判断月份范围，返回值类型是字面量联合类型"
+    "hint": "用 if 判断月份范围，返回值类型是字面量联合类型",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-06-union-intersection"
+    ]
   },
   {
     "title": "字典、对象或 Map",
@@ -318,7 +408,14 @@
         "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "typescript-07-enums-literals"
+    ]
   },
   {
     "title": "字符串操作",
@@ -337,7 +434,14 @@
         "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "typescript-07-get-score"
+    ]
   },
   {
     "title": "类型推断与断言",
@@ -366,7 +470,14 @@
         "description": "非字符串非数组返回0"
       }
     ],
-    "hint": "先用 typeof 或 Array.isArray 检查类型，再用 as 断言告诉 TypeScript 具体类型"
+    "hint": "先用 typeof 或 Array.isArray 检查类型，再用 as 断言告诉 TypeScript 具体类型",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-08-count-vowels"
+    ]
   },
   {
     "title": "综合项目：简易计算器",
@@ -385,7 +496,15 @@
         "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "函数"
+    ],
+    "estimated_minutes": 25,
+    "prerequisites": [
+      "typescript-08-inference-assertions"
+    ]
   },
   {
     "title": "泛型",
@@ -409,7 +528,14 @@
         "description": "字符串包装成数组"
       }
     ],
-    "hint": "直接返回 [value]，TypeScript 会自动推断 T[] 为返回类型"
+    "hint": "直接返回 [value]，TypeScript 会自动推断 T[] 为返回类型",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-09-calculate"
+    ]
   },
   {
     "title": "类与OOP",
@@ -433,7 +559,14 @@
         "description": "5x5 正方形面积为 25"
       }
     ],
-    "hint": "面积 = width * height，用 this 访问实例属性"
+    "hint": "面积 = width * height，用 this 访问实例属性",
+    "knowledge_tags": [
+      "面向对象"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-09-generics"
+    ]
   },
   {
     "title": "综合项目：待办事项管理器",
@@ -452,7 +585,15 @@
         "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "集合与遍历"
+    ],
+    "estimated_minutes": 28,
+    "prerequisites": [
+      "typescript-10-classes-oop"
+    ]
   },
   {
     "title": "高级类型",
@@ -476,7 +617,14 @@
         "description": "字符串数组第一个元素"
       }
     ],
-    "hint": "直接返回 arr[0]，ExtractArrayType 会自动推断元素类型"
+    "hint": "直接返回 arr[0]，ExtractArrayType 会自动推断元素类型",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-10-count-completed"
+    ]
   },
   {
     "title": "装饰器",
@@ -500,7 +648,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "装饰器已经写好，只需在 run() 方法中 return \"done\""
+    "hint": "装饰器已经写好，只需在 run() 方法中 return \"done\"",
+    "knowledge_tags": [
+      "高级函数"
+    ],
+    "estimated_minutes": 22,
+    "prerequisites": [
+      "typescript-11-advanced-types"
+    ]
   },
   {
     "title": "模块系统",
@@ -524,7 +679,14 @@
         "description": "模块导出add应正确工作"
       }
     ],
-    "hint": "使用模板字符串拼接 name、@ 符号和 version"
+    "hint": "使用模板字符串拼接 name、@ 符号和 version",
+    "knowledge_tags": [
+      "模块化"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "typescript-12-decorators"
+    ]
   },
   {
     "title": "类型兼容与逆变",
@@ -548,7 +710,14 @@
         "description": "多余属性也兼容（结构化类型）"
       }
     ],
-    "hint": "TypeScript 的结构化类型系统只看形状，检查 obj.name 是否存在且为 string"
+    "hint": "TypeScript 的结构化类型系统只看形状，检查 obj.name 是否存在且为 string",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-13-modules"
+    ]
   },
   {
     "title": "工具类型",
@@ -572,7 +741,14 @@
         "description": "Partial<User> 应更新name字段"
       }
     ],
-    "hint": "使用展开运算符 ... 合并对象，后面的属性会覆盖前面的"
+    "hint": "使用展开运算符 ... 合并对象，后面的属性会覆盖前面的",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-14-type-compatibility"
+    ]
   },
   {
     "title": "类型体操",
@@ -596,7 +772,14 @@
         "description": "模板字面量类型拼接2"
       }
     ],
-    "hint": "模板字面量类型用反引号和 ${} 语法，运行时也用模板字符串拼接"
+    "hint": "模板字面量类型用反引号和 ${} 语法，运行时也用模板字符串拼接",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-15-utility-types"
+    ]
   },
   {
     "title": "与React结合",
@@ -620,7 +803,14 @@
         "description": "label 属性应正确赋值"
       }
     ],
-    "hint": "对象简写 { label, count } 等价于 { label: label, count: count }"
+    "hint": "对象简写 { label, count } 等价于 { label: label, count: count }",
+    "knowledge_tags": [
+      "前端工程"
+    ],
+    "estimated_minutes": 25,
+    "prerequisites": [
+      "typescript-16-type-gymnastics"
+    ]
   },
   {
     "title": "Node.js开发",
@@ -644,7 +834,14 @@
         "description": "应正确解析多行环境变量"
       }
     ],
-    "hint": "用条件表达式检查环境变量是否存在，不存在则使用默认值"
+    "hint": "用条件表达式检查环境变量是否存在，不存在则使用默认值",
+    "knowledge_tags": [
+      "异步编程"
+    ],
+    "estimated_minutes": 22,
+    "prerequisites": [
+      "typescript-17-react"
+    ]
   },
   {
     "title": "测试类型",
@@ -668,7 +865,14 @@
         "description": "message 属性应正确设置"
       }
     ],
-    "hint": "对象简写 { passed, message } 可以直接使用参数名，timestamp 用 new Date().toISOString()"
+    "hint": "对象简写 { passed, message } 可以直接使用参数名，timestamp 用 new Date().toISOString()",
+    "knowledge_tags": [
+      "测试"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "typescript-18-nodejs"
+    ]
   },
   {
     "title": "综合项目",
@@ -692,6 +896,14 @@
         "description": "拼接本地开发端点"
       }
     ],
-    "hint": "用模板字符串拼接 baseUrl 和 path，接口定义了方法的签名"
+    "hint": "用模板字符串拼接 baseUrl 和 path，接口定义了方法的签名",
+    "knowledge_tags": [
+      "综合项目",
+      "工程实践"
+    ],
+    "estimated_minutes": 35,
+    "prerequisites": [
+      "typescript-19-testing"
+    ]
   }
 ]

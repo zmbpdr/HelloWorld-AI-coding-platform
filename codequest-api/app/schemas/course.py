@@ -50,3 +50,22 @@ class LanguageDetail(BaseModel):
 class SubmitCodeRequest(BaseModel):
     """代码提交请求"""
     code: str = Field(..., min_length=1, max_length=50000, description="提交的代码")
+
+
+class RecommendedLesson(BaseModel):
+    lesson_id: int
+    slug: str
+    title: str
+    reason: str
+    matched_tags: list[str]
+
+
+class NextNormalLesson(BaseModel):
+    lesson_id: int
+    title: str
+
+
+class RecommendationResponse(BaseModel):
+    recommended: list[RecommendedLesson]
+    next_normal: NextNormalLesson | None = None
+    knowledge_map: dict[str, float]

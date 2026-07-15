@@ -16,7 +16,12 @@
         "description": "认识变量：基础用例"
       }
     ],
-    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": []
   },
   {
     "title": "Hello World",
@@ -35,7 +40,15 @@
         "description": "hello() 应返回 Hello, World!"
       }
     ],
-    "hint": "使用 return 返回字符串字面量"
+    "hint": "使用 return 返回字符串字面量",
+    "knowledge_tags": [
+      "基础语法",
+      "输出"
+    ],
+    "estimated_minutes": 8,
+    "prerequisites": [
+      "c-01-get-age"
+    ]
   },
   {
     "title": "基本数据类型",
@@ -54,7 +67,14 @@
         "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "c-01-hello-world"
+    ]
   },
   {
     "title": "变量与数据类型",
@@ -73,7 +93,14 @@
         "description": "get_age() 应返回 25"
       }
     ],
-    "hint": "把 return 后面的数字改成 25"
+    "hint": "把 return 后面的数字改成 25",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "c-02-add"
+    ]
   },
   {
     "title": "条件判断",
@@ -97,7 +124,14 @@
         "description": "非正数返回 non-positive"
       }
     ],
-    "hint": "使用 if (n > 0) 判断是否为正数"
+    "hint": "使用 if (n > 0) 判断是否为正数",
+    "knowledge_tags": [
+      "编程基础"
+    ],
+    "estimated_minutes": 15,
+    "prerequisites": [
+      "c-02-variables"
+    ]
   },
   {
     "title": "条件判断",
@@ -116,7 +150,14 @@
         "description": "条件判断：基础用例"
       }
     ],
-    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "c-03-conditions"
+    ]
   },
   {
     "title": "for循环",
@@ -140,7 +181,14 @@
         "description": "边界值测试"
       }
     ],
-    "hint": "使用 for (int i = 1; i <= n; i++) 循环累加"
+    "hint": "使用 for (int i = 1; i <= n; i++) 循环累加",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "c-03-is-adult"
+    ]
   },
   {
     "title": "循环入门",
@@ -159,7 +207,14 @@
         "description": "循环入门：基础用例"
       }
     ],
-    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "c-04-for-loop"
+    ]
   },
   {
     "title": "数组",
@@ -178,7 +233,14 @@
         "description": "1+2+3+4+5 = 15"
       }
     ],
-    "hint": "使用 for 循环遍历 arr[0] 到 arr[size-1]"
+    "hint": "使用 for 循环遍历 arr[0] 到 arr[size-1]",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "c-04-sum-to"
+    ]
   },
   {
     "title": "数组或列表",
@@ -197,7 +259,14 @@
         "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "c-05-arrays"
+    ]
   },
   {
     "title": "函数基础",
@@ -221,7 +290,14 @@
         "description": "0 * 5 = 0"
       }
     ],
-    "hint": "使用 * 运算符进行乘法"
+    "hint": "使用 * 运算符进行乘法",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "c-05-sum-array"
+    ]
   },
   {
     "title": "函数基础",
@@ -240,7 +316,14 @@
         "description": "函数基础：基础用例"
       }
     ],
-    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "c-06-functions"
+    ]
   },
   {
     "title": "字典、对象或 Map",
@@ -259,7 +342,14 @@
         "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "c-06-square"
+    ]
   },
   {
     "title": "字符串操作",
@@ -283,7 +373,14 @@
         "description": "非Hello开头返回0"
       }
     ],
-    "hint": "使用 strncmp(str, \"Hello\", 5) 比较前5个字符"
+    "hint": "使用 strncmp(str, \"Hello\", 5) 比较前5个字符",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "c-07-get-score"
+    ]
   },
   {
     "title": "字符串操作",
@@ -302,7 +399,14 @@
         "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "c-07-strings"
+    ]
   },
   {
     "title": "指针入门",
@@ -321,7 +425,14 @@
         "description": "交换后 a=5, b=3"
       }
     ],
-    "hint": "用临时变量保存 *a 的值，然后把 *b 赋给 *a，临时变量赋给 *b"
+    "hint": "用临时变量保存 *a 的值，然后把 *b 赋给 *a，临时变量赋给 *b",
+    "knowledge_tags": [
+      "指针与内存"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "c-08-count-vowels"
+    ]
   },
   {
     "title": "综合项目：简易计算器",
@@ -340,7 +451,15 @@
         "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "函数"
+    ],
+    "estimated_minutes": 25,
+    "prerequisites": [
+      "c-08-pointers"
+    ]
   },
   {
     "title": "简易计算器",
@@ -374,7 +493,15 @@
         "description": "8 / 2 = 4"
       }
     ],
-    "hint": "用 if 判断 op 的值，分别返回对应运算结果"
+    "hint": "用 if 判断 op 的值，分别返回对应运算结果",
+    "knowledge_tags": [
+      "综合项目",
+      "函数"
+    ],
+    "estimated_minutes": 25,
+    "prerequisites": [
+      "c-09-calculate"
+    ]
   },
   {
     "title": "综合项目：待办事项管理器",
@@ -393,7 +520,15 @@
         "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "集合与遍历"
+    ],
+    "estimated_minutes": 28,
+    "prerequisites": [
+      "c-09-calculator"
+    ]
   },
   {
     "title": "斐波那契数列",
@@ -422,6 +557,13 @@
         "description": "第10项 = 55"
       }
     ],
-    "hint": "用两个变量 a 和 b 分别记录前两项，循环迭代更新"
+    "hint": "用两个变量 a 和 b 分别记录前两项，循环迭代更新",
+    "knowledge_tags": [
+      "编程基础"
+    ],
+    "estimated_minutes": 15,
+    "prerequisites": [
+      "c-10-count-completed"
+    ]
   }
 ]
