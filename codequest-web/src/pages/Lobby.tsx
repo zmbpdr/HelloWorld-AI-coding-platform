@@ -166,7 +166,7 @@ export default function Lobby() {
 
               <h1 className="text-xl font-bold tracking-tight" style={{ color: '#f1f5f9' }}>
 
-                CodeQuest
+                Hello World
 
               </h1>
 

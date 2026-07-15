@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageTransition from '../components/ui/PageTransition'
 import Button from '../components/ui/Button'
+import apiClient from '../api/client'  // 🆕 导入 apiClient
 
 // Mock 诊断题目
 const questions = [
@@ -51,18 +52,35 @@ export default function Diagnostic() {
     }
   }
 
-  const handleSubmit = async () => {
-// 用 Mock 数据（暂时代替 API）
-  setResult({
-      mastered: ['变量', '条件判断'],
-      weak: ['循环', '函数'],
-      recommendedLevel: '关卡 3'
-  })
-
-// 🆕 标记诊断已完成
-  localStorage.setItem('diagnostic_completed', 'true')
-  setSubmitted(true)
-  }  
+const handleSubmit = async () => {
+  try {
+    // 调用 A 同学的真实接口
+    const response = await apiClient.post('/diagnostic/submit', { 
+      answers: answers  // 用户选择的答案列表
+    })
+    
+    // 用真实数据
+    setResult({
+      correct_tags: response.data.correct_tags || [],
+      weak_tags: response.data.weak_tags || [],
+      skill_level: response.data.skill_level || 'beginner',
+      score: response.data.score,
+      recommended_start: response.data.recommended_start,
+      message: response.data.message
+    })
+    localStorage.setItem('diagnostic_completed', 'true')
+    setSubmitted(true)
+  } catch (error) {
+    console.error('诊断提交失败:', error)
+    // 如果接口失败，可以用 Mock 数据兜底
+    setResult({
+      correct_tags: ['变量', '条件判断'],
+      weak_tags: ['循环', '函数'],
+      skill_level: 'intermediate'
+    })
+    setSubmitted(true)
+  }
+} 
 
   if (submitted && result) {
     return (
@@ -71,9 +89,13 @@ export default function Diagnostic() {
           <div className="max-w-2xl w-full p-8 rounded-2xl" style={{ background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <h1 className="text-2xl font-bold mb-4" style={{ color: '#f1f5f9' }}>🎯 诊断结果</h1>
             <div className="space-y-3">
-              <div><span style={{ color: '#4ade80' }}>✅ 已掌握：</span><span style={{ color: '#94a3b8' }}>{result.mastered.join('、')}</span></div>
-              <div><span style={{ color: '#f87171' }}>⚠️ 薄弱点：</span><span style={{ color: '#94a3b8' }}>{result.weak.join('、')}</span></div>
-              <div><span style={{ color: '#818cf8' }}>📌 推荐起点：</span><span style={{ color: '#fbbf24' }}>{result.recommendedLevel}</span></div>
+              <div><span style={{ color: '#4ade80' }}>✅ 已掌握：</span><span style={{ color: '#94a3b8' }}>{result.correct_tags?.join('、') || '暂无'}</span></div>
+              <div><span style={{ color: '#f87171' }}>⚠️ 薄弱点：</span><span style={{ color: '#94a3b8' }}>{result.weak_tags?.join('、') || '暂无'}</span></div>
+              <div><span style={{ color: '#818cf8' }}>📌 能力等级：</span><span style={{ color: '#fbbf24' }}>
+                {result.skill_level === 'beginner' ? '入门' : 
+                result.skill_level === 'intermediate' ? '进阶' : 
+                result.skill_level === 'advanced' ? '高级' : result.skill_level}
+              </span></div>
             </div>
             <Button className="mt-6 w-full" onClick={() => navigate('/')}>开始学习</Button>
           </div>

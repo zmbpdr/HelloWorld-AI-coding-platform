@@ -39,7 +39,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="text-center mb-1">
         <h2 className="text-2xl font-bold" style={{ color: '#f1f5f9' }}>创建账号</h2>
-        <p className="text-sm mt-1.5" style={{ color: '#64748b' }}>开始你的 CodeQuest 编程之旅</p>
+        <p className="text-sm mt-1.5" style={{ color: '#64748b' }}>开始你的 Hello World 编程之旅</p>
       </div>
 
       {displayError && (
