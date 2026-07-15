@@ -57,7 +57,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               >
                 <span className="text-white font-bold text-sm">{'</>'}</span>
               </div>
-              <span className="text-xl font-bold" style={{ color: '#f1f5f9' }}>CodeQuest</span>
+              <span className="text-xl font-bold" style={{ color: '#f1f5f9' }}>Hello World</span>
             </div>
 
             {/* 标语 */}

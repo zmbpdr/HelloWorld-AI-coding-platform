@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../stores/userStore'
 import { getMyStats, getMyAchievements } from '../api/user'
+import apiClient from '../api/client'  // 🆕 导入 apiClient
 import Button from '../components/ui/Button'
 import AchievementCard from '../components/badge/AchievementCard'
 import PageTransition from '../components/ui/PageTransition'
@@ -27,16 +28,6 @@ interface AchievementData {
   unlocked_at: string | null
 }
 
-// 🆕 Mock 知识掌握度数据 - TODO: 替换为 A 的真实知识掌握度 API
-const mockKnowledge = [
-  { name: '变量', mastery: 85 },
-  { name: '条件判断', mastery: 70 },
-  { name: '循环', mastery: 90 },
-  { name: '函数', mastery: 55 },
-  { name: '列表操作', mastery: 65 },
-  { name: '字符串处理', mastery: 45 },
-]
-
 export default function Profile() {
   const navigate = useNavigate()
   const { logout, isAuthenticated } = useUserStore()
@@ -44,6 +35,7 @@ export default function Profile() {
   const [achievements, setAchievements] = useState<AchievementData[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
+  const [knowledge, setKnowledge] = useState<{ tag: string; mastery: number }[]>([])
 
   useEffect(() => {
     if (!isAuthenticated) { navigate('/'); return }
@@ -51,13 +43,15 @@ export default function Profile() {
     ;(async () => {
       try {
         setLoading(true)
-        const [sRes, aRes] = await Promise.all([
+        const [sRes, aRes, kRes] = await Promise.all([
           getMyStats().catch(() => null),
           getMyAchievements().catch(() => ({ data: [] })),
+          apiClient.get('/progress/knowledge').catch(() => ({ data: { knowledge: [] } })),
         ])
         if (cancelled) return
         if (sRes) setStats(sRes.data || sRes)
         setAchievements(aRes?.data ?? aRes ?? [])
+        setKnowledge(kRes?.data?.knowledge ?? [])
       } catch {
         if (!cancelled) setLoadError('加载数据失败')
       } finally {
@@ -100,7 +94,6 @@ export default function Profile() {
               <Button variant="ghost" onClick={() => navigate('/')}>返回大厅</Button>
               <Button variant="ghost" onClick={() => navigate('/settings')}>设置</Button>
               <Button variant="ghost" onClick={() => navigate('/pricing')}>会员方案</Button>
-              {/* 🆕 错题本入口 */}
               <Button variant="ghost" onClick={() => navigate('/errors')}>📝 错题本</Button>
             </div>
           </div>
@@ -170,7 +163,7 @@ export default function Profile() {
             <ActivityHeatmap />
           </div>
 
-          {/* 🆕 知识掌握度 */}
+          {/* 知识掌握度 - 使用真实数据 */}
           <div className="p-5 rounded-2xl" style={{ background: 'rgba(15,19,34,0.65)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-lg">📊</span>
@@ -179,31 +172,35 @@ export default function Profile() {
                 基于你的学习数据
               </span>
             </div>
-            <div className="space-y-3">
-              {mockKnowledge.map((item) => (
-                <div key={item.name}>
-                  <div className="flex justify-between text-xs mb-1">
-                    <span style={{ color: '#94a3b8' }}>{item.name}</span>
-                    <span style={{ color: item.mastery >= 70 ? '#4ade80' : item.mastery >= 50 ? '#fbbf24' : '#f87171' }}>
-                      {item.mastery}%
-                    </span>
+            {knowledge.length > 0 ? (
+              <div className="space-y-3">
+                {knowledge.map((item) => (
+                  <div key={item.tag}>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span style={{ color: '#94a3b8' }}>{item.tag}</span>
+                      <span style={{ color: item.mastery >= 70 ? '#4ade80' : item.mastery >= 50 ? '#fbbf24' : '#f87171' }}>
+                        {item.mastery}%
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                      <div
+                        className="h-full rounded-full transition-all duration-700"
+                        style={{
+                          width: `${item.mastery}%`,
+                          background: item.mastery >= 70 
+                            ? 'linear-gradient(90deg, #22c55e, #4ade80)' 
+                            : item.mastery >= 50 
+                              ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
+                              : 'linear-gradient(90deg, #ef4444, #f87171)',
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                    <div
-                      className="h-full rounded-full transition-all duration-700"
-                      style={{
-                        width: `${item.mastery}%`,
-                        background: item.mastery >= 70 
-                          ? 'linear-gradient(90deg, #22c55e, #4ade80)' 
-                          : item.mastery >= 50 
-                            ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
-                            : 'linear-gradient(90deg, #ef4444, #f87171)',
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ color: '#475569' }}>暂无学习数据，开始闯关吧 🚀</div>
+            )}
           </div>
 
           {/* 成就展示 */}

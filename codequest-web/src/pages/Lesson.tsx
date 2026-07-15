@@ -38,11 +38,18 @@ export default function Lesson() {
   const [showCelebration, setShowCelebration] = useState(false)
   const [aiMode, setAiMode] = useState<'diagnostic' | 'tutor' | 'review' | 'plan'>('tutor')
   const [aiResponse, setAiResponse] = useState('')
+  const [reviewScores, setReviewScores] = useState<{
+  correctness: number
+  readability: number
+  performance: number
+  robustness: number
+} | null>(null)
   const [reviewIssues, setReviewIssues] = useState<Array<{
   line: number
   message: string
   severity: 'error' | 'warning' | 'info'
 }>>([])
+
 
   useEffect(() => {
     if (lessonId) {
@@ -89,25 +96,39 @@ export default function Lesson() {
     })
   }
 
-  const handleAIAction = () => {
-  const mockResponses = {
-    diagnostic: '🔍 诊断结果：\n• 代码语法正确\n• 建议增加边界条件处理\n• 变量命名可以更清晰',
-    tutor: '🧑‍🏫 导师建议：\n这个问题可以用循环来解决。\n试试这样想：\n1. 先确定循环条件\n2. 再处理每次迭代的逻辑',
-    review: '📋 代码审查评分：\n• 正确性: 85分\n• 可读性: 70分\n• 性能: 75分\n• 健壮性: 60分\n建议：增加空值检查',
-    plan: '📈 学习规划：\n基于你的进度，推荐学习：\n1. 下一关：循环嵌套\n2. 本周目标：完成函数章节\n3. 建议每天练习30分钟',
-  }
-  setAiResponse(mockResponses[aiMode] || '请选择有效模式')
+  const handleAIAction = async () => {
+    try {
+      // 构造请求体
+      const payload: any = {
+        code: code,
+        lesson_id: lessonId,
+      }
+      // 规划模式额外传 code（B 要求的）
+      if (aiMode === 'plan') {
+        payload.code = code
+      }
 
-  // 🆕 审查模式生成标注
-  if (aiMode === 'review') {
-    setReviewIssues([
-      { line: 3, message: '⚠️ 变量名不够清晰，建议使用更描述性的名称', severity: 'warning' },
-      { line: 5, message: '❌ 缺少边界条件检查，可能导致运行时错误', severity: 'error' },
-    ])
-  } else {
-    setReviewIssues([])
-  }
-} 
+      const response = await apiClient.post(`/ai/${aiMode}`, payload)
+      
+      // 审查模式特殊处理
+      if (aiMode === 'review') {
+        // 假设返回格式：{ scores, issues, overall }
+        setAiResponse(response.data.overall || '审查完成')
+        if (response.data.scores) {
+          setReviewScores(response.data.scores)
+        }
+        if (response.data.issues) {
+          setReviewIssues(response.data.issues)
+        }
+      } else {
+        // 其他模式：导师/诊断/规划
+        setAiResponse(response.data.response || 'AI 回复完成')
+      }
+    } catch (error) {
+      console.error('AI 请求失败:', error)
+      setAiResponse('AI 服务暂时不可用，请稍后再试')
+    }
+  } 
 
   if (isLoading) return <LessonSkeleton />
 
@@ -290,20 +311,29 @@ export default function Lesson() {
                   <div className="p-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}>
                     {aiMode === 'review' ? (
                       <div>
+                        {/* 雷达图 */}
                         <div style={{ height: '220px', marginBottom: '12px' }}>
-                          <RadarChart scores={{ correctness: 85, readability: 70, performance: 75, robustness: 60 }} />
+                          {reviewScores && <RadarChart scores={reviewScores} />}
                         </div>
-                        <div className="text-xs" style={{ color: '#94a3b8' }}>
-                          <div className="flex flex-wrap gap-3 mt-2">
-                            <span>✅ 正确性: 85分</span>
-                            <span>📖 可读性: 70分</span>
-                            <span>⚡ 性能: 75分</span>
-                            <span>🛡️ 健壮性: 60分</span>
+
+                        {/* 评分详情 */}
+                        {reviewScores && (
+                          <div className="text-xs" style={{ color: '#94a3b8' }}>
+                            <div className="flex flex-wrap gap-3 mt-2">
+                              <span>✅ 正确性: {reviewScores.correctness}分</span>
+                              <span>📖 可读性: {reviewScores.readability}分</span>
+                              <span>⚡ 性能: {reviewScores.performance}分</span>
+                              <span>🛡️ 健壮性: {reviewScores.robustness}分</span>
+                            </div>
+
+                            {/* 问题建议 */}
+                            {reviewIssues.length > 0 && (
+                              <div className="mt-2" style={{ color: '#a5b4fc' }}>
+                                💡 建议：{reviewIssues.map(i => i.message).join('；')}
+                              </div>
+                            )}
                           </div>
-                          <div className="mt-2" style={{ color: '#a5b4fc' }}>
-                            建议：增加空值检查，提升健壮性
-                          </div>
-                        </div>
+                        )}
                       </div>
                     ) : (
                       <div className="whitespace-pre-wrap" style={{ color: '#cbd5e1' }}>
@@ -312,7 +342,12 @@ export default function Lesson() {
                     )}
                   </div>
                 ) : (
-                  <div style={{ color: '#475569' }}>💡 点击「执行 AI 分析」按钮获取 {aiMode === 'diagnostic' ? '诊断' : aiMode === 'tutor' ? '导师指导' : aiMode === 'review' ? '代码审查' : '学习规划'} 建议</div>
+                  <div style={{ color: '#475569' }}>
+                    💡 点击「执行 AI 分析」按钮获取{' '}
+                    {aiMode === 'diagnostic' ? '诊断' : 
+                    aiMode === 'tutor' ? '导师指导' : 
+                    aiMode === 'review' ? '代码审查' : '学习规划'} 建议
+                  </div>
                 )}
               </div>
             </div>
