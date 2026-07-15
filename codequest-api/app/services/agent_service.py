@@ -111,10 +111,8 @@ class AgentService:
 
         score = judge_result.get("score", 0)
         xp_earned = max(0, score // 10)
-        energy = {"understanding": 3, "implementation": 3, "optimization": 2, "creativity": 1}
-        energy_score = sum(energy.values()) // 4
 
-        # 更新 AgentProgress
+        # 查询或创建进度记录
         prog_result = await self.db.execute(
             select(AgentProgress).where(AgentProgress.user_id == user_id, AgentProgress.node_id == node_id)
         )
@@ -123,6 +121,21 @@ class AgentService:
             progress = AgentProgress(user_id=user_id, node_id=node_id, status="in_progress", attempts=0)
             self.db.add(progress)
             await self.db.flush()
+
+        # 根据实际成绩动态计算四维能量
+        exec_time = judge_result.get("execution_time", 999)
+        attempts = (progress.attempts or 0) + 1
+        understanding = min(5, max(1, (score + 19) // 20))     # 理解力：1-20→1, 21-40→2, ..., 81-100→5
+        implementation = min(5, max(1, (score + 19) // 20))     # 实现力：同上
+        optimization = min(5, max(1, 5 - (exec_time // 500)))   # 优化力：<500ms→5, 500-999→4, ...
+        creativity = min(5, max(1, 6 - (attempts // 2)))        # 创造力：1-2次→5, 3-4→4, ...
+        energy = {
+            "understanding": understanding * 20,
+            "implementation": implementation * 20,
+            "optimization": optimization * 20,
+            "creativity": creativity * 20,
+        }
+        energy_score = (understanding + implementation + optimization + creativity) // 4
 
         progress.attempts = (progress.attempts or 0) + 1
         progress.best_code = code
