@@ -77,17 +77,9 @@ export default function LessonEditor() {
               <Select.Option value={1}>Python</Select.Option>
               <Select.Option value={2}>JavaScript</Select.Option>
               <Select.Option value={3}>Java</Select.Option>
-              <Select.Option value={4}>C++</Select.Option>
-              <Select.Option value={5}>Go</Select.Option>
-              <Select.Option value={6}>Rust</Select.Option>
-              <Select.Option value={7}>TypeScript</Select.Option>
-              <Select.Option value={8}>SQL</Select.Option>
-              <Select.Option value={9}>Ruby</Select.Option>
-              <Select.Option value={10}>Swift</Select.Option>
-              <Select.Option value={11}>Kotlin</Select.Option>
-              <Select.Option value={12}>PHP</Select.Option>
-              <Select.Option value={13}>Shell</Select.Option>
-              <Select.Option value={14}>Lua</Select.Option>
+              <Select.Option value={4}>C</Select.Option>
+              <Select.Option value={5}>C++</Select.Option>
+              <Select.Option value={6}>TypeScript</Select.Option>
             </Select>
           </Form.Item>
 
@@ -129,6 +121,18 @@ export default function LessonEditor() {
 
           <Form.Item name="hint" label="提示">
             <Input.TextArea rows={3} placeholder="解题提示" />
+          </Form.Item>
+
+          <Form.Item name="knowledge_tags" label="知识点标签" rules={[{ required: true, message: '请至少填写一个知识点标签' }]}>
+            <Select mode="tags" tokenSeparators={[',', '，']} placeholder="例如：循环、函数" />
+          </Form.Item>
+
+          <Form.Item name="estimated_minutes" label="预估学习时间（分钟）" rules={[{ required: true, message: '请输入正整数分钟数' }]}>
+            <InputNumber min={1} precision={0} style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item name="prerequisites" label="前置关卡 slug">
+            <Select mode="tags" tokenSeparators={[',', '，']} placeholder="仅允许当前语言内的 slug" />
           </Form.Item>
 
           <Form.Item>

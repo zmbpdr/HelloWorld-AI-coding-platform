@@ -34,6 +34,14 @@
 
 ## 启动指南
 
+### D 模块文档
+
+- [D 模块交付说明](docs/d-module.md)
+- [课程内容与元数据规范](docs/course-content-spec.md)
+- [推荐算法说明](docs/recommendation-algorithm.md)
+- [测试报告](docs/test-report.md)
+- [六语言环境依赖与判题说明](docs/language-runtime-and-judge.md)
+
 ### 环境要求
 
 - Python 3.11+

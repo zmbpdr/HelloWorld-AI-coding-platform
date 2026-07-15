@@ -277,7 +277,7 @@ data: {"chunk": "", "done": true}
 ### 5.1 GET /lessons/recommend
 
 **请求参数（URL Query）：**
-- `language`：（可选，默认 `python`）语言 slug
+- `language`：（可选）语言 slug；传入后仅返回该语言地图可使用的推荐，未传入时按六语言全局顺序兜底。
 
 **示例：** `GET /api/v1/lessons/recommend?language=python`
 
@@ -286,18 +286,14 @@ data: {"chunk": "", "done": true}
 {
   "recommended": [
     {
+      "lesson_id": 5,
       "slug": "python-05-loops",
       "title": "循环",
       "reason": "覆盖薄弱知识点: 循环",
-      "tags": ["循环", "range"]
-    },
-    {
-      "slug": "python-06-lists",
-      "title": "列表",
-      "reason": "下一关待学习",
-      "tags": []
+      "matched_tags": ["循环"]
     }
   ],
+  "next_normal": {"lesson_id": 6, "title": "列表"},
   "knowledge_map": {
     "变量": 90.0,
     "循环": 35.0,
@@ -324,12 +320,7 @@ data: {"chunk": "", "done": true}
 }
 ```
 
-**knowledge_tags 预定义取值：**
-```
-变量, 赋值, 数据类型, 运算符, 条件判断, 循环, 列表, 字典,
-字符串, 函数, 类, 面向对象, 异常处理, 文件操作,
-print, input, range, 注释, 拼接, 元组, 集合, type()
-```
+知识标签、时长及前置关系的规范见 `docs/course-content-spec.md`。
 
 ---
 
