@@ -88,9 +88,11 @@ class AgentService:
             test_cases = json.loads(node.test_cases) if isinstance(node.test_cases, str) else node.test_cases
             judge = JudgeService(self.db)
             # 构造临时 lesson 对象传递 test_cases
+            fake_xp = node.xp_reward or 10
             class _FakeLesson:
-                test_cases = test_cases
-                xp_reward = node.xp_reward or 10
+                pass
+            _FakeLesson.test_cases = test_cases
+            _FakeLesson.xp_reward = fake_xp
             judge_result = await judge.submit_and_judge(
                 user_id=user_id, lesson_id=0, code=code, language="python"
             )
