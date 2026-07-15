@@ -16,7 +16,12 @@
         "description": "认识变量：基础用例"
       }
     ],
-    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": []
   },
   {
     "title": "Hello World",
@@ -40,7 +45,15 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用 return 语句返回字符串"
+    "hint": "使用 return 语句返回字符串",
+    "knowledge_tags": [
+      "基础语法",
+      "输出"
+    ],
+    "estimated_minutes": 8,
+    "prerequisites": [
+      "java-01-get-age"
+    ]
   },
   {
     "title": "基本数据类型",
@@ -59,7 +72,14 @@
         "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "java-01-hello-world"
+    ]
   },
   {
     "title": "变量与数据类型",
@@ -83,7 +103,14 @@
         "description": "greet('Bob')"
       }
     ],
-    "hint": "使用 + 拼接字符串"
+    "hint": "使用 + 拼接字符串",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "java-02-add"
+    ]
   },
   {
     "title": "条件判断",
@@ -102,7 +129,14 @@
         "description": "条件判断：基础用例"
       }
     ],
-    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "java-02-variables"
+    ]
   },
   {
     "title": "运算符",
@@ -126,7 +160,15 @@
         "description": "7不是偶数"
       }
     ],
-    "hint": "使用 % 取余运算符"
+    "hint": "使用 % 取余运算符",
+    "knowledge_tags": [
+      "运算符",
+      "表达式"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "java-03-is-adult"
+    ]
   },
   {
     "title": "条件语句",
@@ -155,7 +197,14 @@
         "description": "60分以下"
       }
     ],
-    "hint": "从高到低依次判断"
+    "hint": "从高到低依次判断",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "java-03-operators"
+    ]
   },
   {
     "title": "循环入门",
@@ -174,7 +223,14 @@
         "description": "循环入门：基础用例"
       }
     ],
-    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "java-04-conditionals"
+    ]
   },
   {
     "title": "循环",
@@ -198,7 +254,14 @@
         "description": "1到10的和"
       }
     ],
-    "hint": "使用 for 循环累加"
+    "hint": "使用 for 循环累加",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "java-04-sum-to"
+    ]
   },
   {
     "title": "数组或列表",
@@ -217,7 +280,14 @@
         "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "java-05-loops"
+    ]
   },
   {
     "title": "函数/方法",
@@ -241,7 +311,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用 Math.round 保留小数"
+    "hint": "使用 Math.round 保留小数",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "java-05-sum-array"
+    ]
   },
   {
     "title": "函数基础",
@@ -260,7 +337,14 @@
         "description": "函数基础：基础用例"
       }
     ],
-    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "java-06-methods"
+    ]
   },
   {
     "title": "数组",
@@ -284,7 +368,14 @@
         "description": "单元素数组"
       }
     ],
-    "hint": "遍历数组逐一比较"
+    "hint": "遍历数组逐一比较",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "java-06-square"
+    ]
   },
   {
     "title": "字典、对象或 Map",
@@ -303,7 +394,14 @@
         "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "java-07-arrays"
+    ]
   },
   {
     "title": "字符串操作",
@@ -322,7 +420,14 @@
         "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "java-07-get-score"
+    ]
   },
   {
     "title": "字符串操作",
@@ -346,7 +451,14 @@
         "description": "反转Java"
       }
     ],
-    "hint": "使用 StringBuilder 的 reverse 方法"
+    "hint": "使用 StringBuilder 的 reverse 方法",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "java-08-count-vowels"
+    ]
   },
   {
     "title": "综合项目：简易计算器",
@@ -365,7 +477,15 @@
         "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "函数"
+    ],
+    "estimated_minutes": 25,
+    "prerequisites": [
+      "java-08-strings"
+    ]
   },
   {
     "title": "面向对象",
@@ -389,7 +509,14 @@
         "description": "圆周长"
       }
     ],
-    "hint": "面积=πr²，周长=2πr"
+    "hint": "面积=πr²，周长=2πr",
+    "knowledge_tags": [
+      "面向对象"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-09-calculate"
+    ]
   },
   {
     "title": "综合项目：待办事项管理器",
@@ -408,7 +535,15 @@
         "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "集合与遍历"
+    ],
+    "estimated_minutes": 28,
+    "prerequisites": [
+      "java-09-oop"
+    ]
   },
   {
     "title": "继承与多态",
@@ -432,7 +567,14 @@
         "description": "正方形面积"
       }
     ],
-    "hint": "使用 super 调用父类构造器"
+    "hint": "使用 super 调用父类构造器",
+    "knowledge_tags": [
+      "面向对象"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-10-count-completed"
+    ]
   },
   {
     "title": "接口",
@@ -456,7 +598,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "实现接口的 sort 方法"
+    "hint": "实现接口的 sort 方法",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "java-10-inheritance"
+    ]
   },
   {
     "title": "集合框架",
@@ -480,7 +629,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用 LinkedHashSet 保持顺序并去重"
+    "hint": "使用 LinkedHashSet 保持顺序并去重",
+    "knowledge_tags": [
+      "数据结构"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-11-interfaces"
+    ]
   },
   {
     "title": "异常处理",
@@ -504,7 +660,14 @@
         "description": "除零返回-1"
       }
     ],
-    "hint": "使用 try/catch 捕获 ArithmeticException"
+    "hint": "使用 try/catch 捕获 ArithmeticException",
+    "knowledge_tags": [
+      "异常处理"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "java-12-collections"
+    ]
   },
   {
     "title": "泛型",
@@ -528,7 +691,14 @@
         "description": "查找不存在的元素"
       }
     ],
-    "hint": "遍历数组使用 equals 比较"
+    "hint": "遍历数组使用 equals 比较",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-13-exceptions"
+    ]
   },
   {
     "title": "Stream API",
@@ -552,7 +722,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用 IntStream 的 filter/map/sum"
+    "hint": "使用 IntStream 的 filter/map/sum",
+    "knowledge_tags": [
+      "编程基础"
+    ],
+    "estimated_minutes": 15,
+    "prerequisites": [
+      "java-14-generics"
+    ]
   },
   {
     "title": "文件I/O",
@@ -576,7 +753,14 @@
         "description": "单行"
       }
     ],
-    "hint": "使用 split 分割行"
+    "hint": "使用 split 分割行",
+    "knowledge_tags": [
+      "文件操作"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-15-streams"
+    ]
   },
   {
     "title": "排序算法",
@@ -600,7 +784,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "双重循环比较交换"
+    "hint": "双重循环比较交换",
+    "knowledge_tags": [
+      "算法"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-16-file-io"
+    ]
   },
   {
     "title": "二分查找",
@@ -624,7 +815,14 @@
         "description": "查找不存在的元素"
       }
     ],
-    "hint": "使用左右指针缩小范围"
+    "hint": "使用左右指针缩小范围",
+    "knowledge_tags": [
+      "算法"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-17-sorting"
+    ]
   },
   {
     "title": "递归",
@@ -648,7 +846,14 @@
         "description": "5!=120"
       }
     ],
-    "hint": "确定基线条件后递归调用"
+    "hint": "确定基线条件后递归调用",
+    "knowledge_tags": [
+      "递归"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-18-binary-search"
+    ]
   },
   {
     "title": "综合实战 - 学生管理",
@@ -672,6 +877,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用 HashMap 存储学生数据"
+    "hint": "使用 HashMap 存储学生数据",
+    "knowledge_tags": [
+      "综合项目",
+      "工程实践"
+    ],
+    "estimated_minutes": 35,
+    "prerequisites": [
+      "java-19-recursion"
+    ]
   }
 ]

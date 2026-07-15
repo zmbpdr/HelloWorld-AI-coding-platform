@@ -1,6 +1,7 @@
 """管理后台课程管理路由"""
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -12,6 +13,58 @@ from app.services.admin_service import AdminService
 from app.core.admin_deps import get_current_admin, require_role
 
 router = APIRouter()
+
+
+async def validate_prerequisites(
+    db: AsyncSession,
+    language_id: int,
+    prerequisites: list[str] | None,
+    lesson_id: int | None = None,
+) -> None:
+    """Ensure admin edits keep prerequisite references inside one language."""
+    if not prerequisites:
+        return
+    result = await db.execute(select(Lesson).where(Lesson.slug.in_(prerequisites)))
+    lessons = result.scalars().all()
+    found = {lesson.slug: lesson for lesson in lessons}
+    missing = [slug for slug in prerequisites if slug not in found]
+    if missing:
+        raise HTTPException(status_code=422, detail=f"前置关卡不存在: {', '.join(missing)}")
+    cross_language = [slug for slug, lesson in found.items() if lesson.language_id != language_id]
+    if cross_language:
+        raise HTTPException(status_code=422, detail=f"前置关卡必须属于同一语言: {', '.join(cross_language)}")
+
+    if lesson_id is None:
+        return
+
+    language_lessons = (
+        await db.execute(select(Lesson).where(Lesson.language_id == language_id))
+    ).scalars().all()
+    current = next((item for item in language_lessons if item.id == lesson_id), None)
+    if current is None:
+        return
+
+    dependencies = {
+        item.slug: list(item.prerequisites or []) for item in language_lessons
+    }
+    dependencies[current.slug] = list(prerequisites)
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def has_cycle(slug: str) -> bool:
+        if slug in visiting:
+            return True
+        if slug in visited:
+            return False
+        visiting.add(slug)
+        if any(has_cycle(dependency) for dependency in dependencies.get(slug, [])):
+            return True
+        visiting.remove(slug)
+        visited.add(slug)
+        return False
+
+    if any(has_cycle(slug) for slug in dependencies):
+        raise HTTPException(status_code=422, detail="前置关卡不能形成循环依赖")
 
 
 @router.get("/lessons")
@@ -48,6 +101,7 @@ async def create_lesson(
     db: AsyncSession = Depends(get_db),
 ):
     """新增关卡"""
+    await validate_prerequisites(db, data.language_id, data.prerequisites)
     lesson = Lesson(**data.model_dump())
     db.add(lesson)
     await db.flush()
@@ -75,10 +129,23 @@ async def update_lesson(
         raise HTTPException(status_code=404, detail="关卡不存在")
 
     # 记录旧值
-    old_data = {c.name: getattr(lesson, c.name) for c in lesson.__table__.columns}
+    # Audit fields are JSON columns; normalise datetimes and other ORM values
+    # before writing an edit log, otherwise a valid metadata update can fail
+    # during commit with a JSON serialisation error.
+    old_data = jsonable_encoder(
+        {c.name: getattr(lesson, c.name) for c in lesson.__table__.columns}
+    )
 
     # 更新字段
     update_data = data.model_dump(exclude_unset=True)
+    target_language_id = update_data.get("language_id", lesson.language_id)
+    if "prerequisites" in update_data or "language_id" in update_data:
+        await validate_prerequisites(
+            db,
+            target_language_id,
+            update_data.get("prerequisites", lesson.prerequisites or []),
+            lesson_id,
+        )
     for key, value in update_data.items():
         setattr(lesson, key, value)
 

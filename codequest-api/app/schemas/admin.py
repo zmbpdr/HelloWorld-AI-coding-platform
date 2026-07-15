@@ -73,6 +73,10 @@ class AdminLessonCreate(BaseModel):
     solution_code: Optional[str] = None
     test_cases: Optional[list[dict]] = None
     hint: Optional[str] = None
+    knowledge_tags: list[str] = Field(..., min_length=1)
+    estimated_minutes: Optional[int] = Field(None, ge=1)
+    prerequisites: list[str] = Field(default_factory=list)
+    is_active: bool = True
 
 
 class AdminLessonUpdate(BaseModel):
@@ -88,6 +92,11 @@ class AdminLessonUpdate(BaseModel):
     solution_code: Optional[str] = None
     test_cases: Optional[list[dict]] = None
     hint: Optional[str] = None
+    language_id: Optional[int] = None
+    knowledge_tags: Optional[list[str]] = Field(None, min_length=1)
+    estimated_minutes: Optional[int] = Field(None, ge=1)
+    prerequisites: Optional[list[str]] = None
+    is_active: Optional[bool] = None
 
 
 class AdminLessonResponse(BaseModel):
@@ -105,6 +114,9 @@ class AdminLessonResponse(BaseModel):
     solution_code: Optional[str] = None
     test_cases: Optional[Any] = None
     hint: Optional[str] = None
+    knowledge_tags: Optional[list[str]] = None
+    estimated_minutes: Optional[int] = None
+    prerequisites: Optional[list[str]] = None
     is_active: bool = True
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
