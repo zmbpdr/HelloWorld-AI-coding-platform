@@ -66,7 +66,7 @@ export default function Lobby() {
 
 
 
-  useEffect(() => { fetchLanguages() }, [fetchLanguages])
+  useEffect(() => { fetchLanguages() }, [fetchLanguages, isAuthenticated])
 
 
 
