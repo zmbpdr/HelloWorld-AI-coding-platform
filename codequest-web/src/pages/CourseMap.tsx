@@ -4,6 +4,8 @@ import { useCourseStore } from '../stores/courseStore'
 import PageTransition from '../components/ui/PageTransition'
 import StarBadge from '../components/badge/StarBadge'
 import ChessPiece from '../components/badge/ChessPiece'
+import apiClient from '../api/client'
+
 
 function scoreToStars(score: number): number {
   if (score <= 0) return 0
@@ -32,6 +34,13 @@ export default function CourseMap() {
   }>({ active: false, fromY: 0, toY: 0, pieceX: 44 })
   const [pieceVisible, setPieceVisible] = useState(false)
   const [pieceNodeIdx, setPieceNodeIdx] = useState(-1)
+  const [recommendations, setRecommendations] = useState<{
+  lesson_id: number
+  slug: string
+  title: string
+  reason: string
+  matched_tags: string[]
+  }[]>([])
 
   const fromLessonId = (location.state as any)?.fromLessonId as number | undefined
   const completedAt = (location.state as any)?.ts as number | undefined
@@ -39,6 +48,26 @@ export default function CourseMap() {
   useEffect(() => {
     if (languageSlug) fetchLanguageMap(languageSlug)
   }, [languageSlug, fetchLanguageMap, location.state])
+
+  useEffect(() => {
+    // 确保有 languageSlug 才调用
+    if (!languageSlug) {
+      console.log('❌ languageSlug 为空，不调用推荐接口')
+      return
+    }
+
+    console.log('🔍 正在获取推荐数据...', languageSlug)
+
+    apiClient.get('/lessons/recommend')
+      .then(res => {
+        console.log('✅ 推荐数据:', res.data)
+        setRecommendations(res.data.recommended || [])
+      })
+      .catch(err => {
+        console.error('❌ 推荐接口失败:', err)
+        setRecommendations([])
+      })
+  }, [languageSlug])
 
   useEffect(() => {
     if (!currentLanguage || !fromLessonId || !completedAt) return
@@ -227,6 +256,12 @@ export default function CourseMap() {
                         )}
                         {status === 'completed' && lesson.best_score > 0 && (
                           <StarBadge stars={scoreToStars(lesson.best_score)} size="sm" />
+                        )}
+                        {/* 推荐标记 */}
+                        {recommendations.some(r => r.lesson_id === lesson.id) && (
+                          <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
+                            ⭐ 推荐
+                          </span>
                         )}
                       </div>
                     </div>
