@@ -38,7 +38,7 @@ export default function CourseMap() {
 
   useEffect(() => {
     if (languageSlug) fetchLanguageMap(languageSlug)
-  }, [languageSlug, fetchLanguageMap])
+  }, [languageSlug, fetchLanguageMap, location.state])
 
   useEffect(() => {
     if (!currentLanguage || !fromLessonId || !completedAt) return
