@@ -202,7 +202,15 @@ class JudgeService:
                 elif language == "go":
                     full_code = wrapper_template.format(expr=expr, user_code=code)
                 else:
-                    full_code = code + wrapper_template.format(expr=expr)
+                    # Python 等多语句场景：将 a=1; b=2; func(a,b) 拆为多行，最后 print
+                    if language == "python" and ";" in expr:
+                        parts = [p.strip() for p in expr.split(";") if p.strip()]
+                        statements = "\n".join(parts[:-1])
+                        last_expr = parts[-1]
+                        harness = f"\n\n# ---- test harness ----\n{statements}\nprint({last_expr})\n"
+                        full_code = code + harness
+                    else:
+                        full_code = code + wrapper_template.format(expr=expr)
             else:
                 full_code = code
 
