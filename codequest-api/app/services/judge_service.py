@@ -81,8 +81,8 @@ class JudgeService:
 
         score = judge_result.get("score", 0)
 
-        # 更新知识掌握度（仅 Python 关卡，且 lesson 有 knowledge_tags）
-        if language == "python":
+        # 更新知识掌握度（六种语言全部支持，只要关卡有 knowledge_tags）
+        if language in ("python", "javascript", "java", "c", "cpp", "typescript"):
             tags = getattr(lesson, 'knowledge_tags', None)
             if tags:
                 try:
