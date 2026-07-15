@@ -37,7 +37,6 @@ ACHIEVEMENTS_DATA = [
     {"slug": "streak-7", "name": "习惯养成", "description": "连续学习7天", "condition_type": "streak", "condition_value": 7, "rarity": "rare"},
 ]
 
-# 方案C：6种语言全部完整开发
 LANGUAGES_DATA = [
     {"name": "Python", "slug": "python", "icon_url": "/icons/python.svg", "description": "AI与数据科学首选，简洁优雅", "color": "#3776AB", "difficulty": "beginner", "is_active": True, "sort_order": 1},
     {"name": "JavaScript", "slug": "javascript", "icon_url": "/icons/javascript.svg", "description": "Web开发核心语言，全栈必备", "color": "#F7DF1E", "difficulty": "beginner", "is_active": True, "sort_order": 2},

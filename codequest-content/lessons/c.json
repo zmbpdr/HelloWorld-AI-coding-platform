@@ -19,11 +19,30 @@
     "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
+    "title": "Hello World",
+    "slug": "c-01-hello-world",
+    "description": "学习C语言基本结构，编写你的第一个程序",
+    "content": "# Hello World - 你的第一个C程序\n\nC语言是计算机科学的基石，几乎所有现代操作系统和编程语言都受其影响。\n\n```c\n#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n```\n\n## 练习\n编写函数 `hello()`，返回字符串 `\"Hello, World!\"`。\n\n## 提示\n- C语言使用 `#include` 引入头文件\n- 每个程序从 `main()` 函数开始\n- 字符串在C语言中是 `char*` 类型",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "#include <stdio.h>\n\nchar* hello() {\n    // 在这里编写你的代码\n    return \"\";\n}",
+    "solution_code": "#include <stdio.h>\n\nchar* hello() {\n    return \"Hello, World!\";\n}",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      }
+    ],
+    "hint": "使用 return 返回字符串字面量"
+  },
+  {
     "title": "基本数据类型",
     "slug": "c-02-add",
     "description": "实现 add(a, b)，返回两个整数之和。",
     "content": "# 基本数据类型\n\n本关使用 **C** 学习「基本数据类型」。\n\n## 任务\n实现 add(a, b)，返回两个整数之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 2,
+    "order": 3,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint add(int a, int b) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -38,11 +57,54 @@
     "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
+    "title": "变量与数据类型",
+    "slug": "c-02-variables",
+    "description": "学习C语言的变量声明和基本数据类型",
+    "content": "# 变量与数据类型\n\nC语言是静态类型语言，必须先声明变量类型才能使用。\n\n```c\nint age = 25;\nfloat height = 1.68f;\nchar grade = 'A';\n```\n\n## 练习\n编写函数 `get_age()`，返回整数 `25`。\n\n## 基本数据类型\n- `int`：整数\n- `float`：单精度浮点数\n- `double`：双精度浮点数\n- `char`：单个字符",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "int get_age() {\n    // 在这里编写你的代码\n    return 0;\n}",
+    "solution_code": "int get_age() {\n    return 25;\n}",
+    "test_cases": [
+      {
+        "input": "get_age()",
+        "expected_output": "25",
+        "description": "get_age() 应返回 25"
+      }
+    ],
+    "hint": "把 return 后面的数字改成 25"
+  },
+  {
+    "title": "条件判断",
+    "slug": "c-03-conditions",
+    "description": "学习C语言的if/else条件判断",
+    "content": "# 条件判断\n\nC语言使用 `if`、`else if`、`else` 进行条件判断。\n\n```c\nint x = 10;\nif (x > 5) {\n    printf(\"大于5\\n\");\n} else {\n    printf(\"小于等于5\\n\");\n}\n```\n\n## 练习\n编写函数 `check_number(int n)`，如果 n > 0 返回 `\"positive\"`，否则返回 `\"non-positive\"`。",
+    "order": 5,
+    "difficulty": "easy",
+    "xp_reward": 10,
+    "starter_code": "char* check_number(int n) {\n    // 在这里编写条件判断\n    return \"\";\n}",
+    "solution_code": "char* check_number(int n) {\n    if (n > 0) {\n        return \"positive\";\n    } else {\n        return \"non-positive\";\n    }\n}",
+    "test_cases": [
+      {
+        "input": "check_number(10)",
+        "expected_output": "positive",
+        "description": "正数返回 positive"
+      },
+      {
+        "input": "check_number(-5)",
+        "expected_output": "non-positive",
+        "description": "非正数返回 non-positive"
+      }
+    ],
+    "hint": "使用 if (n > 0) 判断是否为正数"
+  },
+  {
     "title": "条件判断",
     "slug": "c-03-is-adult",
     "description": "实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。",
     "content": "# 条件判断\n\n本关使用 **C** 学习「条件判断」。\n\n## 任务\n实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 3,
+    "order": 6,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint isAdult(int age) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -57,11 +119,35 @@
     "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
+    "title": "for循环",
+    "slug": "c-04-for-loop",
+    "description": "学习C语言的for循环",
+    "content": "# for 循环\n\nC语言的 `for` 循环用于重复执行代码块。\n\n```c\nfor (int i = 0; i < 5; i++) {\n    printf(\"%d\\n\", i);\n}\n```\n\n## 练习\n编写函数 `sum_to_n(int n)`，返回 1+2+...+n 的和。",
+    "order": 7,
+    "difficulty": "easy",
+    "xp_reward": 10,
+    "starter_code": "int sum_to_n(int n) {\n    // 使用 for 循环计算和\n    int sum = 0;\n    return sum;\n}",
+    "solution_code": "int sum_to_n(int n) {\n    int sum = 0;\n    for (int i = 1; i <= n; i++) {\n        sum += i;\n    }\n    return sum;\n}",
+    "test_cases": [
+      {
+        "input": "sum_to_n(5)",
+        "expected_output": "15",
+        "description": "1+2+3+4+5 = 15"
+      },
+      {
+        "input": "sum_to_n(1)",
+        "expected_output": "1",
+        "description": "边界值测试"
+      }
+    ],
+    "hint": "使用 for (int i = 1; i <= n; i++) 循环累加"
+  },
+  {
     "title": "循环入门",
     "slug": "c-04-sum-to",
     "description": "实现 sumTo(n)，计算从 1 到 n 的和。",
     "content": "# 循环入门\n\n本关使用 **C** 学习「循环」。\n\n## 任务\n实现 sumTo(n)，计算从 1 到 n 的和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 4,
+    "order": 8,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint sumTo(int n) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -76,11 +162,30 @@
     "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
+    "title": "数组",
+    "slug": "c-05-arrays",
+    "description": "学习C语言的数组定义和遍历",
+    "content": "# 数组\n\nC语言中数组是一组相同类型元素的集合。\n\n```c\nint numbers[5] = {1, 2, 3, 4, 5};\n```\n\n## 练习\n编写函数 `array_sum(int arr[], int size)`，返回数组中所有元素的和。",
+    "order": 9,
+    "difficulty": "easy",
+    "xp_reward": 10,
+    "starter_code": "int array_sum(int arr[], int size) {\n    // 遍历数组并求和\n    int sum = 0;\n    return sum;\n}",
+    "solution_code": "int array_sum(int arr[], int size) {\n    int sum = 0;\n    for (int i = 0; i < size; i++) {\n        sum += arr[i];\n    }\n    return sum;\n}",
+    "test_cases": [
+      {
+        "input": "array_sum((int[]){1,2,3,4,5}, 5)",
+        "expected_output": "15",
+        "description": "1+2+3+4+5 = 15"
+      }
+    ],
+    "hint": "使用 for 循环遍历 arr[0] 到 arr[size-1]"
+  },
+  {
     "title": "数组或列表",
     "slug": "c-05-sum-array",
     "description": "实现 sumArray(numbers)，计算数组所有元素之和。",
     "content": "# 数组或列表\n\n本关使用 **C** 学习「数组/列表」。\n\n## 任务\n实现 sumArray(numbers)，计算数组所有元素之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 5,
+    "order": 10,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint sumArray(const int numbers[], int length) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -96,10 +201,34 @@
   },
   {
     "title": "函数基础",
+    "slug": "c-06-functions",
+    "description": "学习C语言函数的定义和调用",
+    "content": "# 函数\n\nC语言的函数由返回类型、函数名、参数列表和函数体组成。\n\n```c\nint add(int a, int b) {\n    return a + b;\n}\n```\n\n## 练习\n编写函数 `multiply(int a, int b)`，返回 a 和 b 的乘积。",
+    "order": 11,
+    "difficulty": "medium",
+    "xp_reward": 15,
+    "starter_code": "int multiply(int a, int b) {\n    // 返回 a 乘以 b 的结果\n    return 0;\n}",
+    "solution_code": "int multiply(int a, int b) {\n    return a * b;\n}",
+    "test_cases": [
+      {
+        "input": "multiply(3, 4)",
+        "expected_output": "12",
+        "description": "3 * 4 = 12"
+      },
+      {
+        "input": "multiply(0, 5)",
+        "expected_output": "0",
+        "description": "0 * 5 = 0"
+      }
+    ],
+    "hint": "使用 * 运算符进行乘法"
+  },
+  {
+    "title": "函数基础",
     "slug": "c-06-square",
     "description": "实现 square(n)，返回 n 的平方。",
     "content": "# 函数基础\n\n本关使用 **C** 学习「函数」。\n\n## 任务\n实现 square(n)，返回 n 的平方。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 6,
+    "order": 12,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint square(int n) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -118,7 +247,7 @@
     "slug": "c-07-get-score",
     "description": "实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。",
     "content": "# 字典、对象或 Map\n\n本关使用 **C** 学习「映射」。\n\n## 任务\n实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 7,
+    "order": 13,
     "difficulty": "intermediate",
     "xp_reward": 10,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint getScore(const char names[][16], const int scores[], int length, const char name[]) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -134,10 +263,34 @@
   },
   {
     "title": "字符串操作",
+    "slug": "c-07-strings",
+    "description": "学习C语言的字符串处理",
+    "content": "# 字符串操作\n\nC语言中字符串是字符数组，使用 `<string.h>` 中的函数进行操作。\n\n```c\n#include <string.h>\nint len = strlen(\"hello\");  // 5\n```\n\n## 练习\n编写函数 `starts_with_hello(char* str)`，如果字符串以 \"Hello\" 开头返回 1，否则返回 0。",
+    "order": 14,
+    "difficulty": "medium",
+    "xp_reward": 15,
+    "starter_code": "#include <string.h>\n\nint starts_with_hello(char* str) {\n    // 检查字符串是否以 \"Hello\" 开头\n    return 0;\n}",
+    "solution_code": "#include <string.h>\n\nint starts_with_hello(char* str) {\n    if (strncmp(str, \"Hello\", 5) == 0) {\n        return 1;\n    }\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "starts_with_hello(\"Hello World\")",
+        "expected_output": "1",
+        "description": "Hello开头返回1"
+      },
+      {
+        "input": "starts_with_hello(\"Hi there\")",
+        "expected_output": "0",
+        "description": "非Hello开头返回0"
+      }
+    ],
+    "hint": "使用 strncmp(str, \"Hello\", 5) 比较前5个字符"
+  },
+  {
+    "title": "字符串操作",
     "slug": "c-08-count-vowels",
     "description": "实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。",
     "content": "# 字符串操作\n\n本关使用 **C** 学习「字符串」。\n\n## 任务\n实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 8,
+    "order": 15,
     "difficulty": "intermediate",
     "xp_reward": 10,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint countVowels(const char text[]) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -152,11 +305,30 @@
     "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
+    "title": "指针入门",
+    "slug": "c-08-pointers",
+    "description": "学习C语言的指针概念",
+    "content": "# 指针\n\n指针是C语言的核心特性，存储变量的内存地址。\n\n```c\nint x = 10;\nint* p = &x;  // p 指向 x\n*p = 20;      // 通过指针修改 x\n```\n\n## 练习\n编写函数 `swap(int* a, int* b)`，交换两个变量的值。",
+    "order": 16,
+    "difficulty": "medium",
+    "xp_reward": 15,
+    "starter_code": "void swap(int* a, int* b) {\n    // 交换 a 和 b 指向的值\n}",
+    "solution_code": "void swap(int* a, int* b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}",
+    "test_cases": [
+      {
+        "input": "swap(&(int){3}, &(int){5})",
+        "expected_output": "5 3",
+        "description": "交换后 a=5, b=3"
+      }
+    ],
+    "hint": "用临时变量保存 *a 的值，然后把 *b 赋给 *a，临时变量赋给 *b"
+  },
+  {
     "title": "综合项目：简易计算器",
     "slug": "c-09-calculate",
     "description": "实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。",
     "content": "# 综合项目：简易计算器\n\n本关使用 **C** 学习「综合应用」。\n\n## 任务\n实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 9,
+    "order": 17,
     "difficulty": "intermediate",
     "xp_reward": 20,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint calculate(int a, int b, char op) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -171,11 +343,45 @@
     "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
   },
   {
+    "title": "简易计算器",
+    "slug": "c-09-calculator",
+    "description": "综合练习：函数+条件判断",
+    "content": "# 简易计算器\n\n综合运用函数和条件判断，实现一个简单的计算器。\n\n## 练习\n编写函数 `calculate(int a, int b, char op)`，根据运算符返回计算结果。\n- op='+' 返回 a+b\n- op='-' 返回 a-b\n- op='*' 返回 a*b\n- op='/' 返回 a/b（整数除法）",
+    "order": 18,
+    "difficulty": "hard",
+    "xp_reward": 20,
+    "starter_code": "int calculate(int a, int b, char op) {\n    // 根据运算符执行对应运算\n    return 0;\n}",
+    "solution_code": "int calculate(int a, int b, char op) {\n    if (op == '+') return a + b;\n    if (op == '-') return a - b;\n    if (op == '*') return a * b;\n    if (op == '/') return a / b;\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "calculate(10, 5, '+')",
+        "expected_output": "15",
+        "description": "10 + 5 = 15"
+      },
+      {
+        "input": "calculate(10, 3, '-')",
+        "expected_output": "7",
+        "description": "10 - 3 = 7"
+      },
+      {
+        "input": "calculate(4, 3, '*')",
+        "expected_output": "12",
+        "description": "4 * 3 = 12"
+      },
+      {
+        "input": "calculate(8, 2, '/')",
+        "expected_output": "4",
+        "description": "8 / 2 = 4"
+      }
+    ],
+    "hint": "用 if 判断 op 的值，分别返回对应运算结果"
+  },
+  {
     "title": "综合项目：待办事项管理器",
     "slug": "c-10-count-completed",
     "description": "实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。",
     "content": "# 综合项目：待办事项管理器\n\n本关使用 **C** 学习「综合应用」。\n\n## 任务\n实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 10,
+    "order": 19,
     "difficulty": "intermediate",
     "xp_reward": 20,
     "starter_code": "#include <string.h>\n#include <ctype.h>\n\nint countCompleted(const int statuses[], int length) {\n    // 在这里实现函数\n    return 0;\n}",
@@ -188,5 +394,34 @@
       }
     ],
     "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+  },
+  {
+    "title": "斐波那契数列",
+    "slug": "c-10-fibonacci",
+    "description": "综合项目：循环+数组+函数",
+    "content": "# 斐波那契数列\n\n斐波那契数列：1, 1, 2, 3, 5, 8, 13, ...\n规律：前两项为1，之后每一项等于前两项之和。\n\n## 练习\n编写函数 `fibonacci(int n)`，返回斐波那契数列的第 n 项（n 从 1 开始）。\n- fibonacci(1) = 1\n- fibonacci(2) = 1\n- fibonacci(3) = 2\n- fibonacci(5) = 5",
+    "order": 20,
+    "difficulty": "hard",
+    "xp_reward": 20,
+    "starter_code": "int fibonacci(int n) {\n    // 计算斐波那契数列第 n 项\n    return 0;\n}",
+    "solution_code": "int fibonacci(int n) {\n    if (n <= 2) return 1;\n    int a = 1, b = 1, c;\n    for (int i = 3; i <= n; i++) {\n        c = a + b;\n        a = b;\n        b = c;\n    }\n    return b;\n}",
+    "test_cases": [
+      {
+        "input": "fibonacci(1)",
+        "expected_output": "1",
+        "description": "第1项 = 1"
+      },
+      {
+        "input": "fibonacci(5)",
+        "expected_output": "5",
+        "description": "第5项 = 5"
+      },
+      {
+        "input": "fibonacci(10)",
+        "expected_output": "55",
+        "description": "第10项 = 55"
+      }
+    ],
+    "hint": "用两个变量 a 和 b 分别记录前两项，循环迭代更新"
   }
 ]
