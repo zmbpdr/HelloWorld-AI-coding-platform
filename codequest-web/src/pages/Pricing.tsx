@@ -40,7 +40,7 @@ export default function Pricing() {
     <div className="min-h-screen px-6 py-10" style={{ background: 'radial-gradient(circle at top, #1d1b4b 0%, #080c17 45%)' }}>
       <div className="max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-14">
-          <button onClick={() => navigate('/')} className="font-bold text-xl" style={{ color: '#f1f5f9' }}>CodeQuest</button>
+          <button onClick={() => navigate('/')} className="font-bold text-xl" style={{ color: '#f1f5f9' }}>Hello World</button>
           <Button variant="ghost" onClick={() => navigate('/profile')}>个人中心</Button>
         </div>
         <div className="text-center mb-10">

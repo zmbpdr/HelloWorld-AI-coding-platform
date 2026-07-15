@@ -793,7 +793,7 @@ export default function Lobby() {
 
         {/* 页脚 */}
         <footer className="border-t border-white/[0.03] py-8 text-center">
-          <p style={{ color: '#334155', fontSize: 13 }}>© 2026 CodeQuest · 让编程学习像游戏一样有趣</p>
+          <p style={{ color: '#334155', fontSize: 13 }}>© 2026 Hello World · 让编程学习像游戏一样有趣</p>
         </footer>
 
         <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
