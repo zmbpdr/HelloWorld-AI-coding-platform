@@ -89,7 +89,7 @@ export default function Profile() {
           style={{ background: 'rgba(8,12,23,0.85)', backdropFilter: 'blur(24px)' }}
         >
           <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-            <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#f1f5f9' }}>CodeQuest</h1>
+            <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#f1f5f9' }}>Hello World</h1>
             <div className="flex items-center gap-3">
               <Button variant="ghost" onClick={() => navigate('/')}>返回大厅</Button>
               <Button variant="ghost" onClick={() => navigate('/settings')}>设置</Button>

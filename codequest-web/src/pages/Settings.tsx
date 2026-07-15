@@ -230,7 +230,7 @@ export default function Settings() {
 
           {/* 关于 */}
           <section style={{ ...sectionStyle, textAlign: 'center' }}>
-            <h2 style={{ color: '#cbd5e1', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>CodeQuest</h2>
+            <h2 style={{ color: '#cbd5e1', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Hello World</h2>
             <p className="text-sm" style={{ color: '#64748b' }}>v0.2.0</p>
             <p className="text-sm mt-1" style={{ color: '#475569' }}>闯关式 AI 编程学习平台</p>
             <p className="text-xs mt-0.5" style={{ color: '#334155' }}>让编程学习像游戏一样有趣</p>
@@ -239,7 +239,7 @@ export default function Settings() {
                 <span key={f}>{f}{i < arr.length - 1 ? ' · ' : ''}</span>
               ))}
             </div>
-            <p className="text-xs mt-4" style={{ color: '#1f2937' }}>© 2026 CodeQuest Team</p>
+            <p className="text-xs mt-4" style={{ color: '#1f2937' }}>© 2026 Hello World Team</p>
           </section>
         </div>
 
