@@ -80,17 +80,29 @@ async def seed_database():
                 language = lang_map[lang_data["slug"]]
                 for key, value in lang_data.items():
                     setattr(language, key, value)
-        exist_lessons = await session.execute(select(Lesson.slug))
-        exist_lesson_slugs = set(exist_lessons.scalars().all())
+        exist_lessons_result = await session.execute(select(Lesson).where(Lesson.language_id.in_([lang.id for lang in existing])))
+        exist_lessons = {l.slug: l for l in exist_lessons_result.scalars().all()}
         for slug in ALL_LANGUAGE_SLUGS:
             language = lang_map.get(slug)
             if not language:
                 continue
-            for lesson_data in _load_lessons_from_json(slug):
-                if lesson_data["slug"] in exist_lesson_slugs:
-                    continue
-                lesson = Lesson(language_id=language.id, title=lesson_data["title"], slug=lesson_data["slug"], description=lesson_data.get("description"), content=lesson_data.get("content"), order=lesson_data.get("order", 0), difficulty=lesson_data.get("difficulty", "beginner"), xp_reward=lesson_data.get("xp_reward", 10), starter_code=lesson_data.get("starter_code"), solution_code=lesson_data.get("solution_code"), test_cases=lesson_data.get("test_cases"), hint=lesson_data.get("hint"), knowledge_tags=lesson_data.get("knowledge_tags"), estimated_minutes=lesson_data.get("estimated_minutes"), prerequisites=lesson_data.get("prerequisites"))
-                session.add(lesson)
+            json_lessons = _load_lessons_from_json(slug)
+            json_slugs = {l["slug"] for l in json_lessons}
+            # 更新已有课程、添加新课程
+            for lesson_data in json_lessons:
+                if lesson_data["slug"] in exist_lessons:
+                    # 更新已有课程内容
+                    existing_lesson = exist_lessons[lesson_data["slug"]]
+                    for key in ["title", "description", "content", "order", "difficulty", "xp_reward", "starter_code", "solution_code", "test_cases", "hint", "knowledge_tags", "estimated_minutes", "prerequisites"]:
+                        if key in lesson_data:
+                            setattr(existing_lesson, key, lesson_data[key])
+                else:
+                    lesson = Lesson(language_id=language.id, title=lesson_data["title"], slug=lesson_data["slug"], description=lesson_data.get("description"), content=lesson_data.get("content"), order=lesson_data.get("order", 0), difficulty=lesson_data.get("difficulty", "beginner"), xp_reward=lesson_data.get("xp_reward", 10), starter_code=lesson_data.get("starter_code"), solution_code=lesson_data.get("solution_code"), test_cases=lesson_data.get("test_cases"), hint=lesson_data.get("hint"), knowledge_tags=lesson_data.get("knowledge_tags"), estimated_minutes=lesson_data.get("estimated_minutes"), prerequisites=lesson_data.get("prerequisites"))
+                    session.add(lesson)
+            # 删除 JSON 中已不存在的旧课程
+            for old_slug, old_lesson in exist_lessons.items():
+                if old_slug.startswith(slug + "-") and old_slug not in json_slugs:
+                    await session.delete(old_lesson)
         exist_ach = await session.execute(select(Achievement.slug))
         exist_ach_slugs = set(exist_ach.scalars().all())
         for ach_data in ACHIEVEMENTS_DATA:
