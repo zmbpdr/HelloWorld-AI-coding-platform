@@ -207,7 +207,8 @@ class JudgeService:
                         parts = [p.strip() for p in expr.split(";") if p.strip()]
                         statements = "\n".join(parts[:-1])
                         last_expr = parts[-1]
-                        harness = f"\n\n# ---- test harness ----\n{statements}\nprint({last_expr})\n"
+                        # 多表达式（含逗号）需要套一层括号，确保 print 输出元组格式
+                        harness = f"\n\n# ---- test harness ----\n{statements}\nprint(({last_expr}))\n"
                         full_code = code + harness
                     else:
                         full_code = code + wrapper_template.format(expr=expr)
