@@ -249,20 +249,33 @@ class JudgeService:
     def _smart_match(self, actual: str, expected: str) -> bool:
         if actual == expected:
             return True
+        # 清洗 numpy 类型前缀 (如 np.float64(3.0) → 3.0)
+        import re
+        _clean = lambda s: re.sub(r'np\.\w+\(([^)]+)\)', r'\1', s)
+        actual_clean = _clean(actual)
+        expected_clean = _clean(expected)
+        if actual_clean == expected_clean:
+            return True
         if actual.strip() == expected.strip():
+            return True
+        if actual_clean.strip() == expected_clean.strip():
             return True
         if actual.lower() == expected.lower():
             return True
         if expected in actual or actual in expected:
             return True
+        if expected_clean in actual_clean or actual_clean in expected_clean:
+            return True
         try:
-            af = float(actual)
-            ef = float(expected)
+            af = float(actual_clean)
+            ef = float(expected_clean)
             if abs(af - ef) < 0.0001:
                 return True
         except (ValueError, TypeError):
             pass
         if "".join(actual.split()) == "".join(expected.split()):
+            return True
+        if "".join(actual_clean.split()) == "".join(expected_clean.split()):
             return True
         return False
 
