@@ -11,6 +11,7 @@ from app.core.exceptions import register_exception_handlers
 from app.core.middleware import logging_middleware
 from app.database import close_db, init_db
 from app.services.seed_service import seed_database
+from app.services.demo_seed import seed_demo_data
 
 
 @asynccontextmanager
@@ -20,6 +21,8 @@ async def lifespan(app: FastAPI):
     await init_db()
     # 初始化种子数据
     await seed_database()
+    # 创建演示数据（幂等，已存在则跳过）
+    await seed_demo_data()
     yield
     # 关闭：释放数据库连接
     await close_db()
