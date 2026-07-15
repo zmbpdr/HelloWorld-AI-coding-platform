@@ -102,24 +102,28 @@ class JudgeService:
             except Exception:
                 logger.exception("错题记录保存失败")
         xp_earned = 0
-        if score > 0:
-            xp_earned = max(1, int((score / 100) * (lesson.xp_reward or 10)))
-            user_result = await self.db.execute(select(User).where(User.id == user_id))
-            user = user_result.scalars().first()
-            if user:
+        # 更新用户统计（每次提交都更新 streak，XP 只在得分时给）
+        user_result = await self.db.execute(select(User).where(User.id == user_id))
+        user = user_result.scalars().first()
+        if user:
+            # 连续打卡
+            today = datetime.now(timezone.utc).date()
+            last = user.last_login_at.date() if user.last_login_at else None
+            if last is None:
+                user.streak_days = 1
+            elif last == today:
+                if (user.streak_days or 0) == 0:
+                    user.streak_days = 1
+            elif last == today - timedelta(days=1):
+                user.streak_days = (user.streak_days or 0) + 1
+            else:
+                user.streak_days = 1
+            user.last_login_at = datetime.now(timezone.utc)
+            # XP 和等级
+            if score > 0:
+                xp_earned = max(1, int((score / 100) * (lesson.xp_reward or 10)))
                 user.xp = (user.xp or 0) + xp_earned
                 user.level = max(1, (user.xp or 0) // 100 + 1)
-                today = datetime.now(timezone.utc).date()
-                last = user.last_login_at.date() if user.last_login_at else None
-                if last is None:
-                    user.streak_days = 1
-                elif last == today:
-                    pass
-                elif last == today - timedelta(days=1):
-                    user.streak_days = (user.streak_days or 0) + 1
-                else:
-                    user.streak_days = 1
-                user.last_login_at = datetime.now(timezone.utc)
 
         if score == 100:
             encouragement = "完美通关！所有测试用例通过！"
@@ -245,20 +249,33 @@ class JudgeService:
     def _smart_match(self, actual: str, expected: str) -> bool:
         if actual == expected:
             return True
+        # 清洗 numpy 类型前缀 (如 np.float64(3.0) → 3.0)
+        import re
+        _clean = lambda s: re.sub(r'np\.\w+\(([^)]+)\)', r'\1', s)
+        actual_clean = _clean(actual)
+        expected_clean = _clean(expected)
+        if actual_clean == expected_clean:
+            return True
         if actual.strip() == expected.strip():
+            return True
+        if actual_clean.strip() == expected_clean.strip():
             return True
         if actual.lower() == expected.lower():
             return True
         if expected in actual or actual in expected:
             return True
+        if expected_clean in actual_clean or actual_clean in expected_clean:
+            return True
         try:
-            af = float(actual)
-            ef = float(expected)
+            af = float(actual_clean)
+            ef = float(expected_clean)
             if abs(af - ef) < 0.0001:
                 return True
         except (ValueError, TypeError):
             pass
         if "".join(actual.split()) == "".join(expected.split()):
+            return True
+        if "".join(actual_clean.split()) == "".join(expected_clean.split()):
             return True
         return False
 

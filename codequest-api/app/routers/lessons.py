@@ -10,12 +10,27 @@ from app.models.lesson import Lesson
 from app.models.progress import Progress
 from app.models.submission import Submission
 from app.models.user import User
-from app.schemas.course import LessonBrief, SubmitCodeRequest
+from app.schemas.course import LessonBrief, RecommendationResponse, SubmitCodeRequest
 from app.core.deps import get_current_user
 from app.core.rate_limit import submit_limiter
 from app.services.judge_service import JudgeService
+from app.services.recommendation_service import get_recommendation
 
 router = APIRouter()
+
+
+@router.get("/lessons/recommend", response_model=RecommendationResponse)
+async def recommend_lessons(
+    language: str | None = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """推荐覆盖用户最低掌握度标签的未完成关卡。
+
+    ``language`` 为可选参数，供 CourseMap 在当前语言地图中渲染标记；
+    未提供时按全部六语言的稳定顺序执行顺序兜底。
+    """
+    return await get_recommendation(db, current_user.id, language)
 
 
 @router.get("/lessons/{lesson_id}")

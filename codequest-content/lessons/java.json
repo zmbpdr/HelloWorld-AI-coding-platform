@@ -16,14 +16,51 @@
         "description": "认识变量：基础用例"
       }
     ],
-    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": []
+  },
+  {
+    "title": "Hello World",
+    "slug": "java-01-hello-world",
+    "description": "学习Java基本语法，编写你的第一个程序",
+    "content": "# Hello World - 你的第一个Java程序\n\nJava是一门强类型、面向对象的编程语言。\n\n```java\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}\n```\n\n## 练习\n编写方法 `hello()`，返回字符串 `\"Hello, World!\"`。\n\n## 编程语言的基本结构\n每种编程语言都有其独特的基本结构，但核心概念是相通的：\n\n1. **入口点**：程序从哪里开始执行\n2. **输出**：如何将结果显示给用户\n3. **语法规则**：语句如何结束、代码块如何组织\n\n## 最佳实践\n- 保持代码简洁易读\n- 使用有意义的函数名\n- 遵循语言的命名规范\n- 添加适当的注释\n\n## 调试技巧\n如果代码不工作，请检查：\n1. 函数名是否正确拼写\n2. 字符串引号是否匹配\n3. 代码缩进是否正确\n4. 是否有语法错误提示\n",
+    "order": 2,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "public class Solution {\n    public static String hello() {\n        // 在这里编写你的代码\n        return null;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static String hello() {\n        return \"Hello, World!\";\n    }\n}",
+    "test_cases": [
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "hello() 应返回 Hello, World!"
+      },
+      {
+        "input": "hello()",
+        "expected_output": "Hello, World!",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 return 语句返回字符串",
+    "knowledge_tags": [
+      "基础语法",
+      "输出"
+    ],
+    "estimated_minutes": 8,
+    "prerequisites": [
+      "java-01-get-age"
+    ]
   },
   {
     "title": "基本数据类型",
     "slug": "java-02-add",
     "description": "实现 add(a, b)，返回两个整数之和。",
     "content": "# 基本数据类型\n\n本关使用 **Java** 学习「基本数据类型」。\n\n## 任务\n实现 add(a, b)，返回两个整数之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 2,
+    "order": 3,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int add(int a, int b) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -35,14 +72,52 @@
         "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "java-01-hello-world"
+    ]
+  },
+  {
+    "title": "变量与数据类型",
+    "slug": "java-02-variables",
+    "description": "学习Java的变量声明和数据类型",
+    "content": "# 变量与数据类型\n\nJava是强类型语言，变量必须声明类型：\n\n```java\nString name = \"Alice\";\nint age = 25;\ndouble height = 1.68;\nboolean isStudent = true;\n```\n\n## 练习\n编写方法 `greet(String name)`，返回 `\"你好, {name}!\"`。\n\n## 数据类型的重要性\n选择正确的数据类型是编程的基础能力：\n- 整数和浮点数用于数学计算\n- 字符串用于文本处理\n- 布尔值用于逻辑判断\n\n## 类型安全\n不同语言对类型的处理方式不同：\n- **强类型**（如Python、Java）：类型不匹配会报错\n- **弱类型**（如JavaScript）：自动进行类型转换\n- **静态类型**：编译时检查类型\n- **动态类型**：运行时确定类型\n\n## 编程建议\n- 变量名要有描述性\n- 避免使用魔法数字（应定义为常量）\n- 注意类型转换可能带来的精度损失\n",
+    "order": 4,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "public class Solution {\n    public static String greet(String name) {\n        // 返回问候语\n        return null;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static String greet(String name) {\n        return \"你好, \" + name + \"!\";\n    }\n}",
+    "test_cases": [
+      {
+        "input": "greet('Alice')",
+        "expected_output": "你好, Alice!",
+        "description": "greet('Alice')"
+      },
+      {
+        "input": "greet('Bob')",
+        "expected_output": "你好, Bob!",
+        "description": "greet('Bob')"
+      }
+    ],
+    "hint": "使用 + 拼接字符串",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "java-02-add"
+    ]
   },
   {
     "title": "条件判断",
     "slug": "java-03-is-adult",
     "description": "实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。",
     "content": "# 条件判断\n\n本关使用 **Java** 学习「条件判断」。\n\n## 任务\n实现 isAdult(age)：年龄大于等于 18 返回 1，否则返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 3,
+    "order": 5,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int isAdult(int age) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -54,14 +129,89 @@
         "description": "条件判断：基础用例"
       }
     ],
-    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "java-02-variables"
+    ]
+  },
+  {
+    "title": "运算符",
+    "slug": "java-03-operators",
+    "description": "学习算术、比较和逻辑运算符",
+    "content": "# 运算符\n\n```java\nint a = 10 + 3;  // 13\nboolean b = (5 > 3) && (2 < 4); // true\n```\n\n## 练习\n编写方法 `isEven(int n)`，判断是否为偶数。\n\n## 运算符优先级\n理解运算符的优先级对编写正确的表达式至关重要。当不确定时，使用括号 `()` 明确优先级。\n\n## 常见陷阱\n- 整数除法 vs 浮点除法（不同语言行为不同）\n- 取余运算中负数的处理\n- 比较浮点数时不要用 `==`（精度问题）\n- 逻辑运算符的短路求值特性\n",
+    "order": 6,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "public class Solution {\n    public static boolean isEven(int n) {\n        // 判断偶数\n        return false;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static boolean isEven(int n) {\n        return n % 2 == 0;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "isEven(4)",
+        "expected_output": "true",
+        "description": "4是偶数"
+      },
+      {
+        "input": "isEven(7)",
+        "expected_output": "false",
+        "description": "7不是偶数"
+      }
+    ],
+    "hint": "使用 % 取余运算符",
+    "knowledge_tags": [
+      "运算符",
+      "表达式"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "java-03-is-adult"
+    ]
+  },
+  {
+    "title": "条件语句",
+    "slug": "java-04-conditionals",
+    "description": "学习 if/else if/else",
+    "content": "# 条件语句\n\n```java\nif (score >= 90) {\n    return \"优秀\";\n} else if (score >= 60) {\n    return \"及格\";\n} else {\n    return \"不及格\";\n}\n```\n\n## 练习\n编写方法 `gradeScore(int score)`，根据分数返回等级。\n\n## 条件语句的设计模式\n```text\n1. 卫语句模式：先处理特殊情况，提前返回\n2. 策略模式：用字典/映射替代多重if-else\n3. 早返回：在函数开头检查无效输入并立即返回\n```\n\n## 代码可读性\n- 条件表达式不要太复杂，可以拆分为多个变量\n- 使用有意义的布尔变量名：`is_valid` > `flag`\n- 避免深度嵌套（超过3层应重构）\n",
+    "order": 7,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "public class Solution {\n    public static String gradeScore(int score) {\n        // 根据分数返回等级\n        return null;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static String gradeScore(int score) {\n        if (score >= 90) return \"优秀\";\n        else if (score >= 80) return \"良好\";\n        else if (score >= 60) return \"及格\";\n        else return \"不及格\";\n    }\n}",
+    "test_cases": [
+      {
+        "input": "gradeScore(95)",
+        "expected_output": "优秀",
+        "description": "90分以上"
+      },
+      {
+        "input": "gradeScore(70)",
+        "expected_output": "及格",
+        "description": "60-79分"
+      },
+      {
+        "input": "gradeScore(50)",
+        "expected_output": "不及格",
+        "description": "60分以下"
+      }
+    ],
+    "hint": "从高到低依次判断",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "java-03-operators"
+    ]
   },
   {
     "title": "循环入门",
     "slug": "java-04-sum-to",
     "description": "实现 sumTo(n)，计算从 1 到 n 的和。",
     "content": "# 循环入门\n\n本关使用 **Java** 学习「循环」。\n\n## 任务\n实现 sumTo(n)，计算从 1 到 n 的和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 4,
+    "order": 8,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int sumTo(int n) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -73,14 +223,52 @@
         "description": "循环入门：基础用例"
       }
     ],
-    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "java-04-conditionals"
+    ]
+  },
+  {
+    "title": "循环",
+    "slug": "java-05-loops",
+    "description": "学习 for 和 while 循环",
+    "content": "# 循环\n\n```java\nfor (int i = 1; i <= n; i++) {\n    sum += i;\n}\n```\n\n## 练习\n编写方法 `sumRange(int n)`，返回1到n的整数和。\n\n## 循环的性能考量\n- 避免在循环中进行重复计算\n- 尽量减少循环体内的函数调用\n- 考虑使用更高效的数据结构\n\n## 循环 vs 递归 vs 高阶函数\n| 方式 | 适用场景 |\n|------|---------|\n| for/while | 明确次数、简单遍历 |\n| 递归 | 树形结构、分治问题 |\n| map/filter | 数据转换和过滤 |\n\n## 常见错误\n- 死循环（循环条件永远为真）\n- 差一错误（off-by-one）\n- 在遍历时修改集合\n",
+    "order": 9,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "public class Solution {\n    public static int sumRange(int n) {\n        // 返回1到n的和\n        return 0;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static int sumRange(int n) {\n        int sum = 0;\n        for (int i = 1; i <= n; i++) {\n            sum += i;\n        }\n        return sum;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "sumRange(5)",
+        "expected_output": "15",
+        "description": "1到5的和"
+      },
+      {
+        "input": "sumRange(10)",
+        "expected_output": "55",
+        "description": "1到10的和"
+      }
+    ],
+    "hint": "使用 for 循环累加",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "java-04-sum-to"
+    ]
   },
   {
     "title": "数组或列表",
     "slug": "java-05-sum-array",
     "description": "实现 sumArray(numbers)，计算数组所有元素之和。",
     "content": "# 数组或列表\n\n本关使用 **Java** 学习「数组/列表」。\n\n## 任务\n实现 sumArray(numbers)，计算数组所有元素之和。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 5,
+    "order": 10,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int sumArray(int[] numbers) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -92,14 +280,52 @@
         "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "java-05-loops"
+    ]
+  },
+  {
+    "title": "函数/方法",
+    "slug": "java-06-methods",
+    "description": "学习方法的定义和调用",
+    "content": "# 方法\n\n```java\npublic static int add(int a, int b) {\n    return a + b;\n}\n```\n\n## 练习\n编写方法 `calculateBMI(double weight, double height)`，计算BMI并保留1位小数。\n\n## 函数设计原则\n1. **单一职责**：一个函数只做一件事\n2. **命名清晰**：函数名应描述其功能（动词开头）\n3. **参数适量**：参数不要超过3-4个\n4. **纯函数优先**：同样的输入总是产生同样的输出\n\n## 函数 vs 方法\n- **函数**：独立的代码块\n- **方法**：属于类/对象的函数\n- **匿名函数/Lambda**：临时使用的简短函数\n\n## 测试函数\n写出函数后，用几个典型输入测试：\n- 正常输入\n- 边界值（0、空值、最大值）\n- 异常输入（类型错误、越界）\n",
+    "order": 11,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "public class Solution {\n    public static double calculateBMI(double weight, double height) {\n        // 计算BMI\n        return 0;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static double calculateBMI(double weight, double height) {\n        double bmi = weight / (height * height);\n        return Math.round(bmi * 10.0) / 10.0;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "calculateBMI(70, 1.75)",
+        "expected_output": "22.9",
+        "description": "BMI计算"
+      },
+      {
+        "input": "calculateBMI(70, 1.75)",
+        "expected_output": "22.9",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 Math.round 保留小数",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "java-05-sum-array"
+    ]
   },
   {
     "title": "函数基础",
     "slug": "java-06-square",
     "description": "实现 square(n)，返回 n 的平方。",
     "content": "# 函数基础\n\n本关使用 **Java** 学习「函数」。\n\n## 任务\n实现 square(n)，返回 n 的平方。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 6,
+    "order": 12,
     "difficulty": "beginner",
     "xp_reward": 10,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int square(int n) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -111,14 +337,52 @@
         "description": "函数基础：基础用例"
       }
     ],
-    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "java-06-methods"
+    ]
+  },
+  {
+    "title": "数组",
+    "slug": "java-07-arrays",
+    "description": "学习数组的创建和操作",
+    "content": "# 数组\n\n```java\nint[] arr = {1, 2, 3, 4, 5};\narr.length;  // 5\nArrays.sort(arr);\n```\n\n## 练习\n编写方法 `findMax(int[] arr)`，找出数组中的最大值。\n",
+    "order": 13,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "public class Solution {\n    public static int findMax(int[] arr) {\n        // 找出最大值\n        return 0;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static int findMax(int[] arr) {\n        int max = arr[0];\n        for (int i = 1; i < arr.length; i++) {\n            if (arr[i] > max) max = arr[i];\n        }\n        return max;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "findMax([3, 7, 2, 9, 1])",
+        "expected_output": "9",
+        "description": "找最大值"
+      },
+      {
+        "input": "findMax([5])",
+        "expected_output": "5",
+        "description": "单元素数组"
+      }
+    ],
+    "hint": "遍历数组逐一比较",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "java-06-square"
+    ]
   },
   {
     "title": "字典、对象或 Map",
     "slug": "java-07-get-score",
     "description": "实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。",
     "content": "# 字典、对象或 Map\n\n本关使用 **Java** 学习「映射」。\n\n## 任务\n实现 getScore(scores, name)：返回 name 对应的分数，找不到时返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 7,
+    "order": 14,
     "difficulty": "intermediate",
     "xp_reward": 10,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int getScore(Map<String, Integer> scores, String name) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -130,14 +394,21 @@
         "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "java-07-arrays"
+    ]
   },
   {
     "title": "字符串操作",
     "slug": "java-08-count-vowels",
     "description": "实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。",
     "content": "# 字符串操作\n\n本关使用 **Java** 学习「字符串」。\n\n## 任务\n实现 countVowels(text)，统计字符串中 a/e/i/o/u（不区分大小写）的数量。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 8,
+    "order": 15,
     "difficulty": "intermediate",
     "xp_reward": 10,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int countVowels(String text) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -149,14 +420,52 @@
         "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "java-07-get-score"
+    ]
+  },
+  {
+    "title": "字符串操作",
+    "slug": "java-08-strings",
+    "description": "学习字符串的常用方法",
+    "content": "# 字符串操作\n\n```java\n\"hello\".toUpperCase();     // \"HELLO\"\n\"hello\".substring(1, 3);  // \"el\"\n\"hello\".charAt(0);         // 'h'\n```\n\n## 练习\n编写方法 `reverseString(String s)`，返回反转后的字符串。\n",
+    "order": 16,
+    "difficulty": "beginner",
+    "xp_reward": 10,
+    "starter_code": "public class Solution {\n    public static String reverseString(String s) {\n        // 反转字符串\n        return null;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static String reverseString(String s) {\n        return new StringBuilder(s).reverse().toString();\n    }\n}",
+    "test_cases": [
+      {
+        "input": "reverseString('hello')",
+        "expected_output": "olleh",
+        "description": "反转字符串"
+      },
+      {
+        "input": "reverseString('Java')",
+        "expected_output": "avaJ",
+        "description": "反转Java"
+      }
+    ],
+    "hint": "使用 StringBuilder 的 reverse 方法",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "java-08-count-vowels"
+    ]
   },
   {
     "title": "综合项目：简易计算器",
     "slug": "java-09-calculate",
     "description": "实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。",
     "content": "# 综合项目：简易计算器\n\n本关使用 **Java** 学习「综合应用」。\n\n## 任务\n实现 calculate(a, b, op)，支持 +、-、*、/；除数为 0 或未知运算符返回 0。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 9,
+    "order": 17,
     "difficulty": "intermediate",
     "xp_reward": 20,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int calculate(int a, int b, char op) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -168,14 +477,53 @@
         "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "函数"
+    ],
+    "estimated_minutes": 25,
+    "prerequisites": [
+      "java-08-strings"
+    ]
+  },
+  {
+    "title": "面向对象",
+    "slug": "java-09-oop",
+    "description": "学习类和对象",
+    "content": "# 面向对象\n\n```java\nclass Circle {\n    double radius;\n    Circle(double r) { radius = r; }\n    double area() { return Math.PI * radius * radius; }\n}\n```\n\n## 练习\n编写 `Circle` 类，包含 radius 属性、area() 和 circumference() 方法。\n",
+    "order": 18,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "class Circle {\n    double radius;\n    Circle(double radius) {\n        // 初始化\n    }\n    double area() {\n        // 面积\n        return 0;\n    }\n    double circumference() {\n        // 周长\n        return 0;\n    }\n}",
+    "solution_code": "class Circle {\n    double radius;\n    Circle(double radius) { this.radius = radius; }\n    double area() { return Math.PI * radius * radius; }\n    double circumference() { return 2 * Math.PI * radius; }\n}",
+    "test_cases": [
+      {
+        "input": "new Circle(1).area()",
+        "expected_output": "3.141592653589793",
+        "description": "圆面积"
+      },
+      {
+        "input": "new Circle(2).circumference()",
+        "expected_output": "12.566370614359172",
+        "description": "圆周长"
+      }
+    ],
+    "hint": "面积=πr²，周长=2πr",
+    "knowledge_tags": [
+      "面向对象"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-09-calculate"
+    ]
   },
   {
     "title": "综合项目：待办事项管理器",
     "slug": "java-10-count-completed",
     "description": "实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。",
     "content": "# 综合项目：待办事项管理器\n\n本关使用 **Java** 学习「综合应用」。\n\n## 任务\n实现 countCompleted(statuses)，统计状态数组中已完成（1 / true）的项目数。\n\n## 要求\n- 保持函数名和参数不变。\n- 返回计算结果，不要自行编写测试入口。\n- 通过下方测试后即可通关。",
-    "order": 10,
+    "order": 19,
     "difficulty": "intermediate",
     "xp_reward": 20,
     "starter_code": "import java.util.*;\n\nclass Solution {\n    static int countCompleted(boolean[] statuses) {\n        // 在这里实现函数\n        return 0;\n    }\n}",
@@ -187,6 +535,356 @@
         "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "集合与遍历"
+    ],
+    "estimated_minutes": 28,
+    "prerequisites": [
+      "java-09-oop"
+    ]
+  },
+  {
+    "title": "继承与多态",
+    "slug": "java-10-inheritance",
+    "description": "学习继承和多态",
+    "content": "# 继承与多态\n\n```java\nclass Animal {\n    String speak() { return \"...\"; }\n}\nclass Dog extends Animal {\n    @Override String speak() { return \"Woof!\"; }\n}\n```\n\n## 练习\n编写 `Rectangle` 和 `Square` 类，Square 继承 Rectangle。\n",
+    "order": 20,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "class Rectangle {\n    int width, height;\n    Rectangle(int w, int h) {\n        // 初始化\n    }\n    int area() { return 0; }\n}\n\nclass Square extends Rectangle {\n    Square(int side) {\n        // 调用父类构造器\n    }\n}",
+    "solution_code": "class Rectangle {\n    int width, height;\n    Rectangle(int w, int h) { width = w; height = h; }\n    int area() { return width * height; }\n}\n\nclass Square extends Rectangle {\n    Square(int side) { super(side, side); }\n}",
+    "test_cases": [
+      {
+        "input": "new Rectangle(3, 4).area()",
+        "expected_output": "12",
+        "description": "矩形面积"
+      },
+      {
+        "input": "new Square(5).area()",
+        "expected_output": "25",
+        "description": "正方形面积"
+      }
+    ],
+    "hint": "使用 super 调用父类构造器",
+    "knowledge_tags": [
+      "面向对象"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-10-count-completed"
+    ]
+  },
+  {
+    "title": "接口",
+    "slug": "java-11-interfaces",
+    "description": "学习接口的定义和实现",
+    "content": "# 接口\n\n```java\ninterface Drawable {\n    void draw();\n}\nclass Circle implements Drawable {\n    public void draw() { ... }\n}\n```\n\n## 练习\n定义 `Sortable` 接口和实现类。\n",
+    "order": 21,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "interface Sortable {\n    int[] sort(int[] arr);\n}\n\nclass BubbleSorter implements Sortable {\n    public int[] sort(int[] arr) {\n        // 冒泡排序\n        return arr;\n    }\n}",
+    "solution_code": "interface Sortable {\n    int[] sort(int[] arr);\n}\n\nclass BubbleSorter implements Sortable {\n    public int[] sort(int[] arr) {\n        int[] result = arr.clone();\n        for (int i = 0; i < result.length; i++) {\n            for (int j = 0; j < result.length - i - 1; j++) {\n                if (result[j] > result[j + 1]) {\n                    int temp = result[j];\n                    result[j] = result[j + 1];\n                    result[j + 1] = temp;\n                }\n            }\n        }\n        return result;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "new BubbleSorter().sort([5,3,1])",
+        "expected_output": "[1,3,5]",
+        "description": "冒泡排序"
+      },
+      {
+        "input": "new BubbleSorter().sort([5,3,1])",
+        "expected_output": "[1,3,5]",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "实现接口的 sort 方法",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "java-10-inheritance"
+    ]
+  },
+  {
+    "title": "集合框架",
+    "slug": "java-12-collections",
+    "description": "学习List、Set、Map",
+    "content": "# 集合框架\n\n```java\nList<String> list = new ArrayList<>();\nSet<Integer> set = new HashSet<>();\nMap<String, Integer> map = new HashMap<>();\n```\n\n## 练习\n编写方法 `removeDuplicates(int[] arr)`，去除重复元素并返回列表。\n",
+    "order": 22,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "import java.util.*;\n\npublic class Solution {\n    public static List<Integer> removeDuplicates(int[] arr) {\n        // 去重\n        return null;\n    }\n}",
+    "solution_code": "import java.util.*;\n\npublic class Solution {\n    public static List<Integer> removeDuplicates(int[] arr) {\n        LinkedHashSet<Integer> set = new LinkedHashSet<>();\n        for (int n : arr) set.add(n);\n        return new ArrayList<>(set);\n    }\n}",
+    "test_cases": [
+      {
+        "input": "removeDuplicates([1,2,3,2,1,4])",
+        "expected_output": "[1,2,3,4]",
+        "description": "去重保持顺序"
+      },
+      {
+        "input": "removeDuplicates([1,2,3,2,1,4])",
+        "expected_output": "[1,2,3,4]",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 LinkedHashSet 保持顺序并去重",
+    "knowledge_tags": [
+      "数据结构"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-11-interfaces"
+    ]
+  },
+  {
+    "title": "异常处理",
+    "slug": "java-13-exceptions",
+    "description": "学习try/catch和自定义异常",
+    "content": "# 异常处理\n\n```java\ntry {\n    int result = 10 / 0;\n} catch (ArithmeticException e) {\n    System.out.println(\"除零错误\");\n}\n```\n\n## 练习\n编写方法 `safeDivide(int a, int b)`，安全除法，除数为0返回-1。\n",
+    "order": 23,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "public class Solution {\n    public static int safeDivide(int a, int b) {\n        // 安全除法\n        return 0;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static int safeDivide(int a, int b) {\n        try {\n            return a / b;\n        } catch (ArithmeticException e) {\n            return -1;\n        }\n    }\n}",
+    "test_cases": [
+      {
+        "input": "safeDivide(10, 2)",
+        "expected_output": "5",
+        "description": "正常除法"
+      },
+      {
+        "input": "safeDivide(10, 0)",
+        "expected_output": "-1",
+        "description": "除零返回-1"
+      }
+    ],
+    "hint": "使用 try/catch 捕获 ArithmeticException",
+    "knowledge_tags": [
+      "异常处理"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "java-12-collections"
+    ]
+  },
+  {
+    "title": "泛型",
+    "slug": "java-14-generics",
+    "description": "学习泛型类和方法",
+    "content": "# 泛型\n\n```java\nclass Box<T> {\n    T value;\n    void set(T v) { value = v; }\n    T get() { return value; }\n}\n```\n\n## 练习\n编写泛型方法 `findFirst(T[] arr, T target)`，返回目标在数组中的索引，不存在返回-1。\n",
+    "order": 24,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "public class Solution {\n    public static <T> int findFirst(T[] arr, T target) {\n        // 查找目标索引\n        return -1;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static <T> int findFirst(T[] arr, T target) {\n        for (int i = 0; i < arr.length; i++) {\n            if (arr[i].equals(target)) return i;\n        }\n        return -1;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "findFirst(['a','b','c'], 'b')",
+        "expected_output": "1",
+        "description": "查找存在的元素"
+      },
+      {
+        "input": "findFirst(['a','b','c'], 'd')",
+        "expected_output": "-1",
+        "description": "查找不存在的元素"
+      }
+    ],
+    "hint": "遍历数组使用 equals 比较",
+    "knowledge_tags": [
+      "类型系统"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-13-exceptions"
+    ]
+  },
+  {
+    "title": "Stream API",
+    "slug": "java-15-streams",
+    "description": "学习Java 8 Stream操作",
+    "content": "# Stream API\n\n```java\nList<Integer> evens = list.stream()\n    .filter(x -> x % 2 == 0)\n    .collect(Collectors.toList());\n```\n\n## 练习\n编写方法 `sumEvenSquares(int[] arr)`，计算偶数的平方和。\n",
+    "order": 25,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "import java.util.stream.*;\n\npublic class Solution {\n    public static int sumEvenSquares(int[] arr) {\n        // 偶数平方和\n        return 0;\n    }\n}",
+    "solution_code": "import java.util.stream.*;\n\npublic class Solution {\n    public static int sumEvenSquares(int[] arr) {\n        return IntStream.of(arr)\n            .filter(x -> x % 2 == 0)\n            .map(x -> x * x)\n            .sum();\n    }\n}",
+    "test_cases": [
+      {
+        "input": "sumEvenSquares([1,2,3,4,5])",
+        "expected_output": "20",
+        "description": "2²+4²=20"
+      },
+      {
+        "input": "sumEvenSquares([1,2,3,4,5])",
+        "expected_output": "20",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 IntStream 的 filter/map/sum",
+    "knowledge_tags": [
+      "编程基础"
+    ],
+    "estimated_minutes": 15,
+    "prerequisites": [
+      "java-14-generics"
+    ]
+  },
+  {
+    "title": "文件I/O",
+    "slug": "java-16-file-io",
+    "description": "学习文件读写操作",
+    "content": "# 文件I/O\n\n```java\n// 读取文件\nFiles.readString(Path.of(\"file.txt\"));\n\n// 写入文件\nFiles.writeString(Path.of(\"file.txt\"), \"content\");\n```\n\n## 练习\n编写方法 `countLines(String text)`，统计文本行数。\n",
+    "order": 26,
+    "difficulty": "intermediate",
+    "xp_reward": 15,
+    "starter_code": "public class Solution {\n    public static int countLines(String text) {\n        // 统计行数\n        return 0;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static int countLines(String text) {\n        if (text == null || text.isEmpty()) return 0;\n        return text.split(\"\\\\n\").length;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "countLines('line1\\nline2\\nline3')",
+        "expected_output": "3",
+        "description": "统计3行"
+      },
+      {
+        "input": "countLines('single')",
+        "expected_output": "1",
+        "description": "单行"
+      }
+    ],
+    "hint": "使用 split 分割行",
+    "knowledge_tags": [
+      "文件操作"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-15-streams"
+    ]
+  },
+  {
+    "title": "排序算法",
+    "slug": "java-17-sorting",
+    "description": "实现冒泡排序",
+    "content": "# 排序算法\n\n## 练习\n编写方法 `bubbleSort(int[] arr)`，返回排序后的新数组。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
+    "order": 27,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "public class Solution {\n    public static int[] bubbleSort(int[] arr) {\n        // 冒泡排序\n        return arr;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static int[] bubbleSort(int[] arr) {\n        int[] result = arr.clone();\n        for (int i = 0; i < result.length; i++) {\n            for (int j = 0; j < result.length - i - 1; j++) {\n                if (result[j] > result[j + 1]) {\n                    int temp = result[j];\n                    result[j] = result[j + 1];\n                    result[j + 1] = temp;\n                }\n            }\n        }\n        return result;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "bubbleSort([5,3,8,1])",
+        "expected_output": "[1,3,5,8]",
+        "description": "冒泡排序"
+      },
+      {
+        "input": "bubbleSort([5,3,8,1])",
+        "expected_output": "[1,3,5,8]",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "双重循环比较交换",
+    "knowledge_tags": [
+      "算法"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-16-file-io"
+    ]
+  },
+  {
+    "title": "二分查找",
+    "slug": "java-18-binary-search",
+    "description": "实现二分查找",
+    "content": "# 二分查找\n\n## 练习\n编写方法 `binarySearch(int[] arr, int target)`，返回索引或-1。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
+    "order": 28,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "public class Solution {\n    public static int binarySearch(int[] arr, int target) {\n        // 二分查找\n        return -1;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static int binarySearch(int[] arr, int target) {\n        int left = 0, right = arr.length - 1;\n        while (left <= right) {\n            int mid = (left + right) / 2;\n            if (arr[mid] == target) return mid;\n            if (arr[mid] < target) left = mid + 1;\n            else right = mid - 1;\n        }\n        return -1;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "binarySearch([1,3,5,7,9], 5)",
+        "expected_output": "2",
+        "description": "查找存在的元素"
+      },
+      {
+        "input": "binarySearch([1,3,5,7,9], 4)",
+        "expected_output": "-1",
+        "description": "查找不存在的元素"
+      }
+    ],
+    "hint": "使用左右指针缩小范围",
+    "knowledge_tags": [
+      "算法"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-17-sorting"
+    ]
+  },
+  {
+    "title": "递归",
+    "slug": "java-19-recursion",
+    "description": "学习递归思想",
+    "content": "# 递归\n\n## 练习\n编写方法 `fibonacci(int n)` 和 `factorial(int n)`。\n\n## 边界情况\n测试你的算法时，请考虑以下边界情况：\n- **空输入**：数组为空时如何处理？\n- **单元素**：只有一个元素时是否正确？\n- **重复元素**：有重复值时的行为？\n- **已排序/逆序**：输入已有序时的效率？\n",
+    "order": 29,
+    "difficulty": "advanced",
+    "xp_reward": 20,
+    "starter_code": "public class Solution {\n    public static int fibonacci(int n) {\n        // 斐波那契\n        return 0;\n    }\n    public static int factorial(int n) {\n        // 阶乘\n        return 0;\n    }\n}",
+    "solution_code": "public class Solution {\n    public static int fibonacci(int n) {\n        if (n <= 1) return n;\n        return fibonacci(n - 1) + fibonacci(n - 2);\n    }\n    public static int factorial(int n) {\n        if (n <= 1) return 1;\n        return n * factorial(n - 1);\n    }\n}",
+    "test_cases": [
+      {
+        "input": "fibonacci(5)",
+        "expected_output": "5",
+        "description": "F(5)=5"
+      },
+      {
+        "input": "factorial(5)",
+        "expected_output": "120",
+        "description": "5!=120"
+      }
+    ],
+    "hint": "确定基线条件后递归调用",
+    "knowledge_tags": [
+      "递归"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "java-18-binary-search"
+    ]
+  },
+  {
+    "title": "综合实战 - 学生管理",
+    "slug": "java-20-student-manager",
+    "description": "综合运用所学知识实现学生管理系统",
+    "content": "# 综合实战 - 学生管理系统\n\n## 练习\n实现 `StudentManager` 类，包含 addStudent、getAverage、getTopStudent 方法。\n",
+    "order": 30,
+    "difficulty": "advanced",
+    "xp_reward": 25,
+    "starter_code": "import java.util.*;\n\npublic class StudentManager {\n    // 实现学生管理\n    public void addStudent(String name, int[] scores) {}\n    public double getAverage(String name) { return 0; }\n    public String getTopStudent() { return null; }\n}",
+    "solution_code": "import java.util.*;\n\npublic class StudentManager {\n    private Map<String, int[]> students = new HashMap<>();\n\n    public void addStudent(String name, int[] scores) {\n        students.put(name, scores);\n    }\n\n    public double getAverage(String name) {\n        if (!students.containsKey(name)) return -1;\n        int[] scores = students.get(name);\n        double sum = 0;\n        for (int s : scores) sum += s;\n        return sum / scores.length;\n    }\n\n    public String getTopStudent() {\n        String top = null;\n        double maxAvg = -1;\n        for (String name : students.keySet()) {\n            double avg = getAverage(name);\n            if (avg > maxAvg) { maxAvg = avg; top = name; }\n        }\n        return top;\n    }\n}",
+    "test_cases": [
+      {
+        "input": "sm = new StudentManager(); sm.addStudent('Alice', [90,85]); sm.getAverage('Alice')",
+        "expected_output": "87.5",
+        "description": "学生平均分"
+      },
+      {
+        "input": "sm = new StudentManager(); sm.addStudent('Alice', [90,85]); sm.getAverage('Alice')",
+        "expected_output": "87.5",
+        "description": "基本功能验证"
+      }
+    ],
+    "hint": "使用 HashMap 存储学生数据",
+    "knowledge_tags": [
+      "综合项目",
+      "工程实践"
+    ],
+    "estimated_minutes": 35,
+    "prerequisites": [
+      "java-19-recursion"
+    ]
   }
 ]

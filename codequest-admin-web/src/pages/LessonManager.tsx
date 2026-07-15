@@ -13,13 +13,14 @@ interface LessonItem {
   difficulty: string
   is_active: boolean
   order: number
+  knowledge_tags?: string[]
+  estimated_minutes?: number | null
+  prerequisites?: string[]
   created_at: string
 }
 
 const LANGUAGE_NAMES: Record<number, string> = {
-  1: 'Python', 2: 'JavaScript', 3: 'Java', 4: 'C++', 5: 'Go',
-  6: 'Rust', 7: 'TypeScript', 8: 'SQL', 9: 'Ruby', 10: 'Swift',
-  11: 'Kotlin', 12: 'PHP', 13: 'Shell', 14: 'Lua',
+  1: 'Python', 2: 'JavaScript', 3: 'Java', 4: 'C', 5: 'C++', 6: 'TypeScript',
 }
 
 export default function LessonManager() {
@@ -65,12 +66,6 @@ export default function LessonManager() {
   const handleAdd = () => {
     setEditingLesson(null)
     form.resetFields()
-    setDrawerOpen(true)
-  }
-
-  const handleEdit = (record: LessonItem) => {
-    setEditingLesson(record)
-    form.setFieldsValue(record)
     setDrawerOpen(true)
   }
 
@@ -148,6 +143,11 @@ export default function LessonManager() {
       ),
     },
     { title: '排序', dataIndex: 'order', key: 'order', width: 60 },
+    {
+      title: '标签', dataIndex: 'knowledge_tags', key: 'knowledge_tags',
+      render: (tags: string[] = []) => <Space size={[0, 4]} wrap>{tags.map(tag => <Tag color="blue" key={tag}>{tag}</Tag>)}</Space>,
+    },
+    { title: '预估', dataIndex: 'estimated_minutes', key: 'estimated_minutes', width: 80, render: (minutes?: number) => minutes ? `${minutes} 分钟` : '—' },
     {
       title: '操作',
       key: 'action',
@@ -256,6 +256,15 @@ export default function LessonManager() {
           </Form.Item>
           <Form.Item name="order" label="排序">
             <InputNumber min={0} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item name="knowledge_tags" label="知识点标签" rules={[{ required: true, message: '请至少填写一个标签' }]}>
+            <Select mode="tags" tokenSeparators={[',', '，']} placeholder="例如：循环、函数" />
+          </Form.Item>
+          <Form.Item name="estimated_minutes" label="预估学习时间（分钟）" rules={[{ required: true, message: '请输入正整数分钟数' }]}>
+            <InputNumber min={1} precision={0} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item name="prerequisites" label="前置关卡 slug">
+            <Select mode="tags" tokenSeparators={[',', '，']} placeholder="仅允许当前语言内的 slug" />
           </Form.Item>
           <Form.Item name="is_active" label="发布" valuePropName="checked">
             <Switch />

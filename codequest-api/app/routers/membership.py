@@ -7,6 +7,7 @@ from app.core.deps import get_current_user
 from app.models.user import User
 from app.schemas.user import MembershipResponse, UpgradeRequest
 from app.services.membership_service import membership_payload
+from app.config import settings
 
 router = APIRouter()
 
@@ -22,7 +23,8 @@ async def upgrade_membership(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """模拟升级为 Pro；真实支付接入前仅改变会员状态。"""
+    if not settings.FEATURE_MEMBERSHIP:
+        return membership_payload(current_user)
     current_user.membership = "pro"
     await db.commit()
     await db.refresh(current_user)
