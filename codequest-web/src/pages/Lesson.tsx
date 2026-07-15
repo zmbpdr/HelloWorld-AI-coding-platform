@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getLesson, type LessonDetail } from '../api/lessons'
-import apiClient from '../api/client'
+import { sendChatMessage } from '../api/ai'
 import { useCodeRunner } from '../hooks/useCodeRunner'
 import { useComboStreak, StreakIndicator } from '../hooks/useComboStreak'
 import CodeEditor from '../components/editor/CodeEditor'
@@ -13,7 +13,6 @@ import StarBadge from '../components/badge/StarBadge'
 import CelebrationEffect from '../components/ui/CelebrationEffect'
 import { renderMarkdown } from '../utils/markdown'
 import PageTransition from '../components/ui/PageTransition'
-import RadarChart from '../components/RadarChart'
 
 const STATUS_COLORS: Record<string, { border: string; bg: string; text: string; gradient: string }> = {
   accepted: { border: 'rgba(34,197,94,0.25)', bg: 'rgba(34,197,94,0.05)', text: '#4ade80', gradient: 'linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.02))' },
@@ -36,8 +35,12 @@ export default function Lesson() {
     slug: string; name: string; rarity: string
   } | null>(null)
   const [showCelebration, setShowCelebration] = useState(false)
-  const [aiMode, setAiMode] = useState<'diagnostic' | 'tutor' | 'review' | 'plan'>('tutor')
+  const [aiMode, setAiMode] = useState<'tutor' | 'review' | 'plan'>('tutor')
   const [aiResponse, setAiResponse] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
+
+  // 切换模式时清空上一个结果
+  useEffect(() => { setAiResponse('') }, [aiMode])
   const [reviewIssues, setReviewIssues] = useState<Array<{
   line: number
   message: string
@@ -89,25 +92,36 @@ export default function Lesson() {
     })
   }
 
-  const handleAIAction = () => {
-  const mockResponses = {
-    diagnostic: '🔍 诊断结果：\n• 代码语法正确\n• 建议增加边界条件处理\n• 变量命名可以更清晰',
-    tutor: '🧑‍🏫 导师建议：\n这个问题可以用循环来解决。\n试试这样想：\n1. 先确定循环条件\n2. 再处理每次迭代的逻辑',
-    review: '📋 代码审查评分：\n• 正确性: 85分\n• 可读性: 70分\n• 性能: 75分\n• 健壮性: 60分\n建议：增加空值检查',
-    plan: '📈 学习规划：\n基于你的进度，推荐学习：\n1. 下一关：循环嵌套\n2. 本周目标：完成函数章节\n3. 建议每天练习30分钟',
+  const handleAIAction = async () => {
+    setAiLoading(true)
+    setAiResponse('')
+    const prompts: Record<string, string> = {
+      tutor: `作为编程导师，请诊断以下代码的问题并给出学习指导（指出错误、引导思路，不要直接给答案）：\n\`\`\`\n${code}\n\`\`\`\n${lesson?.title ? `\\n题目：${lesson.title}` : ''}`,
+      review: `请对以下代码进行代码审查，从正确性、可读性、性能、健壮性四个维度打分（每项100分），并给出改进建议：\n\`\`\`\n${code}\n\`\`\``,
+      plan: `根据以下题目和代码，推荐下一步学习路线和需要加强的知识点：\n\`\`\`\n${code}\n\`\`\`\n${lesson?.title ? `\\n当前题目：${lesson.title}` : ''}`,
+    }
+    try {
+      const result = await sendChatMessage({
+        message: prompts[aiMode] || '',
+        context: {
+          lesson_title: lesson?.title,
+          language: languageSlug,
+          mode: aiMode === 'review' ? 'reviewer' : 'tutor',
+          code,
+        },
+      })
+      setAiResponse(result.reply)
+      if (aiMode === 'review') {
+        setReviewIssues([])
+      } else {
+        setReviewIssues([])
+      }
+    } catch {
+      setAiResponse('AI 分析失败，请稍后重试')
+    } finally {
+      setAiLoading(false)
+    }
   }
-  setAiResponse(mockResponses[aiMode] || '请选择有效模式')
-
-  // 🆕 审查模式生成标注
-  if (aiMode === 'review') {
-    setReviewIssues([
-      { line: 3, message: '⚠️ 变量名不够清晰，建议使用更描述性的名称', severity: 'warning' },
-      { line: 5, message: '❌ 缺少边界条件检查，可能导致运行时错误', severity: 'error' },
-    ])
-  } else {
-    setReviewIssues([])
-  }
-} 
 
   if (isLoading) return <LessonSkeleton />
 
@@ -203,7 +217,6 @@ export default function Lesson() {
             <div className="px-4 pt-2 flex items-center gap-2 shrink-0 flex-wrap" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
               <span className="text-xs mr-1" style={{ color: '#64748b' }}>🤖 AI 模式</span>
               {[
-                { key: 'diagnostic', label: '诊断', icon: '🔍' },
                 { key: 'tutor', label: '导师', icon: '🧑‍🏫' },
                 { key: 'review', label: '审查', icon: '📋' },
                 { key: 'plan', label: '规划', icon: '📈' },
@@ -267,7 +280,6 @@ export default function Lesson() {
               <div className="flex items-center justify-between mb-2">
                 <div className="text-xs" style={{ color: '#64748b' }}>
                   <span className="font-medium" style={{ color: '#818cf8' }}>
-                    {aiMode === 'diagnostic' && '🔍 诊断模式'}
                     {aiMode === 'tutor' && '🧑‍🏫 导师模式'}
                     {aiMode === 'review' && '📋 审查模式'}
                     {aiMode === 'plan' && '📈 规划模式'}
@@ -275,44 +287,27 @@ export default function Lesson() {
                 </div>
                 <button
                   onClick={handleAIAction}
+                  disabled={aiLoading}
                   className="px-3 py-1 rounded-lg text-xs font-medium transition-all"
                   style={{
-                    background: 'rgba(99,102,241,0.15)',
+                    background: aiLoading ? 'rgba(99,102,241,0.05)' : 'rgba(99,102,241,0.15)',
                     border: '1px solid rgba(99,102,241,0.2)',
-                    color: '#a5b4fc',
+                    color: aiLoading ? '#64748b' : '#a5b4fc',
+                    cursor: aiLoading ? 'not-allowed' : 'pointer',
                   }}
                 >
-                  🚀 执行 AI 分析
+                  {aiLoading ? '⏳ 分析中...' : '🚀 执行 AI 分析'}
                 </button>
               </div>
-              <div className="mt-2 text-sm" style={{ color: '#94a3b8' }}>
+              <div className="mt-2 text-sm" style={{ maxHeight: '280px', overflowY: 'auto', color: '#94a3b8' }}>
                 {aiResponse ? (
                   <div className="p-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}>
-                    {aiMode === 'review' ? (
-                      <div>
-                        <div style={{ height: '220px', marginBottom: '12px' }}>
-                          <RadarChart scores={{ correctness: 85, readability: 70, performance: 75, robustness: 60 }} />
-                        </div>
-                        <div className="text-xs" style={{ color: '#94a3b8' }}>
-                          <div className="flex flex-wrap gap-3 mt-2">
-                            <span>✅ 正确性: 85分</span>
-                            <span>📖 可读性: 70分</span>
-                            <span>⚡ 性能: 75分</span>
-                            <span>🛡️ 健壮性: 60分</span>
-                          </div>
-                          <div className="mt-2" style={{ color: '#a5b4fc' }}>
-                            建议：增加空值检查，提升健壮性
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="whitespace-pre-wrap" style={{ color: '#cbd5e1' }}>
-                        {aiResponse}
-                      </div>
-                    )}
+                    <div className="whitespace-pre-wrap" style={{ color: '#cbd5e1' }}>
+                      {aiResponse}
+                    </div>
                   </div>
                 ) : (
-                  <div style={{ color: '#475569' }}>💡 点击「执行 AI 分析」按钮获取 {aiMode === 'diagnostic' ? '诊断' : aiMode === 'tutor' ? '导师指导' : aiMode === 'review' ? '代码审查' : '学习规划'} 建议</div>
+                  <div style={{ color: '#475569' }}>💡 点击「执行 AI 分析」按钮获取 {aiMode === 'tutor' ? '导师指导' : aiMode === 'review' ? '代码审查' : '学习规划'} 建议</div>
                 )}
               </div>
             </div>
