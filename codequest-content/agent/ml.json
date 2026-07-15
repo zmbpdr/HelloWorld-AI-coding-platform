@@ -42,7 +42,7 @@
     "track": "ml",
     "section": "数学基础篇",
     "starter_code": "import numpy as np\n\ndef compute_stats(data):\n    # 返回 (均值, 方差, 标准差)\n    pass\n",
-    "solution_code": "import numpy as np\n\ndef compute_stats(data):\n    mean = np.mean(data)\n    var = np.var(data)\n    std = np.std(data)\n    return (mean, var, std)\n",
+    "solution_code": "import numpy as np\n\ndef compute_stats(data):\n    return float(np.mean(data)), float(np.var(data)), float(np.std(data))\n",
     "test_cases": [
       {
         "input": "compute_stats(np.array([1,2,3,4,5]))",
