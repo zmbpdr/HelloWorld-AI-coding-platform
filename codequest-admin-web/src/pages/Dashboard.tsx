@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Row, Col, Card, Statistic, Typography, Collapse, Tag, Empty, Spin } from 'antd'
+import { Row, Col, Card, Statistic, Typography, Collapse, Tag, Spin } from 'antd'
 import {
   UserOutlined, FileTextOutlined, TrophyOutlined, RiseOutlined,
   WarningOutlined, ClockCircleOutlined,

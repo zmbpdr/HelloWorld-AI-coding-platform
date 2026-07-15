@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Form, Input, InputNumber, Button, Card, App, Spin, Typography, Divider, Switch, Space } from 'antd'
+import { Form, Input, InputNumber, Button, Card, App, Spin, Typography, Switch, Space } from 'antd'
 import { SaveOutlined } from '@ant-design/icons'
 import { getSettings, updateSetting } from '../api/admin'
 
@@ -27,7 +27,6 @@ const DEFAULT_SETTINGS: { key: string; label: string; description: string; type:
 
 export default function SystemSettings() {
   const { message } = App.useApp()
-  const [settings, setSettings] = useState<SettingItem[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [form] = Form.useForm()
@@ -38,7 +37,6 @@ export default function SystemSettings() {
         setLoading(true)
         const res = await getSettings()
         const items: SettingItem[] = Array.isArray(res) ? res : res.items ?? []
-        setSettings(items)
         const values: Record<string, any> = {}
         for (const def of DEFAULT_SETTINGS) {
           const existing = items.find((i: SettingItem) => i.key === def.key)
