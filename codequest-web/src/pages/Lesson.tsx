@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getLesson, type LessonDetail } from '../api/lessons'
-import apiClient from '../api/client'
 import { useCodeRunner } from '../hooks/useCodeRunner'
 import { useComboStreak, StreakIndicator } from '../hooks/useComboStreak'
 import CodeEditor from '../components/editor/CodeEditor'
@@ -13,6 +12,7 @@ import StarBadge from '../components/badge/StarBadge'
 import CelebrationEffect from '../components/ui/CelebrationEffect'
 import { renderMarkdown } from '../utils/markdown'
 import PageTransition from '../components/ui/PageTransition'
+import apiClient from '../api/client' 
 import RadarChart from '../components/RadarChart'
 
 const STATUS_COLORS: Record<string, { border: string; bg: string; text: string; gradient: string }> = {
@@ -224,7 +224,6 @@ export default function Lesson() {
             <div className="px-4 pt-2 flex items-center gap-2 shrink-0 flex-wrap" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
               <span className="text-xs mr-1" style={{ color: '#64748b' }}>🤖 AI 模式</span>
               {[
-                { key: 'diagnostic', label: '诊断', icon: '🔍' },
                 { key: 'tutor', label: '导师', icon: '🧑‍🏫' },
                 { key: 'review', label: '审查', icon: '📋' },
                 { key: 'plan', label: '规划', icon: '📈' },
@@ -288,7 +287,6 @@ export default function Lesson() {
               <div className="flex items-center justify-between mb-2">
                 <div className="text-xs" style={{ color: '#64748b' }}>
                   <span className="font-medium" style={{ color: '#818cf8' }}>
-                    {aiMode === 'diagnostic' && '🔍 诊断模式'}
                     {aiMode === 'tutor' && '🧑‍🏫 导师模式'}
                     {aiMode === 'review' && '📋 审查模式'}
                     {aiMode === 'plan' && '📈 规划模式'}
@@ -300,13 +298,13 @@ export default function Lesson() {
                   style={{
                     background: 'rgba(99,102,241,0.15)',
                     border: '1px solid rgba(99,102,241,0.2)',
-                    color: '#a5b4fc',
+                    color: '#e4631d',
                   }}
                 >
                   🚀 执行 AI 分析
                 </button>
               </div>
-              <div className="mt-2 text-sm" style={{ color: '#94a3b8' }}>
+              <div className="mt-2 text-sm" style={{ maxHeight: '280px', overflowY: 'auto', color: '#94a3b8' }}>
                 {aiResponse ? (
                   <div className="p-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}>
                     {aiMode === 'review' ? (
