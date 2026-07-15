@@ -16,7 +16,12 @@
         "description": "认识变量：基础用例"
       }
     ],
-    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": []
   },
   {
     "title": "Hello World",
@@ -40,7 +45,15 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用 return 语句返回字符串"
+    "hint": "使用 return 语句返回字符串",
+    "knowledge_tags": [
+      "基础语法",
+      "输出"
+    ],
+    "estimated_minutes": 8,
+    "prerequisites": [
+      "javascript-01-get-age"
+    ]
   },
   {
     "title": "基本数据类型",
@@ -59,7 +72,14 @@
         "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "javascript-01-hello-world"
+    ]
   },
   {
     "title": "变量与数据类型",
@@ -83,7 +103,14 @@
         "description": "greet('Bob') 应返回 '你好, Bob!'"
       }
     ],
-    "hint": "使用模板字符串 `${name}` 插值"
+    "hint": "使用模板字符串 `${name}` 插值",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "javascript-02-add"
+    ]
   },
   {
     "title": "条件判断",
@@ -102,7 +129,14 @@
         "description": "条件判断：基础用例"
       }
     ],
-    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "javascript-02-variables"
+    ]
   },
   {
     "title": "运算符",
@@ -126,7 +160,15 @@
         "description": "isEven(7) 应返回 false"
       }
     ],
-    "hint": "使用 % 取余运算符判断偶数"
+    "hint": "使用 % 取余运算符判断偶数",
+    "knowledge_tags": [
+      "运算符",
+      "表达式"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "javascript-03-is-adult"
+    ]
   },
   {
     "title": "条件语句",
@@ -155,7 +197,14 @@
         "description": "60以下不及格"
       }
     ],
-    "hint": "从高到低依次判断"
+    "hint": "从高到低依次判断",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "javascript-03-operators"
+    ]
   },
   {
     "title": "循环入门",
@@ -174,7 +223,14 @@
         "description": "循环入门：基础用例"
       }
     ],
-    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "javascript-04-conditionals"
+    ]
   },
   {
     "title": "循环",
@@ -198,7 +254,14 @@
         "description": "1到10的和"
       }
     ],
-    "hint": "使用 for 循环累加"
+    "hint": "使用 for 循环累加",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "javascript-04-sum-to"
+    ]
   },
   {
     "title": "数组或列表",
@@ -217,7 +280,14 @@
         "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "javascript-05-loops"
+    ]
   },
   {
     "title": "函数",
@@ -241,7 +311,14 @@
         "description": "BMI计算"
       }
     ],
-    "hint": "BMI = 体重/身高²，使用 Math.round 保留小数"
+    "hint": "BMI = 体重/身高²，使用 Math.round 保留小数",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "javascript-05-sum-array"
+    ]
   },
   {
     "title": "函数基础",
@@ -260,7 +337,14 @@
         "description": "函数基础：基础用例"
       }
     ],
-    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "javascript-06-functions"
+    ]
   },
   {
     "title": "数组",
@@ -284,7 +368,14 @@
         "description": "无正数时返回空数组"
       }
     ],
-    "hint": "使用 filter 方法"
+    "hint": "使用 filter 方法",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "javascript-06-square"
+    ]
   },
   {
     "title": "字典、对象或 Map",
@@ -303,7 +394,14 @@
         "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "javascript-07-arrays"
+    ]
   },
   {
     "title": "字符串操作",
@@ -322,7 +420,14 @@
         "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "javascript-07-get-score"
+    ]
   },
   {
     "title": "字符串操作",
@@ -351,7 +456,14 @@
         "description": "非回文判断"
       }
     ],
-    "hint": "使用 split/reverse/join 反转字符串"
+    "hint": "使用 split/reverse/join 反转字符串",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "javascript-08-count-vowels"
+    ]
   },
   {
     "title": "综合项目：简易计算器",
@@ -370,7 +482,15 @@
         "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "函数"
+    ],
+    "estimated_minutes": 25,
+    "prerequisites": [
+      "javascript-08-strings"
+    ]
   },
   {
     "title": "对象",
@@ -394,7 +514,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用对象存储计数"
+    "hint": "使用对象存储计数",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "javascript-09-calculate"
+    ]
   },
   {
     "title": "数组高阶方法",
@@ -418,7 +545,14 @@
         "description": "无偶数时为0"
       }
     ],
-    "hint": "链式调用 filter → map → reduce"
+    "hint": "链式调用 filter → map → reduce",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "javascript-09-objects"
+    ]
   },
   {
     "title": "综合项目：待办事项管理器",
@@ -437,7 +571,15 @@
         "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "集合与遍历"
+    ],
+    "estimated_minutes": 28,
+    "prerequisites": [
+      "javascript-10-array-methods"
+    ]
   },
   {
     "title": "解构与展开",
@@ -461,7 +603,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用展开运算符和 Set 去重"
+    "hint": "使用展开运算符和 Set 去重",
+    "knowledge_tags": [
+      "编程基础"
+    ],
+    "estimated_minutes": 15,
+    "prerequisites": [
+      "javascript-10-count-completed"
+    ]
   },
   {
     "title": "Promise与异步",
@@ -485,7 +634,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用 new Promise 和 setTimeout"
+    "hint": "使用 new Promise 和 setTimeout",
+    "knowledge_tags": [
+      "异步编程"
+    ],
+    "estimated_minutes": 22,
+    "prerequisites": [
+      "javascript-11-destructuring"
+    ]
   },
   {
     "title": "类与继承",
@@ -509,7 +665,14 @@
         "description": "矩形周长"
       }
     ],
-    "hint": "面积=宽×高，周长=2×(宽+高)"
+    "hint": "面积=宽×高，周长=2×(宽+高)",
+    "knowledge_tags": [
+      "面向对象"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "javascript-12-promises"
+    ]
   },
   {
     "title": "闭包",
@@ -533,7 +696,14 @@
         "description": "三倍乘法器"
       }
     ],
-    "hint": "返回一个使用外部 factor 变量的函数"
+    "hint": "返回一个使用外部 factor 变量的函数",
+    "knowledge_tags": [
+      "高级函数"
+    ],
+    "estimated_minutes": 22,
+    "prerequisites": [
+      "javascript-13-classes"
+    ]
   },
   {
     "title": "错误处理",
@@ -557,7 +727,14 @@
         "description": "无效JSON返回null"
       }
     ],
-    "hint": "使用 try/catch 包裹 JSON.parse"
+    "hint": "使用 try/catch 包裹 JSON.parse",
+    "knowledge_tags": [
+      "异常处理"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "javascript-14-closures"
+    ]
   },
   {
     "title": "模块化",
@@ -581,7 +758,14 @@
         "description": "栈弹出"
       }
     ],
-    "hint": "使用闭包保护内部数组"
+    "hint": "使用闭包保护内部数组",
+    "knowledge_tags": [
+      "模块化"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "javascript-15-error-handling"
+    ]
   },
   {
     "title": "排序算法",
@@ -605,7 +789,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "双重循环比较相邻元素"
+    "hint": "双重循环比较相邻元素",
+    "knowledge_tags": [
+      "算法"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "javascript-16-modules"
+    ]
   },
   {
     "title": "二分查找",
@@ -629,7 +820,14 @@
         "description": "查找不存在的元素"
       }
     ],
-    "hint": "使用左右指针缩小范围"
+    "hint": "使用左右指针缩小范围",
+    "knowledge_tags": [
+      "算法"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "javascript-17-sorting"
+    ]
   },
   {
     "title": "递归",
@@ -653,7 +851,14 @@
         "description": "5!=120"
       }
     ],
-    "hint": "确定基线条件后递归调用"
+    "hint": "确定基线条件后递归调用",
+    "knowledge_tags": [
+      "递归"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "javascript-18-binary-search"
+    ]
   },
   {
     "title": "综合实战 - 待办列表",
@@ -677,6 +882,14 @@
         "description": "基本功能验证"
       }
     ],
-    "hint": "使用数组存储待办对象，用 done 属性标记状态"
+    "hint": "使用数组存储待办对象，用 done 属性标记状态",
+    "knowledge_tags": [
+      "综合项目",
+      "集合与遍历"
+    ],
+    "estimated_minutes": 28,
+    "prerequisites": [
+      "javascript-19-recursion"
+    ]
   }
 ]

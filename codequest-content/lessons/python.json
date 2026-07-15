@@ -16,7 +16,12 @@
         "description": "认识变量：基础用例"
       }
     ],
-    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「变量」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": []
   },
   {
     "title": "Hello World",
@@ -45,7 +50,15 @@
         "description": "返回字符串长度应为13"
       }
     ],
-    "hint": "使用 return 语句返回字符串"
+    "hint": "使用 return 语句返回字符串",
+    "knowledge_tags": [
+      "基础语法",
+      "输出"
+    ],
+    "estimated_minutes": 8,
+    "prerequisites": [
+      "python-01-get-age"
+    ]
   },
   {
     "title": "基本数据类型",
@@ -64,7 +77,14 @@
         "description": "基本数据类型：基础用例"
       }
     ],
-    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「基本数据类型」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "python-01-hello-world"
+    ]
   },
   {
     "title": "变量与数据类型",
@@ -108,7 +128,14 @@
         "description": "greet('') 应返回问候语（空字符串边界）"
       }
     ],
-    "hint": "使用 f-string 格式化字符串，使用 int() 进行类型转换"
+    "hint": "使用 f-string 格式化字符串，使用 int() 进行类型转换",
+    "knowledge_tags": [
+      "变量与数据类型"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "python-02-add"
+    ]
   },
   {
     "title": "条件判断",
@@ -127,7 +154,14 @@
         "description": "条件判断：基础用例"
       }
     ],
-    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「条件判断」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "python-02-variables"
+    ]
   },
   {
     "title": "运算符",
@@ -171,7 +205,15 @@
         "description": "in_range(1, 1, 10) 应返回 True（包含边界）"
       }
     ],
-    "hint": "偶数除以2余数为0，使用 % 取余运算符；范围判断使用比较运算符组合"
+    "hint": "偶数除以2余数为0，使用 % 取余运算符；范围判断使用比较运算符组合",
+    "knowledge_tags": [
+      "运算符",
+      "表达式"
+    ],
+    "estimated_minutes": 10,
+    "prerequisites": [
+      "python-03-is-adult"
+    ]
   },
   {
     "title": "条件语句",
@@ -225,7 +267,14 @@
         "description": "grade_score(100) 应返回 '优秀'（最大值边界）"
       }
     ],
-    "hint": "从最高分开始判断，使用 if/elif/else 依次检查"
+    "hint": "从最高分开始判断，使用 if/elif/else 依次检查",
+    "knowledge_tags": [
+      "条件判断"
+    ],
+    "estimated_minutes": 12,
+    "prerequisites": [
+      "python-03-operators"
+    ]
   },
   {
     "title": "循环入门",
@@ -244,7 +293,14 @@
         "description": "循环入门：基础用例"
       }
     ],
-    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「循环」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "python-04-conditionals"
+    ]
   },
   {
     "title": "循环",
@@ -293,7 +349,14 @@
         "description": "sum_range(0) 应返回 0（边界值）"
       }
     ],
-    "hint": "使用 range(1, n+1) 生成1到n的序列，累加求和；遍历字符串逐个比较字符"
+    "hint": "使用 range(1, n+1) 生成1到n的序列，累加求和；遍历字符串逐个比较字符",
+    "knowledge_tags": [
+      "循环"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "python-04-sum-to"
+    ]
   },
   {
     "title": "数组或列表",
@@ -312,7 +375,14 @@
         "description": "数组或列表：基础用例"
       }
     ],
-    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「数组/列表」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "python-05-loops"
+    ]
   },
   {
     "title": "函数",
@@ -356,7 +426,14 @@
         "description": "describe_bmi(32.0) 应返回 '肥胖'"
       }
     ],
-    "hint": "BMI = 体重/身高²，使用 round() 保留小数位数"
+    "hint": "BMI = 体重/身高²，使用 round() 保留小数位数",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "python-05-sum-array"
+    ]
   },
   {
     "title": "函数基础",
@@ -375,7 +452,14 @@
         "description": "函数基础：基础用例"
       }
     ],
-    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「函数」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "函数"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "python-06-functions"
+    ]
   },
   {
     "title": "字典、对象或 Map",
@@ -394,7 +478,14 @@
         "description": "字典、对象或 Map：基础用例"
       }
     ],
-    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「映射」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "映射与对象"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "python-06-square"
+    ]
   },
   {
     "title": "列表",
@@ -443,7 +534,14 @@
         "description": "get_even([]) 应返回 []（空列表边界）"
       }
     ],
-    "hint": "使用列表推导式筛选；找最大值时先假设第一个元素最大，再逐一比较"
+    "hint": "使用列表推导式筛选；找最大值时先假设第一个元素最大，再逐一比较",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "python-07-get-score"
+    ]
   },
   {
     "title": "字符串操作",
@@ -462,7 +560,14 @@
         "description": "字符串操作：基础用例"
       }
     ],
-    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「字符串」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "python-07-lists"
+    ]
   },
   {
     "title": "字符串操作",
@@ -511,7 +616,14 @@
         "description": "reverse_string('') 应返回 ''（空字符串边界）"
       }
     ],
-    "hint": "使用切片 [::-1] 反转字符串；回文判断时先统一转小写并去除空格"
+    "hint": "使用切片 [::-1] 反转字符串；回文判断时先统一转小写并去除空格",
+    "knowledge_tags": [
+      "字符串"
+    ],
+    "estimated_minutes": 14,
+    "prerequisites": [
+      "python-08-count-vowels"
+    ]
   },
   {
     "title": "综合项目：简易计算器",
@@ -530,7 +642,15 @@
         "description": "综合项目：简易计算器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "函数"
+    ],
+    "estimated_minutes": 25,
+    "prerequisites": [
+      "python-08-strings"
+    ]
   },
   {
     "title": "字典",
@@ -569,7 +689,14 @@
         "description": "merge_dicts 重复键应取第二个字典的值"
       }
     ],
-    "hint": "使用 split() 分割字符串，使用 dict.get(key, default) 安全访问"
+    "hint": "使用 split() 分割字符串，使用 dict.get(key, default) 安全访问",
+    "knowledge_tags": [
+      "编程基础"
+    ],
+    "estimated_minutes": 15,
+    "prerequisites": [
+      "python-09-calculate"
+    ]
   },
   {
     "title": "综合项目：待办事项管理器",
@@ -588,7 +715,15 @@
         "description": "综合项目：待办事项管理器：基础用例"
       }
     ],
-    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。"
+    "hint": "先把「综合应用」的核心逻辑拆成一两步，再处理边界情况。",
+    "knowledge_tags": [
+      "综合项目",
+      "集合与遍历"
+    ],
+    "estimated_minutes": 28,
+    "prerequisites": [
+      "python-09-dictionaries"
+    ]
   },
   {
     "title": "元组与集合",
@@ -622,7 +757,14 @@
         "description": "无公共元素时应返回空列表"
       }
     ],
-    "hint": "使用 set() 去重，使用 & 求交集"
+    "hint": "使用 set() 去重，使用 & 求交集",
+    "knowledge_tags": [
+      "编程基础"
+    ],
+    "estimated_minutes": 15,
+    "prerequisites": [
+      "python-10-count-completed"
+    ]
   },
   {
     "title": "列表推导式",
@@ -661,7 +803,14 @@
         "description": "flatten([]) 应返回空列表（边界）"
       }
     ],
-    "hint": "使用 [x**2 for x in nums if x % 2 == 0] 筛选偶数并平方"
+    "hint": "使用 [x**2 for x in nums if x % 2 == 0] 筛选偶数并平方",
+    "knowledge_tags": [
+      "集合与遍历"
+    ],
+    "estimated_minutes": 16,
+    "prerequisites": [
+      "python-10-tuples-sets"
+    ]
   },
   {
     "title": "异常处理",
@@ -705,7 +854,14 @@
         "description": "parse_int('') 应返回 None（空字符串）"
       }
     ],
-    "hint": "使用 try/except 捕获 ZeroDivisionError 和 ValueError"
+    "hint": "使用 try/except 捕获 ZeroDivisionError 和 ValueError",
+    "knowledge_tags": [
+      "异常处理"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "python-11-list-comprehension"
+    ]
   },
   {
     "title": "文件操作",
@@ -734,7 +890,14 @@
         "description": "read_lines 文件不存在时应返回 0"
       }
     ],
-    "hint": "使用 with open() 安全打开文件，使用 split() 分割单词"
+    "hint": "使用 with open() 安全打开文件，使用 split() 分割单词",
+    "knowledge_tags": [
+      "文件操作"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "python-12-exceptions"
+    ]
   },
   {
     "title": "面向对象基础",
@@ -768,7 +931,14 @@
         "description": "正方形（特殊长方形）面积"
       }
     ],
-    "hint": "面积 = 宽 × 高，周长 = 2 × (宽 + 高)"
+    "hint": "面积 = 宽 × 高，周长 = 2 × (宽 + 高)",
+    "knowledge_tags": [
+      "面向对象"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "python-13-file-io"
+    ]
   },
   {
     "title": "模块与包",
@@ -802,7 +972,14 @@
         "description": "长密码应包含多种字符"
       }
     ],
-    "hint": "使用 string.ascii_letters + string.digits 作为字符池，random.choice() 选取字符"
+    "hint": "使用 string.ascii_letters + string.digits 作为字符池，random.choice() 选取字符",
+    "knowledge_tags": [
+      "模块化"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "python-14-oop-basics"
+    ]
   },
   {
     "title": "高阶函数",
@@ -846,7 +1023,14 @@
         "description": "product_of_list([]) 应返回 1（空列表边界）"
       }
     ],
-    "hint": "map(func, iterable) 映射，filter(func, iterable) 过滤，reduce(func, iterable) 归约"
+    "hint": "map(func, iterable) 映射，filter(func, iterable) 过滤，reduce(func, iterable) 归约",
+    "knowledge_tags": [
+      "高级函数"
+    ],
+    "estimated_minutes": 22,
+    "prerequisites": [
+      "python-15-modules"
+    ]
   },
   {
     "title": "排序算法",
@@ -880,7 +1064,14 @@
         "description": "bubble_sort([]) 应返回 []（空列表边界）"
       }
     ],
-    "hint": "复制列表后排序，双重循环比较相邻元素"
+    "hint": "复制列表后排序，双重循环比较相邻元素",
+    "knowledge_tags": [
+      "算法"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "python-16-higher-order"
+    ]
   },
   {
     "title": "二分查找",
@@ -919,7 +1110,14 @@
         "description": "空列表应返回 -1（边界）"
       }
     ],
-    "hint": "使用左右指针 left/right，每次将搜索范围减半。注意 mid = left + (right - left) // 2 防止整数溢出。"
+    "hint": "使用左右指针 left/right，每次将搜索范围减半。注意 mid = left + (right - left) // 2 防止整数溢出。",
+    "knowledge_tags": [
+      "算法"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "python-17-sorting"
+    ]
   },
   {
     "title": "递归",
@@ -958,7 +1156,14 @@
         "description": "gcd(0, 5) 应返回 5（边界：其中一个为0）"
       }
     ],
-    "hint": "辗转相除法：gcd(a, b) = gcd(b, a % b)，当 b=0 时 a 就是答案"
+    "hint": "辗转相除法：gcd(a, b) = gcd(b, a % b)，当 b=0 时 a 就是答案",
+    "knowledge_tags": [
+      "递归"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "python-18-binary-search"
+    ]
   },
   {
     "title": "栈与队列",
@@ -997,7 +1202,14 @@
         "description": "空字符串视为有效"
       }
     ],
-    "hint": "使用栈：遇到左括号入栈，右括号时检查栈顶是否匹配"
+    "hint": "使用栈：遇到左括号入栈，右括号时检查栈顶是否匹配",
+    "knowledge_tags": [
+      "数据结构"
+    ],
+    "estimated_minutes": 20,
+    "prerequisites": [
+      "python-19-recursion"
+    ]
   },
   {
     "title": "正则表达式",
@@ -1036,7 +1248,14 @@
         "description": "无数字时应返回空列表"
       }
     ],
-    "hint": "使用 re.match(r'^[\\w.-]+@[\\w.-]+\\.\\w+$', s) 验证邮箱，re.findall(r'\\d+', s) 提取数字"
+    "hint": "使用 re.match(r'^[\\w.-]+@[\\w.-]+\\.\\w+$', s) 验证邮箱，re.findall(r'\\d+', s) 提取数字",
+    "knowledge_tags": [
+      "正则表达式"
+    ],
+    "estimated_minutes": 18,
+    "prerequisites": [
+      "python-20-stack-queue"
+    ]
   },
   {
     "title": "装饰器",
@@ -1060,7 +1279,14 @@
         "description": "装饰后函数名变为wrapper"
       }
     ],
-    "hint": "装饰器外层接收函数，内层wrapper接收参数并调用原函数"
+    "hint": "装饰器外层接收函数，内层wrapper接收参数并调用原函数",
+    "knowledge_tags": [
+      "高级函数"
+    ],
+    "estimated_minutes": 22,
+    "prerequisites": [
+      "python-21-regex"
+    ]
   },
   {
     "title": "生成器",
@@ -1089,7 +1315,14 @@
         "description": "前0个斐波那契数"
       }
     ],
-    "hint": "使用 yield 逐个产生斐波那契数"
+    "hint": "使用 yield 逐个产生斐波那契数",
+    "knowledge_tags": [
+      "高级函数"
+    ],
+    "estimated_minutes": 22,
+    "prerequisites": [
+      "python-22-decorators"
+    ]
   },
   {
     "title": "综合实战 - 学生管理",
@@ -1123,6 +1356,14 @@
         "description": "最高分排名应为1"
       }
     ],
-    "hint": "用字典存储学生-成绩列表，平均分用 sum()/len()，排名用 sorted()"
+    "hint": "用字典存储学生-成绩列表，平均分用 sum()/len()，排名用 sorted()",
+    "knowledge_tags": [
+      "综合项目",
+      "工程实践"
+    ],
+    "estimated_minutes": 35,
+    "prerequisites": [
+      "python-23-generators"
+    ]
   }
 ]
