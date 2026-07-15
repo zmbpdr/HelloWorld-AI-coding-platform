@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type FormEvent } from 'react'
+import { useState, useRef, useEffect, useCallback, type FormEvent } from 'react'
 import { useAI } from '../../hooks/useAI'
 import type { ChatRequest } from '../../api/ai'
 
@@ -13,9 +13,47 @@ export default function AIChat({ lessonId, context }: AIChatProps) {
   const { messages, isLoading, sendMessage, clearMessages } = useAI(lessonId)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // 拖拽
+  const [pos, setPos] = useState<{ left: number; top: number } | null>(null)
+  const [dragging, setDragging] = useState(false)
+  const dragStart = useRef({ x: 0, y: 0, left: 0, top: 0 })
+  const hasMoved = useRef(false)
+  const btnRef = useRef<HTMLButtonElement>(null)
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    const btn = btnRef.current
+    if (!btn) return
+    const rect = btn.getBoundingClientRect()
+    dragStart.current = {
+      x: e.clientX, y: e.clientY,
+      left: pos?.left ?? rect.left,
+      top: pos?.top ?? rect.top,
+    }
+    hasMoved.current = false
+    setDragging(true)
+  }, [pos])
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    if (!dragging) return
+    const onMove = (e: MouseEvent) => {
+      const dx = e.clientX - dragStart.current.x
+      const dy = e.clientY - dragStart.current.y
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved.current = true
+      setPos({ left: dragStart.current.left + dx, top: dragStart.current.top + dy })
+    }
+    const onUp = () => setDragging(false)
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+  }, [dragging])
+
+  const handleToggle = useCallback(() => {
+    if (!hasMoved.current) setIsOpen(prev => !prev)
+  }, [])
 
   const handleSend = async (e: FormEvent) => {
     e.preventDefault()
@@ -166,17 +204,22 @@ export default function AIChat({ lessonId, context }: AIChatProps) {
         </div>
       )}
 
-      {/* 浮动按钮 */}
-      <div className="fixed bottom-6 right-6 flex flex-col items-center gap-1 z-50">
-        <span
-          className="text-xs font-medium transition-all duration-300"
-          style={{ color: isOpen ? '#64748b' : '#818cf8' }}
-        >
-          {isOpen ? '关闭' : 'AI 导师'}
-        </span>
+      {/* 浮动按钮 — 可拖拽 */}
+      <div
+        className="fixed z-50 select-none"
+        style={{
+          ...(pos
+            ? { left: `${pos.left}px`, top: `${pos.top}px` }
+            : { right: 24, bottom: 24 }),
+          cursor: dragging ? 'grabbing' : 'grab',
+        }}
+      >
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-2xl transition-all duration-300"
+          ref={btnRef}
+          onMouseDown={onMouseDown}
+          onClick={handleToggle}
+          className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-xl transition-all duration-300"
+          title="AI 导师"
           style={{
             background: isOpen ? 'rgba(255,255,255,0.08)' : 'linear-gradient(135deg, #6366f1, #4f46e5)',
             boxShadow: isOpen ? 'none' : '0 4px 24px rgba(99,102,241,0.4)',
@@ -189,7 +232,7 @@ export default function AIChat({ lessonId, context }: AIChatProps) {
               style={{ background: 'rgba(99,102,241,0.2)' }}
             />
           )}
-          <span className="relative">{isOpen ? '✕' : '🤖'}</span>
+          <span className="relative pointer-events-none">{isOpen ? '✕' : '🤖'}</span>
         </button>
       </div>
     </>
