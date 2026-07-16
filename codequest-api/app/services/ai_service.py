@@ -1,5 +1,6 @@
 """AI 对话服务 - AIProvider 抽象工厂（DeepSeek → Mock 降级）"""
 
+import asyncio
 import json
 import logging
 from abc import ABC, abstractmethod
@@ -39,11 +40,30 @@ class DeepSeekProvider(AIProvider):
         payload: dict = {"model": settings.DEEPSEEK_MODEL, "messages": messages, "stream": False, "temperature": temperature}
         if json_mode:
             payload["response_format"] = {"type": "json_object"}
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            resp = await client.post(DEEPSEEK_CHAT_URL, headers={"Authorization": f"Bearer {_api_key()}", "Content-Type": "application/json"}, json=payload)
-            if resp.status_code >= 400:
-                raise RuntimeError(f"DeepSeek {resp.status_code}: {resp.text}")
-            return resp.json()["choices"][0]["message"]["content"]
+        last_error = ""
+        for attempt in range(3):
+            try:
+                async with httpx.AsyncClient(timeout=120.0) as client:
+                    resp = await client.post(DEEPSEEK_CHAT_URL, headers={"Authorization": f"Bearer {_api_key()}", "Content-Type": "application/json"}, json=payload)
+                    if resp.status_code == 429:
+                        last_error = "请求过于频繁，请稍后重试"
+                        await asyncio.sleep(2 * (attempt + 1))
+                        continue
+                    if resp.status_code == 503:
+                        last_error = "AI 服务暂时过载"
+                        await asyncio.sleep(2 * (attempt + 1))
+                        continue
+                    if resp.status_code >= 400:
+                        raise RuntimeError(f"DeepSeek {resp.status_code}: {resp.text[:200]}")
+                    data = resp.json()
+                    return data["choices"][0]["message"]["content"]
+            except (httpx.TimeoutException, httpx.ConnectError) as e:
+                last_error = "连接超时"
+                if attempt < 2:
+                    await asyncio.sleep(2 * (attempt + 1))
+                    continue
+                raise RuntimeError(f"连接失败: {e}") from e
+        raise RuntimeError(last_error or "AI 服务不可用")
 
     async def stream(self, messages):
         async with httpx.AsyncClient(timeout=120.0) as client:

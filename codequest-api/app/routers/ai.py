@@ -67,7 +67,7 @@ async def ai_diagnostic(request: AIActionRequest, req: Request, current_user: Us
         consume_ai_quota(current_user); await db.commit()
         return {"response": response_text}
     except Exception as e:
-        logger.exception(f"diagnostic: {e}"); raise HTTPException(500, "AI服务暂时不可用")
+        logger.exception(f"diagnostic: {e}"); raise HTTPException(500, str(e)[:200])
 
 
 @router.post("/ai/tutor", response_model=TutorResponse)
@@ -78,7 +78,7 @@ async def ai_tutor(request: AIActionRequest, req: Request, current_user: User = 
         consume_ai_quota(current_user); await db.commit()
         return {"response": response_text}
     except Exception as e:
-        logger.exception(f"tutor: {e}"); raise HTTPException(500, "AI服务暂时不可用")
+        logger.exception(f"tutor: {e}"); raise HTTPException(500, str(e)[:200])
 
 
 @router.post("/ai/review", response_model=ReviewResponse)
@@ -87,7 +87,6 @@ async def ai_review(request: AIActionRequest, req: Request, current_user: User =
     try:
         response_text = await _ai_mode("review", request, current_user, db)
         consume_ai_quota(current_user); await db.commit()
-        # 解析 AI 返回的 JSON
         try:
             import json
             data = json.loads(response_text.strip().removeprefix("```json").removesuffix("```").strip())
@@ -99,7 +98,7 @@ async def ai_review(request: AIActionRequest, req: Request, current_user: User =
         except (json.JSONDecodeError, AttributeError):
             return {"scores": {"correctness": 70, "readability": 70, "performance": 70, "robustness": 70}, "issues": [], "overall": response_text}
     except Exception as e:
-        logger.exception(f"review: {e}"); raise HTTPException(500, "AI服务暂时不可用")
+        logger.exception(f"review: {e}"); raise HTTPException(500, str(e)[:200])
 
 
 @router.post("/ai/plan", response_model=TutorResponse)
@@ -110,7 +109,7 @@ async def ai_plan(request: AIActionRequest, req: Request, current_user: User = D
         consume_ai_quota(current_user); await db.commit()
         return {"response": response_text}
     except Exception as e:
-        logger.exception(f"plan: {e}"); raise HTTPException(500, "AI服务暂时不可用")
+        logger.exception(f"plan: {e}"); raise HTTPException(500, str(e)[:200])
 
 
 @router.post("/ai/classify-error")

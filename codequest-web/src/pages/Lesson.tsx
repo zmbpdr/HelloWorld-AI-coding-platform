@@ -102,7 +102,7 @@ export default function Lesson() {
     setAiResponse('')
     try {
       const payload: any = { code, lesson_id: lessonId }
-      const response = await apiClient.post(`/ai/${aiMode}`, payload)
+      const response = await apiClient.post(`/ai/${aiMode}`, payload, { timeout: 120000 })
       if (aiMode === 'review') {
         setAiResponse(response.data.overall || '审查完成')
         if (response.data.scores) setReviewScores(response.data.scores)
