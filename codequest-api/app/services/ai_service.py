@@ -1,7 +1,8 @@
-"""AI 对话服务 - DeepSeek API 聊天与流式响应"""
+"""AI 对话服务 - AIProvider 抽象工厂（DeepSeek → Mock 降级）"""
 
 import json
 import logging
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import AsyncGenerator, Optional
 
@@ -19,6 +20,80 @@ SYSTEM_PROMPT = (
     "你的回答应简洁、鼓励性强，适合编程初学者理解。"
     "当用户贴出代码时，你可以指出潜在问题并给出改进建议。"
 )
+
+
+# ---- AIProvider 抽象工厂 ----
+class AIProvider(ABC):
+    @abstractmethod
+    async def chat(self, messages: list[dict], temperature: float = 0.7, json_mode: bool = False) -> str: ...
+    @abstractmethod
+    async def stream(self, messages: list[dict]) -> AsyncGenerator[str, None]: ...
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+
+class DeepSeekProvider(AIProvider):
+    name = "deepseek"
+    async def chat(self, messages, temperature=0.7, json_mode=False):
+        payload: dict = {"model": settings.DEEPSEEK_MODEL, "messages": messages, "stream": False, "temperature": temperature}
+        if json_mode:
+            payload["response_format"] = {"type": "json_object"}
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            resp = await client.post(DEEPSEEK_CHAT_URL, headers={"Authorization": f"Bearer {_api_key()}", "Content-Type": "application/json"}, json=payload)
+            if resp.status_code >= 400:
+                raise RuntimeError(f"DeepSeek {resp.status_code}: {resp.text}")
+            return resp.json()["choices"][0]["message"]["content"]
+
+    async def stream(self, messages):
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            async with client.stream("POST", DEEPSEEK_CHAT_URL, headers={"Authorization": f"Bearer {_api_key()}", "Content-Type": "application/json"}, json={"model": settings.DEEPSEEK_MODEL, "messages": messages, "stream": True, "temperature": 0.7}) as resp:
+                resp.raise_for_status()
+                async for line in resp.aiter_lines():
+                    if not line or not line.startswith("data: "): continue
+                    data_str = line[6:]
+                    if data_str.strip() == "[DONE]": break
+                    try:
+                        chunk = json.loads(data_str)
+                        content = chunk["choices"][0].get("delta", {}).get("content", "")
+                        if content: yield content
+                    except (json.JSONDecodeError, KeyError, IndexError): continue
+
+
+class MockProvider(AIProvider):
+    name = "mock"
+    async def chat(self, messages, temperature=0.7, json_mode=False):
+        system = messages[0]["content"] if messages else ""
+        if json_mode:
+            return json.dumps({"correctness": 80, "readability": 75, "performance": 70, "robustness": 65, "issues": [], "overall": "[Mock] DeepSeek API Key 未配置，显示占位审查结果。请在 .env 中设置 DEEPSEEK_API_KEY。"})
+        if "诊断" in system:
+            return "[Mock] 诊断模式就绪。配置 DEEPSEEK_API_KEY 后可获得 AI 代码诊断。"
+        if "导师" in system:
+            return "[Mock] 导师模式就绪。配置 DEEPSEEK_API_KEY 后可获得 AI 学习指导。"
+        if "规划" in system:
+            return "[Mock] 规划模式就绪。配置 DEEPSEEK_API_KEY 后可获得 AI 学习规划。"
+        return "[Mock] AI 服务未配置。请在 .env 中设置 DEEPSEEK_API_KEY 以使用真实 AI。"
+
+    async def stream(self, messages):
+        yield "[Mock] AI 服务未配置，请设置 DEEPSEEK_API_KEY。"
+
+
+def _get_provider() -> AIProvider:
+    """按 AI_PROVIDER_PRIORITY 依次尝试实例化 Provider"""
+    priority = [p.strip() for p in settings.AI_PROVIDER_PRIORITY.split(",") if p.strip()]
+    for name in priority:
+        if name == "deepseek" and settings.DEEPSEEK_API_KEY:
+            return DeepSeekProvider()
+        elif name == "mock":
+            return MockProvider()
+    return MockProvider()
+
+
+def _api_key() -> str:
+    key = settings.DEEPSEEK_API_KEY
+    if not key:
+        raise RuntimeError("DeepSeek API Key 未配置，请在 .env 中设置 DEEPSEEK_API_KEY")
+    return key
 
 PROMPTS_PATH = Path(__file__).resolve().parents[3] / "codequest-content" / "ai_prompts.json"
 
@@ -74,31 +149,12 @@ async def chat_with_ai(
 ) -> str:
     """非流式 AI 对话"""
     messages = _build_messages(message, context)
-
-    async with httpx.AsyncClient(timeout=60.0) as client:
-        try:
-            response = await client.post(
-                DEEPSEEK_CHAT_URL,
-                headers={
-                    "Authorization": f"Bearer {_api_key()}",
-                    "Content-Type": "application/json",
-                },
-                json={
-                    "model": settings.DEEPSEEK_MODEL,
-                    "messages": messages,
-                    "stream": False,
-                    "temperature": 0.7,
-                },
-            )
-            if response.status_code >= 400:
-                error_body = response.text
-                logger.error(f"DeepSeek API 返回错误 {response.status_code}: {error_body}")
-                raise RuntimeError(f"AI 服务返回错误 ({response.status_code})")
-            data = response.json()
-            return data["choices"][0]["message"]["content"]
-        except httpx.HTTPError as e:
-            logger.error(f"DeepSeek API 请求失败: {e}")
-            raise RuntimeError(f"AI 服务连接失败: {e}") from e
+    provider = _get_provider()
+    try:
+        return await provider.chat(messages)
+    except Exception as e:
+        logger.error(f"AI ({provider.name}) 请求失败: {e}")
+        raise RuntimeError("AI 服务不可用") from e
 
 
 async def chat_with_ai_stream(
@@ -107,38 +163,65 @@ async def chat_with_ai_stream(
 ) -> AsyncGenerator[str, None]:
     """流式 AI 对话，逐块返回响应内容"""
     messages = _build_messages(message, context)
+    provider = _get_provider()
+    try:
+        async for chunk in provider.stream(messages):
+            yield chunk
+    except Exception as e:
+        logger.error(f"AI ({provider.name}) 流式请求失败: {e}")
+        yield "AI 服务暂时不可用，请稍后重试。"
 
-    async with httpx.AsyncClient(timeout=120.0) as client:
-        try:
-            async with client.stream(
-                "POST",
-                DEEPSEEK_CHAT_URL,
-                headers={
-                    "Authorization": f"Bearer {_api_key()}",
-                    "Content-Type": "application/json",
-                },
-                json={
-                    "model": settings.DEEPSEEK_MODEL,
-                    "messages": messages,
-                    "stream": True,
-                    "temperature": 0.7,
-                },
-            ) as response:
-                response.raise_for_status()
-                async for line in response.aiter_lines():
-                    if not line or not line.startswith("data: "):
-                        continue
-                    data_str = line[6:]  # 去掉 "data: " 前缀
-                    if data_str.strip() == "[DONE]":
-                        break
-                    try:
-                        chunk = json.loads(data_str)
-                        delta = chunk["choices"][0].get("delta", {})
-                        content = delta.get("content", "")
-                        if content:
-                            yield content
-                    except (json.JSONDecodeError, KeyError, IndexError):
-                        continue
-        except httpx.HTTPError as e:
-            logger.error(f"DeepSeek 流式请求失败: {e}")
-            yield "AI 服务暂时不可用，请稍后重试。"
+
+# ---- 四模式 Prompt ----
+MODE_PROMPTS = {
+    "diagnostic": (
+        "你是一名资深代码诊断专家。请分析以下代码，找出语法错误、逻辑缺陷和潜在风险。"
+        "用中文逐条列出问题，并给出修复建议。"
+    ),
+    "tutor": (
+        "你是一名耐心的编程导师。请针对以下代码给出学习指导，引导学习者自己发现问题，"
+        "不要直接给出完整答案。用鼓励的语气，指出关键思路和下一步方向。"
+    ),
+    "review": (
+        "你是一名严格的代码审查官。请从正确性、可读性、性能、健壮性四个维度评审以下代码。"
+        "每个维度打 0-100 分。只返回 JSON，格式："
+        '{"correctness": 85, "readability": 70, "performance": 75, "robustness": 60, "issues": [{"line": 3, "message": "变量命名不清晰", "severity": "warning"}], "overall": "总体评价文字"}'
+    ),
+    "plan": (
+        "你是一名学习规划师。请根据以下题目和代码，分析学习者当前的知识薄弱点，"
+        "推荐下一步应该学习的内容和练习方向。"
+    ),
+}
+
+
+async def run_ai_action(mode: str, code: str, lesson_title: str = "", language: str = "") -> str:
+    """根据模式执行 AI 分析，返回文本结果。自动组合模式 Prompt + 语言 Prompt。"""
+    mode_prompt = MODE_PROMPTS.get(mode, MODE_PROMPTS["tutor"])
+    # 组合语言级 Prompt（映射 plan→tutor, review→reviewer）
+    lang_key = {"diagnostic": "tutor", "tutor": "tutor", "plan": "tutor", "review": "reviewer"}.get(mode, "tutor")
+    lang_prompt = LANGUAGE_PROMPTS.get(language.lower(), {}).get(lang_key, "")
+    system_prompt = f"{mode_prompt}\n{lang_prompt}" if lang_prompt else mode_prompt
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": f"题目：{lesson_title or '未知'}\n语言：{language or '未知'}\n代码：\n```\n{code}\n```"},
+    ]
+    provider = _get_provider()
+    return await provider.chat(messages, temperature=0.3, json_mode=(mode == "review"))
+
+
+async def classify_error_with_ai(code: str, stderr: str, score: int, test_results: list | None = None) -> dict:
+    """AI 错误分类 — 返回 error_type 和 analysis"""
+    system_prompt = (
+        "你是代码诊断专家。根据以下信息对代码错误分类。"
+        "返回 JSON：{\"error_type\": \"syntax|logic|boundary|performance|other\", \"analysis\": \"详细分析\"}"
+    )
+    user_msg = f"代码：\n```\n{code}\n```\n错误：{stderr}\n得分：{score}\n测试结果：{test_results or '无'}\n\n只返回 JSON。"
+    messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_msg}]
+    provider = _get_provider()
+    try:
+        result_text = await provider.chat(messages, temperature=0.1, json_mode=True)
+        result = json.loads(result_text)
+        return {"error_type": result.get("error_type", "logic"), "analysis": result.get("analysis", "")}
+    except Exception as e:
+        logger.warning(f"AI ({provider.name}) 分类失败，降级规则分类: {e}")
+        return {"error_type": "logic", "analysis": None}

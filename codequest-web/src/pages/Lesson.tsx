@@ -49,6 +49,7 @@ export default function Lesson() {
   message: string
   severity: 'error' | 'warning' | 'info'
 }>>([])
+  const [aiLoading, setAiLoading] = useState(false)
 
 
   useEffect(() => {
@@ -97,36 +98,23 @@ export default function Lesson() {
   }
 
   const handleAIAction = async () => {
+    setAiLoading(true)
+    setAiResponse('')
     try {
-      // 构造请求体
-      const payload: any = {
-        code: code,
-        lesson_id: lessonId,
-      }
-      // 规划模式额外传 code（B 要求的）
-      if (aiMode === 'plan') {
-        payload.code = code
-      }
-
+      const payload: any = { code, lesson_id: lessonId }
       const response = await apiClient.post(`/ai/${aiMode}`, payload)
-      
-      // 审查模式特殊处理
       if (aiMode === 'review') {
-        // 假设返回格式：{ scores, issues, overall }
         setAiResponse(response.data.overall || '审查完成')
-        if (response.data.scores) {
-          setReviewScores(response.data.scores)
-        }
-        if (response.data.issues) {
-          setReviewIssues(response.data.issues)
-        }
+        if (response.data.scores) setReviewScores(response.data.scores)
+        if (response.data.issues) setReviewIssues(response.data.issues)
       } else {
-        // 其他模式：导师/诊断/规划
         setAiResponse(response.data.response || 'AI 回复完成')
       }
     } catch (error) {
       console.error('AI 请求失败:', error)
       setAiResponse('AI 服务暂时不可用，请稍后再试')
+    } finally {
+      setAiLoading(false)
     }
   } 
 
@@ -224,6 +212,7 @@ export default function Lesson() {
             <div className="px-4 pt-2 flex items-center gap-2 shrink-0 flex-wrap" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
               <span className="text-xs mr-1" style={{ color: '#64748b' }}>🤖 AI 模式</span>
               {[
+                { key: 'diagnostic', label: '诊断', icon: '🔍' },
                 { key: 'tutor', label: '导师', icon: '🧑‍🏫' },
                 { key: 'review', label: '审查', icon: '📋' },
                 { key: 'plan', label: '规划', icon: '📈' },
@@ -287,6 +276,7 @@ export default function Lesson() {
               <div className="flex items-center justify-between mb-2">
                 <div className="text-xs" style={{ color: '#64748b' }}>
                   <span className="font-medium" style={{ color: '#818cf8' }}>
+                    {aiMode === 'diagnostic' && '🔍 诊断模式'}
                     {aiMode === 'tutor' && '🧑‍🏫 导师模式'}
                     {aiMode === 'review' && '📋 审查模式'}
                     {aiMode === 'plan' && '📈 规划模式'}
@@ -294,14 +284,16 @@ export default function Lesson() {
                 </div>
                 <button
                   onClick={handleAIAction}
+                  disabled={aiLoading}
                   className="px-3 py-1 rounded-lg text-xs font-medium transition-all"
                   style={{
-                    background: 'rgba(99,102,241,0.15)',
+                    background: aiLoading ? 'rgba(99,102,241,0.05)' : 'rgba(99,102,241,0.15)',
                     border: '1px solid rgba(99,102,241,0.2)',
-                    color: '#e4631d',
+                    color: aiLoading ? '#64748b' : '#a5b4fc',
+                    cursor: aiLoading ? 'not-allowed' : 'pointer',
                   }}
                 >
-                  🚀 执行 AI 分析
+                  {aiLoading ? '⏳ 分析中...' : '🚀 执行 AI 分析'}
                 </button>
               </div>
               <div className="mt-2 text-sm" style={{ maxHeight: '280px', overflowY: 'auto', color: '#94a3b8' }}>
