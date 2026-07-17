@@ -14,7 +14,7 @@
 - 🎯 **能力诊断** — 注册后 10 道题诊断水平，推荐起点
 - 📊 **知识掌握度** — 每次提交自动更新，可视化画像
 - 📝 **AI 错题本** — 自动记录错误，按类型分类，追踪改进
-- 🎮 **6 种编程语言** — Python 24关 / JS 20关 / Java 20关 / C 10关 / C++ 18关 / TS 20关，共 112 关
+- 🎮 **6 种编程语言** — Python 34关 / JS 30关 / Java 30关 / C 20关 / C++ 28关 / TS 30关，共 172 关
 
 ---
 
@@ -22,13 +22,16 @@
 
 | 层 | 技术 |
 |:----:|------|
-| **后端** | Python 3.11+ / FastAPI / SQLAlchemy (异步) / aiosqlite |
-| **前端（学习端）** | React 18 / TypeScript / Vite / TailwindCSS / Monaco Editor / Chart.js |
-| **前端（管理后台）** | React 18 / TypeScript / Vite / Ant Design |
-| **AI 模型** | DeepSeek-V4-Flash（主用）/ Ollama 降级 / Mock 兜底 |
-| **数据库** | SQLite（开发）/ PostgreSQL（生产可选） |
-| **认证** | JWT（PyJWT）/ bcrypt 密码哈希 |
-| **代码执行** | subprocess 直接执行（无 Docker） |
+| **后端** | Python 3.11+ / FastAPI / SQLAlchemy 2.0 (异步) / Alembic |
+| **前端（学习端）** | React 19 / TypeScript / Vite / TailwindCSS 4 / Monaco Editor / Chart.js / Zustand |
+| **前端（管理后台）** | React 19 / TypeScript / Vite / Ant Design 6 / Zustand |
+| **AI 模型** | DeepSeek-V4-Flash（主用）/ Mock 兜底 |
+| **数据库** | SQLite + aiosqlite（开发）/ PostgreSQL 16 + asyncpg（生产） |
+| **缓存** | Redis 7（生产环境） |
+| **认证** | JWT Bearer Token / Refresh Token / bcrypt |
+| **代码执行** | subprocess 直接执行 |
+| **HTTP 客户端** | httpx（后端）/ Axios（前端） |
+| **WebSocket** | FastAPI WebSocket（AI 流式对话） |
 
 ---
 
@@ -97,7 +100,7 @@ npm run dev
 
 ## 环境变量配置
 
-创建 `.env` 文件（从 `.env.example` 复制），关键配置：
+创建 `.env` 文件（可从 `.env.example` 复制），关键配置：
 
 ```env
 # 数据库（默认 SQLite，无需额外配置）
@@ -109,7 +112,7 @@ ALLOW_DIRECT_EXECUTION=true
 # AI 配置（DeepSeek API Key，可选，Mock 模式可不填）
 DEEPSEEK_API_KEY=your_api_key_here
 DEEPSEEK_MODEL=deepseek-v4-flash
-AI_PROVIDER_PRIORITY=deepseek,ollama,mock
+AI_PROVIDER_PRIORITY=deepseek,mock
 
 # 管理员账号
 ADMIN_USERNAME=admin
