@@ -2,30 +2,19 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../stores/userStore'
 import { getMyStats, getMyAchievements } from '../api/user'
-import apiClient from '../api/client'  // 🆕 导入 apiClient
+import apiClient from '../api/client'
 import Button from '../components/ui/Button'
 import AchievementCard from '../components/badge/AchievementCard'
 import PageTransition from '../components/ui/PageTransition'
 import ActivityHeatmap from '../components/ui/ActivityHeatmap'
 
 interface Stats {
-  username: string
-  level: number
-  xp: number
-  streak_days: number
-  completed_lessons: number
-  total_submissions: number
-  first_pass_count: number
+  username: string; level: number; xp: number; streak_days: number
+  completed_lessons: number; total_submissions: number; first_pass_count: number
 }
-
 interface AchievementData {
-  id: number
-  slug: string
-  name: string
-  description: string | null
-  rarity: string
-  unlocked: boolean
-  unlocked_at: string | null
+  id: number; slug: string; name: string; description: string | null
+  rarity: string; unlocked: boolean; unlocked_at: string | null
 }
 
 export default function Profile() {
@@ -64,32 +53,30 @@ export default function Profile() {
   const handleLogout = () => { logout(); navigate('/') }
 
   if (loading) return <ProfileSkeleton />
-
   if (loadError) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: '#080c17' }}>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: '#fafbf8' }}>
         <p className="text-5xl">⚠️</p>
-        <p style={{ color: '#94a3b8' }}>{loadError}</p>
-        <button onClick={() => window.location.reload()} className="px-4 py-2 rounded-lg text-white text-sm"
-          style={{ background: 'linear-gradient(135deg, #6366f1, #4f46e5)' }}>重试</button>
+        <p style={{ color: '#64748b' }}>{loadError}</p>
+        <button onClick={() => window.location.reload()} className="px-4 py-2 rounded-xl text-white text-sm font-medium"
+          style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>重试</button>
       </div>
     )
   }
 
-  const unlockedCount = achievements.length
   const level = stats?.level ?? 1
   const xpInLevel = stats ? stats.xp % 100 : 0
   const hasActivity = stats && (stats.completed_lessons > 0 || stats.total_submissions > 0)
 
   return (
     <PageTransition>
-      <div className="min-h-screen mesh-bg" style={{ background: '#080c17' }}>
+      <div className="min-h-screen mesh-bg" style={{ background: '#fafbf8' }}>
         <nav
-          className="sticky top-0 z-40 border-b border-white/[0.04] nav-glow"
-          style={{ background: 'rgba(8,12,23,0.85)', backdropFilter: 'blur(24px)' }}
+          className="sticky top-0 z-40 nav-glow"
+          style={{ background: 'rgba(250,251,248,0.85)', backdropFilter: 'blur(24px)', borderBottom: '1px solid #e6e8e3' }}
         >
           <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-            <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#f1f5f9' }}>Hello World</h1>
+            <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#1e293b' }}>Hello World</h1>
             <div className="flex items-center gap-3">
               <Button variant="ghost" onClick={() => navigate('/')}>返回大厅</Button>
               <Button variant="ghost" onClick={() => navigate('/settings')}>设置</Button>
@@ -101,50 +88,30 @@ export default function Profile() {
 
         <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
           {/* 用户信息卡片 */}
-          <div className="rounded-2xl p-6" style={{ background: 'rgba(15,19,34,0.7)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 4px 24px rgba(0,0,0,0.1)' }}>
+          <div className="rounded-2xl p-6" style={{ background: '#ffffff', border: '1px solid #e6e8e3', boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}>
             <div className="flex items-center gap-6">
               <div
                 className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold shrink-0"
-                style={{
-                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                  boxShadow: '0 0 20px rgba(99,102,241,0.4)',
-                  border: '3px solid rgba(99,102,241,0.5)',
-                }}
+                style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 0 24px rgba(16,185,129,0.2)', border: '3px solid rgba(16,185,129,0.3)' }}
               >
                 {stats?.username?.charAt(0).toUpperCase() || 'U'}
               </div>
-
               <div className="flex-1 min-w-0">
-                <h2 className="text-2xl font-bold truncate" style={{ color: '#f1f5f9' }}>
-                  {stats?.username || '用户'}
-                </h2>
-
+                <h2 className="text-2xl font-bold truncate" style={{ color: '#1e293b' }}>{stats?.username || '用户'}</h2>
                 <div className="mt-2">
-                  <div className="flex items-center gap-2 text-sm" style={{ color: '#94a3b8' }}>
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'rgba(99,102,241,0.12)', color: '#818cf8' }}>
-                      Lv.{level}
-                    </span>
+                  <div className="flex items-center gap-2 text-sm" style={{ color: '#64748b' }}>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: '#ecfdf5', color: '#059669' }}>Lv.{level}</span>
                     <span className="tabular-nums">{stats?.xp || 0} XP</span>
                   </div>
-                  <div className="mt-2 h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                    <div
-                      className="h-full rounded-full transition-all duration-700"
-                      style={{
-                        width: `${xpInLevel}%`,
-                        background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
-                      }}
-                    />
+                  <div className="mt-2 h-2.5 rounded-full overflow-hidden" style={{ background: '#f0f2ed' }}>
+                    <div className="h-full rounded-full transition-all duration-700"
+                      style={{ width: `${xpInLevel}%`, background: 'linear-gradient(90deg, #10b981, #34d399)' }} />
                   </div>
-                  <p className="text-xs mt-1" style={{ color: '#475569' }}>
-                    距离下一级还需 {100 - xpInLevel} XP
-                  </p>
+                  <p className="text-xs mt-1" style={{ color: '#94a3b8' }}>距离下一级还需 {100 - xpInLevel} XP</p>
                 </div>
               </div>
-
               <div className="flex flex-col gap-2 shrink-0">
-                {hasActivity && (
-                  <Button onClick={() => navigate('/')}>继续学习</Button>
-                )}
+                {hasActivity && <Button onClick={() => navigate('/')}>继续学习</Button>}
                 <Button variant="secondary" onClick={handleLogout}>退出登录</Button>
               </div>
             </div>
@@ -159,68 +126,60 @@ export default function Profile() {
           </div>
 
           {/* 学习热力图 */}
-          <div className="p-5 rounded-2xl" style={{ background: 'rgba(15,19,34,0.65)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #e6e8e3', boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}>
             <ActivityHeatmap />
           </div>
 
-          {/* 知识掌握度 - 使用真实数据 */}
-          <div className="p-5 rounded-2xl" style={{ background: 'rgba(15,19,34,0.65)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          {/* 知识掌握度 */}
+          <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #e6e8e3', boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-lg">📊</span>
-              <h3 className="text-lg font-bold" style={{ color: '#f1f5f9' }}>知识掌握度</h3>
-              <span className="text-xs ml-2 px-2 py-0.5 rounded-full" style={{ background: 'rgba(34,197,94,0.15)', color: '#4ade80' }}>
-                基于你的学习数据
-              </span>
+              <h3 className="text-lg font-bold" style={{ color: '#1e293b' }}>知识掌握度</h3>
+              <span className="text-xs ml-2 px-2 py-0.5 rounded-full font-medium" style={{ background: '#f0fdf4', color: '#16a34a' }}>基于你的学习数据</span>
             </div>
             {knowledge.length > 0 ? (
               <div className="space-y-3">
                 {knowledge.map((item) => (
                   <div key={item.tag}>
                     <div className="flex justify-between text-xs mb-1">
-                      <span style={{ color: '#94a3b8' }}>{item.tag}</span>
-                      <span style={{ color: item.mastery >= 70 ? '#4ade80' : item.mastery >= 50 ? '#fbbf24' : '#f87171' }}>
+                      <span style={{ color: '#64748b' }}>{item.tag}</span>
+                      <span className="font-medium" style={{ color: item.mastery >= 70 ? '#16a34a' : item.mastery >= 50 ? '#d97706' : '#dc2626' }}>
                         {item.mastery}%
                       </span>
                     </div>
-                    <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                      <div
-                        className="h-full rounded-full transition-all duration-700"
+                    <div className="h-2 rounded-full overflow-hidden" style={{ background: '#f0f2ed' }}>
+                      <div className="h-full rounded-full transition-all duration-700"
                         style={{
                           width: `${item.mastery}%`,
-                          background: item.mastery >= 70 
-                            ? 'linear-gradient(90deg, #22c55e, #4ade80)' 
-                            : item.mastery >= 50 
-                              ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
-                              : 'linear-gradient(90deg, #ef4444, #f87171)',
-                        }}
-                      />
+                          background: item.mastery >= 70 ? 'linear-gradient(90deg, #22c55e, #4ade80)'
+                            : item.mastery >= 50 ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
+                            : 'linear-gradient(90deg, #ef4444, #f87171)',
+                        }} />
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div style={{ color: '#475569' }}>暂无学习数据，开始闯关吧 🚀</div>
+              <div style={{ color: '#94a3b8' }}>暂无学习数据，开始闯关吧 🚀</div>
             )}
           </div>
 
           {/* 成就展示 */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold" style={{ color: '#f1f5f9' }}>成就</h3>
-              <span className="text-sm" style={{ color: '#94a3b8' }}>
-                已解锁 <span className="font-semibold" style={{ color: '#f59e0b' }}>{unlockedCount}</span> / {achievements.length}
+              <h3 className="text-xl font-bold" style={{ color: '#1e293b' }}>成就</h3>
+              <span className="text-sm" style={{ color: '#64748b' }}>
+                已解锁 <span className="font-semibold" style={{ color: '#d97706' }}>{achievements.filter(a => a.unlocked).length}</span> / {achievements.length}
               </span>
             </div>
             {achievements.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {achievements.map((ach) => (
-                  <AchievementCard key={ach.id} achievement={ach} />
-                ))}
+                {achievements.map((ach) => <AchievementCard key={ach.id} achievement={ach} />)}
               </div>
             ) : (
-              <div className="text-center py-12 rounded-2xl border border-white/[0.04]" style={{ background: 'rgba(15,19,34,0.6)' }}>
+              <div className="text-center py-12 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #e6e8e3' }}>
                 <p className="text-4xl mb-3">🏆</p>
-                <p style={{ color: '#94a3b8' }}>完成课时和挑战来解锁成就</p>
+                <p style={{ color: '#64748b' }}>完成课时和挑战来解锁成就</p>
               </div>
             )}
           </div>
@@ -230,25 +189,28 @@ export default function Profile() {
   )
 }
 
-const statAccentColors = ['#6366f1', '#06b6d4', '#22c55e', '#f59e0b']
+const statAccentColors = ['#10b981', '#0ea5e9', '#22c55e', '#f59e0b']
 function StatCard({ label, value, icon, suffix, index = 0 }: { label: string; value: number; icon: string; suffix?: string; index?: number }) {
   const isEmpty = value === 0
   const accentColor = statAccentColors[index % statAccentColors.length]
   return (
-    <div className="rounded-xl p-4 text-center transition-all duration-300 hover:-translate-y-1" style={{ background: 'rgba(15,19,34,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: `0 2px 12px rgba(0,0,0,0.1), inset 0 1px 0 ${accentColor}15` }}>
+    <div className="rounded-xl p-4 text-center transition-all duration-300 hover:-translate-y-1"
+      style={{
+        background: '#ffffff',
+        border: '1px solid #e6e8e3',
+        boxShadow: `0 1px 3px rgba(0,0,0,0.03), inset 0 1px 0 ${accentColor}12`,
+      }}>
       <div className="text-2xl mb-1">{icon}</div>
-      <div className="text-2xl font-bold tabular-nums" style={{ color: isEmpty ? '#334155' : '#f1f5f9' }}>
-        {value}{suffix && value > 0 ? suffix : ''}
-      </div>
-      <div className="text-xs mt-1" style={{ color: '#475569' }}>{label}</div>
+      <div className="text-2xl font-bold tabular-nums" style={{ color: isEmpty ? '#cbd5e1' : '#1e293b' }}>{value}{suffix && value > 0 ? suffix : ''}</div>
+      <div className="text-xs mt-1" style={{ color: '#94a3b8' }}>{label}</div>
     </div>
   )
 }
 
 function ProfileSkeleton() {
   return (
-    <div className="animate-pulse min-h-screen" style={{ background: '#080c17' }}>
-      <nav className="border-b border-white/[0.04]" style={{ background: 'rgba(8,12,23,0.85)' }}>
+    <div className="animate-pulse min-h-screen" style={{ background: '#fafbf8' }}>
+      <nav className="border-b" style={{ background: 'rgba(250,251,248,0.85)', borderColor: '#e6e8e3' }}>
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="h-8 w-32 rounded skeleton-shimmer" />
           <div className="flex gap-3">
@@ -258,7 +220,7 @@ function ProfileSkeleton() {
         </div>
       </nav>
       <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
-        <div className="rounded-2xl p-6" style={{ background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="rounded-2xl p-6" style={{ background: '#ffffff', border: '1px solid #e6e8e3' }}>
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 rounded-full skeleton-shimmer" />
             <div className="flex-1 space-y-3">
@@ -270,7 +232,7 @@ function ProfileSkeleton() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-xl p-4" style={{ background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.04)' }}>
+            <div key={i} className="rounded-xl p-4" style={{ background: '#ffffff', border: '1px solid #e6e8e3' }}>
               <div className="h-8 w-8 rounded mx-auto mb-2 skeleton-shimmer" />
               <div className="h-6 w-12 rounded mx-auto mb-1 skeleton-shimmer" />
               <div className="h-3 w-16 rounded mx-auto skeleton-shimmer" />

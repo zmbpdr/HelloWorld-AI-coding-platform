@@ -1,5 +1,7 @@
 import apiClient from './client'
 
+export type AIMode = 'tutor' | 'diagnostic' | 'review' | 'planning'
+
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
@@ -7,10 +9,10 @@ export interface ChatMessage {
 
 export interface ChatRequest {
   message: string
+  mode?: AIMode
   context?: {
     lesson_title?: string
     language?: string
-    mode?: 'tutor' | 'reviewer'
     code?: string
     error?: string
   }

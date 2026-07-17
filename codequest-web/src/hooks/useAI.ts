@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { sendChatMessage, type ChatMessage, type ChatRequest } from '../api/ai'
+import { sendChatMessage, type ChatMessage, type ChatRequest, type AIMode } from '../api/ai'
 
 const HISTORY_KEY = 'codequest_ai_history'
 const MAX_HISTORY = 50
@@ -8,12 +8,15 @@ interface UseAIReturn {
   messages: ChatMessage[]
   isLoading: boolean
   error: string | null
+  mode: AIMode
+  setMode: (mode: AIMode) => void
   sendMessage: (message: string, context?: ChatRequest['context']) => Promise<void>
   clearMessages: () => void
 }
 
 export function useAI(lessonId?: number): UseAIReturn {
   const historyKey = lessonId ? `${HISTORY_KEY}_${lessonId}` : HISTORY_KEY
+  const [mode, setMode] = useState<AIMode>('tutor')
 
   const loadScoped = (): ChatMessage[] => {
     try {
@@ -29,6 +32,12 @@ export function useAI(lessonId?: number): UseAIReturn {
   const [error, setError] = useState<string | null>(null)
   const abortRef = useRef(false)
   const keyRef = useRef(historyKey)
+  const modeRef = useRef<AIMode>(mode)
+
+  // keep modeRef in sync
+  useEffect(() => {
+    modeRef.current = mode
+  }, [mode])
 
   // 切换课程时重新加载对应历史
   useEffect(() => {
@@ -54,7 +63,7 @@ export function useAI(lessonId?: number): UseAIReturn {
     setMessages(prev => [...prev, { role: 'user', content: message }])
 
     try {
-      const response = await sendChatMessage({ message, context })
+      const response = await sendChatMessage({ message, mode: modeRef.current, context })
       if (!abortRef.current) {
         setMessages(prev => [...prev, { role: 'assistant', content: response.reply }])
       }
@@ -76,5 +85,5 @@ export function useAI(lessonId?: number): UseAIReturn {
     localStorage.removeItem(keyRef.current)
   }, [])
 
-  return { messages, isLoading, error, sendMessage, clearMessages }
+  return { messages, isLoading, error, mode, setMode, sendMessage, clearMessages }
 }
