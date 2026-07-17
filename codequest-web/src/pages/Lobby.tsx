@@ -11,6 +11,7 @@ import AuthModal from '../components/auth/AuthModal'
 import PageTransition from '../components/ui/PageTransition'
 import ActivityHeatmap from '../components/ui/ActivityHeatmap'
 import SnippetPanel from '../components/snippets/SnippetPanel'
+import { getAgentTracks, type TrackOverview } from '../api/agent'
 
 
 
@@ -63,10 +64,12 @@ export default function Lobby() {
   const [showAuth, setShowAuth] = useState(false)
   const [showSnippets, setShowSnippets] = useState(false)
   const [activeTab, setActiveTab] = useState<TabKey>('languages')
+  const [agentTracks, setAgentTracks] = useState<TrackOverview[]>([])
 
 
 
   useEffect(() => { fetchLanguages() }, [fetchLanguages, isAuthenticated])
+  useEffect(() => { if (isAuthenticated) getAgentTracks().then(setAgentTracks).catch(() => {}) }, [isAuthenticated, activeTab])
 
 
 
@@ -756,19 +759,22 @@ export default function Lobby() {
 
                   </p>
 
-                  <div className="flex items-center justify-between">
-
-                    <div className="h-1.5 flex-1 mr-3 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
-
-                      <div className="h-full rounded-full transition-all duration-700"
-
-                        style={{ width: isAuthenticated ? '10%' : '0%', background: track.color }} />
-
-                    </div>
-
-                    <span className="text-xs group-hover:translate-x-1 transition-transform" style={{ color: track.color }}>→</span>
-
-                  </div>
+                  {(() => {
+                    const completed = agentTracks.find(t => t.track === track.slug)?.completed_nodes || 0
+                    const percent = track.nodes > 0 ? Math.round(completed / track.nodes * 100) : 0
+                    return (
+                      <div>
+                        <div className="flex justify-between text-xs mb-2" style={{ color: '#94a3b8' }}>
+                          <span className="font-medium tabular-nums">{completed} / {track.nodes} 节点</span>
+                          {percent > 0 && <span className="font-mono tabular-nums">{percent}%</span>}
+                        </div>
+                        <div className="rounded-full overflow-hidden h-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                          <div className="h-full rounded-full transition-all duration-700 ease-out"
+                            style={{ width: `${percent}%`, background: `linear-gradient(90deg, ${track.color}, ${track.color}cc)` }} />
+                        </div>
+                      </div>
+                    )
+                  })()}
 
                 </button>
 

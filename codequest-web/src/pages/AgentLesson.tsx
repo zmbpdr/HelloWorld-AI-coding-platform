@@ -122,7 +122,7 @@ export default function AgentLesson() {
     setNode((prev) => prev ? { ...prev, attempts: prev.attempts + 1 } : prev)
   }
 
-  const goBack = () => navigate('/workshop')
+  const goBack = () => navigate('/workshop', { state: { ts: Date.now() } })
 
   if (isLoading) return <AgentLessonSkeleton />
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { getNeuralMap, getAgentTracks, type NeuralMapData, type NeuronNode, type TrackOverview } from '../api/agent'
 import PageTransition from '../components/ui/PageTransition'
 
@@ -39,6 +39,7 @@ function EnergyDots({ level }: { level: number }) {
 export default function NeuralMap() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const location = useLocation()
   const initialTrack = searchParams.get('track') || ''
 
   const [mapData, setMapData] = useState<NeuralMapData | null>(null)
@@ -63,7 +64,7 @@ export default function NeuralMap() {
       })
       .catch(err => console.error('Failed to load neural map:', err))
       .finally(() => setIsLoading(false))
-  }, [initialTrack])
+  }, [initialTrack, location.state])
 
   if (isLoading) return <NeuralMapSkeleton />
 
@@ -142,8 +143,18 @@ export default function NeuralMap() {
                   }}
                 >
                   <span>{cfg.icon}</span>
-                  <span>{cfg.name}</span>
-                  <span className="text-xs opacity-60">{track.completed_nodes}/{track.total_nodes}</span>
+                  <div className="text-left">
+                    <div className="flex items-center gap-2">
+                      <span>{cfg.name}</span>
+                      <span className="text-xs opacity-60">{track.completed_nodes}/{track.total_nodes}</span>
+                    </div>
+                    <div className="mt-1 h-1 rounded-full overflow-hidden" style={{ width: 80, background: 'rgba(255,255,255,0.06)' }}>
+                      <div className="h-full rounded-full transition-all duration-500" style={{
+                        width: `${track.total_nodes > 0 ? (track.completed_nodes / track.total_nodes) * 100 : 0}%`,
+                        background: cfg.color,
+                      }} />
+                    </div>
+                  </div>
                 </button>
               )
             })}
