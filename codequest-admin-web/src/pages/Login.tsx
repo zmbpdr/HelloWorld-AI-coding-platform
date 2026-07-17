@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Form, Input, Button, App, Typography, Space, Divider } from 'antd'
+import { Form, Input, Button, App, Typography, Divider } from 'antd'
 import { UserOutlined, LockOutlined, SafetyCertificateOutlined, CodeOutlined } from '@ant-design/icons'
 import { useAdminStore } from '../stores/adminStore'
 
-const { Title, Text, Paragraph } = Typography
+const { Title, Text } = Typography
 
 export default function Login() {
   const { message } = App.useApp()
