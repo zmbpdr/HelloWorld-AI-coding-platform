@@ -8,6 +8,7 @@ import NeuralMap from './pages/NeuralMap'
 import AgentLesson from './pages/AgentLesson'
 import Leaderboard from './pages/Leaderboard'
 import Profile from './pages/Profile'
+import Pricing from './pages/Pricing'
 import Settings from './pages/Settings'
 import RequireAuth from './components/auth/RequireAuth'
 import Diagnostic from './pages/Diagnostic'
@@ -73,6 +74,9 @@ function App() {
         } />
         <Route path="/profile" element={
           <RequireAuth><Profile /></RequireAuth>
+        } />
+        <Route path="/pricing" element={
+          <RequireAuth><Pricing /></RequireAuth>
         } />
         <Route path="/leaderboard" element={
           <RequireAuth><Leaderboard /></RequireAuth>
