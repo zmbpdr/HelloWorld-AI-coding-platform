@@ -86,7 +86,7 @@ class JudgeService:
             tags = getattr(lesson, 'knowledge_tags', None)
             if tags:
                 try:
-                    await update_knowledge(self.db, user_id, tags, score > 0)
+                    await update_knowledge(self.db, user_id, tags, score, score >= 80)
                 except Exception:
                     logger.exception("知识掌握度更新失败")
 

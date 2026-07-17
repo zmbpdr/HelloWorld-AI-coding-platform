@@ -36,6 +36,8 @@ export default function Profile() {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
   const [knowledge, setKnowledge] = useState<{ tag: string; mastery: number }[]>([])
+  const [aiAnalysis, setAiAnalysis] = useState('')
+  const [aiAnalysisLoading, setAiAnalysisLoading] = useState(false)
 
   useEffect(() => {
     if (!isAuthenticated) { navigate('/'); return }
@@ -80,6 +82,26 @@ export default function Profile() {
   const level = stats?.level ?? 1
   const xpInLevel = stats ? stats.xp % 100 : 0
   const hasActivity = stats && (stats.completed_lessons > 0 || stats.total_submissions > 0)
+
+  const handleKnowledgeAnalysis = async () => {
+    setAiAnalysisLoading(true)
+    try {
+      const payload = {
+        code: '',
+        lesson_id: undefined,
+      }
+      const summary = knowledge.map(k => `${k.tag}: ${k.mastery}%`).join('; ')
+      const response = await apiClient.post('/ai/plan', {
+        ...payload,
+        code: `知识掌握情况：${summary}\n已完成课时：${stats?.completed_lessons || 0}\n总提交：${stats?.total_submissions || 0}`,
+      }, { timeout: 120000 })
+      setAiAnalysis(response.data.response || response.data.overall || '分析完成')
+    } catch {
+      setAiAnalysis('AI 分析失败，请稍后重试')
+    } finally {
+      setAiAnalysisLoading(false)
+    }
+  }
 
   return (
     <PageTransition>
@@ -187,9 +209,9 @@ export default function Profile() {
                         className="h-full rounded-full transition-all duration-700"
                         style={{
                           width: `${item.mastery}%`,
-                          background: item.mastery >= 70 
-                            ? 'linear-gradient(90deg, #22c55e, #4ade80)' 
-                            : item.mastery >= 50 
+                          background: item.mastery >= 70
+                            ? 'linear-gradient(90deg, #22c55e, #4ade80)'
+                            : item.mastery >= 50
                               ? 'linear-gradient(90deg, #f59e0b, #fbbf24)'
                               : 'linear-gradient(90deg, #ef4444, #f87171)',
                         }}
@@ -197,6 +219,28 @@ export default function Profile() {
                     </div>
                   </div>
                 ))}
+                {/* AI 知识分析 */}
+                <div className="pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+                  {aiAnalysis ? (
+                    <div className="p-3 rounded-xl text-sm whitespace-pre-wrap" style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)', color: '#cbd5e1' }}>
+                      {aiAnalysis}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleKnowledgeAnalysis}
+                      disabled={aiAnalysisLoading}
+                      className="w-full py-2.5 rounded-xl text-xs font-medium transition-all"
+                      style={{
+                        background: aiAnalysisLoading ? 'rgba(99,102,241,0.05)' : 'rgba(99,102,241,0.12)',
+                        border: '1px solid rgba(99,102,241,0.2)',
+                        color: aiAnalysisLoading ? '#64748b' : '#a5b4fc',
+                        cursor: aiAnalysisLoading ? 'not-allowed' : 'pointer',
+                      }}
+                    >
+                      {aiAnalysisLoading ? '⏳ AI 分析中...' : '🤖 AI 分析我的知识水平'}
+                    </button>
+                  )}
+                </div>
               </div>
             ) : (
               <div style={{ color: '#475569' }}>暂无学习数据，开始闯关吧 🚀</div>

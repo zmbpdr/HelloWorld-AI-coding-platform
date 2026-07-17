@@ -20,6 +20,7 @@ SYSTEM_PROMPT = (
     "你帮助用户解决编程问题，提供思路引导而非直接给出答案。"
     "你的回答应简洁、鼓励性强，适合编程初学者理解。"
     "当用户贴出代码时，你可以指出潜在问题并给出改进建议。"
+    "避免使用 Markdown 标记（##、**、``` 等），用纯文本回复。"
 )
 
 
@@ -196,20 +197,21 @@ async def chat_with_ai_stream(
 MODE_PROMPTS = {
     "diagnostic": (
         "你是一名资深代码诊断专家。请分析以下代码，找出语法错误、逻辑缺陷和潜在风险。"
-        "用中文逐条列出问题，并给出修复建议。"
+        "用中文逐条列出问题，并给出修复建议。避免使用 Markdown 标记。"
     ),
     "tutor": (
         "你是一名耐心的编程导师。请针对以下代码给出学习指导，引导学习者自己发现问题，"
-        "不要直接给出完整答案。用鼓励的语气，指出关键思路和下一步方向。"
+        "不要直接给出完整答案。用鼓励的语气，指出关键思路和下一步方向。避免使用 Markdown 标记。"
     ),
     "review": (
         "你是一名严格的代码审查官。请从正确性、可读性、性能、健壮性四个维度评审以下代码。"
         "每个维度打 0-100 分。只返回 JSON，格式："
         '{"correctness": 85, "readability": 70, "performance": 75, "robustness": 60, "issues": [{"line": 3, "message": "变量命名不清晰", "severity": "warning"}], "overall": "总体评价文字"}'
+        "。overall 字段不使用 Markdown 标记。"
     ),
     "plan": (
         "你是一名学习规划师。请根据以下题目和代码，分析学习者当前的知识薄弱点，"
-        "推荐下一步应该学习的内容和练习方向。"
+        "推荐下一步应该学习的内容和练习方向。避免使用 Markdown 标记。"
     ),
 }
 
@@ -232,7 +234,7 @@ async def run_ai_action(mode: str, code: str, lesson_title: str = "", language: 
 async def classify_error_with_ai(code: str, stderr: str, score: int, test_results: list | None = None) -> dict:
     """AI 错误分类 — 返回 error_type 和 analysis"""
     system_prompt = (
-        "你是代码诊断专家。根据以下信息对代码错误分类。"
+        "你是代码诊断专家。根据以下信息对代码错误分类。analysis 字段避免使用 Markdown 标记。"
         "返回 JSON：{\"error_type\": \"syntax|logic|boundary|performance|other\", \"analysis\": \"详细分析\"}"
     )
     user_msg = f"代码：\n```\n{code}\n```\n错误：{stderr}\n得分：{score}\n测试结果：{test_results or '无'}\n\n只返回 JSON。"
