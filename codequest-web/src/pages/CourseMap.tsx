@@ -58,7 +58,7 @@ export default function CourseMap() {
 
     console.log('🔍 正在获取推荐数据...', languageSlug)
 
-    apiClient.get('/lessons/recommend')
+    apiClient.get(`/lessons/recommend?language=${languageSlug}`)
       .then(res => {
         console.log('✅ 推荐数据:', res.data)
         setRecommendations(res.data.recommended || [])
