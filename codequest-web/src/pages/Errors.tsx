@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageTransition from '../components/ui/PageTransition'
-import Button from '../components/ui/Button'
 
 // 模拟错题数据
 const mockErrors = [
@@ -49,7 +48,7 @@ const errorTypeMap: Record<string, { label: string; color: string; bg: string }>
 
 export default function Errors() {
   const navigate = useNavigate()
-  const [errors, setErrors] = useState(mockErrors)
+  const [errors] = useState(mockErrors)
   const [filter, setFilter] = useState<string>('all')
   const [expandedId, setExpandedId] = useState<number | null>(null)
 
