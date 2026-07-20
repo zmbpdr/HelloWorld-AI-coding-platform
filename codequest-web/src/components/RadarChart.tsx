@@ -52,17 +52,17 @@ export default function RadarChart({ scores }: RadarChartProps) {
         max: 100,
         ticks: {
           stepSize: 20,
-          color: '#94a3b8',
+          color: '#64748b',
           backdropColor: 'transparent',
         },
         grid: {
-          color: 'rgba(255,255,255,0.06)',
+          color: 'rgba(0,0,0,0.06)',
         },
         angleLines: {
-          color: 'rgba(255,255,255,0.06)',
+          color: 'rgba(0,0,0,0.06)',
         },
         pointLabels: {
-          color: '#e2e8f0',
+          color: '#1e293b',
           font: {
             size: 12,
           },
@@ -72,7 +72,7 @@ export default function RadarChart({ scores }: RadarChartProps) {
     plugins: {
       legend: {
         labels: {
-          color: '#94a3b8',
+          color: '#64748b',
           font: {
             size: 11,
           },
