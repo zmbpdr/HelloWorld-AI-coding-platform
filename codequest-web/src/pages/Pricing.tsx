@@ -7,7 +7,7 @@ import { getMyMembership, upgradeToPro, type MembershipInfo } from '../api/user'
 const FEATURES = [
   ['六语言 60 关学习路线', true, true],
   ['代码运行与闯关记录', true, true],
-  ['AI 导师', '每日 5 次', '不限次数'],
+  ['小智', '每日 5 次', '不限次数'],
   ['代码审查官 Prompt', false, true],
   ['学习路径与进阶功能', false, true],
 ]
@@ -45,7 +45,7 @@ export default function Pricing() {
           <PlanCard title="Free" subtitle="适合刚开始学习" color="#64748b" price="¥0" button={isPro ? '已升级 Pro' : '当前方案'} disabled onClick={() => {}} features={FEATURES.map(([name, free]) => [name as string, free])} />
           <PlanCard title="Pro" subtitle="适合需要持续 AI 陪练" color="#10b981" price="演示升级" featured button={isPro ? '已是 Pro' : '模拟升级为 Pro'} disabled={isLoading || isPro || isUpgrading} onClick={upgrade} features={FEATURES.map(([name, , pro]) => [name as string, pro])} />
         </div>
-        {membership && !membership.is_unlimited && <p className="text-center mt-7 text-sm" style={{ color: '#64748b' }}>今日 AI 导师已使用 {membership.ai_calls_used} / {membership.ai_calls_limit} 次</p>}
+        {membership && !membership.is_unlimited && <p className="text-center mt-7 text-sm" style={{ color: '#64748b' }}>今日 小智已使用 {membership.ai_calls_used} / {membership.ai_calls_limit} 次</p>}
       </div>
     </div>
   </PageTransition>

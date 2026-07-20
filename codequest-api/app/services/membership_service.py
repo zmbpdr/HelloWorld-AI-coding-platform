@@ -28,6 +28,6 @@ def consume_ai_quota(user: User) -> None:
     if (user.ai_usage_today or 0) >= settings.FREE_DAILY_AI_QUOTA:
         raise HTTPException(
             status_code=403,
-            detail=f"免费版每日可使用 {settings.FREE_DAILY_AI_QUOTA} 次 AI 导师，升级 Pro 后可无限使用。",
+            detail=f"免费版每日可使用 {settings.FREE_DAILY_AI_QUOTA} 次 小智，升级 Pro 后可无限使用。",
         )
     user.ai_usage_today = (user.ai_usage_today or 0) + 1

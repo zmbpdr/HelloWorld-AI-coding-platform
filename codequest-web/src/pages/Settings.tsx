@@ -59,18 +59,18 @@ export default function Settings() {
 
         <div className="max-w-3xl mx-auto px-6 py-8 space-y-5">
           <section style={sectionStyle}>
-            <h2 style={sectionTitleStyle}>AI 导师</h2>
+            <h2 style={sectionTitleStyle}>小智</h2>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 rounded-full" style={{ background: aiOnline ? '#22c55e' : '#f59e0b', boxShadow: aiOnline ? '0 0 8px rgba(34,197,94,0.3)' : '0 0 8px rgba(245,158,11,0.3)' }} />
-                <span className="text-sm" style={{ color: '#334155' }}>{aiOnline ? 'AI 导师已就绪' : 'AI 连接中…'}</span>
+                <span className="text-sm" style={{ color: '#334155' }}>{aiOnline ? '小智已就绪' : 'AI 连接中…'}</span>
               </div>
               <button onClick={handleClearAIHistory} className="px-4 py-2 text-sm rounded-xl transition-colors"
                 style={{ background: '#f8fafc', color: '#475569', border: '1px solid #e6e8e3' }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#f4f6f1' }}
                 onMouseLeave={e => { e.currentTarget.style.background = '#f8fafc' }}>清空对话历史</button>
             </div>
-            <p className="text-xs mt-3" style={{ color: '#94a3b8' }}>AI 导师自动选择最优后端提供服务，无需手动配置</p>
+            <p className="text-xs mt-3" style={{ color: '#94a3b8' }}>小智自动选择最优后端提供服务，无需手动配置</p>
           </section>
 
           <section style={sectionStyle}>
@@ -140,7 +140,7 @@ export default function Settings() {
             <p className="text-sm mt-1" style={{ color: '#64748b' }}>闯关式 AI 编程学习平台</p>
             <p className="text-xs mt-0.5" style={{ color: '#94a3b8' }}>让编程学习像游戏一样有趣</p>
             <div className="flex justify-center gap-4 mt-3 text-xs" style={{ color: '#94a3b8' }}>
-              {['本地 AI 导师', '多语言支持', '即时反馈'].map((f, i, arr) => <span key={f}>{f}{i < arr.length - 1 ? ' · ' : ''}</span>)}
+              {['本地 小智', '多语言支持', '即时反馈'].map((f, i, arr) => <span key={f}>{f}{i < arr.length - 1 ? ' · ' : ''}</span>)}
             </div>
             <p className="text-xs mt-4" style={{ color: '#cbd5e1' }}>© 2026 Hello World Team</p>
           </section>

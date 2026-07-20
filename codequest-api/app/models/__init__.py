@@ -12,6 +12,7 @@ from app.models.snippet import CodeSnippet
 from app.models.diagnostic import UserDiagnostic
 from app.models.knowledge import UserKnowledge
 from app.models.error import UserError
+from app.models.chat import ChatHistory
 
 __all__ = [
     "User",
@@ -31,4 +32,5 @@ __all__ = [
     "UserDiagnostic",
     "UserKnowledge",
     "UserError",
+    "ChatHistory",
 ]

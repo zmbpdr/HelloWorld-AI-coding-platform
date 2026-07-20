@@ -7,7 +7,7 @@ interface AuthModalProps { isOpen: boolean; onClose: () => void }
 const FEATURES = [
   { icon: '🎯', title: '编程大陆', desc: '14门编程语言，258关课程' },
   { icon: '🧠', title: '智能体工坊', desc: 'AI/ML 学习路线' },
-  { icon: '🤖', title: 'AI 导师', desc: '实时代码评测与指导' },
+  { icon: '🤖', title: '小智', desc: '实时代码评测与指导' },
   { icon: '🏆', title: '成就系统', desc: '解锁徽章，攀登排行榜' },
 ]
 

@@ -171,7 +171,7 @@ export default function Lobby() {
             </span>
           </h2>
           <p className="text-base max-w-xl mx-auto" style={{ color: '#64748b', lineHeight: 1.7 }}>
-            选择学习路线，AI 导师随时为你答疑解惑
+            选择学习路线，小智随时为你答疑解惑
           </p>
         </section>
 

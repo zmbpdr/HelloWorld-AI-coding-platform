@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { sendChatMessage, type ChatMessage, type ChatRequest, type AIMode } from '../api/ai'
+import apiClient from '../api/client'
 
-const HISTORY_KEY = 'codequest_ai_history'
 const MAX_HISTORY = 50
 
 interface UseAIReturn {
@@ -15,74 +15,66 @@ interface UseAIReturn {
 }
 
 export function useAI(lessonId?: number): UseAIReturn {
-  const historyKey = lessonId ? `${HISTORY_KEY}_${lessonId}` : HISTORY_KEY
   const [mode, setMode] = useState<AIMode>('tutor')
-
-  const loadScoped = (): ChatMessage[] => {
-    try {
-      const stored = localStorage.getItem(historyKey)
-      if (!stored) return []
-      const parsed = JSON.parse(stored)
-      return Array.isArray(parsed) ? parsed.slice(-MAX_HISTORY) : []
-    } catch { return [] }
-  }
-
-  const [messages, setMessages] = useState<ChatMessage[]>(loadScoped)
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const abortRef = useRef(false)
-  const keyRef = useRef(historyKey)
+  const lessonRef = useRef(lessonId)
   const modeRef = useRef<AIMode>(mode)
 
-  // keep modeRef in sync
-  useEffect(() => {
-    modeRef.current = mode
-  }, [mode])
+  useEffect(() => { modeRef.current = mode }, [mode])
+  useEffect(() => { lessonRef.current = lessonId }, [lessonId])
 
-  // 切换课程时重新加载对应历史
+  // 加载后端历史
   useEffect(() => {
-    keyRef.current = historyKey
-    setMessages(loadScoped())
-    setError(null)
+    apiClient.get('/ai/history').then(res => {
+      const histories = res.data?.history || []
+      const match = histories.find((h: any) => h.lesson_id === lessonId)
+      setMessages(match?.messages?.slice(-MAX_HISTORY) || [])
+    }).catch(() => {})
   }, [lessonId])
 
-  // 每次消息更新时持久化
-  useEffect(() => {
-    if (messages.length > 0) {
-      try {
-        localStorage.setItem(keyRef.current, JSON.stringify(messages.slice(-MAX_HISTORY)))
-      } catch { /* storage full */ }
-    }
-  }, [messages])
+  // 每次消息更新时保存到后端
+  const persist = useCallback(async (msgs: ChatMessage[]) => {
+    try {
+      await apiClient.post('/ai/history', { lesson_id: lessonRef.current, messages: msgs.slice(-MAX_HISTORY) })
+    } catch { /* ignore */ }
+  }, [])
 
   const sendMessage = useCallback(async (message: string, context?: ChatRequest['context']) => {
     setIsLoading(true)
     setError(null)
     abortRef.current = false
 
-    setMessages(prev => [...prev, { role: 'user', content: message }])
+    const updated = [...messages, { role: 'user' as const, content: message }]
+    setMessages(updated)
 
     try {
       const response = await sendChatMessage({ message, mode: modeRef.current, context })
       if (!abortRef.current) {
-        setMessages(prev => [...prev, { role: 'assistant', content: response.reply }])
+        const final = [...updated, { role: 'assistant' as const, content: response.reply }]
+        setMessages(final)
+        persist(final)
       }
     } catch (err: unknown) {
       if (!abortRef.current) {
         const msg = err instanceof Error ? err.message : 'AI服务异常'
         setError(msg)
-        setMessages(prev => [...prev, { role: 'assistant', content: '抱歉，AI服务暂时不可用，请稍后再试。' }])
+        const final = [...updated, { role: 'assistant' as const, content: '抱歉，AI服务暂时不可用，请稍后再试。' }]
+        setMessages(final)
+        persist(final)
       }
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [messages, persist])
 
   const clearMessages = useCallback(() => {
     abortRef.current = true
     setMessages([])
     setError(null)
-    localStorage.removeItem(keyRef.current)
+    apiClient.delete(`/ai/history?lesson_id=${lessonRef.current || ''}`).catch(() => {})
   }, [])
 
   return { messages, isLoading, error, mode, setMode, sendMessage, clearMessages }

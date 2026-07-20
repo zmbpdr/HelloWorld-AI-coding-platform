@@ -13,7 +13,13 @@ from app.core.rate_limit import ai_limiter
 from app.core.security import decode_access_token
 from app.services.ai_service import chat_with_ai, chat_with_ai_stream, run_ai_action, classify_error_with_ai
 from app.services.membership_service import consume_ai_quota
+from datetime import datetime, timedelta, timezone
 from app.schemas.ai import ChatRequest, ChatResponse, AIActionRequest, ReviewResponse, TutorResponse
+from app.models.chat import ChatHistory
+from app.models.progress import Progress
+from app.models.submission import Submission as SubModel
+from app.models.knowledge import UserKnowledge
+from sqlalchemy import func
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -127,7 +133,50 @@ async def ai_classify_error(
     return result
 
 
-@router.websocket("/ws/ai/chat")
+@router.get("/ai/weekly-report")
+async def ai_weekly_report(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """AI 周报 — 基于本周学习数据生成总结"""
+    week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+
+    prog_result = await db.execute(
+        select(Progress).where(
+            Progress.user_id == current_user.id,
+            Progress.status == "completed",
+            Progress.completed_at >= week_ago,
+        )
+    )
+    completions = prog_result.scalars().all()
+
+    sub_result = await db.execute(
+        select(func.count()).select_from(SubModel).where(
+            SubModel.user_id == current_user.id,
+            SubModel.created_at >= week_ago,
+        )
+    )
+    submissions_week = sub_result.scalar() or 0
+
+    know_result = await db.execute(
+        select(UserKnowledge).where(UserKnowledge.user_id == current_user.id)
+    )
+    knowledge = know_result.scalars().all()
+
+    summary = (
+        f"本周完成 {len(completions)} 个关卡，提交 {submissions_week} 次代码。"
+        f"知识掌握度：{', '.join(f'{k.knowledge_tag}: {k.mastery}%' for k in knowledge[:8]) or '暂无数据'}。"
+    )
+
+    try:
+        response_text = await chat_with_ai(
+            message=f"请根据以下学习数据生成一份简短的学习周报（避免 Markdown）：{summary}",
+            context={"mode": "tutor"},
+        )
+        return {"report": response_text}
+    except Exception as e:
+        logger.warning(f"周报生成失败: {e}")
+        return {"report": f"📊 学习周报\n\n{summary}\n\n继续加油！"}
 async def websocket_chat(websocket: WebSocket, token: str = ""):
     """WebSocket 流式AI对话（需 token 认证）"""
     # 验证 token
@@ -162,14 +211,66 @@ async def websocket_chat(websocket: WebSocket, token: str = ""):
 @router.get("/ai/history")
 async def get_chat_history(
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
 ):
-    """获取对话历史（占位 - 后续接入数据库存储）"""
-    return {"history": []}
+    """获取当前用户的对话历史"""
+    result = await db.execute(
+        select(ChatHistory).where(
+            ChatHistory.user_id == current_user.id,
+        ).order_by(ChatHistory.updated_at.desc())
+    )
+    histories = result.scalars().all()
+    return {
+        "history": [
+            {
+                "lesson_id": h.lesson_id,
+                "messages": h.messages,
+                "updated_at": h.updated_at.isoformat() if h.updated_at else None,
+            }
+            for h in histories
+        ]
+    }
+
+
+@router.post("/ai/history")
+async def save_chat_history(
+    request: dict,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """保存对话历史"""
+    lesson_id = request.get("lesson_id")
+    messages = request.get("messages", [])
+    result = await db.execute(
+        select(ChatHistory).where(
+            ChatHistory.user_id == current_user.id,
+            ChatHistory.lesson_id == lesson_id,
+        )
+    )
+    record = result.scalars().first()
+    if record:
+        record.messages = messages
+        record.updated_at = datetime.now(timezone.utc)
+    else:
+        record = ChatHistory(user_id=current_user.id, lesson_id=lesson_id, messages=messages)
+        db.add(record)
+    await db.commit()
+    return {"message": "已保存"}
 
 
 @router.delete("/ai/history")
 async def clear_chat_history(
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    lesson_id: int = None,
 ):
-    """清空对话历史（占位）"""
+    """清空对话历史"""
+    query = select(ChatHistory).where(ChatHistory.user_id == current_user.id)
+    if lesson_id is not None:
+        query = query.where(ChatHistory.lesson_id == lesson_id)
+    result = await db.execute(query)
+    records = result.scalars().all()
+    for r in records:
+        await db.delete(r)
+    await db.commit()
     return {"message": "已清空"}

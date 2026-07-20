@@ -9,7 +9,7 @@ interface AIChatProps {
 
 const MODE_CONFIG: { key: AIMode; label: string; icon: string; placeholder: string; welcome: string }[] = [
   { key: 'diagnostic', label: '诊断', icon: '🔍', placeholder: '描述你的代码问题，AI 帮你诊断...', welcome: '你好！我是AI诊断助手，把你的代码发给我，我帮你找出问题所在。' },
-  { key: 'tutor', label: '导师', icon: '🧑‍🏫', placeholder: '询问AI导师关于代码的问题...', welcome: '你好！我是你的AI编程导师，有任何问题都可以问我。' },
+  { key: 'tutor', label: '导师', icon: '🧑‍🏫', placeholder: '向小智提问...', welcome: '你好！我是你的小智，有任何问题都可以问我。' },
   { key: 'review', label: '审查', icon: '📋', placeholder: '让AI审查你的代码质量...', welcome: '你好！我是AI代码审查员，发代码给我，我给你全面的质量评估。' },
   { key: 'planning', label: '规划', icon: '📈', placeholder: '让AI帮你规划学习路径...', welcome: '你好！我是AI学习规划师，告诉我你的目标，我帮你制定学习计划。' },
 ]
@@ -211,7 +211,7 @@ export default function AIChat({ lessonId, context }: AIChatProps) {
           onMouseDown={onMouseDown}
           onClick={handleToggle}
           className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-xl transition-all duration-300"
-          title={`AI ${currentMode.label}`}
+          title={`小智 · ${currentMode.label}`}
           style={{
             background: isOpen ? 'rgba(255,255,255,0.9)' : 'linear-gradient(135deg, #10b981, #059669)',
             boxShadow: isOpen ? '0 2px 12px rgba(0,0,0,0.06)' : '0 4px 24px rgba(16,185,129,0.35)',

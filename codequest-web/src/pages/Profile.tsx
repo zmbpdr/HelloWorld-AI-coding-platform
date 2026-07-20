@@ -27,6 +27,8 @@ export default function Profile() {
   const [knowledge, setKnowledge] = useState<{ tag: string; mastery: number }[]>([])
   const [aiAnalysis, setAiAnalysis] = useState('')
   const [aiAnalysisLoading, setAiAnalysisLoading] = useState(false)
+  const [weeklyReport, setWeeklyReport] = useState('')
+  const [weeklyLoading, setWeeklyLoading] = useState(false)
 
   useEffect(() => {
     if (!isAuthenticated) { navigate('/'); return }
@@ -87,6 +89,18 @@ export default function Profile() {
       setAiAnalysis('AI 分析失败，请稍后重试')
     } finally {
       setAiAnalysisLoading(false)
+    }
+  }
+
+  const handleWeeklyReport = async () => {
+    setWeeklyLoading(true)
+    try {
+      const res = await apiClient.get('/ai/weekly-report', { timeout: 120000 })
+      setWeeklyReport(res.data?.report || '暂无周报数据')
+    } catch {
+      setWeeklyReport('周报生成失败，请稍后重试')
+    } finally {
+      setWeeklyLoading(false)
     }
   }
 
@@ -186,7 +200,7 @@ export default function Profile() {
                 {/* AI 知识分析 */}
                 <div className="pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
                   {aiAnalysis ? (
-                    <div className="p-3 rounded-xl text-sm whitespace-pre-wrap" style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)', color: '#cbd5e1' }}>
+                    <div className="p-3 rounded-xl text-sm whitespace-pre-wrap" style={{ background: '#f8fafc', border: '1px solid #e6e8e3', color: '#334155' }}>
                       {aiAnalysis}
                     </div>
                   ) : (
@@ -208,6 +222,36 @@ export default function Profile() {
               </div>
             ) : (
               <div style={{ color: '#94a3b8' }}>暂无学习数据，开始闯关吧 🚀</div>
+            )}
+          </div>
+
+          {/* AI 学习周报 */}
+          <div className="p-5 rounded-2xl" style={{ background: '#ffffff', border: '1px solid #e6e8e3', boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">📋</span>
+                <h3 className="text-lg font-bold" style={{ color: '#1e293b' }}>学习周报</h3>
+              </div>
+              <button
+                onClick={handleWeeklyReport}
+                disabled={weeklyLoading}
+                className="px-4 py-2 rounded-xl text-xs font-medium transition-all"
+                style={{
+                  background: weeklyLoading ? '#f4f6f1' : '#ecfdf5',
+                  border: '1px solid #a7f3d0',
+                  color: weeklyLoading ? '#94a3b8' : '#059669',
+                  cursor: weeklyLoading ? 'not-allowed' : 'pointer',
+                }}
+              >
+                {weeklyLoading ? '⏳ 生成中...' : '📊 生成本周报告'}
+              </button>
+            </div>
+            {weeklyReport ? (
+              <div className="p-3 rounded-xl text-sm whitespace-pre-wrap" style={{ background: '#f8fafc', border: '1px solid #e6e8e3', color: '#334155' }}>
+                {weeklyReport}
+              </div>
+            ) : (
+              <div style={{ color: '#94a3b8' }}>点击生成按钮，小智为你总结本周学习情况</div>
             )}
           </div>
 
