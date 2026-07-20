@@ -116,8 +116,8 @@ export default function AgentLesson() {
             </div>
           </div>
 
-          <div className="w-1/2 flex flex-col">
-            <div className="flex-1 p-4 min-h-0"><CodeEditor value={code} onChange={setCode} language="python" height="100%" /></div>
+          <div className="w-1/2 flex flex-col overflow-y-auto">
+            <div className="shrink-0 p-4" style={{ height: '45vh', minHeight: '280px' }}><CodeEditor value={code} onChange={setCode} language="python" height="100%" /></div>
             <div className="px-4 py-3 flex items-center gap-3 shrink-0" style={{ borderTop: '1px solid #e6e8e3', background: 'rgba(250,251,248,0.6)' }}>
               <Button onClick={handleSubmit} isLoading={isRunning} size="sm">{isRunning ? '评测中...' : '▶ 运行代码'}</Button>
               <Button variant="secondary" size="sm" onClick={() => setCode(node.starter_code || '')}>重置</Button>
@@ -125,7 +125,7 @@ export default function AgentLesson() {
             </div>
 
             {(result || error) && (
-              <div className="p-4 max-h-72 overflow-y-auto shrink-0" style={{ borderTop: '1px solid #e6e8e3' }}>
+              <div className="p-4 shrink-0" style={{ borderTop: '1px solid #e6e8e3' }}>
                 {error && <div className="rounded-xl p-3.5 text-sm mb-3" style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626' }}><div className="whitespace-pre-wrap">{error}</div></div>}
                 {result && (
                   <div className="space-y-3">

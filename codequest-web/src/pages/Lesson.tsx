@@ -164,8 +164,8 @@ export default function Lesson() {
           </div>
 
           {/* 右侧 */}
-          <div className="w-1/2 flex flex-col">
-            <div className="flex-1 p-4 min-h-0">
+          <div className="w-1/2 flex flex-col overflow-y-auto">
+            <div className="shrink-0 p-4" style={{ height: '45vh', minHeight: '280px' }}>
               <CodeEditor value={code} onChange={setCode} language={languageSlug || 'python'} height="100%" decorations={reviewIssues} />
             </div>
 
@@ -230,7 +230,7 @@ export default function Lesson() {
                   {aiLoading ? '⏳ 分析中...' : '🚀 执行 AI 分析'}
                 </button>
               </div>
-              <div className="mt-2 text-sm" style={{ maxHeight: '280px', overflowY: 'auto', color: '#475569' }}>
+              <div className="mt-2 text-sm" style={{ color: '#475569' }}>
                 {aiResponse ? (
                   <div className="p-3 rounded-xl" style={{ background: '#ecfdf5', border: '1px solid #a7f3d0' }}>
                     {aiMode === 'review' ? (
@@ -263,7 +263,7 @@ export default function Lesson() {
 
             {/* 结果区 */}
             {(result || error) && (
-              <div className="p-4 max-h-72 overflow-y-auto shrink-0" style={{ borderTop: '1px solid #e6e8e3' }}>
+              <div className="p-4 shrink-0" style={{ borderTop: '1px solid #e6e8e3' }}>
                 {error && (
                   <div className="rounded-xl p-3.5 text-sm mb-3" style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626' }}>
                     {result?.error_type && (
