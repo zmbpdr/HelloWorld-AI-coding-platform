@@ -12,7 +12,7 @@ interface SettingItem {
 }
 
 const DEFAULT_SETTINGS: { key: string; label: string; description: string; type: 'text' | 'number' | 'switch'; defaultValue: string }[] = [
-  { key: 'site_name', label: '平台名称', description: '显示在页面标题和导航栏', type: 'text', defaultValue: 'CodeQuest' },
+  { key: 'site_name', label: '平台名称', description: '显示在页面标题和导航栏', type: 'text', defaultValue: 'Hello World' },
   { key: 'site_description', label: '平台描述', description: '在学习平台首页展示', type: 'text', defaultValue: '闯关式 AI 编程学习平台' },
   { key: 'max_submission_per_day', label: '每日提交上限', description: '每个用户每天最多提交次数', type: 'number', defaultValue: '100' },
   { key: 'sandbox_memory_limit', label: '沙箱内存限制 (MB)', description: 'Docker 容器最大内存', type: 'number', defaultValue: '256' },

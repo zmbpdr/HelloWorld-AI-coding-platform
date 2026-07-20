@@ -106,7 +106,7 @@ export default function Layout() {
           </div>
           {!collapsed && (
             <Text strong style={{ color: '#f1f5f9', fontSize: 17, letterSpacing: -0.5 }}>
-              CodeQuest
+              Hello World
             </Text>
           )}
         </div>

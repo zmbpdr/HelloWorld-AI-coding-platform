@@ -4,15 +4,16 @@ import json
 import logging
 from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket, WebSocketDisconnect
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
 from app.database import get_db
 from app.models.user import User
 from app.core.deps import get_current_user
 from app.core.rate_limit import ai_limiter
 from app.core.security import decode_access_token
-from app.services.ai_service import chat_with_ai, chat_with_ai_stream
+from app.services.ai_service import chat_with_ai, chat_with_ai_stream, run_ai_action, classify_error_with_ai
 from app.services.membership_service import consume_ai_quota
-from app.schemas.ai import ChatRequest, ChatResponse
+from app.schemas.ai import ChatRequest, ChatResponse, AIActionRequest, ReviewResponse, TutorResponse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -39,6 +40,91 @@ async def chat(
     except Exception as e:
         logger.exception(f"AI 对话异常: {type(e).__name__}: {e}")
         raise HTTPException(status_code=500, detail="AI服务暂时不可用，请稍后重试")
+
+
+# 四模式通用辅助：查询课程标题和语言后调用 AI
+async def _ai_mode(mode: str, request: AIActionRequest, current_user: User, db: AsyncSession) -> dict:
+    lesson_title, language = "", ""
+    if request.lesson_id:
+        from app.models.lesson import Lesson
+        from app.models.course import Language
+        lesson_result = await db.execute(select(Lesson).where(Lesson.id == request.lesson_id))
+        lesson = lesson_result.scalars().first()
+        if lesson:
+            lesson_title = lesson.title
+            lang_result = await db.execute(select(Language).where(Language.id == lesson.language_id))
+            lang = lang_result.scalars().first()
+            if lang:
+                language = lang.slug
+    return await run_ai_action(mode, request.code, lesson_title, language)
+
+
+@router.post("/ai/diagnostic", response_model=TutorResponse)
+async def ai_diagnostic(request: AIActionRequest, req: Request, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    await ai_limiter(request=req, identifier=str(current_user.id))
+    try:
+        response_text = await _ai_mode("diagnostic", request, current_user, db)
+        consume_ai_quota(current_user); await db.commit()
+        return {"response": response_text}
+    except Exception as e:
+        logger.exception(f"diagnostic: {e}"); raise HTTPException(500, str(e)[:200])
+
+
+@router.post("/ai/tutor", response_model=TutorResponse)
+async def ai_tutor(request: AIActionRequest, req: Request, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    await ai_limiter(request=req, identifier=str(current_user.id))
+    try:
+        response_text = await _ai_mode("tutor", request, current_user, db)
+        consume_ai_quota(current_user); await db.commit()
+        return {"response": response_text}
+    except Exception as e:
+        logger.exception(f"tutor: {e}"); raise HTTPException(500, str(e)[:200])
+
+
+@router.post("/ai/review", response_model=ReviewResponse)
+async def ai_review(request: AIActionRequest, req: Request, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    await ai_limiter(request=req, identifier=str(current_user.id))
+    try:
+        response_text = await _ai_mode("review", request, current_user, db)
+        consume_ai_quota(current_user); await db.commit()
+        try:
+            import json
+            data = json.loads(response_text.strip().removeprefix("```json").removesuffix("```").strip())
+            return {
+                "scores": {k: data.get(k, 70) for k in ("correctness", "readability", "performance", "robustness")},
+                "issues": data.get("issues", []),
+                "overall": data.get("overall", response_text),
+            }
+        except (json.JSONDecodeError, AttributeError):
+            return {"scores": {"correctness": 70, "readability": 70, "performance": 70, "robustness": 70}, "issues": [], "overall": response_text}
+    except Exception as e:
+        logger.exception(f"review: {e}"); raise HTTPException(500, str(e)[:200])
+
+
+@router.post("/ai/plan", response_model=TutorResponse)
+async def ai_plan(request: AIActionRequest, req: Request, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    await ai_limiter(request=req, identifier=str(current_user.id))
+    try:
+        response_text = await _ai_mode("plan", request, current_user, db)
+        consume_ai_quota(current_user); await db.commit()
+        return {"response": response_text}
+    except Exception as e:
+        logger.exception(f"plan: {e}"); raise HTTPException(500, str(e)[:200])
+
+
+@router.post("/ai/classify-error")
+async def ai_classify_error(
+    request: dict,
+    req: Request,
+    current_user: User = Depends(get_current_user),
+):
+    """AI 错误分类 — 返回 error_type 和 analysis"""
+    code = request.get("code", "")
+    stderr = request.get("stderr", "")
+    score = request.get("score", 0)
+    test_results = request.get("test_results")
+    result = await classify_error_with_ai(code, stderr, score, test_results)
+    return result
 
 
 @router.websocket("/ws/ai/chat")

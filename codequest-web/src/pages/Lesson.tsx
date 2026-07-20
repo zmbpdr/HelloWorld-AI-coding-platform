@@ -36,8 +36,19 @@ export default function Lesson() {
   const [showCelebration, setShowCelebration] = useState(false)
   const [aiMode, setAiMode] = useState<'diagnostic' | 'tutor' | 'review' | 'plan'>('tutor')
   const [aiResponse, setAiResponse] = useState('')
-  const [reviewScores, setReviewScores] = useState<{correctness: number; readability: number; performance: number; robustness: number} | null>(null)
-  const [reviewIssues, setReviewIssues] = useState<Array<{line: number; message: string; severity: 'error' | 'warning' | 'info'}>>([])
+  const [reviewScores, setReviewScores] = useState<{
+  correctness: number
+  readability: number
+  performance: number
+  robustness: number
+} | null>(null)
+  const [reviewIssues, setReviewIssues] = useState<Array<{
+  line: number
+  message: string
+  severity: 'error' | 'warning' | 'info'
+}>>([])
+  const [aiLoading, setAiLoading] = useState(false)
+
 
   useEffect(() => {
     if (lessonId) {
@@ -75,10 +86,11 @@ export default function Lesson() {
   }
 
   const handleAIAction = async () => {
+    setAiLoading(true)
+    setAiResponse('')
     try {
-      const payload: any = { code: code, lesson_id: lessonId }
-      if (aiMode === 'plan') payload.code = code
-      const response = await apiClient.post(`/ai/${aiMode}`, payload)
+      const payload: any = { code, lesson_id: lessonId }
+      const response = await apiClient.post(`/ai/${aiMode}`, payload, { timeout: 120000 })
       if (aiMode === 'review') {
         setAiResponse(response.data.overall || '审查完成')
         if (response.data.scores) setReviewScores(response.data.scores)
@@ -89,6 +101,8 @@ export default function Lesson() {
     } catch (error) {
       console.error('AI 请求失败:', error)
       setAiResponse('AI 服务暂时不可用，请稍后再试')
+    } finally {
+      setAiLoading(false)
     }
   }
 
@@ -159,6 +173,7 @@ export default function Lesson() {
             <div className="px-4 pt-2 flex items-center gap-2 shrink-0 flex-wrap" style={{ borderTop: '1px solid #e6e8e3' }}>
               <span className="text-xs mr-1" style={{ color: '#94a3b8' }}>🤖 AI 模式</span>
               {[
+                { key: 'diagnostic', label: '诊断', icon: '🔍' },
                 { key: 'tutor', label: '导师', icon: '🧑‍🏫' },
                 { key: 'review', label: '审查', icon: '📋' },
                 { key: 'plan', label: '规划', icon: '📈' },
@@ -193,15 +208,27 @@ export default function Lesson() {
             {/* AI 回复区域 */}
             <div className="px-4 py-3 shrink-0" style={{ borderTop: '1px solid #e6e8e3', background: 'rgba(250,251,248,0.3)' }}>
               <div className="flex items-center justify-between mb-2">
-                <div className="text-xs" style={{ color: '#94a3b8' }}>
-                  <span className="font-medium" style={{ color: '#059669' }}>
+                <div className="text-xs" style={{ color: '#64748b' }}>
+                  <span className="font-medium" style={{ color: '#818cf8' }}>
+                    {aiMode === 'diagnostic' && '🔍 诊断模式'}
                     {aiMode === 'tutor' && '🧑‍🏫 导师模式'}
                     {aiMode === 'review' && '📋 审查模式'}
                     {aiMode === 'plan' && '📈 规划模式'}
                   </span>
                 </div>
-                <button onClick={handleAIAction} className="px-3 py-1 rounded-lg text-xs font-medium transition-all text-white"
-                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>🚀 执行 AI 分析</button>
+                <button
+                  onClick={handleAIAction}
+                  disabled={aiLoading}
+                  className="px-3 py-1 rounded-lg text-xs font-medium transition-all"
+                  style={{
+                    background: aiLoading ? 'rgba(99,102,241,0.05)' : 'rgba(99,102,241,0.15)',
+                    border: '1px solid rgba(99,102,241,0.2)',
+                    color: aiLoading ? '#64748b' : '#a5b4fc',
+                    cursor: aiLoading ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {aiLoading ? '⏳ 分析中...' : '🚀 执行 AI 分析'}
+                </button>
               </div>
               <div className="mt-2 text-sm" style={{ maxHeight: '280px', overflowY: 'auto', color: '#475569' }}>
                 {aiResponse ? (

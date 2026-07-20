@@ -150,7 +150,7 @@ export default function Login() {
             <CodeOutlined style={{ color: '#fff', fontSize: 36 }} />
           </div>
           <Title level={2} style={{ color: '#f1f5f9', margin: '0 0 6px', fontWeight: 800, letterSpacing: -1.5, fontSize: 28 }}>
-            CodeQuest
+            Hello World
           </Title>
           <Text style={{ color: '#a5b4fc', fontSize: 14, fontWeight: 500, letterSpacing: 1 }}>管理后台</Text>
         </div>

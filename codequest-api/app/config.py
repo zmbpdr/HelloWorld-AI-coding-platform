@@ -1,8 +1,11 @@
 """应用配置模块 - 使用 pydantic-settings 管理所有配置项"""
 
+from pathlib import Path
 from typing import Optional
 
 from pydantic_settings import BaseSettings
+
+_APP_DIR = Path(__file__).resolve().parent.parent  # codequest-api/
 
 
 class Settings(BaseSettings):
@@ -62,11 +65,16 @@ class Settings(BaseSettings):
     FEATURE_MEMBERSHIP: bool = True
     FREE_DAILY_AI_QUOTA: int = 5
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    model_config = {"env_file": str(_APP_DIR / ".env"), "env_file_encoding": "utf-8"}
 
 
 # 全局配置单例
 settings = Settings()
+
+# 自动修正数据库路径：始终指向 codequest-api/ 目录下的 codequest.db
+_DB_PATH = str(_APP_DIR / "codequest.db")
+if "sqlite" in settings.DATABASE_URL:
+    settings.DATABASE_URL = f"sqlite+aiosqlite:///{_DB_PATH}"
 
 # 生产环境启动检查
 import logging

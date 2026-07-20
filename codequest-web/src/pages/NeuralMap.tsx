@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { getNeuralMap, getAgentTracks, type NeuralMapData, type NeuronNode, type TrackOverview } from '../api/agent'
 import PageTransition from '../components/ui/PageTransition'
 
@@ -31,6 +31,7 @@ function EnergyDots({ level }: { level: number }) {
 export default function NeuralMap() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const location = useLocation()
   const initialTrack = searchParams.get('track') || ''
   const [mapData, setMapData] = useState<NeuralMapData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -48,7 +49,7 @@ export default function NeuralMap() {
       })
       .catch(err => console.error('Failed to load neural map:', err))
       .finally(() => setIsLoading(false))
-  }, [initialTrack])
+  }, [initialTrack, location.state])
 
   if (isLoading) return <NeuralMapSkeleton />
 
@@ -96,9 +97,33 @@ export default function NeuralMap() {
                     border: isActive ? `1px solid ${cfg.color}40` : '1px solid #e6e8e3',
                     color: isActive ? cfg.color : '#64748b',
                   }}
-                  onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = `${cfg.color}08`; e.currentTarget.style.borderColor = `${cfg.color}30` } }}
-                  onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#e6e8e3' } }}
-                ><span>{cfg.icon}</span><span>{cfg.name}</span><span className="text-xs opacity-60">{track.completed_nodes}/{track.total_nodes}</span></button>
+                  onMouseEnter={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = `${cfg.color}08`
+                      e.currentTarget.style.borderColor = `${cfg.color}20`
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'
+                    }
+                  }}
+                >
+                  <span>{cfg.icon}</span>
+                  <div className="text-left">
+                    <div className="flex items-center gap-2">
+                      <span>{cfg.name}</span>
+                      <span className="text-xs opacity-60">{track.completed_nodes}/{track.total_nodes}</span>
+                    </div>
+                    <div className="mt-1 h-1 rounded-full overflow-hidden" style={{ width: 80, background: 'rgba(255,255,255,0.06)' }}>
+                      <div className="h-full rounded-full transition-all duration-500" style={{
+                        width: `${track.total_nodes > 0 ? (track.completed_nodes / track.total_nodes) * 100 : 0}%`,
+                        background: cfg.color,
+                      }} />
+                    </div>
+                  </div>
+                </button>
               )
             })}
           </div>

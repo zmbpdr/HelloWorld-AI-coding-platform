@@ -3,7 +3,7 @@ import axios from 'axios'
 /** Axios 请求实例，基础路径为 /api/v1 */
 const apiClient = axios.create({
   baseURL: '/api/v1',
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },

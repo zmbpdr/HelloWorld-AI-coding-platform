@@ -11,12 +11,13 @@ async def update_knowledge(
     db: AsyncSession,
     user_id: int,
     knowledge_tags: list[str],
-    is_correct: bool,
+    score: int,
+    is_passed: bool = False,
 ):
     """
     每次提交代码后更新知识掌握度。
 
-    加权计算：mastery = (correct_count / total_attempts) * 100
+    mastery = 最近一次得分（加权平均），score >= 80 时计入正确次数。
     """
     if not knowledge_tags:
         return
@@ -44,13 +45,13 @@ async def update_knowledge(
             db.add(knowledge)
 
         knowledge.total_attempts += 1
-        if is_correct:
+        if is_passed:
             knowledge.correct_count += 1
 
-        # 加权掌握度计算
-        knowledge.mastery = min(
-            100.0,
-            (knowledge.correct_count / max(1, knowledge.total_attempts)) * 100,
+        # 掌握度 = 最近得分 × 0.6 + 历史掌握度 × 0.4（平滑更新）
+        knowledge.mastery = round(
+            min(100.0, score * 0.6 + (knowledge.mastery or 0) * 0.4),
+            1,
         )
         knowledge.last_practice_at = datetime.now(timezone.utc)
 

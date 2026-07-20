@@ -67,8 +67,14 @@ export default function AgentLesson() {
     if (!result) return null; if (result.status === 'accepted') return 'accepted'; if (result.status === 'error') return 'error'; if (result.score > 0) return 'wrong'; return 'wrong'
   }, [result])
 
-  const handleSubmit = async () => { if (!nodeId) return; await runCode(Number(nodeId), code); setNode((prev) => prev ? { ...prev, attempts: prev.attempts + 1 } : prev) }
-  const goBack = () => navigate('/workshop')
+  const handleSubmit = async () => {
+    if (!nodeId) return
+    await runCode(Number(nodeId), code)
+    // 提交后立即更新尝试次数
+    setNode((prev) => prev ? { ...prev, attempts: prev.attempts + 1 } : prev)
+  }
+
+  const goBack = () => navigate('/workshop', { state: { ts: Date.now() } })
 
   if (isLoading) return <AgentLessonSkeleton />
   if (!node) return <div className="min-h-screen flex items-center justify-center" style={{ background: '#fafbf8' }}><p className="text-lg" style={{ color: '#64748b' }}>节点未找到</p></div>

@@ -23,6 +23,9 @@ class UserKnowledge(Base):
     last_practice_at: Mapped[datetime | None] = mapped_column(
         DateTime, nullable=True, comment="最后练习时间"
     )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=lambda: datetime.now(timezone.utc), comment="创建时间"
+    )
 
     __table_args__ = (
         UniqueConstraint("user_id", "knowledge_tag", name="uq_user_knowledge_tag"),

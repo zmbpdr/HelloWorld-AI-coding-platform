@@ -64,18 +64,26 @@ async def save_error(
     test_results: list | None = None,
 ) -> UserError:
     """
-    保存错误记录。
-
-    使用规则判断错误类型（B 完成 classify_error() 后可替换为 AI 分类）。
+    保存错误记录。优先使用 AI 分类，失败时降级到规则分类。
     """
+    # 尝试 AI 分类
+    ai_analysis = None
     error_type = classify_error_by_rules(stderr, score, test_results)
+    try:
+        from app.services.ai_service import classify_error_with_ai
+        ai_result = await classify_error_with_ai(code, stderr or "", score, test_results)
+        if ai_result.get("error_type"):
+            error_type = ai_result["error_type"]
+        ai_analysis = ai_result.get("analysis")
+    except Exception:
+        pass  # 降级到规则分类
 
     error = UserError(
         user_id=user_id,
         lesson_id=lesson_id,
         error_code=code,
         error_type=error_type,
-        ai_analysis=None,  # B 完成 classify_error() 后可填入 AI 分析
+        ai_analysis=ai_analysis,
         is_resolved=False,
     )
     db.add(error)
