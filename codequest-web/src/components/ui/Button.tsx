@@ -19,26 +19,26 @@ export default function Button({
   const baseStyle = 'rounded-xl font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center justify-center'
 
   const variants: Record<string, string> = {
-    primary: 'text-white hover:scale-[1.02] active:scale-[0.98] transition-transform',
-    secondary: 'hover:brightness-125 active:brightness-90',
-    ghost: 'hover:bg-white/[0.06] active:bg-white/[0.1]',
+    primary: 'text-white hover:-translate-y-0.5 active:translate-y-0',
+    secondary: 'hover:-translate-y-0.5 active:translate-y-0',
+    ghost: 'hover:bg-[#f4f6f1] active:bg-[#ecfdf5]',
   }
 
   const bgMap: Record<string, string> = {
-    primary: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #6366f1 100%)',
-    secondary: 'rgba(255,255,255,0.06)',
+    primary: 'linear-gradient(135deg, #10b981 0%, #059669 50%, #10b981 100%)',
+    secondary: '#f4f6f1',
     ghost: 'transparent',
   }
 
   const colorMap: Record<string, string> = {
     primary: '',
-    secondary: '#cbd5e1',
-    ghost: '#94a3b8',
+    secondary: '#334155',
+    ghost: '#475569',
   }
 
   const borderMap: Record<string, string> = {
     primary: 'none',
-    secondary: '1px solid rgba(255,255,255,0.08)',
+    secondary: '1px solid #e6e8e3',
     ghost: 'none',
   }
 
@@ -49,7 +49,7 @@ export default function Button({
   }
 
   const shadowMap: Record<string, string> = {
-    primary: '0 4px 20px rgba(99,102,241,0.35), 0 0 40px rgba(99,102,241,0.1)',
+    primary: '0 2px 12px rgba(16,185,129,0.25)',
     secondary: '',
     ghost: '',
   }
