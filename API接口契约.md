@@ -1,18 +1,97 @@
 # API 接口契约
 
-> 版本：v1.0（第 1 天定稿，后续修改需通知所有人）
-> Base URL：`http://localhost:8000/api/v1`
+> 版本：v2.0 | 共 37 个端点，分 8 大类别
+> Base URL：`http://localhost:8006/api/v1`
 > 认证方式：JWT Bearer Token（Header: `Authorization: Bearer <token>`）
 > 响应格式：成功返回 JSON 数据，失败返回 `{"detail": "错误描述"}`
 > Content-Type：`application/json`
+>
+> **v2.0 新增**：AI 四模式（diagnostic/tutor/review/plan）、classify-error、能力诊断、错题本、知识掌握度、推荐关卡、会员系统
 
 ---
 
-## 接口总览
+## 端点总览（37 个）
 
-| 方法 | 路径 | 用途 | 负责人 |
-|------|------|------|:------:|
-| GET | `/diagnostic/questions` | 获取诊断题目 | **A** |
+### 认证（3）
+| 方法 | 路径 | 用途 |
+|:----:|------|------|
+| POST | `/api/v1/auth/register` | 用户注册 |
+| POST | `/api/v1/auth/login` | 用户登录 |
+| POST | `/api/v1/auth/refresh` | 刷新令牌 |
+
+### 课程与关卡（8）
+| 方法 | 路径 | 用途 |
+|:----:|------|------|
+| GET | `/api/v1/languages` | 语言列表（含用户进度） |
+| GET | `/api/v1/languages/{slug}` | 语言详情 |
+| GET | `/api/v1/languages/{slug}/map` | 闯关地图（含解锁状态） |
+| GET | `/api/v1/lessons/{id}` | 课时详情 |
+| POST | `/api/v1/lessons/{id}/submit` | 提交代码评测 |
+| GET | `/api/v1/lessons/{id}/stats` | 评测统计 |
+| GET | `/api/v1/lessons/{id}/hint` | 获取提示 |
+| GET | `/api/v1/lessons/recommend` | 推荐关卡 |
+
+### AI 智能体（8）
+| 方法 | 路径 | 用途 |
+|:----:|------|------|
+| POST | `/api/v1/ai/chat` | AI 通用对话 |
+| WS | `/ws/ai/chat` | AI 流式对话 |
+| POST | `/api/v1/ai/diagnostic` | 代码诊断 |
+| POST | `/api/v1/ai/tutor` | 导师指导 |
+| POST | `/api/v1/ai/review` | 结构化代码审查（四维度评分） |
+| POST | `/api/v1/ai/plan` | 学习规划 |
+| POST | `/api/v1/ai/classify-error` | AI 错误分类 |
+| GET | `/api/v1/ai/history` | 对话历史 |
+
+### 诊断、错题与知识（6）
+| 方法 | 路径 | 用途 |
+|:----:|------|------|
+| GET | `/api/v1/diagnostic/questions` | 获取诊断题目 |
+| POST | `/api/v1/diagnostic/submit` | 提交诊断答案 |
+| GET | `/api/v1/diagnostic/result` | 查询诊断结果 |
+| GET | `/api/v1/errors` | 获取错题列表 |
+| PATCH | `/api/v1/errors/{id}/resolve` | 标记错题已解决 |
+| GET | `/api/v1/progress/knowledge` | 获取知识掌握度 |
+
+### 用户、成就与排行榜（6）
+| 方法 | 路径 | 用途 |
+|:----:|------|------|
+| GET | `/api/v1/users/me` | 当前用户信息 |
+| GET | `/api/v1/users/me/stats` | 用户统计数据 |
+| GET | `/api/v1/users/me/achievements` | 已解锁成就 |
+| GET | `/api/v1/users/me/activity` | 90 天活动热力图 |
+| GET | `/api/v1/achievements` | 成就列表 |
+| GET | `/api/v1/leaderboard?period=` | 排行榜（week/month/all） |
+
+### 代码收藏（3）
+| 方法 | 路径 | 用途 |
+|:----:|------|------|
+| GET | `/api/v1/snippets` | 收藏列表 |
+| POST | `/api/v1/snippets` | 收藏代码 |
+| DELETE | `/api/v1/snippets/{id}` | 删除收藏 |
+
+### 智能体工坊（5）
+| 方法 | 路径 | 用途 |
+|:----:|------|------|
+| GET | `/api/v1/agent/map` | 神经元网络地图 |
+| GET | `/api/v1/agent/nodes/{id}` | 节点详情 |
+| POST | `/api/v1/agent/nodes/{id}/submit` | 提交代码评测 |
+| GET | `/api/v1/agent/progress` | 用户进度 |
+| GET | `/api/v1/agent/tracks` | 8 条主线概览 |
+
+### 会员（2）
+| 方法 | 路径 | 用途 |
+|:----:|------|------|
+| POST | `/api/v1/user/upgrade` | 模拟会员升级 |
+| GET | `/api/v1/user/membership` | 查询会员信息 |
+
+---
+
+## 接口详细契约
+
+> 以下为各接口的请求/响应格式详细定义。
+
+### 1. GET /diagnostic/questions — 获取诊断题目
 | POST | `/diagnostic/submit` | 提交诊断答案 | **A** |
 | POST | `/ai/chat` | AI 对话 | **B** |
 | POST | `/ai/chat/stream` | AI 流式对话（SSE） | **B** |
