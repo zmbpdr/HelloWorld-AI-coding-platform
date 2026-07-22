@@ -66,6 +66,16 @@ async def init_db() -> None:
             if "ai_usage_date" not in names:
                 await conn.execute(text("ALTER TABLE users ADD COLUMN ai_usage_date DATE"))
 
+            knowledge_columns = (await conn.execute(
+                text("PRAGMA table_info(user_knowledge)")
+            )).mappings().all()
+            knowledge_column_names = {column["name"] for column in knowledge_columns}
+            if "created_at" not in knowledge_column_names:
+                # SQLite cannot add a non-constant CURRENT_TIMESTAMP default
+                # through ALTER TABLE. Existing rows do not require this audit
+                # value, while all newly-created ORM rows receive the model default.
+                await conn.execute(text("ALTER TABLE user_knowledge ADD COLUMN created_at DATETIME"))
+
 
 async def close_db() -> None:
     """关闭数据库连接"""
