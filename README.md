@@ -53,7 +53,7 @@
 ### 第一步：后端启动
 
 ```bash
-cd codequest-api
+cd HelloWorld-api
 
 # 安装 Python 依赖
 pip install -r requirements.txt
@@ -71,7 +71,7 @@ uvicorn app.main:app --reload --port 8000
 ### 第二步：前端（学习端）启动
 
 ```bash
-cd codequest-web
+cd HelloWorld-web
 
 # 安装前端依赖
 npm install
@@ -88,7 +88,7 @@ npx vite --port 5173 --host
 ### 第三步：管理后台启动（可选）
 
 ```bash
-cd codequest-admin-web
+cd HelloWorld-admin-web
 npm install
 npm run dev
 ```
@@ -104,7 +104,7 @@ npm run dev
 
 ```env
 # 数据库（默认 SQLite，无需额外配置）
-DATABASE_URL=sqlite+aiosqlite:///./codequest.db
+DATABASE_URL=sqlite+aiosqlite:///./HelloWorld.db
 
 # 代码执行（无 Docker，直接使用 subprocess）
 ALLOW_DIRECT_EXECUTION=true
@@ -130,7 +130,7 @@ FEATURE_WEEKLY_REPORT=false # 学习周报（默认关闭）
 
 ```
 Hello World/
-├── codequest-api/                # FastAPI 后端
+├── HelloWorld-api/                # FastAPI 后端
 │   ├── app/
 │   │   ├── main.py               # 应用入口，路由注册
 │   │   ├── config.py             # 全局配置（pydantic-settings）
@@ -167,7 +167,7 @@ Hello World/
 │   ├── judge/                    # 评测执行器
 │   └── requirements.txt
 │
-├── codequest-web/                # 前端（学习端）
+├── HelloWorld-web/                # 前端（学习端）
 │   └── src/
 │       ├── pages/
 │       │   ├── Diagnostic.tsx    # 能力诊断页面
@@ -181,9 +181,9 @@ Hello World/
 │           ├── KnowledgeChart.tsx    # 知识画像图表
 │           └── chat/AIChat.tsx       # AI 聊天
 │
-├── codequest-admin-web/          # 前端（管理后台）
+├── HelloWorld-admin-web/          # 前端（管理后台）
 │
-├── codequest-content/            # 课程数据
+├── HelloWorld-content/            # 课程数据
 │   ├── lessons/                  # 6种语言关卡 JSON（共172关）
 │   │   ├── python.json           # 34关
 │   │   ├── javascript.json       # 30关

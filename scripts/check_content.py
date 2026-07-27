@@ -11,7 +11,7 @@ from pathlib import Path
 
 # 项目根目录
 ROOT = Path(__file__).resolve().parent.parent
-LESSONS_DIR = ROOT / "codequest-content" / "lessons"
+LESSONS_DIR = ROOT / "HelloWorld-content" / "lessons"
 
 # 必填字段（基础字段，所有关卡必须有）
 REQUIRED_FIELDS = ["slug", "title", "starter_code", "test_cases"]
