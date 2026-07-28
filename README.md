@@ -1,20 +1,24 @@
 # Hello World — 闯关式 AI 编程学习平台
 
-> **AI 智能体陪你闯关编程学习**
-> 版本 v2.0 | 2026-07-17
+> AI 智能体陪你闯关编程学习
+> 版本 v3.0 | 2026-07-28
 
 ---
 
 ## 项目简介
 
-**Hello World** 是一个基于 FastAPI + React 的闯关式 AI 编程学习平台。用户注册后由 AI 智能体"小智"引导完成能力诊断，根据诊断结果推荐合适的起点关卡，在闯关中学习编程，提交代码后 AI 自动审查评分，错误代码自动记录到错题本，知识掌握度以可视化图表呈现。
+**Hello World** 是一个基于 FastAPI + React 的闯关式 AI 编程学习平台。用户打开浏览器即可零配置开始编程学习，AI 智能体"小智"引导完成能力诊断，推荐合适起点关卡，在闯关中学习编程，提交代码后自动评测打分，错误代码自动记录到错题本，知识掌握度以可视化图表呈现。
 
 **核心特色：**
-- 🤖 **AI 智能体** — 四种模式（诊断/导师/审查/规划），主动陪伴学习
-- 🎯 **能力诊断** — 注册后 10 道题诊断水平，推荐起点
-- 📊 **知识掌握度** — 每次提交自动更新，可视化画像
-- 📝 **AI 错题本** — 自动记录错误，按类型分类，追踪改进
-- 🎮 **6 种编程语言** — Python 34关 / JS 30关 / Java 30关 / C 20关 / C++ 28关 / TS 30关，共 172 关
+
+- **AI 智能体** — 四种模式（诊断/导师/审查/规划），WebSocket 流式对话
+- **能力诊断** — 注册后 10 道题诊断水平，推荐学习起点
+- **知识掌握度** — 每次提交自动更新（加权平均算法），可视化画像
+- **AI 错题本** — 自动记录错误，AI 分类+双轨降级，按类型追踪改进
+- **6 种编程语言** — Python 34关 / JS 30关 / Java 30关 / C 20关 / C++ 28关 / TS 30关，共 172 关
+- **智能体工坊** — 8 条 AI 学习主线，92 个节点，神经元地图可视化
+- **代码评测引擎** — 自研，7 步流程，智能比对，多语言兼容优化
+- **规则推荐算法** — 基于薄弱知识点，非 ML，可解释，含兜底策略
 
 ---
 
@@ -22,28 +26,58 @@
 
 | 层 | 技术 |
 |:----:|------|
-| **后端** | Python 3.11+ / FastAPI / SQLAlchemy 2.0 (异步) / Alembic |
-| **前端（学习端）** | React 19 / TypeScript / Vite / TailwindCSS 4 / Monaco Editor / Chart.js / Zustand |
-| **前端（管理后台）** | React 19 / TypeScript / Vite / Ant Design 6 / Zustand |
-| **AI 模型** | DeepSeek-V4-Flash（主用）/ Mock 兜底 |
-| **数据库** | SQLite + aiosqlite（开发）/ PostgreSQL 16 + asyncpg（生产） |
-| **缓存** | Redis 7（生产环境） |
-| **认证** | JWT Bearer Token / Refresh Token / bcrypt |
-| **代码执行** | subprocess 直接执行 |
+| **后端** | Python 3.11+ / FastAPI / SQLAlchemy 2.0 (异步) / Alembic / Uvicorn |
+| **前端（学习端）** | React 19 / TypeScript / Vite 8 / TailwindCSS 4 / Monaco Editor / Chart.js / Zustand |
+| **前端（管理后台）** | React 19 / TypeScript / Vite 8 / Ant Design 6 / Zustand |
+| **AI 模型** | DeepSeek-V4-Flash（主用）/ Mock 降级 |
+| **数据库** | SQLite + aiosqlite |
+| **认证** | JWT Bearer Token / bcrypt |
+| **代码执行** | subprocess 直接执行（6 语言编译+运行） |
 | **HTTP 客户端** | httpx（后端）/ Axios（前端） |
-| **WebSocket** | FastAPI WebSocket（AI 流式对话） |
+| **WebSocket** | FastAPI WebSocket（AI 流式对话逐字推送） |
+
+---
+
+## 项目结构
+
+```
+Hello World/
+├── HelloWorld-api/                # FastAPI 后端（Port 8006）
+│   ├── app/
+│   │   ├── main.py               # 应用入口（启动时自动建表+种数据）
+│   │   ├── config.py             # 全局配置（pydantic-settings/.env）
+│   │   ├── database.py           # SQLAlchemy 异步引擎
+│   │   ├── core/                 # 安全/认证/中间件/限速/异常
+│   │   ├── models/               # 18 张 ORM 数据表
+│   │   ├── services/             # 14 个业务服务
+│   │   ├── routers/              # 20 个路由模块
+│   │   ├── judge/                # 代码评测配置（6语言）
+│   │   └── schemas/              # Pydantic 数据模式
+│   ├── scripts/                  # 工具脚本
+│   └── requirements.txt
+│
+├── HelloWorld-web/                # 前端 - 学习端（Port 5173）
+│   └── src/
+│       ├── pages/                # 11 个页面
+│       ├── components/           # 21 个组件
+│       ├── api/                  # 9 个 API 调用文件
+│       ├── stores/               # Zustand 状态管理
+│       └── hooks/                # 4 个自定义 Hook
+│
+├── HelloWorld-admin-web/          # 前端 - 管理后台（Port 5174）
+│
+├── HelloWorld-content/            # 课程数据（JSON）
+│   ├── lessons/                  # 6 种语言 172 关
+│   └── agent/                    # 8 条主线 92 节点
+│
+├── .env                          # 环境变量配置（含 DeepSeek API Key）
+├── API接口契约.md                 # 完整 API 文档
+└── README.md                     # 本文件
+```
 
 ---
 
 ## 启动指南
-
-### D 模块文档
-
-- [D 模块交付说明](docs/d-module.md)
-- [课程内容与元数据规范](docs/course-content-spec.md)
-- [推荐算法说明](docs/recommendation-algorithm.md)
-- [测试报告](docs/test-report.md)
-- [六语言环境依赖与判题说明](docs/language-runtime-and-judge.md)
 
 ### 环境要求
 
@@ -58,17 +92,14 @@ cd HelloWorld-api
 # 安装 Python 依赖
 pip install -r requirements.txt
 
-# 如果遇到 bcrypt 版本问题，锁定版本：
-# pip install bcrypt==4.2.1
-
 # 启动后端（首次启动会自动创建数据库和种子数据）
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --port 8006
 ```
 
-**后端地址：** http://localhost:8000
-**API 文档：** http://localhost:8000/docs
+**后端地址：** http://localhost:8006
+**API 文档：** http://localhost:8006/docs
 
-### 第二步：前端（学习端）启动
+### 第二步：学习端启动
 
 ```bash
 cd HelloWorld-web
@@ -78,9 +109,6 @@ npm install
 
 # 启动开发服务器
 npx vite --port 5173 --host
-
-# （如果需要 Chart.js 雷达图，已包含在 package.json 中）
-# npm install chart.js react-chartjs-2
 ```
 
 **学习端地址：** http://localhost:5173
@@ -96,216 +124,130 @@ npm run dev
 **管理后台地址：** http://localhost:5174
 **默认管理员：** `admin / admin123`（可在 `.env` 中修改）
 
+### 演示账号
+
+- 用户名：`demo`
+- 密码：`demo123`
+- 角色：Pro 会员，已有多项学习数据
+
 ---
 
-## 环境变量配置
+## 环境变量
 
 创建 `.env` 文件（可从 `.env.example` 复制），关键配置：
 
 ```env
-# 数据库（默认 SQLite，无需额外配置）
+# 数据库（默认 SQLite）
 DATABASE_URL=sqlite+aiosqlite:///./HelloWorld.db
 
-# 代码执行（无 Docker，直接使用 subprocess）
+# 代码执行（直接 subprocess 执行）
 ALLOW_DIRECT_EXECUTION=true
 
-# AI 配置（DeepSeek API Key，可选，Mock 模式可不填）
+# AI 配置（DeepSeek API Key，可不填使用 Mock 模式）
 DEEPSEEK_API_KEY=your_api_key_here
 DEEPSEEK_MODEL=deepseek-v4-flash
 AI_PROVIDER_PRIORITY=deepseek,mock
 
 # 管理员账号
 ADMIN_USERNAME=admin
-ADMIN_EMAIL=admin@helloworld.com
 ADMIN_PASSWORD=admin123
 
 # 功能开关
-FEATURE_MEMBERSHIP=false    # 会员系统（默认关闭）
-FEATURE_WEEKLY_REPORT=false # 学习周报（默认关闭）
+FEATURE_DIAGNOSTIC=true       # 能力诊断
+FEATURE_KNOWLEDGE=true        # 知识掌握度
+FEATURE_ERROR_BOOK=true       # 错题本
+FEATURE_RECOMMEND=true        # 推荐算法
+FEATURE_WEEKLY_REPORT=false   # 学习周报（默认关闭）
+FEATURE_MEMBERSHIP=false      # 会员系统（默认关闭）
 ```
 
 ---
 
-## 项目结构
+## 核心功能
 
-```
-Hello World/
-├── HelloWorld-api/                # FastAPI 后端
-│   ├── app/
-│   │   ├── main.py               # 应用入口，路由注册
-│   │   ├── config.py             # 全局配置（pydantic-settings）
-│   │   ├── database.py           # 数据库连接
-│   │   ├── core/                 # 核心模块
-│   │   │   ├── security.py       # JWT + 密码哈希
-│   │   │   ├── deps.py           # 依赖注入（用户认证 + AI配额）
-│   │   │   ├── middleware.py     # 请求日志
-│   │   │   ├── exceptions.py     # 全局异常处理
-│   │   │   └── rate_limit.py     # 速率限制
-│   │   ├── models/               # ORM 数据模型（14张表）
-│   │   │   ├── user.py           # 用户表 + 会员字段
-│   │   │   ├── course.py         # 语言表
-│   │   │   ├── lesson.py         # 关卡表 + 知识标签
-│   │   │   ├── diagnostic.py     # 能力诊断表
-│   │   │   ├── knowledge.py      # 知识掌握度表
-│   │   │   ├── error.py          # 错题本表
-│   │   │   └── ...               # progress/submission/achievement 等
-│   │   ├── services/             # 业务逻辑层
-│   │   │   ├── ai_service.py     # AI 对话服务
-│   │   │   ├── diagnostic_service.py  # 能力诊断逻辑
-│   │   │   ├── knowledge_service.py   # 知识掌握度更新
-│   │   │   ├── error_service.py       # 错题本服务
-│   │   │   ├── judge_service.py       # 代码评测（已集成知识+错题）
-│   │   │   └── seed_service.py        # 种子数据（6种语言）
-│   │   ├── routers/              # API 路由
-│   │   │   ├── diagnostic.py     # 诊断接口
-│   │   │   ├── errors.py         # 错题本接口
-│   │   │   ├── membership.py     # 会员接口
-│   │   │   ├── progress.py       # 进度接口（含知识掌握度）
-│   │   │   └── ...
-│   │   └── judge/                # 代码评测配置
-│   │       └── language_config.py    # 6种语言编译/运行命令
-│   ├── judge/                    # 评测执行器
-│   └── requirements.txt
-│
-├── HelloWorld-web/                # 前端（学习端）
-│   └── src/
-│       ├── pages/
-│       │   ├── Diagnostic.tsx    # 能力诊断页面
-│       │   ├── ErrorBook.tsx     # 错题本页面
-│       │   ├── Lobby.tsx         # 首页
-│       │   ├── CourseMap.tsx     # 闯关地图
-│       │   ├── Lesson.tsx        # 关卡页面
-│       │   └── Profile.tsx       # 个人中心
-│       └── components/
-│           ├── CodeReviewPanel.tsx   # 代码审查雷达图
-│           ├── KnowledgeChart.tsx    # 知识画像图表
-│           └── chat/AIChat.tsx       # AI 聊天
-│
-├── HelloWorld-admin-web/          # 前端（管理后台）
-│
-├── HelloWorld-content/            # 课程数据
-│   ├── lessons/                  # 6种语言关卡 JSON（共172关）
-│   │   ├── python.json           # 34关
-│   │   ├── javascript.json       # 30关
-│   │   ├── java.json             # 30关
-│   │   ├── c.json                # 20关
-│   │   ├── cpp.json              # 28关
-│   │   └── typescript.json       # 30关
-│   └── agent/                    # 智能体工坊（8主线92节点）
-│
-├── scripts/
-│   └── check_content.py          # 关卡内容完整性检查脚本
-│
-└── .env.example                  # 环境变量模板
-```
+### 闯关学习
 
+6 种编程语言，共 172 道闯关关卡。每关包含标题、描述、难度、XP 奖励、起始代码、测试用例、提示、知识点标签。关卡采用顺序解锁机制（第 1 关始终可用，后续关卡必须前置通关后解锁）。完成后系统结算得分（0-5 星）并增加 XP，每 100 XP 升一级。
 
----
+### 能力诊断
 
-## API 接口一览
+10 道硬编码选择题，覆盖 Python 核心知识点。纯代码评分（非 AI），0-100 分判定等级（入门级/进阶级/高级）并推荐学习起点。诊断结果存入数据库并在前端展示。
 
-### 认证
-| 方法 | 路径 | 用途 |
-|:----:|------|------|
-| POST | `/api/v1/auth/register` | 用户注册 |
-| POST | `/api/v1/auth/login` | 用户登录 |
-| POST | `/api/v1/auth/refresh` | 刷新令牌 |
+### AI 智能体"小智"
 
-### 课程与关卡
-| 方法 | 路径 | 用途 |
-|:----:|------|------|
-| GET | `/api/v1/languages` | 获取语言列表 |
-| GET | `/api/v1/languages/{slug}` | 语言详情 |
-| GET | `/api/v1/languages/{slug}/map` | 闯关地图（含解锁状态） |
-| GET | `/api/v1/lessons/{id}` | 课时详情 |
-| POST | `/api/v1/lessons/{id}/submit` | 提交代码评测 |
-| GET | `/api/v1/lessons/{id}/stats` | 评测统计 |
-| GET | `/api/v1/lessons/{id}/hint` | 获取提示 |
-| GET | `/api/v1/lessons/recommend` | 推荐关卡 |
+采用抽象工厂模式设计 AIProvider（DeepSeek/Mock 双提供者）。4 种角色模式：诊断（错误分析）、导师（启发式教学）、审查（四维雷达评分）、规划（方向推荐）。双层 Prompt 组合（模式级+语言级），WebSocket 流式对话逐字推送，对话历史数据库持久化。
 
-### AI 智能体
-| 方法 | 路径 | 用途 |
-|:----:|------|------|
-| POST | `/api/v1/ai/chat` | AI 通用对话 |
-| WS | `/ws/ai/chat` | AI 流式对话 |
-| POST | `/api/v1/ai/diagnostic` | 代码诊断 |
-| POST | `/api/v1/ai/tutor` | 导师指导 |
-| POST | `/api/v1/ai/review` | 结构化代码审查（四维度评分） |
-| POST | `/api/v1/ai/plan` | 学习规划 |
-| POST | `/api/v1/ai/classify-error` | AI 错误分类 |
-| GET | `/api/v1/ai/history` | 对话历史 |
+### 代码评测引擎
 
-### 诊断、错题与知识
-| 方法 | 路径 | 用途 |
-|:----:|------|------|
-| GET | `/api/v1/diagnostic/questions` | 获取诊断题目 |
-| POST | `/api/v1/diagnostic/submit` | 提交诊断答案 |
-| GET | `/api/v1/diagnostic/result` | 查询诊断结果 |
-| GET | `/api/v1/errors` | 获取错题列表 |
-| PATCH | `/api/v1/errors/{id}/resolve` | 标记错题已解决 |
-| GET | `/api/v1/progress/knowledge` | 获取知识掌握度 |
+7 步评测流程：提交→查用例→拼接→subprocess 执行→捕获输出→智能比对→评分加 XP。支持 6 种语言编译和执行，智能比对（精确/数值/子串/空白/numpy 清洗）。评测完全不依赖 AI，AI 仅在出错后做错误分类。
 
-### 用户、成就与排行榜
-| 方法 | 路径 | 用途 |
-|:----:|------|------|
-| GET | `/api/v1/users/me` | 获取当前用户信息 |
-| GET | `/api/v1/users/me/stats` | 用户统计数据 |
-| GET | `/api/v1/users/me/achievements` | 已解锁成就 |
-| GET | `/api/v1/users/me/activity` | 90 天活动热力图 |
-| GET | `/api/v1/achievements` | 成就列表 |
-| GET | `/api/v1/leaderboard?period=` | 排行榜（week/month/all） |
+### 错题本与双轨降级
 
-### 代码收藏
-| 方法 | 路径 | 用途 |
-|:----:|------|------|
-| GET | `/api/v1/snippets` | 获取收藏列表 |
-| POST | `/api/v1/snippets` | 收藏代码 |
-| DELETE | `/api/v1/snippets/{id}` | 删除收藏 |
+每次提交未满分时自动触发：AI 优先分类（syntax/logic/boundary/performance），AI 不可用时降级到规则关键词匹配。错题本支持按类型筛选、AI 分析展开、标记已解决、重新挑战。
+
+### 知识掌握度与推荐
+
+加权平均算法：新掌握度 = 当前得分 × 0.6 + 历史掌握度 × 0.4。规则驱动推荐：找薄弱标签→筛选关卡→排序推荐最多 3 条。新用户或无匹配时返回下一节顺序关卡兜底。
 
 ### 智能体工坊
-| 方法 | 路径 | 用途 |
-|:----:|------|------|
-| GET | `/api/v1/agent/map` | 神经元网络地图 |
-| GET | `/api/v1/agent/nodes/{id}` | 节点详情 |
-| POST | `/api/v1/agent/nodes/{id}/submit` | 提交代码评测 |
-| GET | `/api/v1/agent/progress` | 用户进度 |
-| GET | `/api/v1/agent/tracks` | 8 条主线概览 |
 
-### 会员
-| 方法 | 路径 | 用途 |
-|:----:|------|------|
-| POST | `/api/v1/user/upgrade` | 模拟会员升级 |
-| GET | `/api/v1/user/membership` | 查询会员信息 |
+8 条 AI 学习主线：ML、Agent 开发、大模型应用、综合项目、深度学习、NLP、CV、强化学习，共 92 个学习节点。神经元地图可视化，5 级能量评分系统。
+
+### 管理后台
+
+暗色主题，6 大模块：仪表盘、课程管理、用户管理、成就管理、提交审核、系统设置。三级权限（viewer/editor/admin），课程编辑支持知识标签/时长/前置依赖维护。
 
 ---
 
 ## 演示流程
 
 ```
-1. 注册/登录
-2. AI 智能体"小智"打招呼 → 引导进入能力诊断
-3. 完成 10 道选择题 → 生成能力画像（得分/强弱项/推荐起点）
-4. 进入推荐关卡 → 在 Monaco 编辑器中编写代码
-5. 提交代码 → AI 四维度审查+雷达图（正确性/可读性/效率/规范性）
+1. 注册/登录（或使用 demo / demo123）
+2. 课程大厅 → 能力诊断（10 道选择题）
+3. 获取诊断结果 → 推荐起点关卡
+4. 进入闯关 → Monaco 编辑器编写代码
+5. 提交代码 → 评测引擎自动评分
 6. 通过 → 更新知识掌握度，进入下一关
-7. 失败 → 错误自动记录到错题本
-8. 查看错题本 → 按类型筛选 → 标记已解决
-9. 个人中心 → 查看知识掌握度画像，AI智能分析
-10. 切换其他语言 → 6种语言全部可用
+7. 失败 → 自动记录错题 + AI 错误分类
+8. 查看错题本 → 按类型筛选 → AI 分析
+9. 个人中心 → 知识画像 / 学习热力图 / 排行榜
+10. 智能体工坊 → 神经元地图 → AI 主线学习
 ```
+
+---
+
+## 数据库
+
+共 18 张表，以 SQLite 为存储引擎，通过 SQLAlchemy 异步 ORM 操作。
+
+**核心表：** users（用户+会员）、languages（6 种语言）、lessons（172 关）、progress（学习进度）、submissions（提交记录）、user_diagnostics（诊断结果）、user_knowledge（知识掌握度）、user_errors（错题）、chat_histories（AI 对话历史）、neuron_nodes（92 个智能体节点）、code_snippets（代码收藏）、achievements（成就定义）、admin_users（管理员，三级角色）
+
+---
+
+## API 接口一览
+
+> 完整契约见 [API接口契约.md](API接口契约.md)
+
+| 类别 | 主要端点 |
+|------|---------|
+| 认证 | POST `/api/v1/auth/register`、`/login`、`/refresh` |
+| 课程 | GET `/api/v1/languages`、`/languages/{slug}/map` |
+| 课时 | GET `/api/v1/lessons/{id}`、POST `/lessons/{id}/submit`、GET `/lessons/recommend` |
+| AI | POST `/api/v1/ai/chat`（四种模式）/ WS `/ai/chat/ws?token=` |
+| 诊断 | GET/POST `/api/v1/diagnostic/questions`、`/submit`、`/result` |
+| 错题 | GET `/api/v1/errors`、PATCH `/errors/{id}/resolve` |
+| 知识 | GET `/api/v1/progress/knowledge`、`/users/me/activity` |
+| 智能体 | GET `/api/v1/agent/map`、`/nodes/{id}`、POST `/nodes/{id}/submit` |
+| 会员 | GET `/api/v1/users/me/membership`、POST `/users/me/upgrade` |
 
 ---
 
 ## 团队分工
 
-| 成员 | 角色 | 核心任务 | 
+| 成员 | 角色 | 核心任务 |
 |:----:|:----:|----------|
-| **A** | 基础设施负责人 | P0修复 + 数据库建表 + 诊断/知识/错题后端 + 会员系统 | 
-| **B** | AI 智能体负责人 | AIProvider工厂 + 四种模式 + 代码审查 + 错误分类 | 
-| **C** | 前端页面负责人 | 品牌重命名 + 诊断/错题本页面 + 雷达图 + 知识图表 + AI聊天改造 |
-| **D** | 内容与推荐负责人 | Python 24关打标签 + 推荐算法 + 管理后台改造 + 文档 | 
-
-
-## 许可证
-
-MIT
+| **组长** | 项目统筹 | 系统架构设计、后端核心开发、答辩材料统筹 |
+| **成员 A** | 后端核心 | 数据库设计、能力诊断、代码评测引擎、知识掌握度、错题本、会员系统 |
+| **成员 B** | AI 智能体 | AIProvider 抽象工厂、四种模式、双轨错误分类、WebSocket 流式对话 |
+| **成员 C** | 前端开发 | 11 个页面开发、Monaco 编辑器、雷达图、AI 聊天、闯关地图动画 |
+| **成员 D** | 内容与推荐 | 172 关课程内容、规则推荐算法、管理后台、课程元数据校验 |
