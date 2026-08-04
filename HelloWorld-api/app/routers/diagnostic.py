@@ -1,4 +1,7 @@
-"""能力诊断路由 — 提供诊断题目获取和答案提交接口"""
+"""能力诊断路由 — 提供诊断题目获取和答案提交接口
+
+用户完成能力诊断后，系统根据答题结果评估知识水平并推荐合适的起始关卡。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException
 from app.core.deps import get_current_user
@@ -16,11 +19,13 @@ router = APIRouter()
 
 
 class AnswerItem(BaseModel):
+    """单题答案"""
     question_id: int
     answer: str
 
 
 class DiagnosticSubmitRequest(BaseModel):
+    """诊断提交请求体"""
     answers: list[AnswerItem] = Field(..., min_length=1, max_length=10,
                                        description="用户答案列表，每个元素包含 question_id 和 answer")
 
@@ -28,7 +33,7 @@ class DiagnosticSubmitRequest(BaseModel):
 @router.get("/diagnostic/questions")
 async def get_questions(current_user=Depends(get_current_user)):
     """获取诊断题目（10 道选择题，不返回正确答案）"""
-    # 返回时去掉 answer 字段
+    # 返回时去掉 answer 字段，避免泄露答案
     safe_questions = [
         {k: v for k, v in q.items() if k != "answer"}
         for q in DIAGNOSTIC_QUESTIONS
@@ -52,6 +57,7 @@ async def submit_diagnostic(
     # 转换为 dict 列表格式
     answers = [{"question_id": a.question_id, "answer": a.answer} for a in request.answers]
 
+    # 计算诊断结果
     result = calculate_diagnostic_result(answers)
     await save_diagnostic(db, current_user.id, result)
     return result

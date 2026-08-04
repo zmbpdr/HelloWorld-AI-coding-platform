@@ -1,16 +1,28 @@
+/**
+ * 设置页面 - Settings
+ * 功能：用户偏好设置页，包括编辑器配置（字号）、通知开关、
+ * AI 对话管理、快捷键查看、数据导出和重置学习进度。
+ */
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../stores/userStore'
 import PageTransition from '../components/ui/PageTransition'
 
+/** 从 localStorage 读取设置，失败时返回默认值 */
 function loadSetting<T>(key: string, fallback: T): T {
   try { const stored = localStorage.getItem(key); return stored !== null ? JSON.parse(stored) : fallback }
   catch { return fallback }
 }
+/** 将设置保存到 localStorage */
 function saveSetting<T>(key: string, value: T) { localStorage.setItem(key, JSON.stringify(value)) }
 
+/** Toast 提示消息类型 */
 type ToastType = { message: string; type: 'success' | 'error' }
 
+/**
+ * 设置页面组件
+ * 管理所有本地用户偏好设置
+ */
 export default function Settings() {
   const navigate = useNavigate()
   const { isAuthenticated } = useUserStore()

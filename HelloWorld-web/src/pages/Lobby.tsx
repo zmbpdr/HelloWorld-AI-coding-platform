@@ -1,3 +1,8 @@
+/**
+ * 课程大厅页面 - Lobby
+ * 功能：展示所有编程语言课程和智能体工坊的入口页面。
+ * 用户可在此浏览课程列表、查看学习进度、进入能力诊断、访问排行榜和个人中心。
+ */
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCourseStore } from '../stores/courseStore'
@@ -8,6 +13,7 @@ import ActivityHeatmap from '../components/ui/ActivityHeatmap'
 import SnippetPanel from '../components/snippets/SnippetPanel'
 import { getAgentTracks, type TrackOverview } from '../api/agent'
 
+// 页面标签页定义：编程闯关 / 智能体工坊
 type TabKey = 'languages' | 'workshop'
 
 const TABS: { key: TabKey; label: string; icon: string; description: string }[] = [
@@ -15,6 +21,7 @@ const TABS: { key: TabKey; label: string; icon: string; description: string }[] 
   { key: 'workshop', label: '智能体工坊', icon: '🧠', description: 'AI / 机器学习 / Agent开发 · 神经元网络' },
 ]
 
+// 智能体工坊预设的路线配置
 const AGENT_TRACKS = [
   { slug: 'ml', name: '机器学习', color: '#14b8a6', icon: '🧠', description: '从数学基础到经典算法，构建ML知识体系', nodes: 8 },
   { slug: 'agent', name: 'Agent开发', color: '#6366f1', icon: '🤖', description: '从工具调用到多智能体协作，掌握Agent开发全栈', nodes: 8 },
@@ -26,6 +33,10 @@ const AGENT_TRACKS = [
   { slug: 'rl', name: '强化学习', color: '#f97316', icon: '🎮', description: '从Q-Learning到PPO，深入强化学习算法', nodes: 8 },
 ]
 
+/**
+ * 课程大厅页面组件
+ * 展示编程语言列表和智能体工坊两个主要功能区，支持页面间导航
+ */
 export default function Lobby() {
   const navigate = useNavigate()
   const { languages, fetchLanguages, isLoading, error } = useCourseStore()
@@ -35,15 +46,23 @@ export default function Lobby() {
   const [activeTab, setActiveTab] = useState<TabKey>('languages')
   const [agentTracks, setAgentTracks] = useState<TrackOverview[]>([])
 
+  // 加载课程列表，依赖认证状态和 fetchLanguages
   useEffect(() => { fetchLanguages() }, [fetchLanguages, isAuthenticated])
+  // 加载智能体工坊路线进度
   useEffect(() => { if (isAuthenticated) getAgentTracks().then(setAgentTracks).catch(() => {}) }, [isAuthenticated, activeTab])
 
+  /**
+   * 要求用户登录后再执行操作
+   * 如果未登录则弹出认证弹窗
+   */
   const requireAuth = useCallback((fn: () => void) => {
     if (!isAuthenticated) { setShowAuth(true); return }
     fn()
   }, [isAuthenticated])
 
+  // 难度排序：入门 < 进阶 < 高级
   const difficultyOrder: Record<string, number> = { beginner: 0, intermediate: 1, advanced: 2 }
+  // 对语言课程按难度和课时数排序
   const sortedLanguages = useMemo(() => {
     return [...languages].sort((a, b) => {
       const da = difficultyOrder[a.difficulty || 'beginner'] ?? 0

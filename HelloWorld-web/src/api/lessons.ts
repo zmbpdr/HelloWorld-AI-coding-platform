@@ -1,3 +1,8 @@
+/**
+ * 课时 API 模块
+ * 提供课时详情、代码提交和获取提示的接口调用
+ * 包含 LessonDetail、TestResult、SubmitResult 等类型定义
+ */
 import apiClient from './client'
 
 export interface LessonDetail {

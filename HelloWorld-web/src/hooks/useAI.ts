@@ -1,3 +1,8 @@
+/**
+ * AI 聊天 Hook - useAI
+ * 管理 AI 聊天状态，包括消息列表、加载状态、模式切换、
+ * 发送消息和从后端加载/保存聊天历史记录。
+ */
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { sendChatMessage, type ChatMessage, type ChatRequest, type AIMode } from '../api/ai'
 import apiClient from '../api/client'

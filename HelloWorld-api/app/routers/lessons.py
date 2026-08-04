@@ -1,4 +1,7 @@
-"""课时路由 - 获取课时内容、提交代码、获取提示"""
+"""课时路由 - 获取课时内容、提交代码、获取提示
+
+处理关卡的获取、代码提交评测、统计数据和 AI 提示等操作。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -39,14 +42,17 @@ async def get_lesson(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """获取课时内容"""
+    """获取课时内容
+
+    返回课时的完整信息，包括该用户的学习进度和最佳提交代码。
+    """
     result = await db.execute(select(Lesson).where(Lesson.id == lesson_id))
     lesson = result.scalars().first()
 
     if not lesson:
         raise HTTPException(status_code=404, detail="课时不存在")
 
-    # 获取用户进度
+    # 获取用户学习进度
     progress_result = await db.execute(
         select(Progress).where(
             Progress.user_id == current_user.id,
@@ -55,7 +61,7 @@ async def get_lesson(
     )
     progress = progress_result.scalars().first()
 
-    # 获取用户最佳提交
+    # 获取用户最佳提交（按得分降序取第一条）
     submission_result = await db.execute(
         select(Submission)
         .where(Submission.user_id == current_user.id, Submission.lesson_id == lesson_id)
@@ -90,7 +96,10 @@ async def submit_code(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """提交代码评测"""
+    """提交代码评测
+
+    提交用户代码到评测系统，执行测试用例并返回评测结果。
+    """
     await submit_limiter(request=req, identifier=str(current_user.id))
 
     # 查询课时及其所属语言，确定执行环境
@@ -103,6 +112,7 @@ async def submit_code(
     if not lesson:
         raise HTTPException(status_code=404, detail="课时不存在")
 
+    # 调用评测服务执行代码评测
     judge_service = JudgeService(db)
     result = await judge_service.submit_and_judge(
         user_id=current_user.id,
@@ -128,6 +138,7 @@ async def get_lesson_stats(
     )
     submissions = result.scalars().all()
 
+    # 构建提交时间线
     timeline = []
     error_counts = {"syntax": 0, "runtime": 0, "timeout": 0, "logic": 0}
     for s in submissions:
@@ -138,6 +149,7 @@ async def get_lesson_stats(
             "status": s.status,
             "submitted_at": s.submitted_at.isoformat() if s.submitted_at else None,
         })
+        # 分类统计错误类型
         if s.status in ("error", "timeout"):
             error_counts["timeout" if s.status == "timeout" else "runtime"] += 1
         elif s.status == "wrong":
@@ -160,7 +172,7 @@ async def get_hint(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """获取AI提示"""
+    """获取 AI 提示"""
     result = await db.execute(select(Lesson).where(Lesson.id == lesson_id))
     lesson = result.scalars().first()
 

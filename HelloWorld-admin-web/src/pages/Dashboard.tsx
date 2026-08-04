@@ -1,3 +1,10 @@
+/**
+ * Dashboard.tsx - 仪表盘页面
+ *
+ * 管理后台首页，展示今日核心指标（新增用户、活跃用户、提交数、通过率）、
+ * 近7天趋势图和智能告警（异常提交）信息。
+ */
+
 import { useEffect, useState } from 'react'
 import { Row, Col, Card, Statistic, Typography, Collapse, Tag, Spin } from 'antd'
 import {
@@ -9,6 +16,7 @@ import { getDashboardStats, getSubmissions } from '../api/admin'
 
 const { Title, Text } = Typography
 
+/** 仪表盘统计数据接口 */
 interface DashboardStats {
   today_new_users: number
   today_active_users: number
@@ -20,20 +28,24 @@ interface DashboardStats {
   total_submissions: number
 }
 
+/** 仪表盘页面组件 */
 export default function Dashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
+  // 异常提交告警列表
   const [alerts, setAlerts] = useState<{ id: number; username: string; lesson_title: string; status: string; submitted_at: string }[]>([])
   const [alertsLoading, setAlertsLoading] = useState(false)
 
+  // 获取仪表盘统计数据
   useEffect(() => {
     (async () => {
       try { setLoading(true); setStats(await getDashboardStats()) }
-      catch { /* ignore */ }
+      catch { /* 接口失败时忽略，保持 UI 友好 */ }
       finally { setLoading(false) }
     })()
   }, [])
 
+  // 获取异常提交（错误和超时）作为智能告警
   useEffect(() => {
     (async () => {
       setAlertsLoading(true)
@@ -46,11 +58,12 @@ export default function Dashboard() {
           ...(errRes.items ?? []).map((i: any) => ({ ...i, alertType: 'error' })),
           ...(timeoutRes.items ?? []).map((i: any) => ({ ...i, alertType: 'timeout' })),
         ])
-      } catch { /* ignore */ }
+      } catch { /* 接口失败时忽略 */ }
       finally { setAlertsLoading(false) }
     })()
   }, [])
 
+  // 今日核心指标卡片配置
   const cards = [
     { title: '今日新增用户', value: stats?.today_new_users ?? 0, icon: <UserOutlined style={{ color: '#6366f1', fontSize: 20 }} />, color: '#6366f1' },
     { title: '今日活跃用户', value: stats?.today_active_users ?? 0, icon: <RiseOutlined style={{ color: '#22c55e', fontSize: 20 }} />, color: '#22c55e' },
@@ -58,6 +71,7 @@ export default function Dashboard() {
     { title: '今日通过率', value: `${stats?.today_pass_rate ?? 0}%`, icon: <TrophyOutlined style={{ color: '#3b82f6', fontSize: 20 }} />, color: '#3b82f6' },
   ]
 
+  /** 渲染提交状态标签 */
   const statusTag = (s: string) => {
     const map: Record<string, { color: string; text: string }> = {
       error: { color: 'red', text: '错误' },
@@ -69,7 +83,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      {/* 今日核心指标 */}
+      {/* 今日核心指标区域 */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
           <ClockCircleOutlined style={{ color: '#6366f1' }} />
@@ -128,7 +142,7 @@ export default function Dashboard() {
         </Row>
       </div>
 
-      {/* 近7天趋势图 */}
+      {/* 近7天趋势图卡片 */}
       <Card
         title={<Text style={{ color: '#e2e8f0', fontWeight: 600, fontSize: 15 }}>近 7 天趋势</Text>}
         className="card-lift"
@@ -144,7 +158,7 @@ export default function Dashboard() {
         <TrendChart days={7} />
       </Card>
 
-      {/* 智能告警（仅当有异常时显示） */}
+      {/* 智能告警区域 - 仅当有异常时显示 */}
       {alerts.length > 0 && (
         <Collapse
           ghost

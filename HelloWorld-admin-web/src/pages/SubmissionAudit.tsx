@@ -1,3 +1,10 @@
+/**
+ * SubmissionAudit.tsx - 提交审核页面
+ *
+ * 提供提交记录的查询审计功能，支持按状态和用户名筛选，
+ * 点击查看提交详情（含代码、输出、错误信息等），以 Drawer 形式展示。
+ */
+
 import { useState } from 'react'
 import {
   Table, Select, Tag, Drawer, Descriptions, Typography, Space, App,
@@ -11,16 +18,19 @@ import { getSubmissions, getSubmissionDetail } from '../api/admin'
 
 const { Text } = Typography
 
+/** 提交记录列表项数据结构 */
 interface SubmissionItem {
   id: number; user_id: number; username: string; lesson_id: number
   lesson_title: string; status: string; language: string; score: number; submitted_at: string
 }
 
+/** 提交记录详情数据结构（含代码和执行结果） */
 interface SubmissionDetail extends SubmissionItem {
   code: string; stdout: string; stderr: string | null
   execution_time: number | null; memory_used: number | null
 }
 
+/** 提交状态筛选选项 */
 const statusOpts = [
   { value: 'error', label: '错误' },
   { value: 'timeout', label: '超时' },
@@ -28,6 +38,7 @@ const statusOpts = [
   { value: 'accepted', label: '通过' },
 ]
 
+/** 提交审核页面组件 */
 export default function SubmissionAudit() {
   const { message } = App.useApp()
   const [submissions, setSubmissions] = useState<SubmissionItem[]>([])
@@ -35,16 +46,17 @@ export default function SubmissionAudit() {
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
 
-  // 筛选条件
+  // 筛选条件状态
   const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
   const [usernameFilter, setUsernameFilter] = useState('')
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
 
-  // 详情
+  // 提交详情 Drawer 状态
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [detail, setDetail] = useState<SubmissionDetail | null>(null)
 
+  /** 执行查询 - 至少选择一个筛选条件 */
   const doSearch = async (pg = 1, ps = pageSize) => {
     if (!statusFilter && !usernameFilter) {
       message.warning('请至少选择一个筛选条件')
@@ -68,6 +80,7 @@ export default function SubmissionAudit() {
     }
   }
 
+  /** 重置筛选条件 */
   const handleReset = () => {
     setStatusFilter(undefined)
     setUsernameFilter('')
@@ -77,6 +90,7 @@ export default function SubmissionAudit() {
     setPage(1)
   }
 
+  /** 查看提交详情 */
   const handleViewDetail = async (id: number) => {
     try {
       const res = await getSubmissionDetail(id)
@@ -85,6 +99,7 @@ export default function SubmissionAudit() {
     } catch { message.error('获取详情失败') }
   }
 
+  /** 渲染提交状态标签 - 根据状态显示不同颜色和图标 */
   const renderStatus = (s: string) => {
     const map: Record<string, { color: string; text: string; icon: React.ReactNode }> = {
       accepted: { color: 'green', text: '通过', icon: <CheckCircleOutlined /> },
@@ -96,6 +111,7 @@ export default function SubmissionAudit() {
     return cfg ? <Tag color={cfg.color} icon={cfg.icon}>{cfg.text}</Tag> : <Tag>{s}</Tag>
   }
 
+  // 表格列定义
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id', width: 60 },
     { title: '用户', dataIndex: 'username', key: 'username', width: 100 },
@@ -114,6 +130,7 @@ export default function SubmissionAudit() {
 
   return (
     <div>
+      {/* 顶部操作栏 - 标题 + 重置/查询按钮 */}
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2 style={{ margin: 0, color: '#e2e8f0' }}>提交审计</h2>
         <Space>
@@ -122,7 +139,7 @@ export default function SubmissionAudit() {
         </Space>
       </div>
 
-      {/* 筛选条件 */}
+      {/* 筛选条件区域 */}
       <div
         style={{
           marginBottom: 16, padding: '16px 20px', borderRadius: 12,
@@ -154,7 +171,7 @@ export default function SubmissionAudit() {
         </Row>
       </div>
 
-      {/* 结果表格 */}
+      {/* 结果表格 - 未查询时显示引导提示 */}
       {!searched ? (
         <div
           style={{
@@ -181,7 +198,7 @@ export default function SubmissionAudit() {
         />
       )}
 
-      {/* 详情 Drawer */}
+      {/* 提交详情 Drawer */}
       <Drawer
         title={<Space><span style={{ color: '#e2e8f0' }}>提交详情</span>{detail && renderStatus(detail.status)}</Space>}
         size="large"
@@ -190,6 +207,7 @@ export default function SubmissionAudit() {
       >
         {detail && (
           <div>
+            {/* 基本信息描述列表 */}
             <Descriptions column={2} bordered size="small" style={{ marginBottom: 20 }}>
               <Descriptions.Item label="ID">{detail.id}</Descriptions.Item>
               <Descriptions.Item label="用户">{detail.username}</Descriptions.Item>
@@ -200,6 +218,7 @@ export default function SubmissionAudit() {
               <Descriptions.Item label="提交时间" span={2}>{detail.submitted_at}</Descriptions.Item>
             </Descriptions>
 
+            {/* 提交代码内容 */}
             <Text strong style={{ display: 'block', marginBottom: 8, color: '#cbd5e1' }}>提交代码：</Text>
             <pre style={{
               background: '#0f1322', color: '#cbd5e1', padding: 16, borderRadius: 10, overflow: 'auto',
@@ -207,6 +226,7 @@ export default function SubmissionAudit() {
               border: '1px solid rgba(255,255,255,0.05)',
             }}>{detail.code}</pre>
 
+            {/* 标准输出内容 */}
             {detail.stdout && (
               <div style={{ marginBottom: 20 }}>
                 <Text strong style={{ color: '#22c55e', display: 'block', marginBottom: 8 }}>输出：</Text>
@@ -218,6 +238,7 @@ export default function SubmissionAudit() {
               </div>
             )}
 
+            {/* 错误输出内容 */}
             {detail.stderr && (
               <div style={{ marginBottom: 20 }}>
                 <Text strong style={{ color: '#ef4444', display: 'block', marginBottom: 8 }}>错误输出：</Text>

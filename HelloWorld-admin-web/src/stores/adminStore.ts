@@ -1,7 +1,14 @@
+/**
+ * adminStore.ts - 管理后台 Zustand 状态管理
+ *
+ * 管理管理员认证状态，包含登录、获取管理员信息、退出登录、
+ * 清除错误等操作，使用 localStorage 持久化 token。
+ */
+
 import { create } from 'zustand'
 import { adminLogin, getAdminInfo } from '../api/admin'
 
-// 管理员用户信息
+/** 管理员用户信息 */
 interface AdminUser {
   id: number
   username: string
@@ -10,7 +17,7 @@ interface AdminUser {
   is_active: boolean
 }
 
-// 管理员状态接口
+/** 管理员状态管理接口 */
 interface AdminState {
   admin: AdminUser | null
   isAuthenticated: boolean
@@ -22,14 +29,18 @@ interface AdminState {
   clearError: () => void
 }
 
-// 管理员认证状态管理
+/** 管理员认证状态管理 Store */
 export const useAdminStore = create<AdminState>((set) => ({
   admin: null,
+  // 初始化时检查 localStorage 是否有 token 来判断是否已认证
   isAuthenticated: !!localStorage.getItem('admin_token'),
   isLoading: false,
   error: null,
 
-  // 登录 — 先获取管理员信息再标记已认证，避免竞态导致 UI 不一致
+  /**
+   * 登录 — 先调用登录接口获取 token，再获取管理员信息
+   * 这样避免竞态导致 UI 不一致
+   */
   login: async (username, password) => {
     set({ isLoading: true, error: null })
     try {
@@ -45,23 +56,24 @@ export const useAdminStore = create<AdminState>((set) => ({
     }
   },
 
-  // 获取管理员信息
+  /** 获取当前管理员信息 */
   fetchAdmin: async () => {
     try {
       const adminInfo = await getAdminInfo()
       set({ admin: adminInfo, isAuthenticated: true })
     } catch {
+      // 获取失败视为未登录，清除状态
       set({ admin: null, isAuthenticated: false })
       localStorage.removeItem('admin_token')
     }
   },
 
-  // 退出登录
+  /** 退出登录 — 清除 token 和状态 */
   logout: () => {
     localStorage.removeItem('admin_token')
     set({ admin: null, isAuthenticated: false })
   },
 
-  // 清除错误
+  /** 清除错误信息 */
   clearError: () => set({ error: null }),
 }))

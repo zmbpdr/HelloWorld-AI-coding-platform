@@ -1,3 +1,8 @@
+/**
+ * 个人中心页面 - Profile
+ * 功能：展示用户个人信息、学习统计数据、知识掌握度分析、
+ * AI 学习周报、成就徽章展示和学习热力图等。
+ */
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../stores/userStore'
@@ -8,15 +13,21 @@ import AchievementCard from '../components/badge/AchievementCard'
 import PageTransition from '../components/ui/PageTransition'
 import ActivityHeatmap from '../components/ui/ActivityHeatmap'
 
+/** 用户统计数据接口 */
 interface Stats {
   username: string; level: number; xp: number; streak_days: number
   completed_lessons: number; total_submissions: number; first_pass_count: number
 }
+/** 成就数据接口 */
 interface AchievementData {
   id: number; slug: string; name: string; description: string | null
   rarity: string; unlocked: boolean; unlocked_at: string | null
 }
 
+/**
+ * 个人中心页面组件
+ * 展示用户学习数据、知识掌握度和成就记录
+ */
 export default function Profile() {
   const navigate = useNavigate()
   const { logout, isAuthenticated } = useUserStore()
@@ -30,6 +41,7 @@ export default function Profile() {
   const [weeklyReport, setWeeklyReport] = useState('')
   const [weeklyLoading, setWeeklyLoading] = useState(false)
 
+  // 加载用户统计数据、成就和知识掌握情况
   useEffect(() => {
     if (!isAuthenticated) { navigate('/'); return }
     let cancelled = false
@@ -54,6 +66,7 @@ export default function Profile() {
     return () => { cancelled = true }
   }, [isAuthenticated, navigate])
 
+  /** 退出登录并返回大厅 */
   const handleLogout = () => { logout(); navigate('/') }
 
   if (loading) return <ProfileSkeleton />
@@ -72,6 +85,7 @@ export default function Profile() {
   const xpInLevel = stats ? stats.xp % 100 : 0
   const hasActivity = stats && (stats.completed_lessons > 0 || stats.total_submissions > 0)
 
+  /** 调用 AI 分析用户知识掌握水平，生成个性化学习建议 */
   const handleKnowledgeAnalysis = async () => {
     setAiAnalysisLoading(true)
     try {

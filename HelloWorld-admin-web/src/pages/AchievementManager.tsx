@@ -1,9 +1,16 @@
+/**
+ * AchievementManager.tsx - 成就管理页面
+ *
+ * 使用 Ant Design Table 展示成就列表，支持新增/编辑成就的 Modal 表单，
+ * 包含名称、Slug、描述、图标、稀有度、条件类型/值、经验奖励等字段。
+ */
+
 import { useEffect, useState } from 'react'
 import { Table, Button, Modal, Form, Input, Select, InputNumber, Tag, Space, App } from 'antd'
 import { PlusOutlined, EditOutlined } from '@ant-design/icons'
 import { getAchievements, createAchievement, updateAchievement } from '../api/admin'
 
-// 成就列表项 — 字段名对齐后端
+/** 成就列表项数据结构 - 字段名对齐后端 */
 interface AchievementItem {
   id: number
   name: string
@@ -16,7 +23,7 @@ interface AchievementItem {
   xp_reward: number
 }
 
-// 成就管理页面 - Ant Design Table 列表 + 新增/编辑 Modal
+/** 成就管理页面组件 - 列表展示 + 新增/编辑 Modal */
 export default function AchievementManager() {
   const { message } = App.useApp()
   const [achievements, setAchievements] = useState<AchievementItem[]>([])
@@ -25,7 +32,7 @@ export default function AchievementManager() {
   const [editingItem, setEditingItem] = useState<AchievementItem | null>(null)
   const [form] = Form.useForm()
 
-  // 获取成就列表
+  /** 获取成就列表 */
   const fetchAchievements = async () => {
     try {
       setLoading(true)
@@ -38,25 +45,26 @@ export default function AchievementManager() {
     }
   }
 
+  // 页面初始化时加载成就列表
   useEffect(() => {
     fetchAchievements()
   }, [])
 
-  // 打开新增弹窗
+  /** 打开新增成就弹窗 */
   const handleAdd = () => {
     setEditingItem(null)
     form.resetFields()
     setModalOpen(true)
   }
 
-  // 打开编辑弹窗
+  /** 打开编辑成就弹窗 - 回填已有数据 */
   const handleEdit = (record: AchievementItem) => {
     setEditingItem(record)
     form.setFieldsValue(record)
     setModalOpen(true)
   }
 
-  // 提交表单
+  /** 提交新增/编辑表单 */
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields()
@@ -70,7 +78,7 @@ export default function AchievementManager() {
       setModalOpen(false)
       fetchAchievements()
     } catch (err: any) {
-      if (err?.errorFields) return  // Ant Design validation error, form already shows inline errors
+      if (err?.errorFields) return  // Ant Design 表单验证错误，内联提示已显示
       message.error('操作失败')
     }
   }
@@ -114,6 +122,7 @@ export default function AchievementManager() {
 
   return (
     <div>
+      {/* 顶部栏 - 标题 + 新增按钮 */}
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
         <h2 style={{ margin: 0 }}>成就管理</h2>
         <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
@@ -121,6 +130,7 @@ export default function AchievementManager() {
         </Button>
       </div>
 
+      {/* 成就列表表格 */}
       <Table
         columns={columns}
         dataSource={achievements}
@@ -129,7 +139,7 @@ export default function AchievementManager() {
         pagination={{ pageSize: 10 }}
       />
 
-      {/* 新增/编辑弹窗 */}
+      {/* 新增/编辑成就弹窗 */}
       <Modal
         title={editingItem ? '编辑成就' : '新增成就'}
         open={modalOpen}

@@ -1,4 +1,7 @@
-"""智能体工坊路由 - 神经元网络地图、节点详情、代码提交、进度查询"""
+"""智能体工坊路由 - 神经元网络地图、节点详情、代码提交、进度查询
+
+提供智能体工坊的学习功能，包括神经元地图查看、节点学习、代码提交评测和进度追踪。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -68,6 +71,6 @@ async def get_tracks(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """获取8条主线概览"""
+    """获取 8 条主线概览"""
     service = AgentService(db)
     return await service.get_tracks_overview(current_user.id)

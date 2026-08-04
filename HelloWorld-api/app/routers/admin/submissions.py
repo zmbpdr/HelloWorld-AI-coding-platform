@@ -1,4 +1,7 @@
-"""管理员后台提交审计路由"""
+"""管理员后台提交审计路由
+
+提供提交记录的列表查询和详情查看功能，用于管理后台审核。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,7 +25,7 @@ async def list_submissions(
     current_admin: AdminUser = Depends(require_role("editor")),
     db: AsyncSession = Depends(get_db),
 ):
-    """获取提交记录列表"""
+    """获取提交记录列表（支持分页、状态筛选和用户搜索）"""
     from app.services.admin_service import AdminService
     service = AdminService(db)
     return await service.get_submissions_list(page=page, page_size=page_size, status=status, search=search)

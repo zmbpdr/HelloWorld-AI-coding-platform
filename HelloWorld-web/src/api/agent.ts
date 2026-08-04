@@ -1,3 +1,8 @@
+/**
+ * 智能体工坊 API 模块
+ * 提供神经元地图、Agent 节点详情、代码提交和路线概览的接口调用
+ * 包含 NeuronNode、NeuralMapData、AgentNodeDetail 等类型定义
+ */
 import apiClient from './client'
 
 export interface NeuronNode {

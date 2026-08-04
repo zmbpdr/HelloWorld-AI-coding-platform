@@ -1,8 +1,14 @@
+/**
+ * 错题本页面 - Errors
+ * 功能：展示用户在闯关中出错的题目记录，支持按错误类型筛选、
+ * 展开查看详情（错误代码 + AI 分析）、标记已解决和重新挑战。
+ */
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageTransition from '../components/ui/PageTransition'
 import { getErrors, resolveError, type ErrorItem, type ErrorStats } from '../api/errors'
 
+// 错误类型的中文标签和颜色配置
 const errorTypeMap: Record<string, { label: string; color: string; bg: string; border: string }> = {
   syntax:      { label: '语法错误', color: '#dc2626', bg: '#fef2f2', border: '#fecaca' },
   logic:       { label: '逻辑错误', color: '#d97706', bg: '#fffbeb', border: '#fde68a' },
@@ -10,6 +16,10 @@ const errorTypeMap: Record<string, { label: string; color: string; bg: string; b
   performance: { label: '性能问题', color: '#db2777', bg: '#fdf2f8', border: '#fbcfe8' },
 }
 
+/**
+ * 错题本页面组件
+ * 展示和筛选用户的错误记录，支持重新挑战和标记已解决
+ */
 export default function Errors() {
   const navigate = useNavigate()
   const [errors, setErrors] = useState<ErrorItem[]>([])
@@ -20,6 +30,7 @@ export default function Errors() {
   const [expandedId, setExpandedId] = useState<number | null>(null)
   const [resolvingIds, setResolvingIds] = useState<Set<number>>(new Set())
 
+  /** 根据筛选条件获取错题列表和统计数据 */
   const fetchErrors = useCallback(async () => {
     setIsLoading(true)
     setLoadError(null)
@@ -37,8 +48,10 @@ export default function Errors() {
     }
   }, [filter])
 
+  // 监听筛选条件变化，重新加载数据
   useEffect(() => { fetchErrors() }, [fetchErrors])
 
+  /** 标记错题为已解决，从列表中移除并更新统计数据 */
   const handleResolve = async (errorId: number) => {
     setResolvingIds(prev => new Set(prev).add(errorId))
     try {

@@ -1,3 +1,8 @@
+/**
+ * 成就卡片组件 - AchievementCard
+ * 功能：展示单个成就徽章，根据稀有度（普通/稀有/史诗/传说）
+ * 显示不同样式，未解锁时呈灰色锁定状态。
+ */
 interface AchievementCardProps { achievement: { slug: string; name: string; description: string | null; rarity: string; unlocked: boolean; unlocked_at: string | null } }
 
 const rarityStyles: Record<string, { border: string; bg: string; text: string; glow: string }> = {

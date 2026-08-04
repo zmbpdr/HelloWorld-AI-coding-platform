@@ -1,3 +1,8 @@
+/**
+ * 错题本 API 模块
+ * 提供错题列表获取和标记已解决的接口调用
+ * 包含 ErrorItem、ErrorStats 等类型定义
+ */
 import apiClient from './client'
 
 export interface ErrorItem {

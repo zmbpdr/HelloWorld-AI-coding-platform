@@ -1,4 +1,8 @@
-/** Chess piece — clean SVG knight, subtle idle animation, language-themed color */
+/**
+ * 象棋棋子组件 - ChessPiece
+ * 功能：SVG 骑士棋子，用于闯关地图的棋子跳跃动画，
+ * 支持主题色、尺寸、悬浮动画和跳跃动画模式。
+ */
 import { useEffect, useState } from 'react'
 
 interface ChessPieceProps {

@@ -1,21 +1,33 @@
+/**
+ * 排行榜页面 - Leaderboard
+ * 功能：展示用户排名数据，支持总榜/月榜/周榜切换，
+ * 前三名显示金银铜牌样式。
+ */
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import apiClient from '../api/client'
 import PageTransition from '../components/ui/PageTransition'
 
+/** 排行榜条目数据结构 */
 interface LeaderEntry {
   rank: number; username: string; avatar: string | null; xp: number; level: number; completed_lessons: number; streak_days: number
 }
 
+// 排行榜周期选项：总榜 / 月榜 / 周榜
 const PERIODS = [{ key: 'all', label: '总榜' }, { key: 'month', label: '月榜' }, { key: 'week', label: '周榜' }]
+// 前三名奖牌颜色
 const MEDAL_COLORS: Record<number, string> = { 1: '#d97706', 2: '#64748b', 3: '#b45309' }
 
+/**
+ * 排行榜页面组件
+ */
 export default function Leaderboard() {
   const navigate = useNavigate()
   const [data, setData] = useState<LeaderEntry[]>([])
   const [period, setPeriod] = useState('all')
   const [loading, setLoading] = useState(true)
 
+  // 根据当前周期加载排行榜数据
   useEffect(() => {
     setLoading(true)
     apiClient.get(`/leaderboard?period=${period}&limit=30`)

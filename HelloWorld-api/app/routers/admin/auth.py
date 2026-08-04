@@ -1,4 +1,8 @@
-"""管理后台认证路由"""
+"""管理后台认证路由
+
+提供管理员登录、登出和当前信息查询功能。
+管理员认证体系与普通用户完全隔离，使用独立的 token 类型标识。
+"""
 
 from datetime import datetime, timezone
 
@@ -17,7 +21,11 @@ router = APIRouter()
 
 @router.post("/auth/login", response_model=AdminToken)
 async def admin_login(request: AdminLogin, db: AsyncSession = Depends(get_db)):
-    """管理员登录"""
+    """管理员登录
+
+    验证用户名密码和管理员启用状态，生成带 admin 标识的 JWT 令牌。
+    该令牌只能访问管理后台接口，不能用于普通用户 API。
+    """
     result = await db.execute(select(AdminUser).where(AdminUser.username == request.username))
     admin = result.scalars().first()
 
@@ -30,7 +38,7 @@ async def admin_login(request: AdminLogin, db: AsyncSession = Depends(get_db)):
     # 更新最后登录时间
     admin.last_login_at = datetime.now(timezone.utc)
 
-    # 生成 JWT（包含 type=admin 标识）
+    # 生成 JWT（包含 type=admin 标识，与普通用户 token 区分）
     access_token = create_access_token(
         data={"sub": str(admin.id), "type": "admin", "role": admin.role}
     )

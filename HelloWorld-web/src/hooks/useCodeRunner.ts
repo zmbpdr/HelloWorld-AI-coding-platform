@@ -1,3 +1,8 @@
+/**
+ * 代码运行 Hook - useCodeRunner
+ * 管理代码提交运行状态，包括运行中/结果/错误状态，
+ * 处理服务端返回的错误信息和 Axios 异常提取。
+ */
 import { useState, useCallback } from 'react'
 import { submitCode, type SubmitResult } from '../api/lessons'
 

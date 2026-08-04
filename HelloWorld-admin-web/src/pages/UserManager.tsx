@@ -1,9 +1,16 @@
+/**
+ * UserManager.tsx - 用户管理页面
+ *
+ * 使用 Ant Design Table 展示用户列表，支持搜索、查看详情 Modal、
+ * 封禁/解封用户操作，并支持分页。
+ */
+
 import { useEffect, useState } from 'react'
 import { Table, Button, Input, Modal, Tag, Descriptions, Space, App } from 'antd'
 import { SearchOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import { getUsers, getUserDetail, banUser } from '../api/admin'
 
-// 用户列表项
+/** 用户列表项数据结构 */
 interface UserItem {
   id: number
   username: string
@@ -15,7 +22,7 @@ interface UserItem {
   xp: number
 }
 
-// 用户详情
+/** 用户详情数据结构（与列表项结构相同） */
 interface UserDetail {
   id: number
   username: string
@@ -27,7 +34,7 @@ interface UserDetail {
   xp: number
 }
 
-// 用户管理页面 - Ant Design Table 列表 + 搜索 + 详情 Modal + 封禁操作
+/** 用户管理页面组件 - 列表展示 + 搜索 + 详情 Modal + 封禁操作 */
 export default function UserManager() {
   const { message } = App.useApp()
   const [users, setUsers] = useState<UserItem[]>([])
@@ -42,7 +49,7 @@ export default function UserManager() {
   const [banTarget, setBanTarget] = useState<UserItem | null>(null)
   const [banReason, setBanReason] = useState('')
 
-  // 获取用户列表
+  /** 获取用户列表 */
   const fetchUsers = async (searchVal?: string, pg?: number, ps?: number) => {
     try {
       setLoading(true)
@@ -58,17 +65,18 @@ export default function UserManager() {
     }
   }
 
+  // 页面初始化时加载用户列表
   useEffect(() => {
     fetchUsers()
   }, [])
 
-  // 搜索
+  /** 搜索用户 */
   const handleSearch = (value: string) => {
     setSearch(value)
     fetchUsers(value)
   }
 
-  // 查看用户详情
+  /** 查看用户详情 */
   const handleViewDetail = async (id: number) => {
     try {
       const res = await getUserDetail(id)
@@ -79,7 +87,7 @@ export default function UserManager() {
     }
   }
 
-  // 封禁/解封用户
+  /** 封禁/解封用户 */
   const handleBan = async () => {
     if (!banTarget) return
     try {
@@ -136,6 +144,7 @@ export default function UserManager() {
 
   return (
     <div>
+      {/* 顶部栏 - 标题 + 搜索框 */}
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
         <h2 style={{ margin: 0 }}>用户管理</h2>
         <Input.Search
@@ -147,6 +156,7 @@ export default function UserManager() {
         />
       </div>
 
+      {/* 用户列表表格 */}
       <Table
         columns={columns}
         dataSource={users}
@@ -191,7 +201,7 @@ export default function UserManager() {
         )}
       </Modal>
 
-      {/* 封禁确认 Modal */}
+      {/* 封禁/解封确认 Modal */}
       <Modal
         title={banTarget?.is_banned ? '解封用户' : '封禁用户'}
         open={banModalOpen}

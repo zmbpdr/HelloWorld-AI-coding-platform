@@ -1,20 +1,30 @@
+/**
+ * TrendChart.tsx - 趋势图表组件
+ *
+ * 使用 @ant-design/charts 的折线图展示近 N 天的用户新增和提交数趋势，
+ * 支持加载中、加载失败和无数据三种状态展示。
+ */
+
 import { useEffect, useState, useRef } from 'react'
 import { Line } from '@ant-design/charts'
 import { Spin, Empty, Result } from 'antd'
 import { getDashboardChart } from '../api/admin'
 
+/** 图表数据项结构 */
 interface ChartItem {
   date: string
   value: number
   type: string
 }
 
+/** 趋势图表组件 - 展示指定天数的指标变化曲线 */
 export default function TrendChart({ days = 7 }: { days?: number }) {
   const [data, setData] = useState<ChartItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // 从后端获取趋势数据
   useEffect(() => {
     let cancelled = false
     async function fetchData() {
@@ -24,10 +34,11 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
         const res = await getDashboardChart(days)
         if (cancelled) return
         const chartData: ChartItem[] = []
+        // 兼容数组和嵌套对象两种返回格式
         const items = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : []
         for (const item of items) {
           chartData.push({
-            date: String(item.date).slice(5),
+            date: String(item.date).slice(5),  // 只取月-日
             value: Number(item.new_users ?? 0),
             type: '新增用户',
           })
@@ -51,6 +62,7 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
     return () => { cancelled = true }
   }, [days])
 
+  // 加载中状态
   if (loading) {
     return (
       <div ref={containerRef} style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -62,6 +74,7 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
     )
   }
 
+  // 加载失败状态
   if (error) {
     return (
       <div ref={containerRef} style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -70,6 +83,7 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
     )
   }
 
+  // 无数据状态
   if (!data.length) {
     return (
       <div ref={containerRef} style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -78,6 +92,7 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
     )
   }
 
+  // 折线图配置
   const config = {
     data,
     xField: 'date',
@@ -85,7 +100,7 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
     colorField: 'type',
     height: 300,
     autoFit: true,
-    // 平滑曲线：G2 v5 中 style.shape='smooth'，通过 shape 简写
+    // 平滑曲线
     shape: 'smooth',
     style: { lineWidth: 2 },
     point: { sizeField: 3, shapeField: 'circle' },
@@ -117,9 +132,9 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
         { channel: 'y', valueFormatter: (v: number) => String(Math.round(v)) },
       ],
     },
+    // 深色主题兼容配置
     theme: {
       category10: ['#6366f1', '#22c55e'],
-      // 深色背景兼容：确保 view 透明 + 轴刻度文字可见
       view: {
         viewFill: 'transparent',
         plotFill: 'transparent',

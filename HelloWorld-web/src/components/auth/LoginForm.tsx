@@ -1,3 +1,7 @@
+/**
+ * 登录表单组件 - LoginForm
+ * 功能：用户登录表单，包含用户名和密码输入，支持登录错误提示和切换注册。
+ */
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useUserStore } from '../../stores/userStore'
@@ -6,6 +10,7 @@ import Input from '../ui/Input'
 
 interface LoginFormProps { onSuccess?: () => void; onSwitchToRegister?: () => void }
 
+/** 登录表单组件 */
 export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')

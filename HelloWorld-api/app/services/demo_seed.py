@@ -1,4 +1,12 @@
-"""演示数据库种子 — 创建预置用户及学习数据，方便答辩演示。"""
+"""演示数据库种子 — 创建预置用户及学习数据，方便答辩演示。
+
+创建一个演示用户（demo/demo123），包含：
+- 诊断结果（60 分，intermediate 等级）
+- 8 个知识点的掌握度数据
+- 4 个已完成课程 + 1 个进行中的课程进度和提交记录
+- 3 条错题记录（syntax / logic / boundary）
+- 1 个已解锁的成就（first-blood）
+"""
 import logging
 from datetime import datetime, timedelta, timezone
 
@@ -19,6 +27,7 @@ from app.core.security import get_password_hash
 
 logger = logging.getLogger(__name__)
 
+# 演示用户账号
 DEMO_USERNAME = "demo"
 DEMO_PASSWORD = "demo123"
 
@@ -43,7 +52,7 @@ DEMO_KNOWLEDGE = [
     {"tag": "字典", "mastery": 30.0, "total_attempts": 2, "correct_count": 0},
 ]
 
-# 演示错题记录
+# 演示错题记录（三条不同类型）
 DEMO_ERRORS = [
     {
         "lesson_slug": "python-02-variables",
@@ -73,7 +82,7 @@ DEMO_ERRORS = [
 async def seed_demo_data():
     """创建演示用户及学习数据，幂等（已存在则跳过）。"""
     async with async_session() as session:
-        # ── 检查演示用户是否已存在 ──────────────────────────
+        # 检查演示用户是否已存在
         existing = (await session.execute(
             select(User).where(User.username == DEMO_USERNAME)
         )).scalars().first()
@@ -84,7 +93,7 @@ async def seed_demo_data():
 
         now = datetime.now(timezone.utc)
 
-        # ── 1. 创建演示用户 ─────────────────────────────────
+        # 1. 创建演示用户
         user = User(
             username=DEMO_USERNAME,
             email="demo@helloworld.com",
@@ -99,14 +108,14 @@ async def seed_demo_data():
         session.add(user)
         await session.flush()
 
-        # ── 2. 诊断结果 ─────────────────────────────────────
+        # 2. 创建诊断结果
         diagnostic = UserDiagnostic(
             user_id=user.id,
             **DEMO_DIAGNOSTIC,
         )
         session.add(diagnostic)
 
-        # ── 3. 知识掌握度 ───────────────────────────────────
+        # 3. 创建知识掌握度数据
         for k in DEMO_KNOWLEDGE:
             session.add(UserKnowledge(
                 user_id=user.id,
@@ -117,7 +126,7 @@ async def seed_demo_data():
                 last_practice_at=now - timedelta(hours=k["total_attempts"] * 2),
             ))
 
-        # ── 4. 课时 和 进度 ─────────────────────────────────
+        # 4. 创建课时进度和提交记录
         # 查询 Python 的所有课程（按 order 排序）
         lessons = (await session.execute(
             select(Lesson)
@@ -126,7 +135,7 @@ async def seed_demo_data():
         )).scalars().all()
         lesson_map = {l.slug: l for l in lessons}
 
-        # 进度：前 4 关已完成，第 5 关进行中，第 6 关 available，其余 locked
+        # 进度设计：前 4 关已完成，第 5 关进行中，第 6 关 available，其余 locked
         completed_slugs = [
             "python-01-get-age",
             "python-01-hello-world",
@@ -138,6 +147,7 @@ async def seed_demo_data():
         for i, lesson in enumerate(lessons):
             slug = lesson.slug
             if slug in completed_slugs:
+                # 已完成关卡：创建进度和提交记录
                 progress = Progress(
                     user_id=user.id,
                     lesson_id=lesson.id,
@@ -148,7 +158,6 @@ async def seed_demo_data():
                 )
                 session.add(progress)
 
-                # 提交记录
                 session.add(Submission(
                     user_id=user.id,
                     lesson_id=lesson.id,
@@ -159,6 +168,7 @@ async def seed_demo_data():
                     execution_time=120 + i * 30,
                 ))
             elif slug == in_progress_slug:
+                # 进行中关卡
                 progress = Progress(
                     user_id=user.id,
                     lesson_id=lesson.id,
@@ -168,13 +178,13 @@ async def seed_demo_data():
                 )
                 session.add(progress)
             elif slug == "python-04-sum-to":
-                # 第 8 关是推荐起点，不放进度让它显示 available
+                # 推荐起点，让它在课程地图上显示 available
                 pass
             else:
-                # 其余不创建记录，课程地图会显示 locked（需前置依赖）或 available
+                # 其余不创建记录，课程地图会显示 locked 或 available
                 pass
 
-        # ── 5. 错题记录 ─────────────────────────────────────
+        # 5. 创建错题记录
         for err_data in DEMO_ERRORS:
             lesson = lesson_map.get(err_data["lesson_slug"])
             if lesson:
@@ -188,7 +198,7 @@ async def seed_demo_data():
                     fixed_code=err_data.get("fixed_code"),
                 ))
 
-        # ── 6. 成就解锁 ─────────────────────────────────────
+        # 6. 解锁成就
         achievement = (await session.execute(
             select(Achievement).where(Achievement.slug == "first-blood")
         )).scalars().first()

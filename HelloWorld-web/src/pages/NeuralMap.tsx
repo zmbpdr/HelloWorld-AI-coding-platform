@@ -1,8 +1,15 @@
+/**
+ * 神经元地图页面 - NeuralMap
+ * 功能：展示智能体工坊的学习路线图，包含多个路线（机器学习、
+ * Agent开发、大模型应用等），每个路线包含若干节点，
+ * 支持节点状态切换和进度追踪。
+ */
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { getNeuralMap, getAgentTracks, type NeuralMapData, type NeuronNode, type TrackOverview } from '../api/agent'
 import PageTransition from '../components/ui/PageTransition'
 
+// 各路线的中文名称、颜色和图标配置
 const TRACK_CONFIG: Record<string, { name: string; color: string; icon: string }> = {
   ml: { name: '机器学习', color: '#14b8a6', icon: '📊' },
   agent: { name: 'Agent开发', color: '#6366f1', icon: '🤖' },
@@ -14,6 +21,7 @@ const TRACK_CONFIG: Record<string, { name: string; color: string; icon: string }
   rl: { name: '强化学习', color: '#f97316', icon: '🎮' },
 }
 
+// 节点状态的样式配置
 const STATUS_CONFIG: Record<string, { border: string; bg: string; glow: string; ring: string; label: string; textColor: string }> = {
   locked: { border: '#e6e8e3', bg: '#f8fafc', glow: 'none', ring: '#cbd5e1', label: '未激活', textColor: '#94a3b8' },
   available: { border: '#a7f3d0', bg: '#ffffff', glow: '0 0 0 3px rgba(16,185,129,0.06)', ring: '#10b981', label: '可激活', textColor: '#059669' },
@@ -22,6 +30,7 @@ const STATUS_CONFIG: Record<string, { border: string; bg: string; glow: string; 
   mastered: { border: '#fde68a', bg: '#fffbeb', glow: '0 0 0 3px rgba(251,191,36,0.1)', ring: '#fbbf24', label: '精通', textColor: '#b45309' },
 }
 
+/** 能量等级指示器组件，显示 1-5 级能量点 */
 function EnergyDots({ level }: { level: number }) {
   return <div className="flex items-center gap-0.5">{Array.from({ length: 5 }).map((_, i) => (
     <span key={i} className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: i < level ? '#f59e0b' : '#e2e8f0' }} />

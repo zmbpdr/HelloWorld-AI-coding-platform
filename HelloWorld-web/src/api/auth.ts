@@ -1,3 +1,7 @@
+/**
+ * 认证 API 模块
+ * 提供用户注册、登录、令牌刷新和获取当前用户信息的接口调用
+ */
 import apiClient from './client'
 import type { RegisterParams, LoginParams, AuthResponse, UserResponse } from './auth.types'
 

@@ -1,4 +1,7 @@
-"""进度路由 - 获取用户学习进度和统计"""
+"""进度路由 - 获取用户学习进度和统计
+
+包括用户信息、学习进度列表、统计数据、活动热力图和知识掌握度。
+"""
 
 from datetime import date, datetime, timedelta, timezone
 
@@ -73,7 +76,7 @@ async def get_my_stats(
     )
     total_submissions = submissions_result.scalar() or 0
 
-    # 一次通过的课时数
+    # 一次通过的课时数（attempts == 1 完成）
     first_pass_result = await db.execute(
         select(func.count()).select_from(Progress).where(
             Progress.user_id == current_user.id,
@@ -103,6 +106,7 @@ async def get_activity_heatmap(
 ):
     """获取近 90 天每日提交数（用于热力图）"""
     ninety_days_ago = datetime.now(timezone.utc) - timedelta(days=90)
+    # 按日期分组统计提交次数
     result = await db.execute(
         select(
             func.date(Submission.submitted_at).label("day"),

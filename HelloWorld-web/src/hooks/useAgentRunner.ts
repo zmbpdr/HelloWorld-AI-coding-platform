@@ -1,3 +1,8 @@
+/**
+ * Agent 代码运行 Hook - useAgentRunner
+ * 管理智能体工坊节点的代码提交运行状态，
+ * 包含运行中/结果/错误状态管理。
+ */
 import { useState, useCallback } from 'react'
 import { submitAgentCode, type AgentSubmitResult } from '../api/agent'
 

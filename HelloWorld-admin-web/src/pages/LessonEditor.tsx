@@ -1,10 +1,18 @@
+/**
+ * LessonEditor.tsx - 课程编辑页面
+ *
+ * 用于新建或编辑单个关卡，支持填写标题、Slug、编程语言、难度、
+ * 教学内容（Markdown）、初始代码、参考答案、测试用例（JSON）、
+ * 知识点标签、前置关卡等字段。
+ */
+
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Form, Input, Select, InputNumber, Switch, Button, Card, Space, App } from 'antd'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { getLessonDetail, createLesson, updateLesson } from '../api/admin'
 
-// 关卡编辑页面 - 表单编辑器（标题、slug、语言、难度、内容、测试用例等）
+/** 关卡编辑页面组件 - 包含标题、Slug、语言、难度、内容、测试用例等表单 */
 export default function LessonEditor() {
   const { message } = App.useApp()
   const { id } = useParams<{ id: string }>()
@@ -14,7 +22,7 @@ export default function LessonEditor() {
   const [saving, setSaving] = useState(false)
   const isEdit = !!id
 
-  // 编辑模式时加载关卡详情
+  // 编辑模式时根据路由参数加载关卡详情并填充表单
   useEffect(() => {
     if (isEdit) {
       async function fetchLesson() {
@@ -32,7 +40,7 @@ export default function LessonEditor() {
     }
   }, [id, isEdit, form])
 
-  // 提交表单
+  /** 提交表单 — 编辑时调用更新接口，新建时调用创建接口 */
   const handleSubmit = async () => {
     try {
       setSaving(true)
@@ -46,7 +54,7 @@ export default function LessonEditor() {
       }
       navigate('/lessons')
     } catch (err: any) {
-      if (err?.errorFields) return  // Ant Design validation error, form already shows inline errors
+      if (err?.errorFields) return  // Ant Design 表单验证错误，内联提示已显示
       message.error('保存失败')
     } finally {
       setSaving(false)
@@ -55,6 +63,7 @@ export default function LessonEditor() {
 
   return (
     <div>
+      {/* 顶部导航栏 - 返回按钮 + 页面标题 */}
       <div style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
         <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/lessons')}>
           返回

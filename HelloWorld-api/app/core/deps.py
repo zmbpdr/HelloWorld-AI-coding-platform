@@ -1,4 +1,4 @@
-"""依赖注入 - 获取当前登录用户"""
+"""依赖注入 - 获取当前登录用户（必需认证和可选认证）"""
 
 from typing import Optional
 
@@ -11,7 +11,9 @@ from app.database import get_db
 from app.models.user import User
 from app.core.security import decode_access_token
 
+# 必需认证：默认要求 Bearer token
 security = HTTPBearer()
+# 可选认证：不强制要求携带 token
 optional_security = HTTPBearer(auto_error=False)
 
 
@@ -49,6 +51,7 @@ async def get_current_user(
             detail="无效的认证凭据",
         )
 
+    # 从数据库查询用户
     result = await db.execute(select(User).where(User.id == uid))
     user = result.scalars().first()
 
@@ -65,7 +68,11 @@ async def get_optional_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(optional_security),
     db: AsyncSession = Depends(get_db),
 ) -> Optional[User]:
-    """可选认证 - 有 token 则返回用户，无 token 返回 None"""
+    """可选认证 - 有 token 则返回用户，无 token 返回 None
+
+    用于允许未登录用户也能访问某些公开接口（如浏览课程列表）的依赖。
+    """
+    # 没有携带 token 时直接返回 None，不报错
     if credentials is None:
         return None
 

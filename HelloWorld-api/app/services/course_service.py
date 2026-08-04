@@ -1,4 +1,8 @@
-"""课程服务 - 语言列表、语言详情、关卡地图"""
+"""课程服务 - 语言列表、语言详情、关卡地图
+
+提供编程语言列表查询、语言详情查询、以及带用户解锁状态的关卡地图查询。
+支持计算用户在各语言中的完成进度百分比。
+"""
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,10 +18,25 @@ class CourseService:
     """课程服务"""
 
     def __init__(self, db: AsyncSession):
+        """初始化课程服务
+
+        Args:
+            db: 数据库会话实例
+        """
         self.db = db
 
     async def get_all_languages(self, user_id: int | None = None) -> list[dict]:
-        """获取所有可用语言及用户进度概要"""
+        """获取所有可用语言及用户进度概要
+
+        如果提供 user_id，会计算用户在该语言中的完成进度百分比。
+
+        Args:
+            user_id: 用户 ID（可选，用于计算进度）
+
+        Returns:
+            语言列表，每个元素包含 id、slug、name、description、icon_url、color、difficulty、
+            total_lessons、completed_lessons、progress_percent
+        """
         result = await self.db.execute(
             select(Language)
             .where(Language.is_active == True)
@@ -31,6 +50,7 @@ class CourseService:
             total_lessons = len(lang.lessons)
             completed_lessons = 0
 
+            # 如果提供了 user_id，查询该语言的完成进度
             if user_id and total_lessons > 0:
                 lesson_ids = [l.id for l in lang.lessons]
                 progress_result = await self.db.execute(
@@ -64,7 +84,14 @@ class CourseService:
         return output
 
     async def get_language_by_slug(self, slug: str) -> dict | None:
-        """获取单个语言详情（含关卡列表，不含解锁状态）"""
+        """获取单个语言详情（含关卡列表，不含解锁状态）
+
+        Args:
+            slug: 语言标识
+
+        Returns:
+            语言详情字典，包含 lessons 列表（不含解锁状态）；不存在时返回 None
+        """
         result = await self.db.execute(
             select(Language)
             .where(Language.slug == slug, Language.is_active == True)
@@ -99,7 +126,20 @@ class CourseService:
         }
 
     async def get_language_map(self, slug: str, user_id: int) -> dict | None:
-        """获取语言关卡地图（含用户解锁状态）"""
+        """获取语言关卡地图（含用户解锁状态）
+
+        解锁规则：
+        - 第一个课时始终可用
+        - 后续课时需要前一个课时完成才解锁
+        - 如果用户有进度记录则显示其实际状态
+
+        Args:
+            slug: 语言标识
+            user_id: 用户 ID
+
+        Returns:
+            语言详情字典，包含 lessons 列表（含解锁状态）；不存在时返回 None
+        """
         result = await self.db.execute(
             select(Language)
             .where(Language.slug == slug, Language.is_active == True)
@@ -126,6 +166,7 @@ class CourseService:
         for l in sorted_lessons:
             p = progress_map.get(l.id)
             if p:
+                # 有进度记录，直接使用记录中的状态
                 status = p.status if isinstance(p.status, str) else p.status.value
             else:
                 # 第一个课时始终可用，后续需前一个完成才解锁

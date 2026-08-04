@@ -1,4 +1,8 @@
-"""排行榜路由"""
+"""排行榜路由
+
+提供按经验值（XP）和完成课时数排序的用户排行榜。
+支持按周、月、全部时间三个维度筛选。
+"""
 
 from datetime import datetime, timedelta, timezone
 
@@ -21,6 +25,7 @@ async def get_leaderboard(
     db: AsyncSession = Depends(get_db),
 ):
     """获取排行榜（按 XP 和完成课时数排序）"""
+    # 按 XP 降序获取用户列表
     query = select(User.username, User.avatar, User.xp, User.level, User.streak_days, User.id).order_by(desc(User.xp)).limit(limit)
     result = await db.execute(query)
     users = list(result.all())
@@ -70,6 +75,7 @@ async def get_leaderboard(
     leaderboard_data.sort(key=lambda u: u["xp"], reverse=True)
     leaderboard_data = leaderboard_data[:limit]
 
+    # 生成排名
     for i, entry in enumerate(leaderboard_data):
         entry["rank"] = i + 1
 

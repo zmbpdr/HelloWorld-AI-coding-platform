@@ -1,4 +1,7 @@
-"""代码片段收藏路由"""
+"""代码片段收藏路由
+
+提供用户代码片段的收藏、列表查看、搜索和删除功能。
+"""
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,6 +15,7 @@ router = APIRouter()
 
 
 class CreateSnippetRequest(BaseModel):
+    """收藏代码片段请求体"""
     title: str = Field(..., min_length=1, max_length=120)
     code: str = Field(..., min_length=1, max_length=10000)
     language: str = "python"

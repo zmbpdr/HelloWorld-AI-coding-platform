@@ -1,4 +1,8 @@
-"""能力诊断服务 — 10 道选择题评估用户 Python 基础水平"""
+"""能力诊断服务 — 10 道选择题评估用户 Python 基础水平
+
+包含诊断题目数据、答案评分计算、诊断结果的保存与查询。
+每位用户最多只有一条诊断记录（user_id 唯一约束）。
+"""
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -43,16 +47,20 @@ def calculate_diagnostic_result(answers: list[dict]) -> dict:
     """
     根据用户答案计算诊断结果。
 
+    逐题比对答案，统计正确和错误的知识点标签，
+    根据得分划分能力等级（beginner/intermediate/advanced）并推荐学习起点。
+
     Args:
-        answers: [{"question_id": 1, "answer": "A"}, ...]
+        answers: 用户答案列表，格式 [{"question_id": 1, "answer": "A"}, ...]
 
     Returns:
-        dict with score, skill_level, correct_tags, weak_tags, recommended_start, message
+        包含 score, skill_level, correct_tags, weak_tags, recommended_start, message 的字典
     """
     correct_count = 0
     correct_tags: list[str] = []
     weak_tags: list[str] = []
 
+    # 逐题比对，收集正确和错误的知识点
     for a in answers:
         q = next((q for q in DIAGNOSTIC_QUESTIONS if q["id"] == a["question_id"]), None)
         if q:
@@ -67,7 +75,7 @@ def calculate_diagnostic_result(answers: list[dict]) -> dict:
     total = len(DIAGNOSTIC_QUESTIONS)
     score = int((correct_count / total) * 100)
 
-    # 判断能力等级和推荐起点
+    # 根据分数判断能力等级并推荐学习起点
     if score <= 30:
         skill_level = "beginner"
         recommended_start = "python-01-hello-world"
@@ -100,19 +108,29 @@ async def save_diagnostic(db: AsyncSession, user_id: int, result: dict) -> UserD
     保存诊断结果（upsert：已存在则更新）。
 
     因为 user_id 有 UNIQUE 约束，每个用户只能有一条诊断记录。
+    更新时保留原始 created_at 不变。
+
+    Args:
+        db: 数据库会话
+        user_id: 用户 ID
+        result: 诊断结果字典
+
+    Returns:
+        保存或更新后的 UserDiagnostic 对象
     """
     # 查询是否已有诊断记录
     stmt = select(UserDiagnostic).where(UserDiagnostic.user_id == user_id)
     existing = (await db.execute(stmt)).scalars().first()
 
     if existing:
+        # 更新已有记录，保留 created_at
         existing.score = result["score"]
         existing.skill_level = result["skill_level"]
         existing.correct_tags = result["correct_tags"]
         existing.weak_tags = result["weak_tags"]
         existing.recommended_start = result["recommended_start"]
-        # created_at 保持原时间，不更新
     else:
+        # 创建新记录
         diagnostic = UserDiagnostic(
             user_id=user_id,
             score=result["score"],
@@ -128,7 +146,16 @@ async def save_diagnostic(db: AsyncSession, user_id: int, result: dict) -> UserD
 
 
 async def get_diagnostic(db: AsyncSession, user_id: int) -> dict | None:
-    """获取用户最新的诊断结果"""
+    """获取用户最新的诊断结果
+
+    Args:
+        db: 数据库会话
+        user_id: 用户 ID
+
+    Returns:
+        诊断结果字典，包含 score、skill_level、correct_tags、weak_tags、recommended_start、created_at；
+        如果没有诊断记录则返回 None
+    """
     stmt = select(UserDiagnostic).where(UserDiagnostic.user_id == user_id)
     result = (await db.execute(stmt)).scalars().first()
     if not result:

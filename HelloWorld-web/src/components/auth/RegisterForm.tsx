@@ -1,3 +1,8 @@
+/**
+ * 注册表单组件 - RegisterForm
+ * 功能：用户注册表单，包含用户名/邮箱/密码/确认密码输入，
+ * 支持注册错误提示、密码一致性校验和切换登录。
+ */
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useUserStore } from '../../stores/userStore'
@@ -6,6 +11,7 @@ import Input from '../ui/Input'
 
 interface RegisterFormProps { onSuccess?: () => void; onSwitchToLogin?: () => void }
 
+/** 注册表单组件 */
 export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')

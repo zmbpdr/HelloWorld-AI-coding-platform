@@ -1,4 +1,7 @@
-"""管理后台课程管理路由"""
+"""管理后台课程管理路由
+
+提供关卡的增删改查、发布/下架和前置关卡校验功能。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.encoders import jsonable_encoder
@@ -21,15 +24,20 @@ async def validate_prerequisites(
     prerequisites: list[str] | None,
     lesson_id: int | None = None,
 ) -> None:
-    """Ensure admin edits keep prerequisite references inside one language."""
+    """校验前置关卡引用 — 确保前置关卡存在且属于同一语言，无循环依赖。
+
+    如果发现循环依赖或跨语言引用，抛出 HTTPException。
+    """
     if not prerequisites:
         return
+    # 检查前置关卡是否存在于数据库中
     result = await db.execute(select(Lesson).where(Lesson.slug.in_(prerequisites)))
     lessons = result.scalars().all()
     found = {lesson.slug: lesson for lesson in lessons}
     missing = [slug for slug in prerequisites if slug not in found]
     if missing:
         raise HTTPException(status_code=422, detail=f"前置关卡不存在: {', '.join(missing)}")
+    # 检查是否属于同一语言
     cross_language = [slug for slug, lesson in found.items() if lesson.language_id != language_id]
     if cross_language:
         raise HTTPException(status_code=422, detail=f"前置关卡必须属于同一语言: {', '.join(cross_language)}")
@@ -37,6 +45,7 @@ async def validate_prerequisites(
     if lesson_id is None:
         return
 
+    # 检查是否有循环依赖（使用 DFS 检测环）
     language_lessons = (
         await db.execute(select(Lesson).where(Lesson.language_id == language_id))
     ).scalars().all()
@@ -75,7 +84,7 @@ async def list_lessons(
     current_admin: AdminUser = Depends(get_current_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    """获取关卡列表"""
+    """获取关卡列表（支持分页和按语言筛选）"""
     service = AdminService(db)
     return await service.get_lessons_list(page, page_size, language_id)
 
@@ -101,13 +110,14 @@ async def create_lesson(
     db: AsyncSession = Depends(get_db),
 ):
     """新增关卡"""
+    # 校验前置关卡的合法性
     await validate_prerequisites(db, data.language_id, data.prerequisites)
     lesson = Lesson(**data.model_dump())
     db.add(lesson)
     await db.flush()
     await db.refresh(lesson)
 
-    # 审计日志
+    # 记录审计日志
     service = AdminService(db)
     await service.log_action(current_admin.id, "create", "lesson", lesson.id, new_value=data.model_dump())
 
@@ -128,10 +138,8 @@ async def update_lesson(
     if not lesson:
         raise HTTPException(status_code=404, detail="关卡不存在")
 
-    # 记录旧值
-    # Audit fields are JSON columns; normalise datetimes and other ORM values
-    # before writing an edit log, otherwise a valid metadata update can fail
-    # during commit with a JSON serialisation error.
+    # 记录旧值（用于审计日志）
+    # 注意：JSON 列需要先规范化，否则序列化可能失败
     old_data = jsonable_encoder(
         {c.name: getattr(lesson, c.name) for c in lesson.__table__.columns}
     )
@@ -152,7 +160,7 @@ async def update_lesson(
     await db.flush()
     await db.refresh(lesson)
 
-    # 审计日志
+    # 记录审计日志
     service = AdminService(db)
     await service.log_action(current_admin.id, "update", "lesson", lesson_id, old_value=old_data, new_value=update_data)
 
@@ -166,16 +174,16 @@ async def delete_lesson(
     current_admin: AdminUser = Depends(require_role("editor")),
     db: AsyncSession = Depends(get_db),
 ):
-    """软删除关卡"""
+    """软删除关卡（将 is_active 设为 False）"""
     result = await db.execute(select(Lesson).where(Lesson.id == lesson_id))
     lesson = result.scalars().first()
     if not lesson:
         raise HTTPException(status_code=404, detail="关卡不存在")
 
-    # 软删除
+    # 软删除：标记为不可用，而非物理删除
     lesson.is_active = False
 
-    # 审计日志
+    # 记录审计日志
     service = AdminService(db)
     await service.log_action(current_admin.id, "delete", "lesson", lesson_id)
 
@@ -195,10 +203,11 @@ async def toggle_publish(
     if not lesson:
         raise HTTPException(status_code=404, detail="关卡不存在")
 
+    # 切换发布状态
     lesson.is_active = not lesson.is_active
     action = "publish" if lesson.is_active else "unpublish"
 
-    # 审计日志
+    # 记录审计日志
     service = AdminService(db)
     await service.log_action(current_admin.id, action, "lesson", lesson_id)
 

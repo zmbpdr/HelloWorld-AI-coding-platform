@@ -1,3 +1,9 @@
+/**
+ * Axios HTTP 客户端
+ * 功能：创建带基础路径和默认配置的 Axios 实例，
+ * 配置请求拦截器自动添加 JWT token，
+ * 配置响应拦截器处理 401 认证失效自动退出登录。
+ */
 import axios from 'axios'
 
 /** Axios 请求实例，基础路径为 /api/v1 */

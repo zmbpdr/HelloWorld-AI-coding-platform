@@ -1,3 +1,9 @@
+/**
+ * 闯关地图页面 - CourseMap
+ * 功能：展示某一编程语言的所有课时关卡列表，
+ * 支持课时状态的视觉区分（已完成/可进行/进行中/锁定），
+ * 包含棋子跳跃动画和推荐课程提示。
+ */
 import { useEffect, useState, useRef } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useCourseStore } from '../stores/courseStore'
@@ -6,11 +12,13 @@ import StarBadge from '../components/badge/StarBadge'
 import ChessPiece from '../components/badge/ChessPiece'
 import apiClient from '../api/client'
 
+/** 将得分（0-100）转换为星级（0-5） */
 function scoreToStars(score: number): number {
   if (score <= 0) return 0
   return Math.min(5, Math.max(1, Math.floor((score + 19) / 20)))
 }
 
+// 各课时的状态样式配置：已完成 / 可进行 / 进行中 / 锁定
 const statusConfig: Record<string, { border: string; bg: string; dotBg: string; glow: string; leftBorder: string; textColor: string }> = {
   completed:   { border: '1px solid #bbf7d0', bg: '#f0fdf4', dotBg: '#22c55e', glow: '0 0 0 4px rgba(34,197,94,0.06)', leftBorder: '#22c55e', textColor: '#16a34a' },
   available:   { border: '1px solid #a7f3d0', bg: '#ffffff', dotBg: '#10b981', glow: '0 0 0 4px rgba(16,185,129,0.08)', leftBorder: '#10b981', textColor: '#059669' },
@@ -18,6 +26,10 @@ const statusConfig: Record<string, { border: string; bg: string; dotBg: string; 
   locked:      { border: '1px solid #e6e8e3', bg: '#f8fafc', dotBg: '#cbd5e1', glow: 'none', leftBorder: '#e6e8e3', textColor: '#94a3b8' },
 }
 
+/**
+ * 闯关地图页面组件
+ * 展示单个语言的学习路线，包含课时节点列表和状态
+ */
 export default function CourseMap() {
   const { languageSlug } = useParams<{ languageSlug: string }>()
   const navigate = useNavigate()
@@ -37,8 +49,10 @@ export default function CourseMap() {
   const fromLessonId = (location.state as any)?.fromLessonId as number | undefined
   const completedAt = (location.state as any)?.ts as number | undefined
 
+  // 获取当前语言的地图数据
   useEffect(() => { if (languageSlug) fetchLanguageMap(languageSlug) }, [languageSlug, fetchLanguageMap, location.state])
 
+  // 加载推荐课程
   useEffect(() => {
     if (!languageSlug) return
     apiClient.get(`/lessons/recommend?language=${languageSlug}`)
@@ -46,6 +60,7 @@ export default function CourseMap() {
       .catch(() => setRecommendations([]))
   }, [languageSlug])
 
+  // 棋子跳跃动画：从上一个完成课时跳到下一个可用课时
   useEffect(() => {
     if (!currentLanguage || !fromLessonId || !completedAt) return
     if (Date.now() - completedAt > 5000) return
@@ -73,6 +88,7 @@ export default function CourseMap() {
     })
   }, [currentLanguage, fromLessonId, completedAt])
 
+  // 首次加载时定位棋子到"进行中"或"可进行"的课时
   useEffect(() => {
     if (!currentLanguage || fromLessonId) return
     const lessons = currentLanguage.lessons
@@ -84,6 +100,7 @@ export default function CourseMap() {
     }
   }, [currentLanguage, fromLessonId])
 
+  /** 点击课时：锁定状态不可点击，否则跳转到课时页面 */
   const handleLessonClick = (lessonId: number, status: string | null) => {
     if (status === 'locked') return
     navigate(`/${languageSlug}/${lessonId}`)

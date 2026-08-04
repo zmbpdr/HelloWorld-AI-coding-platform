@@ -11,11 +11,11 @@ from app.core.security import decode_access_token
 
 admin_security = HTTPBearer()
 
-# 角色权限等级映射
+# 角色权限等级映射（数值越大权限越高）
 ROLE_LEVELS = {
-    "viewer": 1,
-    "editor": 2,
-    "admin": 3,
+    "viewer": 1,   # 只读权限
+    "editor": 2,   # 编辑权限
+    "admin": 3,    # 超级管理员
 }
 
 
@@ -31,7 +31,7 @@ async def get_current_admin(
             detail="无效的管理员认证凭据",
         )
 
-    # 检查 token 类型
+    # 检查 token 类型是否为管理员，拒绝普通用户 token
     if payload.get("type") != "admin":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -53,6 +53,7 @@ async def get_current_admin(
             detail="无效的认证凭据",
         )
 
+    # 从数据库查询管理员
     result = await db.execute(select(AdminUser).where(AdminUser.id == aid))
     admin = result.scalars().first()
 
@@ -62,6 +63,7 @@ async def get_current_admin(
             detail="管理员账户不存在",
         )
 
+    # 检查管理员是否被禁用
     if not admin.is_active:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -72,7 +74,11 @@ async def get_current_admin(
 
 
 def require_role(min_role: str):
-    """角色权限校验 - 返回一个依赖"""
+    """角色权限校验 - 返回一个依赖
+
+    用法: Depends(require_role("editor"))
+    要求当前管理员的角色等级不低于 min_role。
+    """
     async def role_checker(
         current_admin: AdminUser = Depends(get_current_admin),
     ) -> AdminUser:

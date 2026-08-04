@@ -1,4 +1,7 @@
-"""FastAPI 应用入口"""
+"""FastAPI 应用入口
+
+应用生命周期管理：初始化数据库、种子数据、CORS 配置、异常处理器和路由注册。
+"""
 
 from contextlib import asynccontextmanager
 
@@ -17,14 +20,12 @@ from app.services.demo_seed import seed_demo_data
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """应用生命周期管理 - 启动和关闭时执行"""
-    # 启动：初始化数据库
+    # 启动阶段：初始化数据库、种子数据和演示数据
     await init_db()
-    # 初始化种子数据
     await seed_database()
-    # 创建演示数据（幂等，已存在则跳过）
-    await seed_demo_data()
+    await seed_demo_data()  # 幂等，已存在则跳过
     yield
-    # 关闭：释放数据库连接
+    # 关闭阶段：释放数据库连接
     await close_db()
 
 
@@ -35,7 +36,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS 中间件配置
+# CORS 中间件配置 — 允许前端跨域请求
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -53,7 +54,11 @@ register_exception_handlers(app)
 
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception):
-    """兜底异常处理 - 记录详细日志，对外返回通用错误"""
+    """兜底异常处理 - 记录详细日志，对外返回通用错误
+
+    捕获所有未被 AppException 处理的异常，记录详细的错误日志，
+    并返回统一的 500 错误响应，避免泄露内部信息。
+    """
     import logging
     logger = logging.getLogger("HelloWorld")
     logger.exception(
@@ -66,7 +71,8 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
         content={"detail": "服务器内部错误"},
     )
 
-# 路由注册
+
+# 用户端 API 路由注册
 from app.routers import auth, courses, lessons, ai, achievements, progress, leaderboard, submissions, agent, snippets, diagnostic, errors, membership
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["认证"])
 app.include_router(diagnostic.router, prefix="/api/v1", tags=["能力诊断"])
@@ -82,7 +88,7 @@ app.include_router(snippets.router, prefix="/api/v1", tags=["代码收藏"])
 app.include_router(errors.router, prefix="/api/v1", tags=["错题本"])
 app.include_router(membership.router, prefix="/api/v1", tags=["会员"])
 
-# 管理后台路由
+# 管理后台 API 路由注册
 from app.routers.admin import auth_router, dashboard_router, lessons_router, users_router, achievements_router, submissions_router, settings_router
 app.include_router(auth_router, prefix="/api/v1/admin", tags=["管理后台-认证"])
 app.include_router(dashboard_router, prefix="/api/v1/admin", tags=["管理后台-仪表盘"])

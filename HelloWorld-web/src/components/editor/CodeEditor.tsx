@@ -1,3 +1,8 @@
+/**
+ * 代码编辑器组件 - CodeEditor
+ * 功能：基于 Monaco Editor 的代码编辑器，支持多语言语法高亮、
+ * 行内标注（错误/警告/信息）显示、自定义主题、字号配置和响应式布局。
+ */
 import { useRef, useEffect, useCallback, useState } from 'react'
 import Editor, { type OnMount } from '@monaco-editor/react'
 import type * as Monaco from 'monaco-editor'
@@ -8,7 +13,7 @@ interface CodeEditorProps {
   language?: string
   readOnly?: boolean
   height?: string
-  // 🆕 新增：标注数据
+  // 代码审查标注数据
   decorations?: Array<{
     line: number
     message: string

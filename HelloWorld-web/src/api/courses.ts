@@ -1,3 +1,7 @@
+/**
+ * 课程 API 模块
+ * 提供编程语言课程列表、详情和地图数据的接口调用
+ */
 import apiClient from './client'
 import type { LanguageResponse, LanguageDetail } from './courses.types'
 

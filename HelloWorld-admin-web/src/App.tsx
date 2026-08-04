@@ -1,3 +1,10 @@
+/**
+ * App.tsx - 路由配置与主题配置
+ *
+ * 应用根组件，配置 Ant Design 深色主题、中文语言包、
+ * React Router 路由规则（含登录页和私有路由保护）。
+ */
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ConfigProvider, App as AntApp, theme } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
@@ -12,13 +19,16 @@ import SubmissionAudit from './pages/SubmissionAudit'
 import SystemSettings from './pages/SystemSettings'
 import { useAdminStore } from './stores/adminStore'
 
-// 私有路由 - 需要登录才能访问
+/**
+ * 私有路由组件 - 需要登录才能访问
+ * 未认证时自动重定向到 /login
+ */
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAdminStore((s) => s.isAuthenticated)
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />
 }
 
-// 深色主题配置
+/** 深色主题配置 */
 const darkTheme = {
   algorithm: theme.darkAlgorithm,
   token: {
@@ -74,13 +84,16 @@ const darkTheme = {
   },
 }
 
+/** 应用根组件 */
 export default function App() {
   return (
     <ConfigProvider locale={zhCN} theme={darkTheme}>
       <AntApp>
         <BrowserRouter>
           <Routes>
+            {/* 登录页 - 公开访问 */}
             <Route path="/login" element={<Login />} />
+            {/* 私有路由 - 需要登录 */}
             <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
               <Route index element={<Dashboard />} />
               <Route path="lessons" element={<LessonManager />} />

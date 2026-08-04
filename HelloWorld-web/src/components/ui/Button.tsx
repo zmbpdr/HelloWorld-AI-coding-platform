@@ -1,3 +1,8 @@
+/**
+ * 按钮组件 - Button
+ * 功能：通用按钮组件，支持 primary/secondary/ghost 三种样式变体，
+ * sm/md/lg 三种尺寸，以及加载状态和禁用状态。
+ */
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
