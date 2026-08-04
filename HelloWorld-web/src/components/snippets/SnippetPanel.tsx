@@ -1,3 +1,8 @@
+/**
+ * 收藏面板组件 - SnippetPanel
+ * 功能：侧边滑出的代码收藏面板，支持搜索、标签筛选、
+ * 展开查看代码内容和删除收藏。
+ */
 import { useEffect, useState, useCallback } from 'react'
 import apiClient from '../../api/client'
 

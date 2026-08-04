@@ -1,4 +1,7 @@
-"""成就路由 - 获取用户成就"""
+"""成就路由 - 获取用户成就
+
+提供用户已获得成就的查询功能。
+"""
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession

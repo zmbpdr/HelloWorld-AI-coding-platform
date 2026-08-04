@@ -1,3 +1,8 @@
+/**
+ * AI 模块 API
+ * 提供 AI 聊天功能的类型定义和接口调用，
+ * 支持导师/诊断/审查/规划四种模式
+ */
 import apiClient from './client'
 
 export type AIMode = 'tutor' | 'diagnostic' | 'review' | 'planning'

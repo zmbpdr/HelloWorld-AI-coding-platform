@@ -1,4 +1,7 @@
-"""管理后台仪表盘路由"""
+"""管理后台仪表盘路由
+
+提供管理后台首页的核心指标数据和趋势图表数据。
+"""
 
 import logging
 from fastapi import APIRouter, Depends
@@ -20,7 +23,10 @@ async def get_dashboard(
     current_admin: AdminUser = Depends(get_current_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    """获取仪表盘核心指标"""
+    """获取仪表盘核心指标
+
+    包括总用户数、总提交数、活跃用户数等概览数据。
+    """
     service = AdminService(db)
     return await service.get_dashboard_stats()
 
@@ -31,7 +37,10 @@ async def get_dashboard_chart(
     current_admin: AdminUser = Depends(get_current_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    """获取趋势图数据"""
+    """获取趋势图数据
+
+    返回指定天数内的每日新增用户数和提交数，用于前端图表展示。
+    """
     service = AdminService(db)
     data = await service.get_dashboard_chart(days)
     non_zero = [d for d in data if d["submissions"] > 0 or d["new_users"] > 0]

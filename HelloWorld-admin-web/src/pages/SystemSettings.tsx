@@ -1,3 +1,11 @@
+/**
+ * SystemSettings.tsx - 系统设置页面
+ *
+ * 管理平台全局配置项，包括基本设置（平台名称、描述、开放注册）、
+ * 沙箱资源限制（内存/CPU/进程数/超时）、评分与经验值、AI 模式等。
+ * 以卡片分组展示，支持保存所有配置到后端。
+ */
+
 import { useEffect, useState } from 'react'
 import { Form, Input, InputNumber, Button, Card, App, Spin, Typography, Switch, Space } from 'antd'
 import { SaveOutlined } from '@ant-design/icons'
@@ -5,12 +13,14 @@ import { getSettings, updateSetting } from '../api/admin'
 
 const { Title, Text } = Typography
 
+/** 系统设置项数据结构 */
 interface SettingItem {
   key: string
   value: string
   description: string
 }
 
+/** 系统设置项默认配置列表 */
 const DEFAULT_SETTINGS: { key: string; label: string; description: string; type: 'text' | 'number' | 'switch'; defaultValue: string }[] = [
   { key: 'site_name', label: '平台名称', description: '显示在页面标题和导航栏', type: 'text', defaultValue: 'Hello World' },
   { key: 'site_description', label: '平台描述', description: '在学习平台首页展示', type: 'text', defaultValue: '闯关式 AI 编程学习平台' },
@@ -25,12 +35,14 @@ const DEFAULT_SETTINGS: { key: string; label: string; description: string; type:
   { key: 'registration_enabled', label: '开放注册', description: '是否允许新用户注册', type: 'switch', defaultValue: 'true' },
 ]
 
+/** 系统设置页面组件 */
 export default function SystemSettings() {
   const { message } = App.useApp()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [form] = Form.useForm()
 
+  // 页面初始化时从后端获取所有设置项并填充表单
   useEffect(() => {
     (async () => {
       try {
@@ -54,6 +66,7 @@ export default function SystemSettings() {
     })()
   }, [form])
 
+  /** 保存所有设置项到后端 */
   const handleSave = async () => {
     try {
       setSaving(true)
@@ -69,19 +82,21 @@ export default function SystemSettings() {
     } finally { setSaving(false) }
   }
 
+  // 加载中显示旋转动画
   if (loading) {
     return <div style={{ textAlign: 'center', padding: 60 }}><Spin size="large" /></div>
   }
 
   return (
     <div>
+      {/* 顶部栏 - 标题 + 保存按钮 */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <Title level={4} style={{ margin: 0, color: '#e2e8f0' }}>系统设置</Title>
         <Button type="primary" icon={<SaveOutlined />} onClick={handleSave} loading={saving} size="large">保存配置</Button>
       </div>
 
       <Form form={form} layout="vertical">
-        {/* 基本设置 */}
+        {/* 基本设置分组 */}
         <Card
           title={<Text strong style={{ color: '#e2e8f0' }}>基本设置</Text>}
           style={{ marginBottom: 20, borderRadius: 12, background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}
@@ -100,7 +115,7 @@ export default function SystemSettings() {
           </Space>
         </Card>
 
-        {/* 沙箱资源限制 */}
+        {/* 沙箱资源限制分组 */}
         <Card
           title={<Text strong style={{ color: '#e2e8f0' }}>沙箱资源限制</Text>}
           style={{ marginBottom: 20, borderRadius: 12, background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}
@@ -115,7 +130,7 @@ export default function SystemSettings() {
           </Space>
         </Card>
 
-        {/* 评分与经验值 */}
+        {/* 评分与经验值分组 */}
         <Card
           title={<Text strong style={{ color: '#e2e8f0' }}>评分与经验值</Text>}
           style={{ marginBottom: 20, borderRadius: 12, background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}
@@ -130,7 +145,7 @@ export default function SystemSettings() {
           </Space>
         </Card>
 
-        {/* AI 配置 */}
+        {/* AI 配置分组 */}
         <Card
           title={<Text strong style={{ color: '#e2e8f0' }}>AI 配置</Text>}
           style={{ marginBottom: 20, borderRadius: 12, background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}

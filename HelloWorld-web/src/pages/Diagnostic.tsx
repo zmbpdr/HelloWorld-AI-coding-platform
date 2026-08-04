@@ -1,9 +1,15 @@
+/**
+ * 能力诊断页面 - Diagnostic
+ * 功能：通过选择题测试用户编程水平，评估各知识点掌握情况，
+ * 生成个性化学习起点建议。包含答题、进度追踪和结果展示。
+ */
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageTransition from '../components/ui/PageTransition'
 import Button from '../components/ui/Button'
 import apiClient from '../api/client'
 
+/** 题目数据结构 */
 interface Question {
   id: number
   question: string
@@ -11,11 +17,13 @@ interface Question {
   tag: string
 }
 
+/** 用户答案数据结构 */
 interface AnswerItem {
   question_id: number
   answer: string
 }
 
+/** 诊断结果数据结构 */
 interface DiagnosticResult {
   score: number
   skill_level: string
@@ -25,11 +33,16 @@ interface DiagnosticResult {
   message: string
 }
 
+/** 从选项文本中提取字母编号（A-D） */
 function extractLetter(option: string): string {
   const match = option.match(/^([A-D])[.）\)、\s]/)
   return match ? match[1] : option.charAt(0)
 }
 
+/**
+ * 能力诊断页面组件
+ * 包含答题流程、结果展示和个性化建议
+ */
 export default function Diagnostic() {
   const navigate = useNavigate()
   const [questions, setQuestions] = useState<Question[]>([])
@@ -41,6 +54,7 @@ export default function Diagnostic() {
   const [submitting, setSubmitting] = useState(false)
   const [loadError, setLoadError] = useState('')
 
+  // 加载诊断题目列表
   useEffect(() => {
     apiClient.get('/diagnostic/questions')
       .then(res => {
@@ -57,12 +71,14 @@ export default function Diagnostic() {
       .finally(() => setLoading(false))
   }, [])
 
+  // 当前题目、总数、当前答案等计算属性
   const currentQuestion = questions[currentIndex]
   const total = questions.length
   const currentAnswer = answers[currentIndex]
   const selectedLetter = currentAnswer?.answer || ''
   const allAnswered = answers.every(a => a.answer !== '')
 
+  /** 选择答案，更新当前题目的选中选项 */
   const handleSelect = useCallback((optionText: string) => {
     const letter = extractLetter(optionText)
     setAnswers(prev => {
@@ -72,9 +88,12 @@ export default function Diagnostic() {
     })
   }, [currentIndex, currentQuestion])
 
+  /** 切换到下一题 */
   const handleNext = () => { if (currentIndex < total - 1) setCurrentIndex(currentIndex + 1) }
+  /** 切换到上一题 */
   const handlePrev = () => { if (currentIndex > 0) setCurrentIndex(currentIndex - 1) }
 
+  /** 提交所有答案，获取诊断结果 */
   const handleSubmit = async () => {
     setSubmitting(true)
     try {

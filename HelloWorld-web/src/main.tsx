@@ -1,3 +1,8 @@
+/**
+ * 应用入口 - main.tsx
+ * 功能：React 应用入口文件，挂载根组件到 DOM，
+ * 配置 Monaco Editor 从 CDN 加载 web worker。
+ */
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { loader } from '@monaco-editor/react'

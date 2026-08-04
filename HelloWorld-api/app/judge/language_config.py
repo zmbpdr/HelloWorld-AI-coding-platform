@@ -1,8 +1,13 @@
-"""六种主推语言的本地执行配置。"""
+"""六种主推语言的本地执行配置。
+
+定义了 Python、JavaScript、Java、C、C++、TypeScript 六种语言的
+文件扩展名、编译命令和执行命令，支持本地环境和沙箱环境。
+"""
 import os
 import shutil
 from pathlib import Path
 
+# TypeScript 编译器路径（来自前端项目）
 TSC_BIN = str(Path(__file__).resolve().parents[3] / "HelloWorld-web" / "node_modules" / "typescript" / "bin" / "tsc")
 
 
@@ -33,11 +38,14 @@ _JAVA_HOME = _find_java_home()
 _JAVA = f"{_JAVA_HOME}\\java.exe" if _JAVA_HOME else "java"
 _JAVAC = f"{_JAVA_HOME}\\javac.exe" if _JAVA_HOME else "javac"
 
+# 语言 -> 文件扩展名映射
 LANGUAGE_EXTENSIONS = {
     "python": ".py", "javascript": ".js", "java": ".java",
     "c": ".c", "cpp": ".cpp", "typescript": ".ts",
 }
 
+# 本地执行环境的编译和执行命令
+# 格式: (run_command, compile_command) 其中 compile_command 为 None 表示无需编译
 LANGUAGE_COMMANDS = {
     "python": (["python", "{file}"], None),
     "javascript": (["node", "{file}"], None),
@@ -47,6 +55,7 @@ LANGUAGE_COMMANDS = {
     "typescript": (["node", "{js_output}"], ["node", TSC_BIN, "--target", "ES2020", "--module", "commonjs", "--outDir", "{dir}", "{file}"]),
 }
 
+# 沙箱执行环境的编译和执行命令
 SANDBOX_LANGUAGE_COMMANDS = {
     "python": (["python3", "/code/user_code.py"], None),
     "javascript": (["node", "/code/user_code.js"], None),

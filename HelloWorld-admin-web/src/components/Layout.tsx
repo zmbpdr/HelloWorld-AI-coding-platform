@@ -1,3 +1,11 @@
+/**
+ * Layout.tsx - 整体布局框架组件
+ *
+ * 管理后台的侧边栏 + 顶栏 + 内容区域布局。
+ * 侧边栏包含 Logo 和导航菜单，顶栏包含折叠按钮和管理员信息下拉菜单，
+ * 内容区域使用 Outlet 渲染子路由页面。
+ */
+
 import { useState, useEffect } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Layout as AntLayout, Menu, Avatar, Dropdown, Typography } from 'antd'
@@ -19,6 +27,7 @@ import { useAdminStore } from '../stores/adminStore'
 const { Header, Sider, Content } = AntLayout
 const { Text } = Typography
 
+/** 侧边栏导航菜单项配置 */
 const menuItems: MenuProps['items'] = [
   { key: '/', icon: <DashboardOutlined />, label: '仪表盘' },
   { key: '/lessons', icon: <BookOutlined />, label: '课程管理' },
@@ -28,33 +37,41 @@ const menuItems: MenuProps['items'] = [
   { key: '/settings', icon: <SettingOutlined />, label: '系统设置' },
 ]
 
+/** 整体布局框架组件 */
 export default function Layout() {
   const [collapsed, setCollapsed] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const { admin, logout, fetchAdmin } = useAdminStore()
 
+  // 页面加载时获取管理员信息
   useEffect(() => { fetchAdmin() }, [fetchAdmin])
 
+  // 监听未授权事件，触发跳转到登录页
   useEffect(() => {
     const handleUnauthorized = () => navigate('/login')
     window.addEventListener('auth:unauthorized', handleUnauthorized)
     return () => window.removeEventListener('auth:unauthorized', handleUnauthorized)
   }, [navigate])
 
+  /** 菜单点击跳转 */
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => navigate(key)
 
+  /** 退出登录 */
   const handleLogout = () => { logout(); navigate('/login') }
 
+  /** 用户下拉菜单项 */
   const userMenuItems: MenuProps['items'] = [
     { key: 'logout', icon: <LogoutOutlined />, label: '退出登录', onClick: handleLogout },
   ]
 
+  // 根据当前路径计算选中的菜单项
   const first = location.pathname.split('/').filter(Boolean)[0]
   const selectedKey = first ? '/' + first : '/'
 
   return (
     <AntLayout style={{ minHeight: '100vh' }}>
+      {/* 侧边栏 */}
       <Sider
         trigger={null}
         collapsible
@@ -63,7 +80,7 @@ export default function Layout() {
           borderRight: '1px solid rgba(255,255,255,0.04)',
         }}
       >
-        {/* Logo */}
+        {/* Logo 区域 */}
         <div
           style={{
             height: 64,
@@ -77,7 +94,7 @@ export default function Layout() {
             position: 'relative',
           }}
         >
-          {/* 底部微光 */}
+          {/* 底部微光装饰 */}
           <div
             style={{
               position: 'absolute',
@@ -104,6 +121,7 @@ export default function Layout() {
           >
             <CodeOutlined style={{ color: '#fff', fontSize: 18 }} />
           </div>
+          {/* 侧边栏展开时显示标题文字 */}
           {!collapsed && (
             <Text strong style={{ color: '#f1f5f9', fontSize: 17, letterSpacing: -0.5 }}>
               Hello World
@@ -111,6 +129,7 @@ export default function Layout() {
           )}
         </div>
 
+        {/* 导航菜单 */}
         <Menu
           theme="dark"
           mode="inline"
@@ -122,6 +141,7 @@ export default function Layout() {
       </Sider>
 
       <AntLayout>
+        {/* 顶部栏 */}
         <Header
           className="admin-header"
           style={{
@@ -137,6 +157,7 @@ export default function Layout() {
             zIndex: 10,
           }}
         >
+          {/* 左侧 - 折叠按钮 + 标题 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             {collapsed ? (
               <MenuUnfoldOutlined
@@ -158,6 +179,7 @@ export default function Layout() {
             </Text>
           </div>
 
+          {/* 右侧 - 管理员头像下拉菜单 */}
           <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
             <div
               className="smooth-transition"
@@ -171,6 +193,7 @@ export default function Layout() {
                 background: 'rgba(99,102,241,0.04)',
                 border: '1px solid rgba(255,255,255,0.04)',
               }}
+              // 鼠标悬停效果
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLDivElement).style.background = 'rgba(99,102,241,0.1)'
                 ;(e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.2)'
@@ -194,6 +217,7 @@ export default function Layout() {
           </Dropdown>
         </Header>
 
+        {/* 内容区域 */}
         <Content
           style={{
             margin: 24,
@@ -219,6 +243,7 @@ export default function Layout() {
               zIndex: 1,
             }}
           />
+          {/* 子路由页面内容 */}
           <div className="page-enter" key={location.pathname}>
             <Outlet />
           </div>

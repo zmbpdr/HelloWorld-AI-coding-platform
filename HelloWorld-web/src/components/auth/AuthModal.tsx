@@ -1,3 +1,8 @@
+/**
+ * 认证弹窗组件 - AuthModal
+ * 功能：登录/注册的模态框，左侧展示品牌信息和功能特性，
+ * 右侧为登录或注册表单，支持登录/注册模式切换。
+ */
 import { useState } from 'react'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'

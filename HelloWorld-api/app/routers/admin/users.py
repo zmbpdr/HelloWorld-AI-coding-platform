@@ -1,4 +1,7 @@
-"""管理后台用户管理路由"""
+"""管理后台用户管理路由
+
+提供用户的列表查询、详情查看和封禁/解封操作。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,7 +25,7 @@ async def list_users(
     current_admin: AdminUser = Depends(require_role("editor")),
     db: AsyncSession = Depends(get_db),
 ):
-    """获取用户列表"""
+    """获取用户列表（支持分页和搜索）"""
     service = AdminService(db)
     return await service.get_users_list(page, page_size, search)
 
@@ -54,7 +57,7 @@ async def ban_user(
     if not user:
         raise HTTPException(status_code=404, detail="用户不存在")
 
-    # 使用独立字段存储封禁状态
+    # 使用独立字段存储封禁状态，与正常状态分离
     if data.is_banned:
         user.is_banned = True
         user.banned_reason = data.reason
@@ -62,7 +65,7 @@ async def ban_user(
         user.is_banned = False
         user.banned_reason = None
 
-    # 审计日志
+    # 记录审计日志
     service = AdminService(db)
     await service.log_action(
         current_admin.id,

@@ -1,3 +1,8 @@
+/**
+ * 雷达图组件 - RadarChart
+ * 功能：基于 Chart.js 的雷达图，用于代码审查评分展示，
+ * 包含正确性、可读性、性能和健壮性四个维度的评分。
+ */
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -10,7 +15,7 @@ import {
 } from 'chart.js'
 import { Radar } from 'react-chartjs-2'
 
-// 注册 Chart.js 组件
+// 注册 Chart.js 所需的组件
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
 
 interface RadarChartProps {

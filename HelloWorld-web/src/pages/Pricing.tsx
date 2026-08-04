@@ -1,9 +1,15 @@
+/**
+ * 会员定价页面 - Pricing
+ * 功能：展示 Free / Pro 两种会员方案的对比，支持模拟升级 Pro。
+ * 注意：此为课堂演示 Mock 页面，不接入真实支付。
+ */
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/ui/Button'
 import PageTransition from '../components/ui/PageTransition'
 import { getMyMembership, upgradeToPro, type MembershipInfo } from '../api/user'
 
+// 功能对比表：[功能名称, Free版值, Pro版值]
 const FEATURES = [
   ['六语言 60 关学习路线', true, true],
   ['代码运行与闯关记录', true, true],
@@ -12,6 +18,10 @@ const FEATURES = [
   ['学习路径与进阶功能', false, true],
 ]
 
+/**
+ * 会员定价页面组件
+ * 展示免费版和 Pro 版的功能对比表格，支持模拟升级
+ */
 export default function Pricing() {
   const navigate = useNavigate()
   const [membership, setMembership] = useState<MembershipInfo | null>(null)

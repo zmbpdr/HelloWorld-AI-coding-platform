@@ -1,3 +1,9 @@
+/**
+ * 课时闯关页面 - Lesson
+ * 功能：编程课时闯关的核心页面，包含题目描述、代码编辑器、
+ * AI 助手（诊断/导师/审查/规划四模式）、运行结果展示、
+ * 成就解锁、连击计数和庆祝特效等完整学习体验。
+ */
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getLesson, type LessonDetail } from '../api/lessons'
@@ -15,6 +21,7 @@ import PageTransition from '../components/ui/PageTransition'
 import apiClient from '../api/client'
 import RadarChart from '../components/RadarChart'
 
+// 运行结果状态的配色方案：通过 / 错误 / 部分正确 / 超时
 const STATUS_COLORS: Record<string, { border: string; bg: string; text: string; gradient: string }> = {
   accepted: { border: '#bbf7d0', bg: '#f0fdf4', text: '#16a34a', gradient: 'linear-gradient(135deg, rgba(34,197,94,0.05), rgba(34,197,94,0.01))' },
   error:   { border: '#fecaca', bg: '#fef2f2', text: '#dc2626', gradient: 'linear-gradient(135deg, rgba(239,68,68,0.04), rgba(239,68,68,0.01))' },
@@ -22,6 +29,10 @@ const STATUS_COLORS: Record<string, { border: string; bg: string; text: string; 
   timeout: { border: '#fed7aa', bg: '#fff7ed', text: '#ea580c', gradient: 'linear-gradient(135deg, rgba(249,115,22,0.04), rgba(249,115,22,0.01))' },
 }
 
+/**
+ * 课时闯关页面组件
+ * 核心学习交互页面，包含代码编辑、AI 智能辅导、运行评测等
+ */
 export default function Lesson() {
   const { languageSlug, lessonId } = useParams<{ languageSlug: string; lessonId: string }>()
   const navigate = useNavigate()
@@ -50,6 +61,7 @@ export default function Lesson() {
   const [aiLoading, setAiLoading] = useState(false)
 
 
+  // 加载课时详情数据
   useEffect(() => {
     if (lessonId) {
       setIsLoading(true)
@@ -60,6 +72,7 @@ export default function Lesson() {
     }
   }, [lessonId])
 
+  // 根据运行结果推导状态类型
   const resultStatus = useMemo(() => {
     if (!result) return null
     if (result.status === 'accepted') return 'accepted'
@@ -68,23 +81,26 @@ export default function Lesson() {
     return 'error'
   }, [result])
 
+  /** 提交代码进行评测，处理结果状态和成就解锁 */
   const handleSubmit = async () => {
     if (!lessonId) return
     const submitResult = await runCode(Number(lessonId), code)
     if (!submitResult) return
     setLesson((prev) => prev ? { ...prev, attempts: prev.attempts + 1 } : prev)
     if (submitResult.score > 0) {
-      recordSuccess()
-      if (submitResult.stars >= 4) setShowCelebration(true)
+      recordSuccess()  // 记录成功连击
+      if (submitResult.stars >= 4) setShowCelebration(true)  // 高分触发庆祝特效
       const achievements = submitResult.unlocked_achievements
-      if (achievements.length > 0) setUnlockedAchievement(achievements[0])
+      if (achievements.length > 0) setUnlockedAchievement(achievements[0])  // 显示新解锁的成就
     } else { recordFailure() }
   }
 
+  /** 返回闯关地图，携带当前课时ID用于棋子动画 */
   const goBack = () => {
     navigate(`/${languageSlug}`, { state: lessonId ? { fromLessonId: Number(lessonId), ts: Date.now() } : undefined })
   }
 
+  /** 调用 AI 接口执行当前模式（诊断/导师/审查/规划）的分析 */
   const handleAIAction = async () => {
     setAiLoading(true)
     setAiResponse('')

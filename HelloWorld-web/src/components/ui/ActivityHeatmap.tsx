@@ -1,3 +1,8 @@
+/**
+ * 学习活跃度热力图组件 - ActivityHeatmap
+ * 功能：展示过去 90 天的学习活跃度，以颜色深浅表示每天
+ * 的代码提交次数，类似 GitHub 贡献热力图。
+ */
 import { useEffect, useState } from 'react'
 import apiClient from '../../api/client'
 

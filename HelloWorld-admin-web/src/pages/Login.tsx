@@ -1,3 +1,10 @@
+/**
+ * Login.tsx - 管理员登录页面
+ *
+ * 提供管理员身份认证入口，包含用户名/密码表单、背景动画装饰、
+ * 错误提示和安全提醒等功能。登录成功后跳转至仪表盘。
+ */
+
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Form, Input, Button, App, Typography, Divider } from 'antd'
@@ -6,6 +13,7 @@ import { useAdminStore } from '../stores/adminStore'
 
 const { Title, Text } = Typography
 
+/** 管理员登录页面组件 */
 export default function Login() {
   const { message } = App.useApp()
   const [loading, setLoading] = useState(false)
@@ -13,6 +21,7 @@ export default function Login() {
   const navigate = useNavigate()
   const login = useAdminStore((s) => s.login)
 
+  /** 表单提交处理 - 调用登录接口，成功后跳转至首页 */
   const onFinish = async (values: { username: string; password: string }) => {
     setLoading(true)
     setErrorMsg('')
@@ -96,7 +105,7 @@ export default function Login() {
         }}
       />
 
-      {/* 登录卡片 */}
+      {/* 登录卡片容器 */}
       <div
         className="login-card"
         style={{
@@ -113,6 +122,7 @@ export default function Login() {
           boxShadow: '0 30px 80px rgba(0,0,0,0.55), 0 0 100px rgba(99,102,241,0.06), 0 1px 0 rgba(255,255,255,0.04) inset',
           transition: 'border-color 0.4s ease',
         }}
+        // 鼠标悬停时卡片边框高亮
         onMouseEnter={(e) => {
           (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.25)'
         }}
@@ -120,7 +130,7 @@ export default function Login() {
           (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.12)'
         }}
       >
-        {/* Logo */}
+        {/* Logo 及标题区域 */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <div
             style={{
@@ -136,7 +146,7 @@ export default function Login() {
               position: 'relative',
             }}
           >
-            {/* 光晕环 */}
+            {/* 光晕环动画 */}
             <div
               style={{
                 position: 'absolute',
@@ -157,7 +167,7 @@ export default function Login() {
 
         <Divider style={{ borderColor: 'rgba(255,255,255,0.05)', margin: '0 0 32px' }} />
 
-        {/* 错误提示 */}
+        {/* 错误提示消息 */}
         {errorMsg && (
           <div
             className="shake-in"
@@ -180,6 +190,7 @@ export default function Login() {
           </div>
         )}
 
+        {/* 登录表单 - 用户名 & 密码 */}
         <Form
           name="login"
           onFinish={onFinish}
@@ -218,6 +229,7 @@ export default function Login() {
             />
           </Form.Item>
 
+          {/* 登录按钮 */}
           <Form.Item style={{ marginBottom: 16 }}>
             <Button
               type="primary"
@@ -242,6 +254,7 @@ export default function Login() {
           </Form.Item>
         </Form>
 
+        {/* 安全提醒区域 */}
         <div
           style={{
             padding: '14px 18px',
@@ -265,7 +278,7 @@ export default function Login() {
           </span>
         </div>
 
-        {/* 特性标签 */}
+        {/* 底部功能特性标签 */}
         <div
           style={{
             marginTop: 32,

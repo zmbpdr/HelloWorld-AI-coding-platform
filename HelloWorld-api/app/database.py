@@ -1,4 +1,8 @@
-"""数据库模块 - SQLAlchemy 异步引擎和会话管理"""
+"""数据库模块 - SQLAlchemy 异步引擎和会话管理
+
+提供异步数据库引擎、会话工厂、ORM 基类以及数据库初始化和关闭函数。
+SQLite 下自动启用外键约束以保证引用完整性。
+"""
 
 from sqlalchemy import event, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -6,7 +10,7 @@ from sqlalchemy.orm import DeclarativeBase
 
 from app.config import settings
 
-# 创建异步引擎
+# 创建异步数据库引擎
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=settings.SQL_ECHO,
@@ -52,10 +56,14 @@ async def get_db() -> AsyncSession:
 
 
 async def init_db() -> None:
-    """初始化数据库 - 创建所有表"""
+    """初始化数据库 - 创建所有表
+
+    如果数据库中已有表则跳过创建。SQLite 模式下还会自动补充
+    因模型更新而缺失的字段（如 membership、ai_usage_today 等）。
+    """
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-        # 本项目尚未维护历史 Alembic revision；为已有 SQLite 开发库补齐会员字段。
+        # 为已有 SQLite 开发库补齐缺失的字段（无 Alembic 迁移时的兼容方案）
         if settings.DATABASE_URL and "sqlite" in settings.DATABASE_URL:
             columns = (await conn.execute(text("PRAGMA table_info(users)"))).mappings().all()
             names = {column["name"] for column in columns}
@@ -71,9 +79,8 @@ async def init_db() -> None:
             )).mappings().all()
             knowledge_column_names = {column["name"] for column in knowledge_columns}
             if "created_at" not in knowledge_column_names:
-                # SQLite cannot add a non-constant CURRENT_TIMESTAMP default
-                # through ALTER TABLE. Existing rows do not require this audit
-                # value, while all newly-created ORM rows receive the model default.
+                # SQLite 无法通过 ALTER TABLE 添加带非常量 CURRENT_TIMESTAMP 默认值的列
+                # 已存在的行不需要此审计值，新创建的 ORM 行会通过模型默认值自动填充
                 await conn.execute(text("ALTER TABLE user_knowledge ADD COLUMN created_at DATETIME"))
 
 

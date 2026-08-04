@@ -1,4 +1,7 @@
-"""会员 Mock 路由：不接真实支付，仅用于产品演示。"""
+"""会员 Mock 路由：不接真实支付，仅用于产品演示。
+
+提供会员信息查询和升级功能，仅供演示用途。
+"""
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,6 +17,7 @@ router = APIRouter()
 
 @router.get("/users/me/membership", response_model=MembershipResponse)
 async def get_membership(current_user: User = Depends(get_current_user)):
+    """获取当前用户的会员信息"""
     return membership_payload(current_user)
 
 
@@ -23,6 +27,7 @@ async def upgrade_membership(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    """升级为 Pro 会员（Mock 接口，不涉及真实支付）"""
     if not settings.FEATURE_MEMBERSHIP:
         return membership_payload(current_user)
     current_user.membership = "pro"

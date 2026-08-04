@@ -1,4 +1,8 @@
-/** Quality tier badge — clean, professional star indicator */
+/**
+ * 星级评分徽章组件 - StarBadge
+ * 功能：根据分数显示 1-5 星评级，附带等级标签文字
+ * （未通过/起步/基础/良好/优秀/完美），支持三种尺寸和动画。
+ */
 interface StarBadgeProps {
   stars: number  // 0-5
   size?: 'sm' | 'md' | 'lg'

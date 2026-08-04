@@ -1,3 +1,8 @@
+/**
+ * 输入框组件 - Input
+ * 功能：通用文本输入框，支持标签、错误提示、自定义样式
+ * 和焦点动画效果。
+ */
 import { forwardRef } from 'react'
 import type { InputHTMLAttributes } from 'react'
 

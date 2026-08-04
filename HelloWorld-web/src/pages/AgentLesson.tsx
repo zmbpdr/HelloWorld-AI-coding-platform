@@ -1,3 +1,8 @@
+/**
+ * 智能体关卡页面 - AgentLesson
+ * 功能：智能体工坊路线的节点学习页面，包含题目描述、
+ * 代码编辑器、运行评测、能量评级和 AI 分析。
+ */
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getAgentNode, type AgentNodeDetail } from '../api/agent'
@@ -8,11 +13,13 @@ import AIChat from '../components/chat/AIChat'
 import { renderMarkdown } from '../utils/markdown'
 import PageTransition from '../components/ui/PageTransition'
 
+// 路线名称与配色
 const TRACK_CONFIG: Record<string, { name: string; color: string }> = {
   ml: { name: '机器学习', color: '#14b8a6' }, agent: { name: 'Agent开发', color: '#6366f1' },
   llm: { name: '大模型应用', color: '#ec4899' }, project: { name: '综合项目', color: '#f59e0b' },
 }
 
+/** 能量条组件，用于展示各项评分的百分比 */
 function EnergyBar({ label, value, color }: { label: string; value: number; color: string }) {
   const percent = Math.min(100, Math.max(0, value))
   return (
@@ -26,6 +33,7 @@ function EnergyBar({ label, value, color }: { label: string; value: number; colo
   )
 }
 
+/** 能量评级卡片组件，显示理解度/实现度/优化度/创新度评分 */
 function EnergyRating({ detail, totalScore }: { detail: { understanding: number; implementation: number; optimization: number; creativity: number }; totalScore: number }) {
   return (
     <div className="rounded-xl p-4" style={{ background: '#f8fafc', border: '1px solid #e6e8e3' }}>

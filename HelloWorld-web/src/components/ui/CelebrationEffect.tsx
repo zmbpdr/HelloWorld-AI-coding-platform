@@ -1,3 +1,8 @@
+/**
+ * 庆祝特效组件 - CelebrationEffect
+ * 功能：高分通关时的五彩纸屑粒子动画特效，
+ * 展示 Canvas 粒子爆发效果和 XP 得分面板。
+ */
 import { useEffect, useRef } from 'react'
 
 interface CelebrationEffectProps {
@@ -7,6 +12,7 @@ interface CelebrationEffectProps {
   xpTotal?: number
 }
 
+/** 粒子数据结构 */
 interface Particle {
   x: number
   y: number

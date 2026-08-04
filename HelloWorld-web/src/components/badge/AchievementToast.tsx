@@ -1,3 +1,8 @@
+/**
+ * 成就解锁提示组件 - AchievementToast
+ * 功能：当用户解锁新成就时，在页面右上角弹出动画提示，
+ * 显示成就名称和稀有度，自动消失。
+ */
 import { useEffect, useRef, useState } from 'react'
 
 interface AchievementToastProps { achievement: { slug: string; name: string; rarity: string } | null; onClose: () => void }

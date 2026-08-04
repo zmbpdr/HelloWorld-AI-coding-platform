@@ -1,3 +1,8 @@
+/**
+ * 应用根组件 - App
+ * 功能：配置路由系统，初始化用户认证状态，
+ * 包含学习提醒功能（浏览器通知）。
+ */
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useUserStore } from './stores/userStore'
@@ -14,7 +19,7 @@ import RequireAuth from './components/auth/RequireAuth'
 import Diagnostic from './pages/Diagnostic'
 import Errors from './pages/Errors'
 
-// 学习提醒（浏览器通知 API）
+/** 学习提醒组件：利用浏览器 Notification API 发送每日学习提醒 */
 function StudyReminder() {
   useEffect(() => {
     let reminder = true
@@ -50,6 +55,7 @@ function StudyReminder() {
   return null
 }
 
+/** 应用根组件：初始化认证状态并配置路由 */
 function App() {
   const initAuth = useUserStore((s) => s.initAuth)
 

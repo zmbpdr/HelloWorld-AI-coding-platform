@@ -1,4 +1,7 @@
-"""提交路由 - 代码提交记录查询"""
+"""提交路由 - 代码提交记录查询
+
+提供用户代码提交记录的查询功能，包括列表查询和详情查看。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, desc
@@ -19,7 +22,12 @@ async def get_submissions(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """获取当前用户的代码提交记录"""
+    """获取当前用户的代码提交记录
+
+    Args:
+        lesson_id: 按课时筛选（可选）
+        limit: 返回记录数量上限
+    """
     query = (
         select(Submission)
         .where(Submission.user_id == current_user.id)
@@ -54,7 +62,7 @@ async def get_submission(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """获取指定提交的详细信息（含代码）"""
+    """获取指定提交的详细信息（含代码和评测结果）"""
     result = await db.execute(
         select(Submission).where(
             Submission.id == submission_id,

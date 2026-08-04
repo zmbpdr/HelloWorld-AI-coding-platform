@@ -1,8 +1,14 @@
+/**
+ * 用户状态管理 Store
+ * 基于 Zustand 管理用户认证状态、用户信息和登录/注册/登出等操作，
+ * 支持从 localStorage 恢复会话、自动处理 token 过期。
+ */
 import { create } from 'zustand'
 import axios from 'axios'
 import { login as apiLogin, register as apiRegister, getCurrentUser } from '../api/auth'
 import type { LoginParams, RegisterParams, UserResponse } from '../api/auth.types'
 
+/** 从 API 错误中提取可读的错误信息 */
 function extractError(err: unknown, fallback: string): string {
   if (axios.isAxiosError(err)) {
     const detail = err.response?.data?.detail

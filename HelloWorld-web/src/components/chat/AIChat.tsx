@@ -1,3 +1,8 @@
+/**
+ * AI 聊天组件 - AIChat
+ * 功能：浮动 AI 助手聊天窗口，支持四种模式（诊断/导师/审查/规划），
+ * 包含消息列表、模式切换、导出对话和拖拽功能。
+ */
 import { useState, useRef, useEffect, useCallback, type FormEvent } from 'react'
 import { useAI } from '../../hooks/useAI'
 import type { ChatRequest, AIMode } from '../../api/ai'

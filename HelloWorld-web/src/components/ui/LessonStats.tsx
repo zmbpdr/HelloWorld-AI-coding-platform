@@ -1,3 +1,8 @@
+/**
+ * 课时统计组件 - LessonStats
+ * 功能：展示当前课时的评测统计数据，包括提交次数、最佳分数、
+ * 平均执行时间、执行时间趋势图和错误类型分布。
+ */
 import { useEffect, useState } from 'react'
 import apiClient from '../../api/client'
 

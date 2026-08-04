@@ -1,55 +1,57 @@
 @import "tailwindcss";
 
 /* ================================================================
-   CODEX UI SYSTEM — Fresh Natural · 清新自然风
+   全局样式系统 — Fresh Natural · 清新自然风
+   包含设计令牌、Tailwind v4 主题、动画关键帧、
+   基础样式、工具类和组件样式。
    ================================================================ */
 
-/* ---- Design Tokens ---- */
+/* ---- 设计令牌（Design Tokens） ---- */
 :root {
-  /* Surface */
+  /* 表面色 */
   --bg-page: #fafbf8;
   --bg-surface: #ffffff;
   --bg-elevated: #f4f6f1;
   --bg-glass: rgba(255, 255, 255, 0.78);
   --bg-glass-strong: rgba(255, 255, 255, 0.92);
 
-  /* Text */
+  /* 文字色 */
   --text-primary: #1e293b;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
   --text-dim: #64748b;
 
-  /* Accent — Fresh Meadow */
+  /* 主色调 — 清新草绿 */
   --accent: #10b981;
   --accent-hover: #059669;
   --accent-soft: #ecfdf5;
   --accent-muted: #a7f3d0;
   --accent-gradient: linear-gradient(135deg, #10b981, #059669);
 
-  /* Secondary — Sky */
+  /* 辅助色 — 天蓝 */
   --accent2: #0ea5e9;
   --accent2-soft: #f0f9ff;
 
-  /* Warm — Amber */
+  /* 辅助色 — 琥珀 */
   --accent3: #f59e0b;
   --accent3-soft: #fffbeb;
 
-  /* Status */
+  /* 状态色 */
   --success: #22c55e;
   --danger: #ef4444;
   --warning: #f59e0b;
 
-  /* Border */
+  /* 边框色 */
   --border: #e6e8e3;
   --border-light: #f0f2ed;
 
-  /* Shadow */
+  /* 阴影 */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
   --shadow-glow: 0 0 0 1px rgba(16, 185, 129, 0.08), 0 0 20px rgba(16, 185, 129, 0.06);
 
-  /* Radius */
+  /* 圆角 */
   --radius-sm: 10px;
   --radius-md: 14px;
   --radius-lg: 20px;
@@ -106,13 +108,14 @@
   50%  { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
 }
 
+/* CSS @property 注册自定义属性，用于 conic-gradient 动画边框 */
 @property --border-angle {
   syntax: '<angle>';
   initial-value: 0deg;
   inherits: false;
 }
 
-/* ---- Base ---- */
+/* ---- 基础样式 ---- */
 body {
   background: #fafbf8;
   color: #1e293b;
@@ -121,7 +124,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ---- Particle Orbs ---- */
+/* ---- 粒子光晕 ---- */
 .particle-orb {
   position: absolute;
   border-radius: 50%;
@@ -130,7 +133,7 @@ body {
   pointer-events: none;
 }
 
-/* ---- Animated Gradient Border ---- */
+/* ---- 动态渐变边框 ---- */
 .animated-border {
   position: relative;
   border-radius: 20px;
@@ -155,7 +158,7 @@ body {
   z-index: -1;
 }
 
-/* ---- 3D Card ---- */
+/* ---- 3D 卡片 ---- */
 .card-3d {
   transition: transform 0.35s ease-out, box-shadow 0.35s ease-out;
   transform-style: preserve-3d;
@@ -166,7 +169,7 @@ body {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(16, 185, 129, 0.08);
 }
 
-/* ---- Glass ---- */
+/* ---- 毛玻璃效果 ---- */
 .glass {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(20px);
@@ -180,12 +183,12 @@ body {
   border: 1px solid #e6e8e3;
 }
 
-/* ---- Glow ---- */
+/* ---- 发光环 ---- */
 .glow-ring {
   box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.06), 0 0 30px rgba(16, 185, 129, 0.05);
 }
 
-/* ---- Grid BG ---- */
+/* ---- 网格背景 ---- */
 .bg-grid {
   background-image:
     linear-gradient(#e6e8e3 1px, transparent 1px),
@@ -193,7 +196,7 @@ body {
   background-size: 64px 64px;
 }
 
-/* ---- Utilities ---- */
+/* ---- 实用工具类 ---- */
 .skeleton-shimmer {
   background: linear-gradient(90deg, #e6e8e3 25%, #f4f6f1 50%, #e6e8e3 75%);
   background-size: 200% 100%;
@@ -205,6 +208,7 @@ body {
 .nav-glow {
   box-shadow: 0 1px 0 #e6e8e3, 0 4px 20px rgba(16, 185, 129, 0.03);
 }
+/* 网状背景：多层径向渐变叠加的柔和纹理 */
 .mesh-bg {
   background:
     radial-gradient(ellipse 80% 60% at 50% -10%, rgba(16, 185, 129, 0.04), transparent),
@@ -212,12 +216,12 @@ body {
     radial-gradient(ellipse 50% 50% at 20% 70%, rgba(245, 158, 11, 0.03), transparent);
 }
 
-/* ---- Scrollbar ---- */
+/* ---- 滚动条隐藏 ---- */
 /* 隐藏所有滚动条但保留滚动功能 */
 ::-webkit-scrollbar { width: 0; height: 0; }
 * { scrollbar-width: none; -ms-overflow-style: none; }
 
-/* ---- Markdown ---- */
+/* ---- Markdown 内容样式 ---- */
 .prose code {
   background: #f0f2ed;
   padding: 2px 6px;
@@ -239,7 +243,7 @@ body {
 .prose p, .prose li { color: #475569; line-height: 1.85; }
 .prose strong { color: #334155; }
 
-/* ---- Code review decorations ---- */
+/* ---- 代码审查标注样式 ---- */
 .error-line   { background: rgba(239, 68, 68, 0.1) !important; }
 .error-glyph  { background: #ef4444 !important; width: 4px !important; margin-left: 3px !important; border-radius: 2px !important; }
 .warning-line { background: rgba(245, 158, 11, 0.08) !important; }
@@ -247,7 +251,7 @@ body {
 .info-line    { background: rgba(16, 185, 129, 0.07) !important; }
 .info-glyph   { background: #10b981 !important; width: 4px !important; margin-left: 3px !important; border-radius: 2px !important; }
 
-/* ---- Fresh button base (for components to extend) ---- */
+/* ---- 按钮基础样式 ---- */
 .btn-primary {
   background: linear-gradient(135deg, #10b981, #059669);
   color: #fff;
@@ -283,7 +287,7 @@ body {
   color: #1e293b;
 }
 
-/* ---- Chip / Badge ---- */
+/* ---- 标签 / 徽章 ---- */
 .chip {
   display: inline-flex;
   align-items: center;

@@ -1,9 +1,17 @@
+/**
+ * LessonManager.tsx - 课程管理页面
+ *
+ * 提供课程的列表展示、新增/编辑（通过抽屉表单）、删除、发布状态切换等功能。
+ * 支持按语言、难度、发布状态进行客户端筛选。
+ */
+
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Table, Button, Space, Tag, Drawer, Form, Input, Select, InputNumber, Switch, App, Popconfirm } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, FilterOutlined } from '@ant-design/icons'
 import { getLessons, createLesson, updateLesson, deleteLesson, togglePublishLesson } from '../api/admin'
 
+/** 课程列表项数据结构 */
 interface LessonItem {
   id: number
   title: string
@@ -19,10 +27,12 @@ interface LessonItem {
   created_at: string
 }
 
+/** 编程语言名称映射 */
 const LANGUAGE_NAMES: Record<number, string> = {
   1: 'Python', 2: 'JavaScript', 3: 'Java', 4: 'C', 5: 'C++', 6: 'TypeScript',
 }
 
+/** 课程管理页面组件 */
 export default function LessonManager() {
   const { message } = App.useApp()
   const [lessons, setLessons] = useState<LessonItem[]>([])
@@ -32,11 +42,12 @@ export default function LessonManager() {
   const [form] = Form.useForm()
   const navigate = useNavigate()
 
-  // 筛选状态
+  // 筛选条件状态
   const [filterLang, setFilterLang] = useState<number | undefined>(undefined)
   const [filterDifficulty, setFilterDifficulty] = useState<string | undefined>(undefined)
   const [filterActive, setFilterActive] = useState<boolean | undefined>(undefined)
 
+  /** 获取课程列表数据 */
   const fetchLessons = async () => {
     try {
       setLoading(true)
@@ -49,11 +60,12 @@ export default function LessonManager() {
     }
   }
 
+  // 页面初始化时加载课程列表
   useEffect(() => {
     fetchLessons()
   }, [])
 
-  // 客户端筛选
+  /** 客户端筛选 - 根据语言、难度、发布状态过滤课程列表 */
   const filteredLessons = useMemo(() => {
     return lessons.filter((item) => {
       if (filterLang !== undefined && item.language_id !== filterLang) return false
@@ -63,12 +75,14 @@ export default function LessonManager() {
     })
   }, [lessons, filterLang, filterDifficulty, filterActive])
 
+  /** 打开新增课程抽屉 */
   const handleAdd = () => {
     setEditingLesson(null)
     form.resetFields()
     setDrawerOpen(true)
   }
 
+  /** 提交新增/编辑表单 */
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields()
@@ -82,11 +96,12 @@ export default function LessonManager() {
       setDrawerOpen(false)
       fetchLessons()
     } catch (err: any) {
-      if (err?.errorFields) return  // Ant Design validation error, form already shows inline errors
+      if (err?.errorFields) return  // Ant Design 表单验证错误，内联提示已显示
       message.error('操作失败')
     }
   }
 
+  /** 删除课程 */
   const handleDelete = async (id: number) => {
     try {
       await deleteLesson(id)
@@ -97,6 +112,7 @@ export default function LessonManager() {
     }
   }
 
+  /** 切换课程发布/下架状态 */
   const handleTogglePublish = async (id: number) => {
     try {
       await togglePublishLesson(id)
@@ -107,6 +123,7 @@ export default function LessonManager() {
     }
   }
 
+  // 表格列定义
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id', width: 60 },
     { title: '标题', dataIndex: 'title', key: 'title' },
@@ -167,7 +184,7 @@ export default function LessonManager() {
 
   return (
     <div>
-      {/* 顶部栏 */}
+      {/* 顶部操作栏 */}
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
         <h2 style={{ margin: 0 }}>课程管理</h2>
         <Space>
@@ -175,7 +192,7 @@ export default function LessonManager() {
         </Space>
       </div>
 
-      {/* 筛选栏 */}
+      {/* 筛选条件栏 - 语言、难度、发布状态 */}
       <div style={{ marginBottom: 16, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
         <FilterOutlined style={{ color: '#94a3b8' }} />
         <Select
@@ -215,6 +232,7 @@ export default function LessonManager() {
         </span>
       </div>
 
+      {/* 课程列表表格 */}
       <Table
         columns={columns}
         dataSource={filteredLessons}
@@ -223,7 +241,7 @@ export default function LessonManager() {
         pagination={{ pageSize: 10, showSizeChanger: false }}
       />
 
-      {/* 新增/编辑抽屉 */}
+      {/* 新增/编辑抽屉表单 */}
       <Drawer
         title={editingLesson ? '编辑课程' : '新增课程'}
         size="default"

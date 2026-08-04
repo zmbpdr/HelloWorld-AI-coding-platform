@@ -1,4 +1,7 @@
-"""管理员后台系统设置路由"""
+"""管理员后台系统设置路由
+
+提供系统配置的查看和更新功能，仅允许白名单内的配置键被修改。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,7 +14,7 @@ from app.core.admin_deps import get_current_admin, require_role
 
 router = APIRouter()
 
-# 允许更新的配置键白名单
+# 允许更新的配置键白名单（防止任意修改导致安全问题）
 ALLOWED_SETTING_KEYS = {
     "ollama_url",
     "ai_mode",
@@ -47,7 +50,7 @@ async def update_setting(
     current_admin: AdminUser = Depends(require_role("admin")),
     db: AsyncSession = Depends(get_db),
 ):
-    """更新系统配置"""
+    """更新系统配置（仅限白名单中的配置键）"""
     if key not in ALLOWED_SETTING_KEYS:
         raise HTTPException(status_code=400, detail=f"不允许修改配置项: {key}")
     service = AdminService(db)

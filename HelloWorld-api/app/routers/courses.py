@@ -1,4 +1,7 @@
-"""课程路由 - 语言大厅、课程地图"""
+"""课程路由 - 语言大厅、课程地图
+
+获取编程语言列表、语言详情及关卡地图（含解锁状态）。
+"""
 
 from typing import Optional
 
@@ -45,7 +48,10 @@ async def get_language_map(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """获取该语言的关卡地图（含解锁状态）"""
+    """获取该语言的关卡地图（含解锁状态）
+
+    返回每个关卡的用户进度信息（是否已完成、最佳得分等）。
+    """
     service = CourseService(db)
     data = await service.get_language_map(slug, user_id=current_user.id)
     if not data:

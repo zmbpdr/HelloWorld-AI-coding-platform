@@ -1,3 +1,8 @@
+/**
+ * 课程状态管理 Store
+ * 基于 Zustand 管理编程语言课程列表、当前语言地图数据，
+ * 提供加载语言列表和闯关地图的异步操作。
+ */
 import { create } from 'zustand'
 import { getLanguages, getLanguageMap } from '../api/courses'
 import type { LanguageResponse, LanguageDetail } from '../api/courses.types'

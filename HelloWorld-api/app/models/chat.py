@@ -1,4 +1,7 @@
-"""AI 对话历史模型"""
+"""AI 对话历史模型
+
+存储用户与 AI 助手的对话历史记录，每个用户每节课最多保留一条对话记录。
+"""
 from datetime import datetime, timezone
 from sqlalchemy import Integer, String, Text, DateTime, ForeignKey, JSON, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
@@ -14,11 +17,11 @@ class ChatHistory(Base):
     lesson_id: Mapped[int | None] = mapped_column(Integer, nullable=True, comment="关联关卡 ID，null 表示全局对话")
     messages: Mapped[list] = mapped_column(JSON, default=list, comment="对话消息列表 [{role, content}]")
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=lambda: datetime.now(timezone.utc)
+        DateTime, default=lambda: datetime.now(timezone.utc), comment="创建时间"
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc), comment="更新时间"
     )
 
     __table_args__ = (

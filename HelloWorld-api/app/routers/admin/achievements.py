@@ -1,4 +1,7 @@
-"""管理后台成就管理路由"""
+"""管理后台成就管理路由
+
+提供成就的列表查询、新增和编辑功能。
+"""
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -43,6 +46,7 @@ async def create_achievement(
     db.add(achievement)
     await db.flush()
 
+    # 记录审计日志
     service = AdminService(db)
     await service.log_action(current_admin.id, "create", "achievement", achievement.id, new_value=data.model_dump())
 
@@ -63,12 +67,14 @@ async def update_achievement(
     if not achievement:
         raise HTTPException(status_code=404, detail="成就不存在")
 
+    # 只更新请求中提供的字段
     update_data = data.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(achievement, key, value)
 
     await db.flush()
 
+    # 记录审计日志
     service = AdminService(db)
     await service.log_action(current_admin.id, "update", "achievement", achievement_id, new_value=update_data)
 

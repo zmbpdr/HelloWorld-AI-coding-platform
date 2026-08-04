@@ -1,4 +1,7 @@
-"""错题本路由 — 错题列表、统计和标记已解决接口"""
+"""错题本路由 — 错题列表、统计和标记已解决接口
+
+提供用户错题的查看、统计分析和标记解决功能。
+"""
 
 from fastapi import APIRouter, Depends, Query, HTTPException
 from app.core.deps import get_current_user
@@ -15,6 +18,7 @@ router = APIRouter()
 
 
 class ResolveRequest(BaseModel):
+    """标记解决请求体"""
     fixed_code: str | None = None
 
 

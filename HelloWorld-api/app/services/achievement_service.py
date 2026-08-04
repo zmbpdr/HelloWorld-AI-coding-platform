@@ -1,4 +1,7 @@
-"""成就服务 - 用户成就查询"""
+"""成就服务 - 用户成就查询
+
+提供用户已解锁成就的查询功能，返回成就名称、描述、稀有度等详细信息。
+"""
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,10 +14,25 @@ class AchievementService:
     """成就服务"""
 
     def __init__(self, db: AsyncSession):
+        """初始化成就服务
+
+        Args:
+            db: 数据库会话实例
+        """
         self.db = db
 
     async def get_user_achievements(self, user_id: int) -> list[dict]:
-        """获取用户已解锁的所有成就"""
+        """获取用户已解锁的所有成就
+
+        按解锁时间倒序排列，返回成就详情列表。
+
+        Args:
+            user_id: 用户 ID
+
+        Returns:
+            已解锁成就列表，每个元素包含 id、name、slug、description、icon_url、
+            rarity、unlocked、xp_reward、unlocked_at
+        """
         result = await self.db.execute(
             select(UserAchievement)
             .options(selectinload(UserAchievement.achievement))
