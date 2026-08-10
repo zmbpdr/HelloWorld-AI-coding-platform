@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     # --- CORS ---
     CORS_ORIGINS: list[str] = ["http://localhost:5173"]
 
+    # --- 文件上传 ---
+    UPLOAD_DIR: str = str(_APP_DIR / "static" / "uploads")   # 图片上传存储目录
+    MAX_UPLOAD_SIZE: int = 5 * 1024 * 1024                   # 上传文件大小限制（默认 5MB）
+
     # --- 执行环境 ---
     ALLOW_DIRECT_EXECUTION: bool = False     # 允许宿主机直接执行代码（仅开发环境）
     CONTENT_DIR: str = ""                    # 课程内容 JSON 文件目录

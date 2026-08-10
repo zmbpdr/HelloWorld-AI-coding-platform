@@ -206,3 +206,76 @@ class SystemSettingUpdate(BaseModel):
     """更新系统配置"""
     value: str
     reason: Optional[str] = None
+
+
+# === 题库管理 ===
+
+VALID_QUESTION_TYPES = {
+    "single_choice", "multiple_choice", "true_false",
+    "fill_blank", "coding", "short_answer",
+}
+
+
+class AdminQuestionCreate(BaseModel):
+    """新增题目"""
+    language_id: int
+    title: str = Field(..., min_length=1, max_length=200)
+    slug: str = Field(..., min_length=1, max_length=200)
+    description: Optional[str] = None
+    difficulty: Optional[str] = None
+    question_type: str = Field(
+        default="coding",
+        description="题目类型: single_choice/multiple_choice/true_false/fill_blank/coding/short_answer",
+    )
+    content: Optional[str] = None
+    options: Optional[list[dict]] = None
+    answer: Optional[str] = None
+    explanation: Optional[str] = None
+    test_cases: Optional[list[dict]] = None
+    starter_code: Optional[str] = None
+    knowledge_tags: list[str] = Field(default_factory=list)
+    order: int = 0
+    is_active: bool = True
+
+
+class AdminQuestionUpdate(BaseModel):
+    """编辑题目 — 所有字段可选"""
+    language_id: Optional[int] = None
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    slug: Optional[str] = None
+    description: Optional[str] = None
+    difficulty: Optional[str] = None
+    question_type: Optional[str] = None
+    content: Optional[str] = None
+    options: Optional[list[dict]] = None
+    answer: Optional[str] = None
+    explanation: Optional[str] = None
+    test_cases: Optional[list[dict]] = None
+    starter_code: Optional[str] = None
+    knowledge_tags: Optional[list[str]] = None
+    order: Optional[int] = None
+    is_active: Optional[bool] = None
+
+
+class AdminQuestionResponse(BaseModel):
+    """题目详情"""
+    id: int
+    language_id: int
+    title: str
+    slug: str
+    description: Optional[str] = None
+    difficulty: Optional[str] = None
+    question_type: str
+    content: Optional[str] = None
+    options: Optional[Any] = None
+    answer: Optional[str] = None
+    explanation: Optional[str] = None
+    test_cases: Optional[Any] = None
+    starter_code: Optional[str] = None
+    knowledge_tags: Optional[list[str]] = None
+    order: int = 0
+    is_active: bool = True
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+    model_config = {"from_attributes": True}

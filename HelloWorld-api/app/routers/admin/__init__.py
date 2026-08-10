@@ -7,6 +7,8 @@ from app.routers.admin.users import router as users_router
 from app.routers.admin.achievements import router as achievements_router
 from app.routers.admin.submissions import router as submissions_router
 from app.routers.admin.settings import router as settings_router
+from app.routers.admin.upload import router as upload_router
+from app.routers.admin.questions import router as questions_router
 
 __all__ = [
     "auth_router",
@@ -16,4 +18,6 @@ __all__ = [
     "achievements_router",
     "submissions_router",
     "settings_router",
+    "upload_router",
+    "questions_router",
 ]

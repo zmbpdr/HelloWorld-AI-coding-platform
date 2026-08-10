@@ -141,3 +141,115 @@ body {
 .abnormal-row:hover td { background: rgba(239,68,68,0.1) !important; }
 .warning-row td { background: rgba(245,158,11,0.06) !important; }
 .warning-row:hover td { background: rgba(245,158,11,0.1) !important; }
+
+/* ===== Markdown 编辑器深色主题适配 ===== */
+
+/* 编辑器容器背景与边框 */
+.w-md-editor {
+  --md-editor-font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: #111827 !important;
+  border-color: #1f2937 !important;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+/* 工具栏背景 */
+.w-md-editor-toolbar {
+  background: #0f1322 !important;
+  border-bottom-color: #1f2937 !important;
+  border-radius: 6px 6px 0 0 !important;
+}
+
+/* 工具栏按钮 */
+.w-md-editor-toolbar ul li button {
+  color: #94a3b8 !important;
+  transition: color 0.2s, background 0.2s;
+}
+.w-md-editor-toolbar ul li button:hover {
+  color: #f1f5f9 !important;
+  background: rgba(99,102,241,0.15) !important;
+}
+.w-md-editor-toolbar ul li button.active {
+  color: #6366f1 !important;
+  background: rgba(99,102,241,0.2) !important;
+}
+
+/* 工具栏分隔线 */
+.w-md-editor-toolbar-divider {
+  background: #1f2937 !important;
+}
+
+/* 编辑区 */
+.w-md-editor-text {
+  background: #111827 !important;
+}
+.w-md-editor-text-input {
+  color: #f1f5f9 !important;
+}
+.w-md-editor-text-pre > code {
+  color: #f1f5f9 !important;
+}
+
+/* 预览区 */
+.w-md-editor-preview {
+  background: #0b0f1a !important;
+  border-left-color: #1f2937 !important;
+  box-shadow: none !important;
+}
+.w-md-editor-preview .wmde-markdown {
+  background: transparent !important;
+  color: #f1f5f9 !important;
+}
+
+/* 预览区 Markdown 样式 */
+.wmde-markdown h1, .wmde-markdown h2, .wmde-markdown h3,
+.wmde-markdown h4, .wmde-markdown h5, .wmde-markdown h6 {
+  border-bottom-color: rgba(255,255,255,0.08) !important;
+  color: #f1f5f9 !important;
+}
+.wmde-markdown code {
+  background: rgba(99,102,241,0.15) !important;
+  color: #c4b5fd !important;
+}
+.wmde-markdown pre {
+  background: #0b0f1a !important;
+  border-color: #1f2937 !important;
+}
+.wmde-markdown pre code {
+  background: transparent !important;
+}
+.wmde-markdown blockquote {
+  border-left-color: #6366f1 !important;
+  color: #94a3b8 !important;
+  background: rgba(99,102,241,0.06) !important;
+}
+.wmde-markdown table th,
+.wmde-markdown table td {
+  border-color: #1f2937 !important;
+}
+.wmde-markdown table th {
+  background: #0f1322 !important;
+}
+.wmde-markdown table tr:nth-child(2n) {
+  background: rgba(255,255,255,0.02) !important;
+}
+.wmde-markdown a {
+  color: #818cf8 !important;
+}
+.wmde-markdown hr {
+  background: #1f2937 !important;
+}
+
+/* 拖拽调整条 */
+.w-md-editor-dragbar {
+  background: #0f1322 !important;
+  border-left-color: #1f2937 !important;
+}
+.w-md-editor-dragbar:hover {
+  background: #1f2937 !important;
+}
+
+/* 全屏模式 */
+.w-md-editor-fullscreen {
+  background: #0b0f1a !important;
+}

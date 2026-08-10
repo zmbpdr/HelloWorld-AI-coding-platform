@@ -11,6 +11,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { Form, Input, Select, InputNumber, Switch, Button, Card, Space, App } from 'antd'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { getLessonDetail, createLesson, updateLesson } from '../api/admin'
+import MarkdownEditor from '../components/MarkdownEditor'
 
 /** 关卡编辑页面组件 - 包含标题、Slug、语言、难度、内容、测试用例等表单 */
 export default function LessonEditor() {
@@ -113,7 +114,7 @@ export default function LessonEditor() {
           </Form.Item>
 
           <Form.Item name="content" label="教学内容">
-            <Input.TextArea rows={6} placeholder="Markdown 格式的教学内容" />
+            <MarkdownEditor height={450} />
           </Form.Item>
 
           <Form.Item name="starter_code" label="初始代码">

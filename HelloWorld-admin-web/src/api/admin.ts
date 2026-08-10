@@ -127,6 +127,18 @@ export async function getSubmissionDetail(id: number) {
   return data
 }
 
+// ==================== 文件上传接口 ====================
+
+/** 上传教程图片 — 返回图片 URL */
+export async function uploadImage(file: File): Promise<string> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const { data } = await apiClient.post('/lessons/upload-image', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return data.url
+}
+
 // ==================== 系统设置接口 ====================
 
 /** 获取所有系统设置 */
