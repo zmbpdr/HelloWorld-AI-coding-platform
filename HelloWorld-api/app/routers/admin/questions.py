@@ -1,9 +1,10 @@
 """管理后台题库管理路由
 
 提供题目的增删改查功能，支持按语言、难度、题型筛选。
+包含批量导入（预检查 → 确认入库）两阶段流程。
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -15,9 +16,13 @@ from app.schemas.admin import (
     AdminQuestionCreate,
     AdminQuestionUpdate,
     AdminQuestionResponse,
+    ImportPreviewResponse,
+    ImportConfirmRequest,
+    ImportConfirmResponse,
     VALID_QUESTION_TYPES,
 )
 from app.services.admin_service import AdminService
+from app.services.import_service import ImportService
 from app.core.admin_deps import get_current_admin, require_role
 
 router = APIRouter()
@@ -167,6 +172,61 @@ async def delete_question(
 
     await db.commit()
     return {"message": "已删除"}
+
+
+# ── 批量导入 ──────────────────────────────────────────
+
+@router.post(
+    "/questions/import/preview",
+    response_model=ImportPreviewResponse,
+    summary="导入预检查",
+)
+async def preview_import(
+    file: UploadFile = File(..., description="Excel (.xlsx) 或 CSV 文件"),
+    current_admin: AdminUser = Depends(require_role("editor")),
+    db: AsyncSession = Depends(get_db),
+):
+    """上传文件 → 解析 → 逐行校验 → 返回错误报告 + 有效数据
+
+    校验项：
+    - 必填字段缺失（language_id, title, slug, question_type）
+    - slug 文件内重复 / 数据库冲突
+    - language_id 有效性
+    - question_type / difficulty 枚举值
+    - test_cases / options JSON 格式
+
+    返回的 valid_data 仅在 errors 为空时存在，用于后续 confirm 调用。
+    """
+    service = ImportService(db)
+    return await service.preview(file)
+
+
+@router.post(
+    "/questions/import/confirm",
+    response_model=ImportConfirmResponse,
+    status_code=201,
+    summary="确认导入",
+)
+async def confirm_import(
+    data: ImportConfirmRequest,
+    current_admin: AdminUser = Depends(require_role("editor")),
+    db: AsyncSession = Depends(get_db),
+):
+    """确认导入 — 将预检查通过的 valid_data 事务批量入库
+
+    注意：调用前请确保已通过 preview 端点校验无误。
+    """
+    service = ImportService(db)
+    result = await service.confirm_import(data.rows, current_admin.id)
+
+    # 记录审计日志
+    admin_service = AdminService(db)
+    await admin_service.log_action(
+        current_admin.id, "import", "question", 0,
+        new_value={"count": result["imported"]},
+    )
+
+    return result
 
 
 @router.post("/questions/{question_id}/publish")

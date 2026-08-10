@@ -32,6 +32,38 @@ class AdminUserResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
+# === 题库批量导入 ===
+
+class ImportRowError(BaseModel):
+    """单行校验错误"""
+    row: int = Field(..., description="错误所在行号（1-based，含表头）")
+    field: str = Field(..., description="出错的字段名")
+    message: str = Field(..., description="错误描述")
+
+
+class ImportPreviewResponse(BaseModel):
+    """导入预检查报告"""
+    total_rows: int
+    valid_rows: int
+    error_rows: int
+    errors: list[ImportRowError]
+    valid_data: Optional[list[dict]] = Field(
+        None,
+        description="校验通过的数据行，仅在 errors 为空时返回",
+    )
+
+
+class ImportConfirmRequest(BaseModel):
+    """确认导入请求 — 传入预检查返回的 valid_data"""
+    rows: list[dict] = Field(..., min_length=1, description="要导入的数据行列表")
+
+
+class ImportConfirmResponse(BaseModel):
+    """确认导入结果"""
+    imported: int
+    message: str
+
+
 # === 仪表盘 ===
 class DashboardStats(BaseModel):
     """仪表盘统计数据"""
