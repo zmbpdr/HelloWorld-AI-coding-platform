@@ -4,13 +4,19 @@
  * 用于新建或编辑单个关卡，支持填写标题、Slug、编程语言、难度、
  * 教学内容（Markdown）、初始代码、参考答案、测试用例（JSON）、
  * 知识点标签、前置关卡等字段。
+ * 编辑模式下支持关联题库题目（多选，按语言/知识点筛选）。
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Form, Input, Select, InputNumber, Switch, Button, Card, Space, App } from 'antd'
-import { ArrowLeftOutlined } from '@ant-design/icons'
-import { getLessonDetail, createLesson, updateLesson } from '../api/admin'
+import {
+  Form, Input, Select, InputNumber, Switch, Button, Card, Space, App, Divider, Tag,
+} from 'antd'
+import { ArrowLeftOutlined, LinkOutlined } from '@ant-design/icons'
+import {
+  getLessonDetail, createLesson, updateLesson,
+  getQuestions, getLessonQuestionIds, setLessonQuestions,
+} from '../api/admin'
 import MarkdownEditor from '../components/MarkdownEditor'
 
 /** 关卡编辑页面组件 - 包含标题、Slug、语言、难度、内容、测试用例等表单 */
@@ -23,7 +29,12 @@ export default function LessonEditor() {
   const [saving, setSaving] = useState(false)
   const isEdit = !!id
 
-  // 编辑模式时根据路由参数加载关卡详情并填充表单
+  // 教程-题目关联
+  const [linkedIds, setLinkedIds] = useState<number[]>([])
+  const [questionOptions, setQuestionOptions] = useState<{ value: number; label: string }[]>([])
+  const [searchingQuestions, setSearchingQuestions] = useState(false)
+
+  /** 编辑模式时加载关卡详情并填充表单 */
   useEffect(() => {
     if (isEdit) {
       async function fetchLesson() {
@@ -39,7 +50,50 @@ export default function LessonEditor() {
       }
       fetchLesson()
     }
-  }, [id, isEdit, form])
+  }, [id, isEdit, form, message])
+
+  /** 编辑模式时加载已关联题目 */
+  useEffect(() => {
+    if (!isEdit || !id) return
+    async function fetchLinked() {
+      try {
+        const ids = await getLessonQuestionIds(Number(id))
+        setLinkedIds(Array.isArray(ids) ? ids : [])
+      } catch {
+        // 后端关联接口不可用时静默降级
+        setLinkedIds([])
+      }
+    }
+    fetchLinked()
+  }, [isEdit, id])
+
+  /** 搜索可关联题目（按关键词 / 语言） */
+  const searchQuestions = useCallback(async (keyword?: string, languageId?: number) => {
+    setSearchingQuestions(true)
+    try {
+      const res = await getQuestions({
+        page: 1,
+        page_size: 50,
+        keyword,
+        language_id: languageId,
+      })
+      setQuestionOptions(
+        (res.items || []).map((q) => ({
+          value: q.id,
+          label: `#${q.id} ${q.title}`,
+        })),
+      )
+    } catch {
+      setQuestionOptions([])
+    } finally {
+      setSearchingQuestions(false)
+    }
+  }, [])
+
+  /** 加载初始可选项 */
+  useEffect(() => {
+    searchQuestions(undefined, undefined)
+  }, [searchQuestions])
 
   /** 提交表单 — 编辑时调用更新接口，新建时调用创建接口 */
   const handleSubmit = async () => {
@@ -52,6 +106,14 @@ export default function LessonEditor() {
       } else {
         await createLesson(values)
         message.success('创建成功')
+      }
+      // 保存教程-题目关联（仅编辑模式）
+      if (isEdit && id) {
+        try {
+          await setLessonQuestions(Number(id), linkedIds)
+        } catch {
+          message.warning('关卡已保存，但关联题目保存失败')
+        }
       }
       navigate('/lessons')
     } catch (err: any) {
@@ -144,6 +206,43 @@ export default function LessonEditor() {
           <Form.Item name="prerequisites" label="前置关卡 slug">
             <Select mode="tags" tokenSeparators={[',', '，']} placeholder="仅允许当前语言内的 slug" />
           </Form.Item>
+
+          {/* 教程-题目关联（仅编辑模式） */}
+          {isEdit && (
+            <>
+              <Divider style={{ margin: '8px 0 20px' }} titlePlacement="start" plain>
+                <Space size={6}>
+                  <LinkOutlined /> 教程-题目关联
+                </Space>
+              </Divider>
+              <Form.Item
+                label={
+                  <Space size={6}>
+                    <span>关联题库题目</span>
+                    <Tag color="blue">已选 {linkedIds.length} 题</Tag>
+                  </Space>
+                }
+                tooltip="从题库中选择与本教程相关的题目，保存关卡时一并保存关联关系。"
+              >
+                <Select
+                  mode="multiple"
+                  allowClear
+                  showSearch
+                  filterOption={false}
+                  loading={searchingQuestions}
+                  value={linkedIds}
+                  onChange={setLinkedIds}
+                  onSearch={(kw) => {
+                    const langId = form.getFieldValue('language_id') as number | undefined
+                    searchQuestions(kw, langId)
+                  }}
+                  placeholder="搜索并选择要关联的题目（按标题/Slug 搜索）"
+                  options={questionOptions}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </>
+          )}
 
           <Form.Item>
             <Space>

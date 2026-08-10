@@ -1,7 +1,7 @@
 /**
  * Layout.tsx - 整体布局框架组件
  *
- * 管理后台的侧边栏 + 顶栏 + 内容区域布局。
+ * 管理后台的侧边栏 + 顶栏 + 内容区域布局（浅色清新风，与学习端统一）。
  * 侧边栏包含 Logo 和导航菜单，顶栏包含折叠按钮和管理员信息下拉菜单，
  * 内容区域使用 Outlet 渲染子路由页面。
  */
@@ -20,6 +20,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   CodeOutlined,
+  DatabaseOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { useAdminStore } from '../stores/adminStore'
@@ -31,6 +32,15 @@ const { Text } = Typography
 const menuItems: MenuProps['items'] = [
   { key: '/', icon: <DashboardOutlined />, label: '仪表盘' },
   { key: '/lessons', icon: <BookOutlined />, label: '课程管理' },
+  {
+    key: 'questions',
+    icon: <DatabaseOutlined />,
+    label: '题库管理',
+    children: [
+      { key: '/questions', label: '题目列表' },
+      { key: '/questions/import', label: '批量导入' },
+    ],
+  },
   { key: '/users', icon: <UserOutlined />, label: '用户管理' },
   { key: '/achievements', icon: <TrophyOutlined />, label: '成就管理' },
   { key: '/submissions', icon: <AuditOutlined />, label: '提交审计' },
@@ -65,19 +75,32 @@ export default function Layout() {
     { key: 'logout', icon: <LogoutOutlined />, label: '退出登录', onClick: handleLogout },
   ]
 
-  // 根据当前路径计算选中的菜单项
-  const first = location.pathname.split('/').filter(Boolean)[0]
-  const selectedKey = first ? '/' + first : '/'
+  // 根据当前路径计算选中的菜单项（优先精确匹配叶子 key，否则回退到首段）
+  const leafKeys = new Set<string>()
+  const collectLeafKeys = (items: MenuProps['items']) => {
+    (items || []).forEach((item) => {
+      if (item && 'children' in item && item.children) {
+        collectLeafKeys(item.children as MenuProps['items'])
+      } else if (item && 'key' in item) {
+        leafKeys.add(item.key as string)
+      }
+    })
+  }
+  collectLeafKeys(menuItems)
+  const pathname = location.pathname
+  const first = pathname.split('/').filter(Boolean)[0]
+  const selectedKey = leafKeys.has(pathname) ? pathname : first ? '/' + first : '/'
 
   return (
-    <AntLayout style={{ minHeight: '100vh' }}>
+    <AntLayout style={{ minHeight: '100vh', background: '#fafbf8' }}>
       {/* 侧边栏 */}
       <Sider
         trigger={null}
         collapsible
         collapsed={collapsed}
         style={{
-          borderRight: '1px solid rgba(255,255,255,0.04)',
+          borderRight: '1px solid rgba(15,23,42,0.06)',
+          background: '#ffffff',
         }}
       >
         {/* Logo 区域 */}
@@ -88,9 +111,9 @@ export default function Layout() {
             alignItems: 'center',
             justifyContent: collapsed ? 'center' : 'flex-start',
             padding: collapsed ? 0 : '0 20px',
-            borderBottom: '1px solid rgba(255,255,255,0.04)',
+            borderBottom: '1px solid rgba(15,23,42,0.06)',
             gap: 10,
-            background: 'linear-gradient(180deg, rgba(99,102,241,0.06) 0%, transparent 100%)',
+            background: 'linear-gradient(180deg, rgba(16,185,129,0.04) 0%, transparent 100%)',
             position: 'relative',
           }}
         >
@@ -102,7 +125,7 @@ export default function Layout() {
               left: '20%',
               width: '60%',
               height: 1,
-              background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.15), transparent)',
+              background: 'linear-gradient(90deg, transparent, rgba(16,185,129,0.15), transparent)',
               pointerEvents: 'none',
             }}
           />
@@ -111,36 +134,35 @@ export default function Layout() {
               width: 36,
               height: 36,
               borderRadius: 10,
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              background: 'linear-gradient(135deg, #10b981, #059669)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
-              boxShadow: '0 0 16px rgba(99,102,241,0.25)',
+              boxShadow: '0 0 16px rgba(16,185,129,0.25)',
             }}
           >
             <CodeOutlined style={{ color: '#fff', fontSize: 18 }} />
           </div>
           {/* 侧边栏展开时显示标题文字 */}
           {!collapsed && (
-            <Text strong style={{ color: '#f1f5f9', fontSize: 17, letterSpacing: -0.5 }}>
+            <Text strong style={{ color: '#1e293b', fontSize: 17, letterSpacing: -0.5 }}>
               Hello World
             </Text>
           )}
         </div>
 
-        {/* 导航菜单 */}
+        {/* 导航菜单（浅色） */}
         <Menu
-          theme="dark"
           mode="inline"
           selectedKeys={[selectedKey]}
           items={menuItems}
           onClick={handleMenuClick}
-          style={{ borderRight: 0, marginTop: 8 }}
+          style={{ borderRight: 0, marginTop: 8, background: 'transparent' }}
         />
       </Sider>
 
-      <AntLayout>
+      <AntLayout style={{ background: '#fafbf8' }}>
         {/* 顶部栏 */}
         <Header
           className="admin-header"
@@ -149,9 +171,9 @@ export default function Layout() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderBottom: '1px solid rgba(255,255,255,0.04)',
+            borderBottom: '1px solid rgba(15,23,42,0.06)',
             height: 64,
-            background: 'linear-gradient(180deg, rgba(15,19,34,1) 0%, rgba(13,17,30,0.98) 100%)',
+            background: '#ffffff',
             position: 'sticky',
             top: 0,
             zIndex: 10,
@@ -161,20 +183,20 @@ export default function Layout() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             {collapsed ? (
               <MenuUnfoldOutlined
-                style={{ fontSize: 17, cursor: 'pointer', color: '#94a3b8', transition: 'color 0.2s ease' }}
+                style={{ fontSize: 17, cursor: 'pointer', color: '#64748b', transition: 'color 0.2s ease' }}
                 onClick={() => setCollapsed(false)}
-                onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.color = '#6366f1'}
-                onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.color = '#94a3b8'}
+                onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.color = '#10b981'}
+                onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.color = '#64748b'}
               />
             ) : (
               <MenuFoldOutlined
-                style={{ fontSize: 17, cursor: 'pointer', color: '#94a3b8', transition: 'color 0.2s ease' }}
+                style={{ fontSize: 17, cursor: 'pointer', color: '#64748b', transition: 'color 0.2s ease' }}
                 onClick={() => setCollapsed(true)}
-                onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.color = '#6366f1'}
-                onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.color = '#94a3b8'}
+                onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.color = '#10b981'}
+                onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.color = '#64748b'}
               />
             )}
-            <Text style={{ fontSize: 15, fontWeight: 500, color: '#e2e8f0' }}>
+            <Text style={{ fontSize: 15, fontWeight: 500, color: '#1e293b' }}>
               管理后台
             </Text>
           </div>
@@ -190,27 +212,27 @@ export default function Layout() {
                 gap: 10,
                 padding: '6px 12px',
                 borderRadius: 10,
-                background: 'rgba(99,102,241,0.04)',
-                border: '1px solid rgba(255,255,255,0.04)',
+                background: 'rgba(16,185,129,0.04)',
+                border: '1px solid rgba(15,23,42,0.06)',
               }}
               // 鼠标悬停效果
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.background = 'rgba(99,102,241,0.1)'
-                ;(e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.2)'
+                (e.currentTarget as HTMLDivElement).style.background = 'rgba(16,185,129,0.1)'
+                ;(e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(16,185,129,0.2)'
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.background = 'rgba(99,102,241,0.04)'
-                ;(e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.04)'
+                (e.currentTarget as HTMLDivElement).style.background = 'rgba(16,185,129,0.04)'
+                ;(e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(15,23,42,0.06)'
               }}
             >
               <Avatar
                 icon={<UserOutlined />}
                 style={{
-                  background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-                  boxShadow: '0 0 8px rgba(99,102,241,0.3)',
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  boxShadow: '0 0 8px rgba(16,185,129,0.3)',
                 }}
               />
-              <Text style={{ color: '#cbd5e1', fontSize: 14 }}>
+              <Text style={{ color: '#475569', fontSize: 14 }}>
                 {admin?.username || '管理员'}
               </Text>
             </div>
@@ -224,8 +246,8 @@ export default function Layout() {
             padding: 24,
             borderRadius: 12,
             minHeight: 280,
-            background: '#0f1322',
-            border: '1px solid rgba(255,255,255,0.03)',
+            background: '#ffffff',
+            border: '1px solid rgba(15,23,42,0.06)',
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -238,7 +260,7 @@ export default function Layout() {
               left: 0,
               right: 0,
               height: 40,
-              background: 'linear-gradient(180deg, rgba(15,19,34,1) 0%, transparent 100%)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, transparent 100%)',
               pointerEvents: 'none',
               zIndex: 1,
             }}

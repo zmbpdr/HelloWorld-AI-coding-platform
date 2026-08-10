@@ -91,19 +91,19 @@ export default function SystemSettings() {
     <div>
       {/* 顶部栏 - 标题 + 保存按钮 */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <Title level={4} style={{ margin: 0, color: '#e2e8f0' }}>系统设置</Title>
+        <Title level={4} style={{ margin: 0, color: '#1e293b' }}>系统设置</Title>
         <Button type="primary" icon={<SaveOutlined />} onClick={handleSave} loading={saving} size="large">保存配置</Button>
       </div>
 
       <Form form={form} layout="vertical">
         {/* 基本设置分组 */}
         <Card
-          title={<Text strong style={{ color: '#e2e8f0' }}>基本设置</Text>}
-          style={{ marginBottom: 20, borderRadius: 12, background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}
+          title={<Text strong style={{ color: '#1e293b' }}>基本设置</Text>}
+          style={{ marginBottom: 20, borderRadius: 12, background: '#ffffff', border: '1px solid rgba(15,23,42,0.05)' }}
         >
           <Space orientation="vertical" style={{ width: '100%' }} size="middle">
             {DEFAULT_SETTINGS.filter(d => ['site_name', 'site_description', 'registration_enabled'].includes(d.key)).map(def => (
-              <Form.Item key={def.key} name={def.key} label={<Text style={{ color: '#94a3b8' }}>{def.label}</Text>}
+              <Form.Item key={def.key} name={def.key} label={<Text style={{ color: '#64748b' }}>{def.label}</Text>}
                 tooltip={def.description} style={{ marginBottom: 0 }}>
                 {def.type === 'switch' ? (
                   <Switch checkedChildren="开启" unCheckedChildren="关闭" />
@@ -117,12 +117,12 @@ export default function SystemSettings() {
 
         {/* 沙箱资源限制分组 */}
         <Card
-          title={<Text strong style={{ color: '#e2e8f0' }}>沙箱资源限制</Text>}
-          style={{ marginBottom: 20, borderRadius: 12, background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}
+          title={<Text strong style={{ color: '#1e293b' }}>沙箱资源限制</Text>}
+          style={{ marginBottom: 20, borderRadius: 12, background: '#ffffff', border: '1px solid rgba(15,23,42,0.05)' }}
         >
           <Space orientation="vertical" style={{ width: '100%' }} size="middle">
             {DEFAULT_SETTINGS.filter(d => d.key.startsWith('sandbox_')).map(def => (
-              <Form.Item key={def.key} name={def.key} label={<Text style={{ color: '#94a3b8' }}>{def.label}</Text>}
+              <Form.Item key={def.key} name={def.key} label={<Text style={{ color: '#64748b' }}>{def.label}</Text>}
                 tooltip={def.description} style={{ marginBottom: 0 }}>
                 <InputNumber min={1} style={{ width: 200 }} />
               </Form.Item>
@@ -132,12 +132,12 @@ export default function SystemSettings() {
 
         {/* 评分与经验值分组 */}
         <Card
-          title={<Text strong style={{ color: '#e2e8f0' }}>评分与经验值</Text>}
-          style={{ marginBottom: 20, borderRadius: 12, background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}
+          title={<Text strong style={{ color: '#1e293b' }}>评分与经验值</Text>}
+          style={{ marginBottom: 20, borderRadius: 12, background: '#ffffff', border: '1px solid rgba(15,23,42,0.05)' }}
         >
           <Space orientation="vertical" style={{ width: '100%' }} size="middle">
             {DEFAULT_SETTINGS.filter(d => d.key.startsWith('scoring_') || d.key === 'max_submission_per_day').map(def => (
-              <Form.Item key={def.key} name={def.key} label={<Text style={{ color: '#94a3b8' }}>{def.label}</Text>}
+              <Form.Item key={def.key} name={def.key} label={<Text style={{ color: '#64748b' }}>{def.label}</Text>}
                 tooltip={def.description} style={{ marginBottom: 0 }}>
                 <InputNumber min={0} step={def.key === 'scoring_xp_multiplier' ? 0.1 : 1} style={{ width: 200 }} />
               </Form.Item>
@@ -147,12 +147,12 @@ export default function SystemSettings() {
 
         {/* AI 配置分组 */}
         <Card
-          title={<Text strong style={{ color: '#e2e8f0' }}>AI 配置</Text>}
-          style={{ marginBottom: 20, borderRadius: 12, background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}
+          title={<Text strong style={{ color: '#1e293b' }}>AI 配置</Text>}
+          style={{ marginBottom: 20, borderRadius: 12, background: '#ffffff', border: '1px solid rgba(15,23,42,0.05)' }}
         >
           <Space orientation="vertical" style={{ width: '100%' }} size="middle">
             {DEFAULT_SETTINGS.filter(d => d.key === 'ai_mode').map(def => (
-              <Form.Item key={def.key} name={def.key} label={<Text style={{ color: '#94a3b8' }}>{def.label}</Text>}
+              <Form.Item key={def.key} name={def.key} label={<Text style={{ color: '#64748b' }}>{def.label}</Text>}
                 tooltip={def.description} style={{ marginBottom: 0 }}>
                 <Input placeholder="auto / cloud / local" />
               </Form.Item>

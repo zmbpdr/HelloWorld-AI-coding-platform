@@ -132,7 +132,7 @@ export default function SubmissionAudit() {
     <div>
       {/* 顶部操作栏 - 标题 + 重置/查询按钮 */}
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2 style={{ margin: 0, color: '#e2e8f0' }}>提交审计</h2>
+        <h2 style={{ margin: 0, color: '#1e293b' }}>提交审计</h2>
         <Space>
           <Button icon={<ReloadOutlined />} onClick={handleReset} size="small">重置</Button>
           <Button type="primary" icon={<SearchOutlined />} onClick={() => doSearch()} size="small">查询</Button>
@@ -143,12 +143,12 @@ export default function SubmissionAudit() {
       <div
         style={{
           marginBottom: 16, padding: '16px 20px', borderRadius: 12,
-          background: 'rgba(15,19,34,0.8)', border: '1px solid rgba(255,255,255,0.05)',
+          background: '#ffffff', border: '1px solid rgba(15,23,42,0.05)',
         }}
       >
         <Row gutter={[16, 12]} align="middle">
           <Col>
-            <Text style={{ color: '#94a3b8', fontSize: 13, marginRight: 8 }}>状态:</Text>
+            <Text style={{ color: '#64748b', fontSize: 13, marginRight: 8 }}>状态:</Text>
             <Select
               placeholder="全部状态"
               allowClear
@@ -159,7 +159,7 @@ export default function SubmissionAudit() {
             />
           </Col>
           <Col>
-            <Text style={{ color: '#94a3b8', fontSize: 13, marginRight: 8 }}>用户:</Text>
+            <Text style={{ color: '#64748b', fontSize: 13, marginRight: 8 }}>用户:</Text>
             <Input
               placeholder="输入用户名"
               style={{ width: 180 }}
@@ -176,7 +176,7 @@ export default function SubmissionAudit() {
         <div
           style={{
             textAlign: 'center', padding: '80px 20px', borderRadius: 12,
-            background: 'rgba(15,19,34,0.6)', border: '1px solid rgba(255,255,255,0.04)',
+            background: '#ffffff', border: '1px solid rgba(15,23,42,0.04)',
           }}
         >
           <SearchOutlined style={{ fontSize: 40, color: '#334155', marginBottom: 16 }} />
@@ -200,7 +200,7 @@ export default function SubmissionAudit() {
 
       {/* 提交详情 Drawer */}
       <Drawer
-        title={<Space><span style={{ color: '#e2e8f0' }}>提交详情</span>{detail && renderStatus(detail.status)}</Space>}
+        title={<Space><span style={{ color: '#1e293b' }}>提交详情</span>{detail && renderStatus(detail.status)}</Space>}
         size="large"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
@@ -219,11 +219,11 @@ export default function SubmissionAudit() {
             </Descriptions>
 
             {/* 提交代码内容 */}
-            <Text strong style={{ display: 'block', marginBottom: 8, color: '#cbd5e1' }}>提交代码：</Text>
+            <Text strong style={{ display: 'block', marginBottom: 8, color: '#475569' }}>提交代码：</Text>
             <pre style={{
-              background: '#0f1322', color: '#cbd5e1', padding: 16, borderRadius: 10, overflow: 'auto',
+              background: '#ffffff', color: '#475569', padding: 16, borderRadius: 10, overflow: 'auto',
               fontSize: 13, lineHeight: 1.6, maxHeight: 400, margin: '0 0 20px',
-              border: '1px solid rgba(255,255,255,0.05)',
+              border: '1px solid rgba(15,23,42,0.05)',
             }}>{detail.code}</pre>
 
             {/* 标准输出内容 */}
