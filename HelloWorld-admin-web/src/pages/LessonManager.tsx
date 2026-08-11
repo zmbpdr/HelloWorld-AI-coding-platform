@@ -194,7 +194,7 @@ export default function LessonManager() {
 
       {/* 筛选条件栏 - 语言、难度、发布状态 */}
       <div style={{ marginBottom: 16, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-        <FilterOutlined style={{ color: '#94a3b8' }} />
+        <FilterOutlined style={{ color: '#64748b' }} />
         <Select
           placeholder="全部语言"
           allowClear
@@ -227,7 +227,7 @@ export default function LessonManager() {
           <Select.Option value={true}>已发布</Select.Option>
           <Select.Option value={false}>未发布</Select.Option>
         </Select>
-        <span style={{ fontSize: 12, color: '#94a3b8', marginLeft: 8 }}>
+        <span style={{ fontSize: 12, color: '#64748b', marginLeft: 8 }}>
           共 {filteredLessons.length} 条
         </span>
       </div>

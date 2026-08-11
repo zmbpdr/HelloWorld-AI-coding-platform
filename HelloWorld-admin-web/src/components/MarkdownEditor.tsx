@@ -167,7 +167,7 @@ export default function MarkdownEditor({
         preview="live"
         visibleDragbar={true}
         highlightEnable={true}
-        data-color-mode="dark"
+        data-color-mode="light"
         onPaste={handlePaste}
         onDrop={handleDrop}
         onDragOver={handleDragOver}

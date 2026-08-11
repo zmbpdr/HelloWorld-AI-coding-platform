@@ -105,7 +105,7 @@ class AdminService:
         cr = await self.db.execute(select(func.count()).select_from(Lesson))
         return {"items": [{"id": l.id, "title": l.title, "slug": l.slug, "difficulty": l.difficulty, "language_id": l.language_id, "order": l.order, "xp_reward": l.xp_reward, "knowledge_tags": l.knowledge_tags or [], "estimated_minutes": l.estimated_minutes, "prerequisites": l.prerequisites or [], "is_active": l.is_active} for l in r.scalars().all()], "total": cr.scalar() or 0, "page": page, "page_size": page_size}
 
-    async def get_questions_list(self, page=1, page_size=20, language_id=None, difficulty=None, question_type=None):
+    async def get_questions_list(self, page=1, page_size=20, language_id=None, difficulty=None, question_type=None, keyword=None):
         """获取题库列表（分页，支持按语言、难度、题型筛选）
 
         Args:
@@ -129,6 +129,9 @@ class AdminService:
         if question_type:
             q = q.where(Question.question_type == question_type)
             cq = cq.where(Question.question_type == question_type)
+        if keyword:
+            q = q.where(or_(Question.title.ilike(f"%{keyword}%"), Question.slug.ilike(f"%{keyword}%")))
+            cq = cq.where(or_(Question.title.ilike(f"%{keyword}%"), Question.slug.ilike(f"%{keyword}%")))
         r = await self.db.execute(q.offset((page - 1) * page_size).limit(page_size))
         cr = await self.db.execute(cq)
         return {

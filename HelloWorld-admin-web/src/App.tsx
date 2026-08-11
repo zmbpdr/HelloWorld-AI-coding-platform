@@ -1,8 +1,8 @@
 /**
  * App.tsx - 路由配置与主题配置
  *
- * 应用根组件，配置 Ant Design 深色主题、中文语言包、
- * React Router 路由规则（含登录页和私有路由保护）。
+ * 应用根组件，配置 Ant Design 浅色清新主题（与学习端"清新自然风"统一）、
+ * 中文语言包、React Router 路由规则（含登录页和私有路由保护）。
  */
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
@@ -17,6 +17,8 @@ import UserManager from './pages/UserManager'
 import AchievementManager from './pages/AchievementManager'
 import SubmissionAudit from './pages/SubmissionAudit'
 import SystemSettings from './pages/SystemSettings'
+import QuestionManager from './pages/QuestionManager'
+import QuestionImport from './pages/QuestionImport'
 import { useAdminStore } from './stores/adminStore'
 
 /**
@@ -28,58 +30,63 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />
 }
 
-/** 深色主题配置 */
-const darkTheme = {
-  algorithm: theme.darkAlgorithm,
+/** 浅色清新主题配置 — 与学习端"清新自然风"统一（主色草绿 #10b981） */
+const lightTheme = {
+  algorithm: theme.defaultAlgorithm,
   token: {
-    colorPrimary: '#6366f1',
-    colorInfo: '#6366f1',
+    colorPrimary: '#10b981',
+    colorInfo: '#0ea5e9',
     colorSuccess: '#22c55e',
     colorWarning: '#f59e0b',
     colorError: '#ef4444',
-    colorBgBase: '#0b0f1a',
-    colorBgContainer: '#111827',
-    colorBgElevated: '#1a1f2e',
-    colorBorder: '#1f2937',
-    colorBorderSecondary: '#374151',
-    colorText: '#f1f5f9',
-    colorTextSecondary: '#94a3b8',
-    borderRadius: 8,
+    colorBgBase: '#fafbf8',
+    colorBgContainer: '#ffffff',
+    colorBgElevated: '#ffffff',
+    colorBgLayout: '#fafbf8',
+    colorBorder: '#e6e8e3',
+    colorBorderSecondary: '#f0f2ed',
+    colorText: '#1e293b',
+    colorTextSecondary: '#475569',
+    colorTextTertiary: '#94a3b8',
+    borderRadius: 10,
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif",
   },
   components: {
     Layout: {
-      siderBg: '#080b14',
-      triggerBg: '#0f1322',
-      headerBg: '#0f1322',
+      siderBg: '#ffffff',
+      triggerBg: '#f4f6f1',
+      headerBg: '#ffffff',
     },
     Menu: {
-      darkItemBg: '#080b14',
-      darkItemSelectedBg: 'rgba(99,102,241,0.15)',
-      darkItemHoverBg: 'rgba(99,102,241,0.08)',
-      darkSubMenuItemBg: '#080b14',
+      itemBg: 'transparent',
+      itemColor: '#475569',
+      itemSelectedBg: 'rgba(16,185,129,0.1)',
+      itemSelectedColor: '#059669',
+      itemHoverBg: 'rgba(16,185,129,0.06)',
+      itemHoverColor: '#1e293b',
+      subMenuItemBg: 'transparent',
     },
     Card: {
-      colorBgContainer: '#111827',
+      colorBgContainer: '#ffffff',
     },
     Table: {
-      headerBg: '#0f1322',
-      rowHoverBg: 'rgba(99,102,241,0.04)',
+      headerBg: '#f4f6f1',
+      rowHoverBg: 'rgba(16,185,129,0.04)',
     },
     Input: {
-      colorBgContainer: '#0f1322',
-      colorBorder: '#1f2937',
-      activeBorderColor: '#6366f1',
+      colorBgContainer: '#ffffff',
+      colorBorder: '#e6e8e3',
+      activeBorderColor: '#10b981',
     },
     Select: {
-      colorBgContainer: '#0f1322',
-      colorBorder: '#1f2937',
+      colorBgContainer: '#ffffff',
+      colorBorder: '#e6e8e3',
     },
     Modal: {
-      colorBgElevated: '#111827',
+      colorBgElevated: '#ffffff',
     },
     Drawer: {
-      colorBgElevated: '#111827',
+      colorBgElevated: '#ffffff',
     },
   },
 }
@@ -87,7 +94,7 @@ const darkTheme = {
 /** 应用根组件 */
 export default function App() {
   return (
-    <ConfigProvider locale={zhCN} theme={darkTheme}>
+    <ConfigProvider locale={zhCN} theme={lightTheme}>
       <AntApp>
         <BrowserRouter>
           <Routes>
@@ -103,6 +110,8 @@ export default function App() {
               <Route path="achievements" element={<AchievementManager />} />
               <Route path="submissions" element={<SubmissionAudit />} />
               <Route path="settings" element={<SystemSettings />} />
+              <Route path="questions" element={<QuestionManager />} />
+              <Route path="questions/import" element={<QuestionImport />} />
             </Route>
           </Routes>
         </BrowserRouter>

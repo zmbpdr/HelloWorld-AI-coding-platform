@@ -6,6 +6,7 @@
  */
 
 import apiClient from './client'
+import axios from 'axios'
 
 // ==================== 认证接口 ====================
 
@@ -150,5 +151,153 @@ export async function getSettings() {
 /** 更新单个系统设置 */
 export async function updateSetting(key: string, value: string) {
   const { data } = await apiClient.put(`/settings/${key}`, { value })
+  return data
+}
+
+
+// ==================== 题库管理接口 ====================
+
+/** 题目列表项 */
+export interface QuestionListItem {
+  id: number
+  title: string
+  slug: string
+  language_id: number
+  difficulty: string | null
+  question_type: string
+  knowledge_tags: string[]
+  order: number
+  is_active: boolean
+  created_at?: string | null
+  updated_at?: string | null
+}
+
+/** 题目详情（含完整字段） */
+export interface QuestionDetail extends QuestionListItem {
+  description?: string | null
+  content?: string | null
+  options?: unknown
+  answer?: string | null
+  explanation?: string | null
+  test_cases?: unknown
+  starter_code?: string | null
+}
+
+/** 题目列表响应 */
+export interface QuestionListResult {
+  items: QuestionListItem[]
+  total: number
+  page: number
+  page_size: number
+}
+
+/** 导入预检查错误项 */
+export interface ImportErrorItem {
+  row: number
+  field: string
+  message: string
+}
+
+/** 导入预检查报告 */
+export interface ImportReport {
+  errors: ImportErrorItem[]
+  total: number
+  valid_count: number
+  error_count: number
+}
+
+/** 语言信息（用户端公开接口） */
+export interface LanguageItem {
+  id: number
+  slug: string
+  name: string
+  [key: string]: unknown
+}
+
+/** 获取编程语言列表（公开接口 /api/v1/languages） */
+export async function getLanguages(): Promise<LanguageItem[]> {
+  const { data } = await axios.get('/api/v1/languages')
+  return data
+}
+
+/** 获取题目列表（分页 + 语言/难度/题型筛选 + 关键词搜索） */
+export async function getQuestions(params?: {
+  page?: number
+  page_size?: number
+  language_id?: number
+  difficulty?: string
+  question_type?: string
+  keyword?: string
+}): Promise<QuestionListResult> {
+  const { data } = await apiClient.get('/questions', { params })
+  return data
+}
+
+/** 获取题目详情 */
+export async function getQuestionDetail(id: number): Promise<QuestionDetail> {
+  const { data } = await apiClient.get(`/questions/${id}`)
+  return data
+}
+
+/** 新增题目 */
+export async function createQuestion(payload: Record<string, unknown>) {
+  const { data } = await apiClient.post('/questions', payload)
+  return data
+}
+
+/** 编辑题目 */
+export async function updateQuestion(id: number, payload: Record<string, unknown>) {
+  const { data } = await apiClient.put(`/questions/${id}`, payload)
+  return data
+}
+
+/** 删除题目（软删除） */
+export async function deleteQuestion(id: number) {
+  const { data } = await apiClient.delete(`/questions/${id}`)
+  return data
+}
+
+/** 发布/下架题目 */
+export async function togglePublishQuestion(id: number) {
+  const { data } = await apiClient.post(`/questions/${id}/publish`)
+  return data
+}
+
+/** 批量导入题目（上传 Excel/CSV，返回预检查报告；后端支持 confirm 参数确认入库） */
+export async function importQuestions(file: File, confirm = false): Promise<ImportReport> {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('confirm', String(confirm))
+  const { data } = await apiClient.post('/questions/import', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 60000,
+  })
+  return data
+}
+
+/** 批量导出题目（返回 CSV 文件流） */
+export async function exportQuestions(params?: {
+  language_id?: number
+  difficulty?: string
+  question_type?: string
+}): Promise<Blob> {
+  const { data } = await apiClient.get('/questions/export', {
+    params,
+    responseType: 'blob',
+  })
+  return data
+}
+
+/** 获取关卡已关联的题目 ID 列表 */
+export async function getLessonQuestionIds(lessonId: number): Promise<number[]> {
+  const { data } = await apiClient.get(`/lessons/${lessonId}/questions`)
+  return data
+}
+
+/** 保存关卡关联题目（全量替换） */
+export async function setLessonQuestions(lessonId: number, questionIds: number[]) {
+  const { data } = await apiClient.put(`/lessons/${lessonId}/questions`, {
+    question_ids: questionIds,
+  })
   return data
 }

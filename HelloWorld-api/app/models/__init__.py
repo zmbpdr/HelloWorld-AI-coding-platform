@@ -14,6 +14,7 @@ from app.models.knowledge import UserKnowledge
 from app.models.error import UserError
 from app.models.chat import ChatHistory
 from app.models.question import Question
+from app.models.lesson_question import LessonQuestion
 
 __all__ = [
     "User",
@@ -35,4 +36,5 @@ __all__ = [
     "UserError",
     "ChatHistory",
     "Question",
+    "LessonQuestion",
 ]
