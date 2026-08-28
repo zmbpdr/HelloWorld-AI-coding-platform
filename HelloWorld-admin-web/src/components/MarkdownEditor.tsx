@@ -13,8 +13,8 @@ import React, { useRef, useCallback } from 'react'
 import MDEditor, { commands, type ICommand } from '@uiw/react-md-editor'
 import '@uiw/react-md-editor/markdown-editor.css'
 import { message } from 'antd'
-import { PictureOutlined } from '@ant-design/icons'
-import { uploadImage } from '../api/admin'
+import { PictureOutlined, FileTextOutlined } from '@ant-design/icons'
+import { uploadImage, parseWordFile, parsePdfFile } from '../api/admin'
 
 interface MarkdownEditorProps {
   /** 当前 Markdown 内容（受控） */
@@ -44,6 +44,7 @@ export default function MarkdownEditor({
   height = 500,
 }: MarkdownEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const docInputRef = useRef<HTMLInputElement>(null)
   /** 用 ref 保持最新 value，避免闭包过期问题 */
   const valueRef = useRef(value)
   valueRef.current = value
@@ -100,6 +101,87 @@ export default function MarkdownEditor({
     },
   }
 
+  // ──── 自定义文件导入按钮（Word/PDF → Markdown）────
+
+  /** 将解析结果文本插入到编辑器光标位置 */
+  const insertText = useCallback(
+    (text: string) => {
+      const textarea = document.querySelector(
+        '.w-md-editor-text-input',
+      ) as HTMLTextAreaElement | null
+      if (textarea) {
+        const currentValue = valueRef.current || ''
+        const start = textarea.selectionStart
+        const newValue =
+          currentValue.substring(0, start) +
+          text +
+          currentValue.substring(start)
+        onChange?.(newValue)
+
+        // 将光标移到插入内容之后
+        setTimeout(() => {
+          textarea.selectionStart = textarea.selectionEnd = start + text.length
+          textarea.focus()
+        }, 0)
+      } else {
+        onChange?.((valueRef.current || '') + text)
+      }
+    },
+    [onChange],
+  )
+
+  /** 解析 Word/PDF 文件并插入编辑器 */
+  const doImportDoc = useCallback(
+    async (file: File) => {
+      const name = file.name.toLowerCase()
+      const isPdf = name.endsWith('.pdf')
+      if (!isPdf && !name.endsWith('.docx')) {
+        message.error('仅支持 .docx / .pdf 文件')
+        return
+      }
+      const hide = message.loading(isPdf ? 'PDF 解析中，大文件可能需要较长时间...' : 'Word 解析中...', 0)
+      try {
+        const result = isPdf
+          ? await parsePdfFile(file)
+          : await parseWordFile(file)
+
+        const markdown = result.markdown || ''
+        if (!markdown.trim()) {
+          hide()
+          message.warning('解析完成，但未提取到文本内容，请检查源文件。')
+          return
+        }
+
+        // 在光标处插入解析结果（追加换行保证与已有内容分离）
+        insertText(markdown.trimEnd() + '\n\n')
+
+        const imageText = result.images > 0 ? `，提取图片 ${result.images} 张` : ''
+        if (isPdf) {
+          hide()
+          message.success(`PDF 解析完成${imageText}。PDF 还原度有限，建议人工校对格式。`, 5)
+        } else {
+          hide()
+          message.success(`Word 解析完成${imageText}。`, 3)
+        }
+      } catch {
+        hide()
+        message.error('文件解析失败，请确认文件未损坏且格式正确（≤20MB）')
+      }
+    },
+    [insertText],
+  )
+
+  /** 文件导入命令（工具栏按钮触发隐藏 input） */
+  const docImportCommand: ICommand = {
+    name: 'docImport',
+    keyCommand: 'docImport',
+    buttonProps: { 'aria-label': '导入 Word/PDF 文件', title: '导入 Word/PDF 文件' },
+    icon: <FileTextOutlined />,
+    execute: () => {
+      docInputRef.current?.click()
+    },
+  }
+
   // ──── 事件处理 ────
 
   /** 文件选择 → 上传 */
@@ -110,6 +192,16 @@ export default function MarkdownEditor({
       e.target.value = '' // 允许重复选择同一文件
     },
     [doUpload],
+  )
+
+  /** 文档选择 → 解析导入 */
+  const handleDocSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (file) doImportDoc(file)
+      e.target.value = '' // 允许重复选择同一文件
+    },
+    [doImportDoc],
   )
 
   /** 粘贴图片 → 上传 */
@@ -160,6 +252,14 @@ export default function MarkdownEditor({
         style={{ display: 'none' }}
         onChange={handleFileSelect}
       />
+      {/* 隐藏的文档 input，由"导入文件"按钮触发 */}
+      <input
+        ref={docInputRef}
+        type="file"
+        accept=".docx,.pdf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        style={{ display: 'none' }}
+        onChange={handleDocSelect}
+      />
       <MDEditor
         value={value}
         onChange={(val) => onChange?.(val || '')}
@@ -189,6 +289,7 @@ export default function MarkdownEditor({
           commands.checkedListCommand,
           commands.divider,
           imageCommand,
+          docImportCommand,
           commands.link,
           commands.divider,
           commands.table,

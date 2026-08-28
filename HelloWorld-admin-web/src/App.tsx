@@ -19,6 +19,8 @@ import SubmissionAudit from './pages/SubmissionAudit'
 import SystemSettings from './pages/SystemSettings'
 import QuestionManager from './pages/QuestionManager'
 import QuestionImport from './pages/QuestionImport'
+import DiagnosticManager from './pages/DiagnosticManager'
+import RagManager from './pages/RagManager'
 import { useAdminStore } from './stores/adminStore'
 
 /**
@@ -112,6 +114,8 @@ export default function App() {
               <Route path="settings" element={<SystemSettings />} />
               <Route path="questions" element={<QuestionManager />} />
               <Route path="questions/import" element={<QuestionImport />} />
+              <Route path="diagnostics" element={<DiagnosticManager />} />
+              <Route path="rag" element={<RagManager />} />
             </Route>
           </Routes>
         </BrowserRouter>

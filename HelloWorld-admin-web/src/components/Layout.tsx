@@ -21,6 +21,8 @@ import {
   MenuUnfoldOutlined,
   CodeOutlined,
   DatabaseOutlined,
+  FormOutlined,
+  DeploymentUnitOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { useAdminStore } from '../stores/adminStore'
@@ -42,8 +44,10 @@ const menuItems: MenuProps['items'] = [
     ],
   },
   { key: '/users', icon: <UserOutlined />, label: '用户管理' },
+  { key: '/diagnostics', icon: <FormOutlined />, label: '诊断题管理' },
   { key: '/achievements', icon: <TrophyOutlined />, label: '成就管理' },
   { key: '/submissions', icon: <AuditOutlined />, label: '提交审计' },
+  { key: '/rag', icon: <DeploymentUnitOutlined />, label: 'RAG 检索' },
   { key: '/settings', icon: <SettingOutlined />, label: '系统设置' },
 ]
 

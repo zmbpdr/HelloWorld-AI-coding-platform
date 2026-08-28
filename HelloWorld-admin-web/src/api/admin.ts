@@ -301,3 +301,148 @@ export async function setLessonQuestions(lessonId: number, questionIds: number[]
   })
   return data
 }
+
+// ==================== 诊断题管理接口 ====================
+
+/** 诊断题列表项 */
+export interface DiagnosticQuestionItem {
+  id: number
+  question: string
+  options: string[]
+  answer: string
+  tag: string
+  order: number
+  is_active: boolean
+  created_at?: string | null
+  updated_at?: string | null
+}
+
+/** 诊断题列表响应 */
+export interface DiagnosticQuestionListResult {
+  items: DiagnosticQuestionItem[]
+  total: number
+  page: number
+  page_size: number
+}
+
+/** 获取诊断题列表（分页 + 标签筛选） */
+export async function getDiagnosticQuestions(params?: {
+  page?: number
+  page_size?: number
+  tag?: string
+}): Promise<DiagnosticQuestionListResult> {
+  const { data } = await apiClient.get('/diagnostic-questions', { params })
+  return data
+}
+
+/** 获取诊断题详情 */
+export async function getDiagnosticQuestion(id: number): Promise<DiagnosticQuestionItem> {
+  const { data } = await apiClient.get(`/diagnostic-questions/${id}`)
+  return data
+}
+
+/** 新增诊断题 */
+export async function createDiagnosticQuestion(payload: Record<string, unknown>) {
+  const { data } = await apiClient.post('/diagnostic-questions', payload)
+  return data
+}
+
+/** 编辑诊断题 */
+export async function updateDiagnosticQuestion(id: number, payload: Record<string, unknown>) {
+  const { data } = await apiClient.put(`/diagnostic-questions/${id}`, payload)
+  return data
+}
+
+/** 删除诊断题（软删除） */
+export async function deleteDiagnosticQuestion(id: number) {
+  const { data } = await apiClient.delete(`/diagnostic-questions/${id}`)
+  return data
+}
+
+/** 启用/停用诊断题 */
+export async function toggleDiagnosticQuestion(id: number) {
+  const { data } = await apiClient.post(`/diagnostic-questions/${id}/toggle`)
+  return data
+}
+
+// ==================== 文件导入解析接口 ====================
+
+/** 解析 Word 文档（.docx）为 Markdown — 返回 { markdown, images } */
+export async function parseWordFile(file: File) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const { data } = await apiClient.post('/lessons/parse-word', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000,
+  })
+  return data as { markdown: string; images: number }
+}
+
+/** 解析 PDF 文档为 Markdown — 返回 { markdown, images, pages } */
+export async function parsePdfFile(file: File) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const { data } = await apiClient.post('/lessons/parse-pdf', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000,
+  })
+  return data as { markdown: string; images: number; pages: number }
+}
+
+// ==================== RAG 检索管理接口 ====================
+
+/** RAG 索引状态 */
+export interface RagStatus {
+  total_indexed: number
+  collection_name: string
+  embedding_model: string
+  storage_path: string
+  error?: string
+}
+
+/** RAG 检索结果项 */
+export interface RagSearchResult {
+  content: string
+  lesson_title: string
+  lesson_id: number
+  lesson_slug: string
+  language: string
+  knowledge_tags: string[]
+  score: number
+}
+
+/** 获取 RAG 索引状态 */
+export async function getRagStatus(): Promise<RagStatus> {
+  const { data } = await apiClient.get('/rag/status')
+  return data
+}
+
+/** 全量索引所有课程（后台任务，立即返回） */
+export async function ragIndexAll() {
+  const { data } = await apiClient.post('/rag/index-all')
+  return data
+}
+
+/** 索引单篇课程 */
+export async function ragIndexLesson(lessonId: number) {
+  const { data } = await apiClient.post(`/rag/index-lesson/${lessonId}`)
+  return data
+}
+
+/** 删除单篇课程索引 */
+export async function ragDeleteLesson(lessonId: number) {
+  const { data } = await apiClient.delete(`/rag/index-lesson/${lessonId}`)
+  return data
+}
+
+/** 检索测试 */
+export async function ragSearch(
+  q: string,
+  top_k?: number,
+  tag?: string,
+): Promise<{ query: string; results: RagSearchResult[]; count: number }> {
+  const { data } = await apiClient.get('/rag/search', {
+    params: { q, top_k, tag },
+  })
+  return data
+}
