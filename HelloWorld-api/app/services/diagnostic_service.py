@@ -1,49 +1,40 @@
 """能力诊断服务 — 10 道选择题评估用户 Python 基础水平
 
-包含诊断题目数据、答案评分计算、诊断结果的保存与查询。
-每位用户最多只有一条诊断记录（user_id 唯一约束）。
+诊断题目从数据库 diagnostic_questions 表中读取，教师可通过管理后台自由增删改。
 """
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.models.diagnostic import UserDiagnostic
-
-# 诊断题目（10 道选择题，覆盖 Python 核心知识点）
-DIAGNOSTIC_QUESTIONS = [
-    {"id": 1, "question": "Python 中 print(type(42)) 的输出是什么？",
-     "options": ["A. <class 'int'>", "B. <class 'str'>", "C. 42", "D. int"],
-     "answer": "A", "tag": "数据类型"},
-    {"id": 2, "question": "以下哪个是正确的变量命名？",
-     "options": ["A. 2name", "B. my-name", "C. my_name", "D. class"],
-     "answer": "C", "tag": "变量"},
-    {"id": 3, "question": "x = 10; x += 5 后 x 的值是？",
-     "options": ["A. 10", "B. 5", "C. 15", "D. 105"],
-     "answer": "C", "tag": "运算符"},
-    {"id": 4, "question": "if x > 10: 中，当 x=10 时条件为？",
-     "options": ["A. True", "B. False", "C. None", "D. Error"],
-     "answer": "B", "tag": "条件判断"},
-    {"id": 5, "question": "for i in range(3): 循环执行几次？",
-     "options": ["A. 2次", "B. 3次", "C. 4次", "D. 0次"],
-     "answer": "B", "tag": "循环"},
-    {"id": 6, "question": "len([1,2,3]) 的返回值是？",
-     "options": ["A. 2", "B. 3", "C. 4", "D. [1,2,3]"],
-     "answer": "B", "tag": "列表"},
-    {"id": 7, "question": "def add(a,b): return a+b 中，add(2,3) 返回？",
-     "options": ["A. '23'", "B. 5", "C. 23", "D. None"],
-     "answer": "B", "tag": "函数"},
-    {"id": 8, "question": "d = {'name': 'Alice'}; print(d['name']) 输出？",
-     "options": ["A. name", "B. Alice", "C. {'name': 'Alice'}", "D. Error"],
-     "answer": "B", "tag": "字典"},
-    {"id": 9, "question": "try...except 的作用是？",
-     "options": ["A. 加速代码", "B. 捕获异常", "C. 定义函数", "D. 导入模块"],
-     "answer": "B", "tag": "异常处理"},
-    {"id": 10, "question": "open('file.txt','r') 中 'r' 表示？",
-     "options": ["A. 写入", "B. 读取", "C. 追加", "D. 删除"],
-     "answer": "B", "tag": "文件操作"},
-]
+from app.models.diagnostic_question import DiagnosticQuestion
 
 
-def calculate_diagnostic_result(answers: list[dict]) -> dict:
+async def get_diagnostic_questions(db: AsyncSession) -> list[dict]:
+    """从数据库获取启用的诊断题目（按 order 排序）
+
+    Returns:
+        题目列表，每项包含 id, question, options, answer, tag, order
+    """
+    result = await db.execute(
+        select(DiagnosticQuestion)
+        .where(DiagnosticQuestion.is_active == True)
+        .order_by(DiagnosticQuestion.order)
+    )
+    questions = result.scalars().all()
+    return [
+        {
+            "id": q.id,
+            "question": q.question,
+            "options": q.options,
+            "answer": q.answer,
+            "tag": q.tag,
+            "order": q.order,
+        }
+        for q in questions
+    ]
+
+
+async def calculate_diagnostic_result(answers: list[dict], db: AsyncSession) -> dict:
     """
     根据用户答案计算诊断结果。
 
@@ -52,17 +43,21 @@ def calculate_diagnostic_result(answers: list[dict]) -> dict:
 
     Args:
         answers: 用户答案列表，格式 [{"question_id": 1, "answer": "A"}, ...]
+        db: 数据库会话
 
     Returns:
         包含 score, skill_level, correct_tags, weak_tags, recommended_start, message 的字典
     """
+    questions = await get_diagnostic_questions(db)
+    total = len(questions)
+
     correct_count = 0
     correct_tags: list[str] = []
     weak_tags: list[str] = []
 
     # 逐题比对，收集正确和错误的知识点
     for a in answers:
-        q = next((q for q in DIAGNOSTIC_QUESTIONS if q["id"] == a["question_id"]), None)
+        q = next((q for q in questions if q["id"] == a["question_id"]), None)
         if q:
             if a["answer"] == q["answer"]:
                 correct_count += 1
@@ -72,7 +67,16 @@ def calculate_diagnostic_result(answers: list[dict]) -> dict:
                 if q["tag"] not in weak_tags:
                     weak_tags.append(q["tag"])
 
-    total = len(DIAGNOSTIC_QUESTIONS)
+    if total == 0:
+        return {
+            "score": 0,
+            "skill_level": "beginner",
+            "correct_tags": [],
+            "weak_tags": [],
+            "recommended_start": "python-01-hello-world",
+            "message": "暂无诊断题目，请联系管理员添加。",
+        }
+
     score = int((correct_count / total) * 100)
 
     # 根据分数判断能力等级并推荐学习起点
@@ -118,19 +122,16 @@ async def save_diagnostic(db: AsyncSession, user_id: int, result: dict) -> UserD
     Returns:
         保存或更新后的 UserDiagnostic 对象
     """
-    # 查询是否已有诊断记录
     stmt = select(UserDiagnostic).where(UserDiagnostic.user_id == user_id)
     existing = (await db.execute(stmt)).scalars().first()
 
     if existing:
-        # 更新已有记录，保留 created_at
         existing.score = result["score"]
         existing.skill_level = result["skill_level"]
         existing.correct_tags = result["correct_tags"]
         existing.weak_tags = result["weak_tags"]
         existing.recommended_start = result["recommended_start"]
     else:
-        # 创建新记录
         diagnostic = UserDiagnostic(
             user_id=user_id,
             score=result["score"],

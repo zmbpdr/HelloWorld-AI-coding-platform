@@ -10,6 +10,9 @@ from app.routers.admin.settings import router as settings_router
 from app.routers.admin.upload import router as upload_router
 from app.routers.admin.questions import router as questions_router
 from app.routers.admin.lesson_questions import router as lesson_questions_router
+from app.routers.admin.diagnostic import router as diagnostic_router
+from app.routers.admin.file_import import router as file_import_router
+from app.routers.admin.rag import router as rag_router
 
 __all__ = [
     "auth_router",
@@ -22,4 +25,7 @@ __all__ = [
     "upload_router",
     "questions_router",
     "lesson_questions_router",
+    "diagnostic_router",
+    "file_import_router",
+    "rag_router",
 ]

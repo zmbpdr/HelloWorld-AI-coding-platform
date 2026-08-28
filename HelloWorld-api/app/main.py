@@ -92,7 +92,7 @@ app.include_router(errors.router, prefix="/api/v1", tags=["错题本"])
 app.include_router(membership.router, prefix="/api/v1", tags=["会员"])
 
 # 管理后台 API 路由注册
-from app.routers.admin import auth_router, dashboard_router, lessons_router, users_router, achievements_router, submissions_router, settings_router, upload_router, questions_router, lesson_questions_router
+from app.routers.admin import auth_router, dashboard_router, lessons_router, users_router, achievements_router, submissions_router, settings_router, upload_router, questions_router, lesson_questions_router, diagnostic_router, file_import_router, rag_router
 app.include_router(auth_router, prefix="/api/v1/admin", tags=["管理后台-认证"])
 app.include_router(dashboard_router, prefix="/api/v1/admin", tags=["管理后台-仪表盘"])
 app.include_router(lessons_router, prefix="/api/v1/admin", tags=["管理后台-课程"])
@@ -103,6 +103,9 @@ app.include_router(settings_router, prefix="/api/v1/admin", tags=["管理后台-
 app.include_router(upload_router, prefix="/api/v1/admin", tags=["管理后台-上传"])
 app.include_router(questions_router, prefix="/api/v1/admin", tags=["管理后台-题库"])
 app.include_router(lesson_questions_router, prefix="/api/v1/admin", tags=["管理后台-教程题目关联"])
+app.include_router(diagnostic_router, prefix="/api/v1/admin", tags=["管理后台-诊断题"])
+app.include_router(file_import_router, prefix="/api/v1/admin", tags=["管理后台-文件导入"])
+app.include_router(rag_router, prefix="/api/v1/admin", tags=["管理后台-RAG"])
 
 # 静态文件挂载 — 使上传的图片可通过 /uploads/... 公开访问
 _static_dir = settings.UPLOAD_DIR

@@ -16,6 +16,7 @@ from app.models.lesson import Lesson
 from app.models.achievement import Achievement
 from app.models.admin import AdminUser
 from app.models.agent import NeuronNode
+from app.models.diagnostic_question import DiagnosticQuestion
 from app.core.security import get_password_hash
 from app.config import settings
 
@@ -50,6 +51,20 @@ ACHIEVEMENTS_DATA = [
     {"slug": "first-blood", "name": "初出茅庐", "description": "完成第1关", "condition_type": "lessons", "condition_value": 1, "rarity": "common"},
     {"slug": "getting-started", "name": "循序渐进", "description": "连续完成5关", "condition_type": "lessons", "condition_value": 5, "rarity": "common"},
     {"slug": "streak-7", "name": "习惯养成", "description": "连续学习7天", "condition_type": "streak", "condition_value": 7, "rarity": "rare"},
+]
+
+# 诊断题种子数据（首次部署时写入，之后教师可自由修改）
+DIAGNOSTIC_QUESTIONS_SEED = [
+    {"question": "Python 中 print(type(42)) 的输出是什么？", "options": ["A. <class 'int'>", "B. <class 'str'>", "C. 42", "D. int"], "answer": "A", "tag": "数据类型", "order": 1},
+    {"question": "以下哪个是正确的变量命名？", "options": ["A. 2name", "B. my-name", "C. my_name", "D. class"], "answer": "C", "tag": "变量", "order": 2},
+    {"question": "x = 10; x += 5 后 x 的值是？", "options": ["A. 10", "B. 5", "C. 15", "D. 105"], "answer": "C", "tag": "运算符", "order": 3},
+    {"question": "if x > 10: 中，当 x=10 时条件为？", "options": ["A. True", "B. False", "C. None", "D. Error"], "answer": "B", "tag": "条件判断", "order": 4},
+    {"question": "for i in range(3): 循环执行几次？", "options": ["A. 2次", "B. 3次", "C. 4次", "D. 0次"], "answer": "B", "tag": "循环", "order": 5},
+    {"question": "len([1,2,3]) 的返回值是？", "options": ["A. 2", "B. 3", "C. 4", "D. [1,2,3]"], "answer": "B", "tag": "列表", "order": 6},
+    {"question": "def add(a,b): return a+b 中，add(2,3) 返回？", "options": ["A. '23'", "B. 5", "C. 23", "D. None"], "answer": "B", "tag": "函数", "order": 7},
+    {"question": "d = {'name': 'Alice'}; print(d['name']) 输出？", "options": ["A. name", "B. Alice", "C. {'name': 'Alice'}", "D. Error"], "answer": "B", "tag": "字典", "order": 8},
+    {"question": "try...except 的作用是？", "options": ["A. 加速代码", "B. 捕获异常", "C. 定义函数", "D. 导入模块"], "answer": "B", "tag": "异常处理", "order": 9},
+    {"question": "open('file.txt','r') 中 'r' 表示？", "options": ["A. 写入", "B. 读取", "C. 追加", "D. 删除"], "answer": "B", "tag": "文件操作", "order": 10},
 ]
 
 # 预设的编程语言数据
@@ -130,32 +145,36 @@ async def seed_database():
                     setattr(language, key, value)
 
         # ---- 初始化课程 ----
-        exist_lessons_result = await session.execute(select(Lesson).where(Lesson.language_id.in_([lang.id for lang in existing])))
-        exist_lessons = {l.slug: l for l in exist_lessons_result.scalars().all()}
+        # 首次检测：如果已有课程数据，跳过 JSON 导入（教师可能已修改）
+        lessons_exist = (await session.execute(select(Lesson))).scalars().first() is not None
 
-        for slug in ALL_LANGUAGE_SLUGS:
-            language = lang_map.get(slug)
-            if not language:
-                continue
-            json_lessons = _load_lessons_from_json(slug)
-            json_slugs = {l["slug"] for l in json_lessons}
+        if not lessons_exist:
+            for slug in ALL_LANGUAGE_SLUGS:
+                language = lang_map.get(slug)
+                if not language:
+                    continue
+                json_lessons = _load_lessons_from_json(slug)
 
-            # 更新或创建课程
-            for lesson_data in json_lessons:
-                if lesson_data["slug"] in exist_lessons:
-                    # 更新已有课程内容
-                    existing_lesson = exist_lessons[lesson_data["slug"]]
-                    for key in ["title", "description", "content", "order", "difficulty", "xp_reward", "starter_code", "solution_code", "test_cases", "hint", "knowledge_tags", "estimated_minutes", "prerequisites"]:
-                        if key in lesson_data:
-                            setattr(existing_lesson, key, lesson_data[key])
-                else:
-                    lesson = Lesson(language_id=language.id, title=lesson_data["title"], slug=lesson_data["slug"], description=lesson_data.get("description"), content=lesson_data.get("content"), order=lesson_data.get("order", 0), difficulty=lesson_data.get("difficulty", "beginner"), xp_reward=lesson_data.get("xp_reward", 10), starter_code=lesson_data.get("starter_code"), solution_code=lesson_data.get("solution_code"), test_cases=lesson_data.get("test_cases"), hint=lesson_data.get("hint"), knowledge_tags=lesson_data.get("knowledge_tags"), estimated_minutes=lesson_data.get("estimated_minutes"), prerequisites=lesson_data.get("prerequisites"))
+                # 批量创建课程（首次部署，无需更新逻辑）
+                for lesson_data in json_lessons:
+                    lesson = Lesson(
+                        language_id=language.id,
+                        title=lesson_data["title"],
+                        slug=lesson_data["slug"],
+                        description=lesson_data.get("description"),
+                        content=lesson_data.get("content"),
+                        order=lesson_data.get("order", 0),
+                        difficulty=lesson_data.get("difficulty", "beginner"),
+                        xp_reward=lesson_data.get("xp_reward", 10),
+                        starter_code=lesson_data.get("starter_code"),
+                        solution_code=lesson_data.get("solution_code"),
+                        test_cases=lesson_data.get("test_cases"),
+                        hint=lesson_data.get("hint"),
+                        knowledge_tags=lesson_data.get("knowledge_tags"),
+                        estimated_minutes=lesson_data.get("estimated_minutes"),
+                        prerequisites=lesson_data.get("prerequisites"),
+                    )
                     session.add(lesson)
-
-            # JSON 中已移除的旧课程标记为停用（保留用户进度/提交记录）
-            for old_slug, old_lesson in exist_lessons.items():
-                if old_slug.startswith(slug + "-") and old_slug not in json_slugs:
-                    old_lesson.is_active = False
 
         # ---- 初始化成就 ----
         exist_ach = await session.execute(select(Achievement.slug))
@@ -163,6 +182,13 @@ async def seed_database():
         for ach_data in ACHIEVEMENTS_DATA:
             if ach_data["slug"] not in exist_ach_slugs:
                 session.add(Achievement(**ach_data))
+
+        # ---- 初始化诊断题 ----
+        # 首次部署时写入 10 道预设诊断题，之后教师可通过管理后台自由修改
+        exist_diag = (await session.execute(select(DiagnosticQuestion))).scalars().first() is not None
+        if not exist_diag:
+            for dq_data in DIAGNOSTIC_QUESTIONS_SEED:
+                session.add(DiagnosticQuestion(**dq_data))
 
         # ---- 创建管理员 ----
         admin_result = await session.execute(select(AdminUser).where(AdminUser.username == "admin"))
