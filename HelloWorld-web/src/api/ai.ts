@@ -11,10 +11,17 @@ export interface ChatRequest {
   message: string
   mode?: AIMode
   context?: {
+    lesson_id?: number
     lesson_title?: string
     language?: string
     code?: string
     error?: string
+    rag_results?: Array<{
+      title?: string
+      content?: string
+      snippet?: string
+      score?: number
+    }>
   }
 }
 
