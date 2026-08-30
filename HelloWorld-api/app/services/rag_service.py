@@ -1,9 +1,10 @@
 """RAG 检索增强生成服务
 
-使用 ChromaDB 作为向量存储，SentenceTransformer 作为 Embedding 引擎，
-将课程内容索引后提供语义检索，为 AI 对话注入相关教程上下文。
+提供两条检索路径：
+1. 语义检索：ChromaDB 向量存储 + SentenceTransformer Embedding，供管理端 RAG API 使用
+2. 轻量关键词检索：直接查数据库 lesson.content，供学生端 AI 对话上下文注入使用，无需向量索引
 
-核心流程：
+语义检索核心流程：
 1. 内容分块：按 ## 标题分割，每块 ≤ 2000 字符
 2. Embedding：SentenceTransformer（all-MiniLM-L6-v2）
 3. 存储：ChromaDB 持久化存储向量 + 元数据
@@ -11,7 +12,8 @@
 """
 
 import logging
-from typing import Optional
+import re
+from typing import Any, Optional
 
 import chromadb
 from chromadb.utils import embedding_functions
@@ -384,3 +386,78 @@ async def get_index_status() -> dict:
             "storage_path": CHROMA_PERSIST_DIR,
             "error": str(e),
         }
+
+
+# ---- 轻量关键词检索（AI 对话上下文注入用，无需向量索引） ----
+def _tokenize(text: str) -> set[str]:
+    return set(re.findall(r"[A-Za-z0-9\u4e00-\u9fa5]+", (text or "").lower()))
+
+
+def _split_content_to_chunks(title: str, content: str) -> list[str]:
+    if not content:
+        return []
+    sections = re.split(r"\n(?=\s*#{1,4}\s)", content)
+    chunks: list[str] = []
+    for section in sections:
+        cleaned = " ".join(section.strip().split())
+        if cleaned:
+            chunks.append(cleaned)
+    if not chunks:
+        chunks.append(" ".join(content.split()))
+    return chunks[:10]
+
+
+def _score_chunk(query: str, title: str, chunk: str) -> float:
+    query_tokens = _tokenize(query)
+    if not query_tokens:
+        return 0.0
+    title_tokens = _tokenize(title)
+    text_tokens = _tokenize(chunk)
+    overlap = query_tokens & text_tokens
+    title_overlap = query_tokens & title_tokens
+    score = len(overlap) * 2 + len(title_overlap) * 3
+    if title and title.lower() in (chunk or "").lower():
+        score += 5
+    return float(score)
+
+
+async def search_lesson_context(
+    db: AsyncSession,
+    lesson_id: int | None,
+    query: str,
+    limit: int = 3,
+) -> list[dict[str, Any]]:
+    """根据课时 ID 和用户问题，召回最相关教学内容片段。"""
+    if lesson_id is None:
+        return []
+
+    lesson_result = await db.execute(select(Lesson).where(Lesson.id == lesson_id))
+    lesson = lesson_result.scalars().first()
+    if not lesson or not (lesson.content or lesson.title):
+        return []
+
+    chunks = _split_content_to_chunks(lesson.title, lesson.content or "")
+    if not chunks:
+        return []
+
+    scored: list[tuple[float, str]] = []
+    for chunk in chunks:
+        score = _score_chunk(query, lesson.title, chunk)
+        if score > 0:
+            scored.append((score, chunk))
+
+    if not scored:
+        return []
+
+    ranked = sorted(scored, key=lambda item: item[0], reverse=True)[:limit]
+    results: list[dict[str, Any]] = []
+    for score, chunk in ranked:
+        snippet = " ".join(chunk.split())
+        if len(snippet) > 600:
+            snippet = snippet[:600].rstrip() + "..."
+        results.append({
+            "title": lesson.title,
+            "content": snippet,
+            "score": round(score, 2),
+        })
+    return results

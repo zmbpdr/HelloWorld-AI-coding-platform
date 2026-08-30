@@ -227,11 +227,12 @@ def _select_system_prompt(context: Optional[dict]) -> str:
 def _build_messages(message: str, context: Optional[dict] = None) -> list[dict]:
     """构建发送给 LLM 的消息列表
 
-    包含系统提示词、上下文信息（课程、代码、错误）和用户消息。
+    包含系统提示词、上下文信息（课程、代码、错误）和用户消息，
+    支持附加 RAG 检索结果，让模型在回答时参考教师教程内容。
 
     Args:
         message: 用户消息内容
-        context: 上下文字典（可选），包含 lesson_title、code、error 等
+        context: 上下文字典（可选），包含 lesson_title、code、error、rag_results 等
 
     Returns:
         格式化后的消息列表
@@ -247,6 +248,22 @@ def _build_messages(message: str, context: Optional[dict] = None) -> list[dict]:
             context_str_parts.append(f"用户代码:\n```\n{context['code']}\n```")
         if context.get("error"):
             context_str_parts.append(f"错误信息: {context['error']}")
+
+        rag_results = context.get("rag_results")
+        if isinstance(rag_results, list) and rag_results:
+            rag_parts = []
+            for index, item in enumerate(rag_results[:3], start=1):
+                title = item.get("title") or item.get("lesson_title") or f"相关内容 {index}"
+                content = item.get("content") or item.get("snippet") or item.get("text") or ""
+                snippet = " ".join(str(content).split())
+                if not snippet:
+                    continue
+                if len(snippet) > 600:
+                    snippet = snippet[:600].rstrip() + "..."
+                rag_parts.append(f"{index}. {title}: {snippet}")
+            if rag_parts:
+                context_str_parts.append("相关教学内容:\n" + "\n\n".join(rag_parts))
+
         if context_str_parts:
             messages.append({"role": "system", "content": "\n".join(context_str_parts)})
 
