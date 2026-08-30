@@ -1,6 +1,11 @@
 """管理后台课程管理路由"""
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+import os
+from datetime import datetime
+from pathlib import Path
+from uuid import uuid4
+
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -13,6 +18,36 @@ from app.services.admin_service import AdminService
 from app.core.admin_deps import get_current_admin, require_role
 
 router = APIRouter()
+
+
+def validate_upload_image(filename: str, content: bytes, max_size: int = 5 * 1024 * 1024) -> bool:
+    """校验上传图片的合法性：扩展名、大小和 magic bytes。"""
+    if not filename:
+        return False
+    lower_name = filename.lower()
+    if lower_name.endswith(".svg"):
+        return False
+    if lower_name.endswith((".jpg", ".jpeg", ".png", ".gif", ".webp")) is False:
+        return False
+    if len(content) > max_size:
+        return False
+    signatures = {
+        ".png": b"\x89PNG\r\n\x1a\n",
+        ".jpg": b"\xff\xd8\xff",
+        ".jpeg": b"\xff\xd8\xff",
+        ".gif": b"GIF87a" or b"GIF89a",
+        ".webp": b"RIFF",
+    }
+    for suffix, signature in signatures.items():
+        if lower_name.endswith(suffix):
+            if suffix == ".webp":
+                return content.startswith(signature) and len(content) >= 12 and content[8:12] == b"WEBP"
+            if suffix in {".jpg", ".jpeg"}:
+                return content.startswith(signature)
+            if suffix == ".gif":
+                return content.startswith(b"GIF87a") or content.startswith(b"GIF89a")
+            return content.startswith(signature)
+    return False
 
 
 async def validate_prerequisites(
@@ -65,6 +100,27 @@ async def validate_prerequisites(
 
     if any(has_cycle(slug) for slug in dependencies):
         raise HTTPException(status_code=422, detail="前置关卡不能形成循环依赖")
+
+
+@router.post("/lessons/upload-image")
+async def upload_lesson_image(
+    file: UploadFile = File(...),
+    current_admin: AdminUser = Depends(require_role("editor")),
+):
+    """上传教师课程图片，保存在 static/uploads 目录下。"""
+    content = await file.read()
+    if not validate_upload_image(file.filename or "", content):
+        raise HTTPException(status_code=400, detail="仅允许 JPG/PNG/GIF/WebP 图片，且大小不超过 5MB，SVG 不允许上传")
+
+    today = datetime.now().strftime("%Y%m%d")
+    storage_dir = Path("static/uploads") / today
+    storage_dir.mkdir(parents=True, exist_ok=True)
+    suffix = Path(file.filename or "image.png").suffix.lower() or ".png"
+    file_name = f"{uuid4()}{suffix}"
+    target = storage_dir / file_name
+    target.write_bytes(content)
+
+    return {"url": f"/uploads/{today}/{file_name}"}
 
 
 @router.get("/lessons")

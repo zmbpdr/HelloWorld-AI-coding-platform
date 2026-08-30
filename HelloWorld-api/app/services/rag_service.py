@@ -71,7 +71,7 @@ async def search_lesson_context(
             scored.append((score, chunk))
 
     if not scored:
-        scored = [(1.0, chunks[0])] if chunks else []
+        return []
 
     ranked = sorted(scored, key=lambda item: item[0], reverse=True)[:limit]
     results: list[dict[str, Any]] = []

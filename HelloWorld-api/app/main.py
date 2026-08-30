@@ -2,9 +2,12 @@
 
 from contextlib import asynccontextmanager
 
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.core.exceptions import register_exception_handlers
@@ -46,6 +49,11 @@ app.add_middleware(
 
 # 注册请求日志中间件
 app.middleware("http")(logging_middleware)
+
+# 提供 Markdown/教程图片上传的静态资源服务
+upload_dir = Path("static/uploads")
+upload_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(upload_dir)), name="uploads")
 
 # 注册全局异常处理器
 register_exception_handlers(app)

@@ -53,6 +53,15 @@ export async function togglePublishLesson(id: number) {
   return data
 }
 
+export async function uploadLessonImage(file: File) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const { data } = await apiClient.post('/lessons/upload-image', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return data
+}
+
 // === 用户管理 ===
 export async function getUsers(params?: { page?: number; page_size?: number; search?: string }) {
   const { data } = await apiClient.get('/users', { params })
