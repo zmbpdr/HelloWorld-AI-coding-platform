@@ -7,7 +7,6 @@ const md: MarkdownItType = new MarkdownIt({
   html: false,
   linkify: true,
   typographer: true,
-<<<<<<< HEAD
   highlight(str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
