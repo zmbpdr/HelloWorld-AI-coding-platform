@@ -1,28 +1,30 @@
-"""RAG 检索增强生成服务
+"""RAG 检索增强服务
 
 提供两条检索路径：
-1. 语义检索：ChromaDB 向量存储 + SentenceTransformer Embedding，供管理端 RAG API 使用
+1. 语义检索：可选的 ChromaDB 向量存储 + SentenceTransformer Embedding，供管理端 RAG API 使用
 2. 轻量关键词检索：直接查数据库 lesson.content，供学生端 AI 对话上下文注入使用，无需向量索引
 
-语义检索核心流程：
-1. 内容分块：按 ## 标题分割，每块 ≤ 2000 字符
-2. Embedding：SentenceTransformer（all-MiniLM-L6-v2）
-3. 存储：ChromaDB 持久化存储向量 + 元数据
-4. 检索：余弦相似度检索 top_k 结果，知识点标签加权
+本项目当前并未强依赖 ChromaDB，因此语义路径优先、无索引时自动回退到关键词搜索，
+是当前版本中最稳定的做法，也符合“语义优先、无索引降级”的目标。
 """
 
 import logging
 import re
 from typing import Any, Optional
 
-import chromadb
-from chromadb.utils import embedding_functions
+try:
+    import chromadb
+    from chromadb.utils import embedding_functions
+except Exception:  # pragma: no cover - optional dependency
+    chromadb = None
+    embedding_functions = None
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import async_session
-from app.models.lesson import Lesson
 from app.models.course import Language
+from app.models.lesson import Lesson
 
 logger = logging.getLogger(__name__)
 
@@ -38,15 +40,16 @@ CHUNK_OVERLAP = 100
 DEFAULT_TOP_K = 5
 TAG_WEIGHT_BOOST = 0.15
 
-
 # ---- ChromaDB 客户端 ----
-_client: Optional[chromadb.PersistentClient] = None
-_embedding_fn: Optional[embedding_functions.SentenceTransformerEmbeddingFunction] = None
+_client: Optional[Any] = None
+_embedding_fn: Optional[Any] = None
 
 
-def _get_chroma_client() -> chromadb.PersistentClient:
+def _get_chroma_client():
     """获取 ChromaDB 持久化客户端（单例）"""
     global _client
+    if chromadb is None:
+        raise RuntimeError("chromadb not installed")
     if _client is None:
         _client = chromadb.PersistentClient(path=CHROMA_PERSIST_DIR)
         logger.info("ChromaDB 客户端初始化完成: %s", CHROMA_PERSIST_DIR)
@@ -56,6 +59,8 @@ def _get_chroma_client() -> chromadb.PersistentClient:
 def _get_embedding_fn():
     """获取 SentenceTransformer embedding 函数"""
     global _embedding_fn
+    if chromadb is None or embedding_functions is None:
+        raise RuntimeError("SentenceTransformer embedding function unavailable")
     if _embedding_fn is None:
         _embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name="all-MiniLM-L6-v2"
@@ -82,17 +87,8 @@ def _get_collection():
         )
 
 
-# ---- 内容分块 ----
 def chunk_content(content: str, lesson_title: str = "") -> list[dict]:
-    """将课程内容按 ## 标题分块
-
-    Args:
-        content: 课程 Markdown 内容
-        lesson_title: 课程标题（用于构建块标题）
-
-    Returns:
-        分块列表，每项 {"title": str, "content": str, "char_count": int}
-    """
+    """将课程内容按 ## 标题分块"""
     if not content:
         return []
 
@@ -110,17 +106,14 @@ def chunk_content(content: str, lesson_title: str = "") -> list[dict]:
             first_line, rest = section, ""
 
         heading = first_line.lstrip("#").strip()
-
         if i == 0 and not heading:
             chunk_title = lesson_title
         else:
             chunk_title = f"{lesson_title} > {heading}" if lesson_title else heading
 
         chunk_text = f"{chunk_title}\n{rest}".strip()
-
         if len(chunk_text) > MAX_CHUNK_SIZE:
-            sub_chunks = _split_long_chunk(chunk_text, chunk_title)
-            chunks.extend(sub_chunks)
+            chunks.extend(_split_long_chunk(chunk_text, chunk_title))
         else:
             chunks.append({
                 "title": chunk_title,
@@ -160,114 +153,81 @@ def _split_long_chunk(text: str, title: str) -> list[dict]:
     return chunks
 
 
-# ---- 索引操作 ----
 async def index_lesson(lesson_id: int, db: Optional[AsyncSession] = None) -> int:
-    """索引单篇课程内容
-
-    Args:
-        lesson_id: 课程 ID
-        db: 数据库会话（可选，不传则自动创建）
-
-    Returns:
-        索引的块数量
-    """
+    """索引单篇课程内容"""
     close_db = False
     if db is None:
         db = async_session()
         close_db = True
 
     try:
-        result = await db.execute(
-            select(Lesson).where(Lesson.id == lesson_id)
-        )
+        result = await db.execute(select(Lesson).where(Lesson.id == lesson_id))
         lesson = result.scalars().first()
         if not lesson:
             logger.warning("课程不存在: lesson_id=%d", lesson_id)
             return 0
 
-        lang_result = await db.execute(
-            select(Language.name).where(Language.id == lesson.language_id)
-        )
+        lang_result = await db.execute(select(Language.name).where(Language.id == lesson.language_id))
         lang_name = lang_result.scalars().first() or "未知"
 
-        # 构建索引文本
         index_text = f"# {lesson.title}\n"
         if lesson.description:
             index_text += f"{lesson.description}\n\n"
         if lesson.content:
             index_text += lesson.content
 
-        # 分块
         chunks = chunk_content(index_text, lesson.title)
         if not chunks:
             return 0
 
-        # 写入 ChromaDB（embedding 由 collection 的 embedding_function 自动处理）
+        if chromadb is None or embedding_functions is None:
+            logger.warning("ChromaDB/embedding 未安装，跳过索引 lesson_id=%d", lesson_id)
+            return 0
+
         collection = _get_collection()
         ids = [f"lesson_{lesson_id}_chunk_{i}" for i in range(len(chunks))]
-        metadatas = [
-            {
-                "lesson_id": lesson_id,
-                "lesson_title": lesson.title,
-                "lesson_slug": lesson.slug,
-                "language": lang_name,
-                "knowledge_tags": ",".join(lesson.knowledge_tags) if lesson.knowledge_tags else "",
-                "chunk_title": c["title"],
-                "char_count": c["char_count"],
-            }
-            for c in chunks
-        ]
+        metadatas = [{
+            "lesson_id": lesson_id,
+            "lesson_title": lesson.title,
+            "lesson_slug": lesson.slug,
+            "language": lang_name,
+            "knowledge_tags": ",".join(lesson.knowledge_tags) if lesson.knowledge_tags else "",
+            "chunk_title": c["title"],
+            "char_count": c["char_count"],
+        } for c in chunks]
         documents = [c["content"] for c in chunks]
 
-        collection.add(
-            ids=ids,
-            documents=documents,
-            metadatas=metadatas,
-        )
-
+        collection.add(ids=ids, documents=documents, metadatas=metadatas)
         logger.info("索引完成: lesson_id=%d (%s), 共 %d 块", lesson_id, lesson.title, len(chunks))
         return len(chunks)
-
     finally:
         if close_db:
             await db.close()
 
 
 async def index_all_lessons(db: Optional[AsyncSession] = None) -> dict:
-    """全量索引所有课程内容
-
-    Args:
-        db: 数据库会话（可选）
-
-    Returns:
-        {"total": int, "indexed": int, "errors": int}
-    """
+    """全量索引所有课程内容"""
     close_db = False
     if db is None:
         db = async_session()
         close_db = True
 
     try:
-        result = await db.execute(
-            select(Lesson).where(Lesson.is_active == True)
-        )
+        result = await db.execute(select(Lesson).where(Lesson.is_active == True))
         lessons = result.scalars().all()
-
         total = len(lessons)
         indexed = 0
         errors = 0
 
         for lesson in lessons:
             try:
-                chunks = await index_lesson(lesson.id, db)
-                indexed += chunks
+                indexed += await index_lesson(lesson.id, db)
             except Exception as e:
                 logger.error("索引失败: lesson_id=%d (%s): %s", lesson.id, lesson.title, e)
                 errors += 1
 
         logger.info("全量索引完成: %d 篇课程, %d 块, %d 错误", total, indexed, errors)
         return {"total": total, "indexed": indexed, "errors": errors}
-
     finally:
         if close_db:
             await db.close()
@@ -277,9 +237,7 @@ async def delete_lesson_index(lesson_id: int) -> bool:
     """删除指定课程的索引"""
     try:
         collection = _get_collection()
-        result = collection.get(
-            where={"lesson_id": lesson_id},
-        )
+        result = collection.get(where={"lesson_id": lesson_id})
         if result and result["ids"]:
             collection.delete(ids=result["ids"])
             logger.info("索引已删除: lesson_id=%d, 共 %d 块", lesson_id, len(result["ids"]))
@@ -290,38 +248,19 @@ async def delete_lesson_index(lesson_id: int) -> bool:
         return False
 
 
-# ---- 检索 ----
 async def search(
     query: str,
     top_k: int = DEFAULT_TOP_K,
     tag_filter: Optional[str] = None,
 ) -> list[dict]:
-    """语义检索课程内容
-
-    Args:
-        query: 查询文本
-        top_k: 返回结果数量（默认 5）
-        tag_filter: 知识点标签过滤（可选）
-
-    Returns:
-        检索结果列表，每项 {"content": str, "lesson_title": str, "lesson_id": int,
-                        "language": str, "knowledge_tags": list, "score": float}
-    """
+    """语义检索课程内容"""
     if not query.strip():
         return []
 
     try:
         collection = _get_collection()
-
-        where_filter = None
-        if tag_filter:
-            where_filter = {"knowledge_tags": {"$contains": tag_filter}}
-
-        results = collection.query(
-            query_texts=[query],
-            n_results=top_k * 2,
-            where=where_filter,
-        )
+        where_filter = None if not tag_filter else {"knowledge_tags": {"$contains": tag_filter}}
+        results = collection.query(query_texts=[query], n_results=top_k * 2, where=where_filter)
 
         if not results or not results["ids"] or not results["ids"][0]:
             return []
@@ -330,13 +269,10 @@ async def search(
         for i in range(len(results["ids"][0])):
             metadata = results["metadatas"][0][i] if results["metadatas"] else {}
             distance = results["distances"][0][i] if results["distances"] else 0
-
             base_score = 1.0 - distance
-
             tags = metadata.get("knowledge_tags", "").split(",") if metadata.get("knowledge_tags") else []
             tag_score = _compute_tag_score(query, tags)
             final_score = base_score * (1.0 + tag_score * TAG_WEIGHT_BOOST)
-
             items.append({
                 "content": results["documents"][0][i] if results["documents"] else "",
                 "lesson_title": metadata.get("lesson_title", ""),
@@ -349,9 +285,45 @@ async def search(
 
         items.sort(key=lambda x: x["score"], reverse=True)
         return items[:top_k]
-
     except Exception as e:
         logger.error("检索失败: %s", e)
+        return []
+
+
+async def _semantic_search_lesson_context(
+    db: AsyncSession,
+    lesson_id: int | None,
+    query: str,
+    limit: int = 3,
+) -> list[dict[str, Any]]:
+    """语义检索入口：若 ChromaDB/embedding 可用，则优先使用；否则返回 []."""
+    if lesson_id is None or not query.strip() or chromadb is None or embedding_functions is None:
+        return []
+
+    try:
+        collection = _get_collection()
+        results = collection.query(
+            query_texts=[query],
+            n_results=limit,
+            where={"lesson_id": lesson_id},
+            include=["documents", "metadatas", "distances"],
+        )
+        if not results or not results.get("documents") or not results["documents"][0]:
+            return []
+
+        items: list[dict[str, Any]] = []
+        for idx, document in enumerate(results["documents"][0]):
+            metadata = (results.get("metadatas") or [{}])[0][idx] if results.get("metadatas") else {}
+            distance = (results.get("distances") or [])[0][idx] if (results.get("distances") and results["distances"]) else 0.0
+            score = max(0.0, 1.0 - float(distance))
+            items.append({
+                "title": metadata.get("lesson_title") or metadata.get("chunk_title") or "相关内容",
+                "content": document,
+                "score": round(score, 4),
+            })
+        return items
+    except Exception as e:
+        logger.warning("Semantic lesson retrieval unavailable: %s", e)
         return []
 
 
@@ -359,13 +331,11 @@ def _compute_tag_score(query: str, tags: list[str]) -> float:
     """计算查询与知识点标签的匹配度"""
     if not tags:
         return 0.0
-
     query_lower = query.lower()
     matched = sum(1 for tag in tags if tag.lower() in query_lower)
     return min(matched / len(tags), 1.0)
 
 
-# ---- 索引状态 ----
 async def get_index_status() -> dict:
     """获取索引状态信息"""
     try:
@@ -388,7 +358,6 @@ async def get_index_status() -> dict:
         }
 
 
-# ---- 轻量关键词检索（AI 对话上下文注入用，无需向量索引） ----
 def _tokenize(text: str) -> set[str]:
     return set(re.findall(r"[A-Za-z0-9\u4e00-\u9fa5]+", (text or "").lower()))
 
@@ -427,9 +396,13 @@ async def search_lesson_context(
     query: str,
     limit: int = 3,
 ) -> list[dict[str, Any]]:
-    """根据课时 ID 和用户问题，召回最相关教学内容片段。"""
+    """根据课时 ID 和用户问题，优先走语义检索；无索引时自动回退到关键词召回。"""
     if lesson_id is None:
         return []
+
+    semantic_results = await _semantic_search_lesson_context(db, lesson_id, query, limit=limit)
+    if semantic_results:
+        return semantic_results
 
     lesson_result = await db.execute(select(Lesson).where(Lesson.id == lesson_id))
     lesson = lesson_result.scalars().first()

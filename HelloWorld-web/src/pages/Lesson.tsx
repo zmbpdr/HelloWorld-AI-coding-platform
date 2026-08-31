@@ -265,7 +265,11 @@ export default function Lesson() {
                         )}
                       </div>
                     ) : (
-                      <div className="whitespace-pre-wrap" style={{ color: '#334155' }}>{aiResponse}</div>
+                      <div
+                        className="prose prose-sm max-w-none"
+                        style={{ color: '#334155' }}
+                        dangerouslySetInnerHTML={{ __html: renderMarkdown(aiResponse || '') }}
+                      />
                     )}
                   </div>
                 ) : (
@@ -361,7 +365,16 @@ export default function Lesson() {
           </div>
         </div>
 
-        <AIChat lessonId={Number(lessonId)} context={{ lesson_title: lesson.title, language: languageSlug, code, error: error || undefined }} />
+        <AIChat
+          lessonId={Number(lessonId)}
+          context={{
+            lesson_id: Number(lessonId),
+            lesson_title: lesson.title,
+            language: languageSlug,
+            code,
+            error: error || undefined,
+          }}
+        />
         <AchievementToast achievement={unlockedAchievement} onClose={() => setUnlockedAchievement(null)} />
         <CelebrationEffect active={showCelebration} onComplete={() => setShowCelebration(false)} xpEarned={result?.xp_earned || 0} />
       </div>

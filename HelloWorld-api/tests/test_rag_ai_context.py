@@ -1,5 +1,7 @@
 import unittest
+from unittest.mock import AsyncMock
 
+from app.services import rag_service
 from app.services.ai_service import _build_messages
 from app.services.rag_service import search_lesson_context
 
@@ -51,6 +53,29 @@ class RagAiContextTests(unittest.TestCase):
         async def run_test():
             result = await search_lesson_context(FakeSession(lesson), 2, "量子计算机和机器学习原理", limit=3)
             self.assertEqual(result, [])
+
+        import asyncio
+        asyncio.run(run_test())
+
+    def test_search_lesson_context_prefers_semantic_results_when_available(self):
+        lesson = type("Lesson", (), {
+            "id": 3,
+            "title": "Python 变量",
+            "content": "变量用于存储数据。函数可复用代码。条件语句控制执行流程。",
+        })()
+        semantic_result = [{"title": "Python 变量", "content": "变量用于存储数据，适合保存用户输入。", "score": 0.97}]
+
+        async def run_test():
+            original = getattr(rag_service, "_semantic_search_lesson_context", None)
+            rag_service._semantic_search_lesson_context = AsyncMock(return_value=semantic_result)
+            try:
+                result = await search_lesson_context(FakeSession(lesson), 3, "变量和数据保存", limit=3)
+                self.assertEqual(result, semantic_result)
+            finally:
+                if original is None:
+                    delattr(rag_service, "_semantic_search_lesson_context")
+                else:
+                    rag_service._semantic_search_lesson_context = original
 
         import asyncio
         asyncio.run(run_test())
