@@ -8,7 +8,9 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 import app.models  # noqa: F401 - 注册 Base.metadata 中的全部 ORM 模型
 from app.database import Base
+from app.models.admin import AdminUser
 from app.models.diagnostic_question import DiagnosticQuestion
+from app.routers.admin.diagnostic import update_diagnostic_question
 from app.routers.diagnostic import get_questions
 from app.services import diagnostic_service, seed_service
 
@@ -77,15 +79,20 @@ async def test_second_seed_keeps_teacher_edited_question_and_inactive_questions_
 
 @pytest.mark.anyio
 async def test_scoring_reads_the_teacher_updated_answer(seeded_session_factory):
-    """评分必须从数据库读取最新答案，而不是回退到旧硬编码题库。"""
+    """后台编辑后，学生评分必须读取新答案而不是回退到旧硬编码题库。"""
     async with seeded_session_factory() as session:
         first_question = (
             await session.execute(
                 select(DiagnosticQuestion).order_by(DiagnosticQuestion.order).limit(1)
             )
         ).scalars().one()
-        first_question.answer = "D"
-        await session.commit()
+        admin = (await session.execute(select(AdminUser).limit(1))).scalars().one()
+        await update_diagnostic_question(
+            first_question.id,
+            {"answer": "D"},
+            current_admin=admin,
+            db=session,
+        )
 
         active_questions = await diagnostic_service.get_diagnostic_questions(session)
         answers = [

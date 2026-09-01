@@ -12,6 +12,7 @@ import io
 import os
 import struct
 import uuid
+from types import SimpleNamespace
 
 import pytest
 from httpx import ASGITransport, AsyncClient
@@ -260,6 +261,23 @@ async def client():
         yield ac
 
 
+@pytest.fixture
+async def admin_client(tmp_path, monkeypatch):
+    """绕过认证依赖，仅验证上传端点本身的文件校验逻辑。"""
+    route = next(route for route in app.routes if route.path == "/api/v1/admin/lessons/upload-image")
+    role_dependency = route.dependant.dependencies[0].call
+
+    async def editor_override():
+        return SimpleNamespace(id=1, role="editor", is_active=True)
+
+    monkeypatch.setattr(settings, "UPLOAD_DIR", str(tmp_path))
+    app.dependency_overrides[role_dependency] = editor_override
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        yield ac
+    app.dependency_overrides.pop(role_dependency, None)
+
+
 # ── 权限测试 ──────────────────────────────────────────────────
 
 @pytest.mark.anyio
@@ -286,9 +304,9 @@ async def test_upload_with_invalid_token_returns_401(client):
 # ── 文件类型测试 ──────────────────────────────────────────────
 
 @pytest.mark.anyio
-async def test_upload_svg_is_rejected(client):
+async def test_upload_svg_is_rejected(admin_client):
     """上传 SVG 应被拒绝"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("test.svg", io.BytesIO(_make_svg_bytes()), "image/svg+xml")},
     )
@@ -297,9 +315,9 @@ async def test_upload_svg_is_rejected(client):
 
 
 @pytest.mark.anyio
-async def test_upload_svg_disguised_as_jpg_is_rejected(client):
+async def test_upload_svg_disguised_as_jpg_is_rejected(admin_client):
     """上传伪装成 .jpg 的 SVG 应被 magic bytes 检测拒绝"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("test.jpg", io.BytesIO(_make_svg_disguised_as_jpg()), "image/jpeg")},
     )
@@ -308,9 +326,9 @@ async def test_upload_svg_disguised_as_jpg_is_rejected(client):
 
 
 @pytest.mark.anyio
-async def test_upload_unknown_format_is_rejected(client):
+async def test_upload_unknown_format_is_rejected(admin_client):
     """上传未知格式应被拒绝"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("test.txt", io.BytesIO(_make_unknown_bytes()), "text/plain")},
     )
@@ -321,9 +339,9 @@ async def test_upload_unknown_format_is_rejected(client):
 # ── 文件大小测试 ──────────────────────────────────────────────
 
 @pytest.mark.anyio
-async def test_upload_oversized_file_is_rejected(client):
+async def test_upload_oversized_file_is_rejected(admin_client):
     """上传超大文件应被拒绝"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("big.jpg", io.BytesIO(_make_oversized_bytes()), "image/jpeg")},
     )
@@ -333,95 +351,80 @@ async def test_upload_oversized_file_is_rejected(client):
 # ── UUID 文件名测试 ───────────────────────────────────────────
 
 @pytest.mark.anyio
-async def test_uploaded_filename_is_uuid_not_original(client):
-    """上传成功后的文件名应为 UUID，而非原始文件名"""
-    # 此测试需要有效 token 才能通过权限校验
-    # 手动测试时验证：上传 test.png 后，存储的文件名不是 test.png
-    response = await client.post(
+async def test_uploaded_filename_is_uuid_not_original(admin_client):
+    """上传成功后的文件名应为 UUID，而非原始文件名。"""
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("test.png", io.BytesIO(_make_png_bytes()), "image/png")},
     )
-    if response.status_code == 201:
-        url = response.json()["url"]
-        filename = url.split("/")[-1]
-        # 文件名应为 32 位 hex + 扩展名
-        name_part, ext = filename.rsplit(".", 1)
-        assert ext == "png"
-        assert len(name_part) == 32
-        # 验证是有效的 UUID hex
-        uuid.UUID(name_part)
-        assert name_part != "test"  # 不是原始文件名
-    else:
-        # 如果没有有效 token，跳过（标记为通过）
-        pytest.skip("需要有效管理员 token（手动测试时验证）")
+    assert response.status_code == 201
+    url = response.json()["url"]
+    filename = url.split("/")[-1]
+    name_part, ext = filename.rsplit(".", 1)
+    assert ext == "png"
+    assert len(name_part) == 32
+    uuid.UUID(name_part)
+    assert name_part != "test"
 
 
 # ── 正常上传测试 ──────────────────────────────────────────────
 
 @pytest.mark.anyio
-async def test_upload_jpeg_success(client):
+async def test_upload_jpeg_success(admin_client):
     """上传 JPEG 应返回 201 和 URL"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("photo.jpg", io.BytesIO(_make_jpeg_bytes()), "image/jpeg")},
     )
-    if response.status_code == 201:
-        data = response.json()
-        assert "url" in data
-        assert data["url"].startswith("/uploads/")
-        assert data["url"].endswith(".jpg") or data["url"].endswith(".jpeg")
-    else:
-        pytest.skip("需要有效管理员 token（手动测试时验证）")
+    assert response.status_code == 201
+    data = response.json()
+    assert "url" in data
+    assert data["url"].startswith("/uploads/")
+    assert data["url"].endswith(".jpg") or data["url"].endswith(".jpeg")
 
 
 @pytest.mark.anyio
-async def test_upload_png_success(client):
+async def test_upload_png_success(admin_client):
     """上传 PNG 应返回 201 和 URL"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("icon.png", io.BytesIO(_make_png_bytes()), "image/png")},
     )
-    if response.status_code == 201:
-        data = response.json()
-        assert data["url"].endswith(".png")
-    else:
-        pytest.skip("需要有效管理员 token（手动测试时验证）")
+    assert response.status_code == 201
+    data = response.json()
+    assert data["url"].endswith(".png")
 
 
 @pytest.mark.anyio
-async def test_upload_gif_success(client):
+async def test_upload_gif_success(admin_client):
     """上传 GIF 应返回 201 和 URL"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("anim.gif", io.BytesIO(_make_gif_bytes()), "image/gif")},
     )
-    if response.status_code == 201:
-        data = response.json()
-        assert data["url"].endswith(".gif")
-    else:
-        pytest.skip("需要有效管理员 token（手动测试时验证）")
+    assert response.status_code == 201
+    data = response.json()
+    assert data["url"].endswith(".gif")
 
 
 @pytest.mark.anyio
-async def test_upload_webp_success(client):
+async def test_upload_webp_success(admin_client):
     """上传 WebP 应返回 201 和 URL"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("img.webp", io.BytesIO(_make_webp_bytes()), "image/webp")},
     )
-    if response.status_code == 201:
-        data = response.json()
-        assert data["url"].endswith(".webp")
-    else:
-        pytest.skip("需要有效管理员 token（手动测试时验证）")
+    assert response.status_code == 201
+    data = response.json()
+    assert data["url"].endswith(".webp")
 
 
 # ── 边界情况测试 ──────────────────────────────────────────────
 
 @pytest.mark.anyio
-async def test_upload_empty_file_is_rejected(client):
+async def test_upload_empty_file_is_rejected(admin_client):
     """上传空文件应被拒绝"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
         files={"file": ("empty.jpg", io.BytesIO(b""), "image/jpeg")},
     )
@@ -429,9 +432,9 @@ async def test_upload_empty_file_is_rejected(client):
 
 
 @pytest.mark.anyio
-async def test_upload_no_file_returns_422(client):
+async def test_upload_no_file_returns_422(admin_client):
     """不传文件应返回 422"""
-    response = await client.post(
+    response = await admin_client.post(
         "/api/v1/admin/lessons/upload-image",
     )
     assert response.status_code == 422

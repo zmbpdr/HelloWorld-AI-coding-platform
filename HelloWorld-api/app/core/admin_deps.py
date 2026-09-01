@@ -9,7 +9,7 @@ from app.database import get_db
 from app.models.admin import AdminUser
 from app.core.security import decode_access_token
 
-admin_security = HTTPBearer()
+admin_security = HTTPBearer(auto_error=False)
 
 # 角色权限等级映射（数值越大权限越高）
 ROLE_LEVELS = {
@@ -20,10 +20,16 @@ ROLE_LEVELS = {
 
 
 async def get_current_admin(
-    credentials: HTTPAuthorizationCredentials = Depends(admin_security),
+    credentials: HTTPAuthorizationCredentials | None = Depends(admin_security),
     db: AsyncSession = Depends(get_db),
 ) -> AdminUser:
     """从 JWT token 中解析当前管理员"""
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="缺少管理员认证凭据",
+        )
+
     payload = decode_access_token(credentials.credentials)
     if not payload:
         raise HTTPException(

@@ -51,8 +51,15 @@ class RagAiContextTests(unittest.TestCase):
         })()
 
         async def run_test():
-            result = await search_lesson_context(FakeSession(lesson), 2, "量子计算机和机器学习原理", limit=3)
-            self.assertEqual(result, [])
+            # 单元测试不得因本机安装了 ChromaDB 而下载 embedding 模型；
+            # 这里明确验证“语义索引不可用时”的关键词降级路径。
+            original = rag_service._semantic_search_lesson_context
+            rag_service._semantic_search_lesson_context = AsyncMock(return_value=[])
+            try:
+                result = await search_lesson_context(FakeSession(lesson), 2, "量子计算机和机器学习原理", limit=3)
+                self.assertEqual(result, [])
+            finally:
+                rag_service._semantic_search_lesson_context = original
 
         import asyncio
         asyncio.run(run_test())
