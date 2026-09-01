@@ -17,6 +17,7 @@ from app.core.rate_limit import ai_limiter
 from app.core.security import decode_access_token
 from app.services.ai_service import chat_with_ai, chat_with_ai_stream, run_ai_action, classify_error_with_ai
 from app.services.membership_service import consume_ai_quota
+from app.services.rag_service import search_lesson_context
 from datetime import datetime, timedelta, timezone
 from app.schemas.ai import ChatRequest, ChatResponse, AIActionRequest, ReviewResponse, TutorResponse
 from app.models.chat import ChatHistory
@@ -39,14 +40,27 @@ async def chat(
     """发送消息（非流式）
 
     用户发送消息给 AI 助手，返回完整的回复文本。
+    如存在 lesson_id / lesson_title / code 等上下文，自动检索对应课程内容并注入
+    到 AI 请求中，形成最小可用 RAG 上下文。
     """
     await ai_limiter(request=req, identifier=str(current_user.id))
     try:
+        context = request.context or {}
+        lesson_id = context.get("lesson_id")
+        if lesson_id is not None:
+            rag_results = await search_lesson_context(
+                db,
+                lesson_id=int(lesson_id),
+                query=request.message,
+                limit=3,
+            )
+            if rag_results:
+                context["rag_results"] = rag_results
+
         reply = await chat_with_ai(
             message=request.message,
-            context=request.context,
+            context=context,
         )
-        # AI 调用成功后才扣配额，避免失败也扣
         consume_ai_quota(current_user)
         await db.commit()
         return ChatResponse(reply=reply)

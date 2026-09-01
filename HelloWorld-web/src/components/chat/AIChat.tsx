@@ -6,6 +6,7 @@
 import { useState, useRef, useEffect, useCallback, type FormEvent } from 'react'
 import { useAI } from '../../hooks/useAI'
 import type { ChatRequest, AIMode } from '../../api/ai'
+import { renderMarkdown } from '../../utils/markdown'
 
 interface AIChatProps {
   lessonId?: number
@@ -63,8 +64,12 @@ export default function AIChat({ lessonId, context }: AIChatProps) {
     e.preventDefault()
     if (!input.trim() || isLoading) return
     const message = input.trim()
+    const mergedContext = {
+      ...context,
+      lesson_id: lessonId ?? context?.lesson_id,
+    }
     setInput('')
-    await sendMessage(message, context)
+    await sendMessage(message, mergedContext)
   }
 
   return (
@@ -153,7 +158,7 @@ export default function AIChat({ lessonId, context }: AIChatProps) {
             {messages.map((msg, index) => (
               <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div
-                  className="max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed"
+                  className="max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed overflow-hidden"
                   style={{
                     background: msg.role === 'user'
                       ? 'linear-gradient(135deg, #10b981, #059669)'
@@ -163,7 +168,11 @@ export default function AIChat({ lessonId, context }: AIChatProps) {
                     borderBottomLeftRadius: msg.role === 'assistant' ? 6 : undefined,
                   }}
                 >
-                  {msg.content}
+                  {msg.role === 'assistant' ? (
+                    <div dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content || '') }} />
+                  ) : (
+                    <div className="whitespace-pre-wrap">{msg.content}</div>
+                  )}
                 </div>
               </div>
             ))}

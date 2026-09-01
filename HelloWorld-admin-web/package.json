@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/charts": "^2.6.7",
     "@ant-design/icons": "^6.2.3",
+    "@uiw/react-md-editor": "^4.1.1",
     "antd": "^6.4.3",
     "axios": "^1.16.1",
     "react": "^19.2.6",

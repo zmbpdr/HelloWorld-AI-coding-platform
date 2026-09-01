@@ -17,6 +17,7 @@ from app.models.achievement import Achievement
 from app.models.admin import SystemSettings, ContentAuditLog
 from app.models.submission import Submission
 from app.models.progress import Progress
+from app.models.question import Question
 
 
 class AdminService:
@@ -103,6 +104,57 @@ class AdminService:
         r = await self.db.execute(q.offset((page-1)*page_size).limit(page_size))
         cr = await self.db.execute(select(func.count()).select_from(Lesson))
         return {"items": [{"id": l.id, "title": l.title, "slug": l.slug, "difficulty": l.difficulty, "language_id": l.language_id, "order": l.order, "xp_reward": l.xp_reward, "knowledge_tags": l.knowledge_tags or [], "estimated_minutes": l.estimated_minutes, "prerequisites": l.prerequisites or [], "is_active": l.is_active} for l in r.scalars().all()], "total": cr.scalar() or 0, "page": page, "page_size": page_size}
+
+    async def get_questions_list(self, page=1, page_size=20, language_id=None, difficulty=None, question_type=None, keyword=None):
+        """获取题库列表（分页，支持按语言、难度、题型筛选）
+
+        Args:
+            page: 页码（从 1 开始）
+            page_size: 每页数量
+            language_id: 语言 ID 筛选（可选）
+            difficulty: 难度筛选（可选）
+            question_type: 题型筛选（可选）
+
+        Returns:
+            包含 items、total、page、page_size 的字典
+        """
+        q = select(Question).order_by(Question.id)
+        cq = select(func.count()).select_from(Question)
+        if language_id:
+            q = q.where(Question.language_id == language_id)
+            cq = cq.where(Question.language_id == language_id)
+        if difficulty:
+            q = q.where(Question.difficulty == difficulty)
+            cq = cq.where(Question.difficulty == difficulty)
+        if question_type:
+            q = q.where(Question.question_type == question_type)
+            cq = cq.where(Question.question_type == question_type)
+        if keyword:
+            q = q.where(or_(Question.title.ilike(f"%{keyword}%"), Question.slug.ilike(f"%{keyword}%")))
+            cq = cq.where(or_(Question.title.ilike(f"%{keyword}%"), Question.slug.ilike(f"%{keyword}%")))
+        r = await self.db.execute(q.offset((page - 1) * page_size).limit(page_size))
+        cr = await self.db.execute(cq)
+        return {
+            "items": [
+                {
+                    "id": item.id,
+                    "title": item.title,
+                    "slug": item.slug,
+                    "language_id": item.language_id,
+                    "difficulty": item.difficulty,
+                    "question_type": item.question_type,
+                    "knowledge_tags": item.knowledge_tags or [],
+                    "order": item.order,
+                    "is_active": item.is_active,
+                    "created_at": item.created_at.isoformat() if item.created_at else None,
+                    "updated_at": item.updated_at.isoformat() if item.updated_at else None,
+                }
+                for item in r.scalars().all()
+            ],
+            "total": cr.scalar() or 0,
+            "page": page,
+            "page_size": page_size,
+        }
 
     async def get_users_list(self, page=1, page_size=20, search=None):
         """获取用户列表（分页，支持搜索）

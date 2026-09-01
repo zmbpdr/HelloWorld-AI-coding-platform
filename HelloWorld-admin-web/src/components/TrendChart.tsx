@@ -68,7 +68,7 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
       <div ref={containerRef} style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <Spin size="large" />
-          <p style={{ color: '#94a3b8', fontSize: 13, marginTop: 12 }}>加载趋势数据中...</p>
+          <p style={{ color: '#64748b', fontSize: 13, marginTop: 12 }}>加载趋势数据中...</p>
         </div>
       </div>
     )
@@ -107,14 +107,14 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
     axis: {
       y: {
         title: false,
-        labelFill: '#94a3b8',
+        labelFill: '#64748b',
         labelFontSize: 11,
-        gridStroke: 'rgba(255,255,255,0.06)',
+        gridStroke: 'rgba(15,23,42,0.06)',
         gridLineWidth: 0.5,
       },
       x: {
         grid: false,
-        labelFill: '#94a3b8',
+        labelFill: '#64748b',
         labelFontSize: 11,
       },
     },
@@ -122,7 +122,7 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
       color: {
         position: 'top',
         itemMarker: 'smooth',
-        labelFill: '#cbd5e1',
+        labelFill: '#475569',
         labelFontSize: 12,
       },
     },
@@ -134,7 +134,7 @@ export default function TrendChart({ days = 7 }: { days?: number }) {
     },
     // 深色主题兼容配置
     theme: {
-      category10: ['#6366f1', '#22c55e'],
+      category10: ['#10b981', '#22c55e'],
       view: {
         viewFill: 'transparent',
         plotFill: 'transparent',

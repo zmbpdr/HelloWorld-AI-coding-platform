@@ -3,6 +3,7 @@
  *
  * 提供管理员身份认证入口，包含用户名/密码表单、背景动画装饰、
  * 错误提示和安全提醒等功能。登录成功后跳转至仪表盘。
+ * 配色与学习端"清新自然风"统一（草绿主色、浅色背景）。
  */
 
 import { useState } from 'react'
@@ -41,7 +42,10 @@ export default function Login() {
       className="page-enter"
       style={{
         minHeight: '100vh',
-        background: 'radial-gradient(ellipse at 20% 10%, #1e1045 0%, #0f0c24 40%, #0a0e17 80%, #060913 100%)',
+        background:
+          'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(16,185,129,0.08), transparent), ' +
+          'radial-gradient(ellipse 60% 50% at 80% 40%, rgba(14,165,233,0.06), transparent), ' +
+          'radial-gradient(ellipse 50% 50% at 20% 70%, rgba(245,158,11,0.05), transparent), #fafbf8',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -59,7 +63,7 @@ export default function Login() {
           width: 600,
           height: 600,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,102,241,0.08), rgba(99,102,241,0.02) 40%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(16,185,129,0.10), rgba(16,185,129,0.03) 40%, transparent 65%)',
           pointerEvents: 'none',
           animation: 'floating-blob 10s ease-in-out infinite',
         }}
@@ -72,7 +76,7 @@ export default function Login() {
           width: 700,
           height: 700,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.07), rgba(139,92,246,0.02) 40%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(14,165,233,0.08), rgba(14,165,233,0.02) 40%, transparent 65%)',
           pointerEvents: 'none',
           animation: 'floating-blob 15s ease-in-out infinite alternate',
         }}
@@ -85,7 +89,7 @@ export default function Login() {
           width: 350,
           height: 350,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(59,130,246,0.05), transparent 65%)',
+          background: 'radial-gradient(circle, rgba(245,158,11,0.06), transparent 65%)',
           pointerEvents: 'none',
           animation: 'floating-blob 12s ease-in-out infinite alternate-reverse',
         }}
@@ -96,10 +100,10 @@ export default function Login() {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(99,102,241,0.10) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, rgba(16,185,129,0.12) 1px, transparent 1px)',
           backgroundSize: '60px 60px',
           pointerEvents: 'none',
-          opacity: 0.25,
+          opacity: 0.18,
           maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)',
           WebkitMaskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)',
         }}
@@ -113,21 +117,21 @@ export default function Login() {
           zIndex: 1,
           width: 440,
           maxWidth: '100%',
-          background: 'rgba(15,21,38,0.92)',
+          background: 'rgba(255,255,255,0.92)',
           backdropFilter: 'blur(32px)',
           WebkitBackdropFilter: 'blur(32px)',
-          border: '1px solid rgba(99,102,241,0.12)',
+          border: '1px solid rgba(16,185,129,0.15)',
           borderRadius: 24,
           padding: '52px 44px',
-          boxShadow: '0 30px 80px rgba(0,0,0,0.55), 0 0 100px rgba(99,102,241,0.06), 0 1px 0 rgba(255,255,255,0.04) inset',
+          boxShadow: '0 30px 80px rgba(15,23,42,0.08), 0 0 100px rgba(16,185,129,0.04), 0 1px 0 rgba(255,255,255,0.6) inset',
           transition: 'border-color 0.4s ease',
         }}
         // 鼠标悬停时卡片边框高亮
         onMouseEnter={(e) => {
-          (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.25)'
+          (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(16,185,129,0.35)'
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.12)'
+          (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(16,185,129,0.15)'
         }}
       >
         {/* Logo 及标题区域 */}
@@ -138,34 +142,22 @@ export default function Login() {
               height: 80,
               margin: '0 auto 22px',
               borderRadius: 20,
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%)',
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 50%, #34d399 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 16px 48px rgba(99,102,241,0.4), 0 0 60px rgba(139,92,246,0.2)',
-              position: 'relative',
+              boxShadow: '0 12px 32px rgba(16,185,129,0.25)',
             }}
           >
-            {/* 光晕环动画 */}
-            <div
-              style={{
-                position: 'absolute',
-                inset: -8,
-                borderRadius: 24,
-                border: '2px solid rgba(139,92,246,0.2)',
-                animation: 'logo-ring-pulse 2.5s ease-in-out infinite',
-                pointerEvents: 'none',
-              }}
-            />
             <CodeOutlined style={{ color: '#fff', fontSize: 36 }} />
           </div>
-          <Title level={2} style={{ color: '#f1f5f9', margin: '0 0 6px', fontWeight: 800, letterSpacing: -1.5, fontSize: 28 }}>
+          <Title level={2} style={{ color: '#1e293b', margin: '0 0 6px', fontWeight: 800, letterSpacing: -1.5, fontSize: 28 }}>
             Hello World
           </Title>
-          <Text style={{ color: '#a5b4fc', fontSize: 14, fontWeight: 500, letterSpacing: 1 }}>管理后台</Text>
+          <Text style={{ color: '#059669', fontSize: 14, fontWeight: 500, letterSpacing: 1 }}>管理后台</Text>
         </div>
 
-        <Divider style={{ borderColor: 'rgba(255,255,255,0.05)', margin: '0 0 32px' }} />
+        <Divider style={{ borderColor: 'rgba(15,23,42,0.06)', margin: '0 0 32px' }} />
 
         {/* 错误提示消息 */}
         {errorMsg && (
@@ -175,9 +167,9 @@ export default function Login() {
               marginBottom: 20,
               padding: '12px 16px',
               borderRadius: 12,
-              background: 'rgba(239,68,68,0.08)',
+              background: 'rgba(239,68,68,0.06)',
               border: '1px solid rgba(239,68,68,0.2)',
-              color: '#fca5a5',
+              color: '#dc2626',
               fontSize: 13,
               display: 'flex',
               alignItems: 'center',
@@ -199,14 +191,14 @@ export default function Login() {
         >
           <Form.Item name="username" rules={[{ required: true, message: '请输入用户名' }]}>
             <Input
-              prefix={<UserOutlined style={{ color: '#6366f1' }} />}
+              prefix={<UserOutlined style={{ color: '#10b981' }} />}
               placeholder="用户名" autoComplete="username"
               onChange={() => errorMsg && setErrorMsg('')}
               style={{
                 borderRadius: 12,
                 height: 50,
-                background: 'rgba(15,20,35,0.6)',
-                borderColor: 'rgba(99,102,241,0.12)',
+                background: '#ffffff',
+                borderColor: 'rgba(16,185,129,0.15)',
                 transition: 'all 0.3s ease',
               }}
               className="login-input-glow"
@@ -215,14 +207,14 @@ export default function Login() {
 
           <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
             <Input.Password
-              prefix={<LockOutlined style={{ color: '#6366f1' }} />}
+              prefix={<LockOutlined style={{ color: '#10b981' }} />}
               placeholder="密码" autoComplete="current-password"
               onChange={() => errorMsg && setErrorMsg('')}
               style={{
                 borderRadius: 12,
                 height: 50,
-                background: 'rgba(15,20,35,0.6)',
-                borderColor: 'rgba(99,102,241,0.12)',
+                background: '#ffffff',
+                borderColor: 'rgba(16,185,129,0.15)',
                 transition: 'all 0.3s ease',
               }}
               className="login-input-glow"
@@ -242,9 +234,9 @@ export default function Login() {
                 borderRadius: 14,
                 fontSize: 16,
                 fontWeight: 700,
-                background: 'linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                 border: 'none',
-                boxShadow: '0 6px 28px rgba(99,102,241,0.45), 0 0 2px rgba(139,92,246,0.4)',
+                boxShadow: '0 6px 28px rgba(16,185,129,0.3)',
                 letterSpacing: 2,
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
@@ -259,21 +251,21 @@ export default function Login() {
           style={{
             padding: '14px 18px',
             borderRadius: 12,
-            background: 'rgba(99,102,241,0.04)',
-            border: '1px solid rgba(99,102,241,0.08)',
+            background: 'rgba(16,185,129,0.04)',
+            border: '1px solid rgba(16,185,129,0.08)',
             display: 'flex',
             alignItems: 'flex-start',
             gap: 10,
             fontSize: 12,
-            color: '#94a3b8',
+            color: '#64748b',
             lineHeight: 1.8,
             marginTop: 4,
             backdropFilter: 'blur(4px)',
           }}
         >
-          <SafetyCertificateOutlined style={{ fontSize: 18, color: '#818cf8', marginTop: 1, flexShrink: 0 }} />
+          <SafetyCertificateOutlined style={{ fontSize: 18, color: '#059669', marginTop: 1, flexShrink: 0 }} />
           <span>
-            <strong style={{ color: '#cbd5e1' }}>安全提醒：</strong>
+            <strong style={{ color: '#334155' }}>安全提醒：</strong>
             请勿在公共设备上保存密码。如发现异常登录，请立即联系超级管理员。
           </span>
         </div>
@@ -289,7 +281,7 @@ export default function Login() {
           }}
         >
           {['📊 数据仪表', '📝 课程管理', '👥 用户管理', '🔍 提交审计'].map((label) => (
-            <Text key={label} style={{ fontSize: 12, color: '#475569', transition: 'color 0.3s ease' }}>
+            <Text key={label} style={{ fontSize: 12, color: '#94a3b8', transition: 'color 0.3s ease' }}>
               {label}
             </Text>
           ))}

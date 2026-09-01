@@ -3,11 +3,14 @@
 应用生命周期管理：初始化数据库、种子数据、CORS 配置、异常处理器和路由注册。
 """
 
+import os
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.core.exceptions import register_exception_handlers
@@ -89,7 +92,7 @@ app.include_router(errors.router, prefix="/api/v1", tags=["错题本"])
 app.include_router(membership.router, prefix="/api/v1", tags=["会员"])
 
 # 管理后台 API 路由注册
-from app.routers.admin import auth_router, dashboard_router, lessons_router, users_router, achievements_router, submissions_router, settings_router
+from app.routers.admin import auth_router, dashboard_router, lessons_router, users_router, achievements_router, submissions_router, settings_router, upload_router, questions_router, lesson_questions_router, diagnostic_router, file_import_router, rag_router
 app.include_router(auth_router, prefix="/api/v1/admin", tags=["管理后台-认证"])
 app.include_router(dashboard_router, prefix="/api/v1/admin", tags=["管理后台-仪表盘"])
 app.include_router(lessons_router, prefix="/api/v1/admin", tags=["管理后台-课程"])
@@ -97,6 +100,20 @@ app.include_router(users_router, prefix="/api/v1/admin", tags=["管理后台-用
 app.include_router(achievements_router, prefix="/api/v1/admin", tags=["管理后台-成就"])
 app.include_router(submissions_router, prefix="/api/v1/admin", tags=["管理后台-提交"])
 app.include_router(settings_router, prefix="/api/v1/admin", tags=["管理后台-设置"])
+app.include_router(upload_router, prefix="/api/v1/admin", tags=["管理后台-上传"])
+app.include_router(questions_router, prefix="/api/v1/admin", tags=["管理后台-题库"])
+app.include_router(lesson_questions_router, prefix="/api/v1/admin", tags=["管理后台-教程题目关联"])
+app.include_router(diagnostic_router, prefix="/api/v1/admin", tags=["管理后台-诊断题"])
+app.include_router(file_import_router, prefix="/api/v1/admin", tags=["管理后台-文件导入"])
+app.include_router(rag_router, prefix="/api/v1/admin", tags=["管理后台-RAG"])
+
+# 静态文件挂载 — 使上传的图片可通过 /uploads/... 公开访问
+_static_dir = settings.UPLOAD_DIR
+if not _static_dir:
+    _static_dir = "static/uploads"
+# 确保上传目录存在，否则 StaticFiles 挂载会报 RuntimeError
+os.makedirs(_static_dir, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=_static_dir), name="uploads")
 
 
 @app.get("/health")

@@ -40,7 +40,7 @@ export default function StatCard({ title, value, prefix, suffix, trend, loading 
         <div style={{ marginTop: 8, fontSize: 12, color: trend >= 0 ? '#3f8600' : '#cf1322' }}>
           {trend >= 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
           <span style={{ marginLeft: 4 }}>{Math.abs(trend)}%</span>
-          <span style={{ marginLeft: 4, color: '#999' }}>较上周</span>
+          <span style={{ marginLeft: 4, color: '#94a3b8' }}>较上周</span>
         </div>
       )}
     </Card>
