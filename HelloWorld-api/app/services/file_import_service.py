@@ -140,7 +140,8 @@ def parse_pdf_to_markdown(file_bytes: bytes) -> dict:
     lines: list[str] = []
     image_count = 0
 
-    for page_num in range(len(doc)):
+    page_count = len(doc)
+    for page_num in range(page_count):
         page = doc[page_num]
         lines.append(f"\n### 第 {page_num + 1} 页\n")
 
@@ -166,4 +167,4 @@ def parse_pdf_to_markdown(file_bytes: bytes) -> dict:
     doc.close()
 
     markdown = "\n".join(lines)
-    return {"markdown": markdown, "images": image_count, "pages": len(doc)}
+    return {"markdown": markdown, "images": image_count, "pages": page_count}
