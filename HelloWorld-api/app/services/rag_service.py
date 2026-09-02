@@ -63,9 +63,9 @@ def _get_embedding_fn():
         raise RuntimeError("SentenceTransformer embedding function unavailable")
     if _embedding_fn is None:
         _embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name="all-MiniLM-L6-v2"
+            model_name="BAAI/bge-small-zh-v1.5"
         )
-        logger.info("Embedding 函数初始化完成: SentenceTransformer (all-MiniLM-L6-v2)")
+        logger.info("Embedding 函数初始化完成: SentenceTransformer (BAAI/bge-small-zh-v1.5)")
     return _embedding_fn
 
 
@@ -344,7 +344,7 @@ async def get_index_status() -> dict:
         return {
             "total_indexed": count,
             "collection_name": COLLECTION_NAME,
-            "embedding_model": "all-MiniLM-L6-v2 (SentenceTransformer)",
+            "embedding_model": "BAAI/bge-small-zh-v1.5 (SentenceTransformer)",
             "storage_path": CHROMA_PERSIST_DIR,
         }
     except Exception as e:
@@ -352,7 +352,7 @@ async def get_index_status() -> dict:
         return {
             "total_indexed": 0,
             "collection_name": COLLECTION_NAME,
-            "embedding_model": "all-MiniLM-L6-v2 (SentenceTransformer)",
+            "embedding_model": "BAAI/bge-small-zh-v1.5 (SentenceTransformer)",
             "storage_path": CHROMA_PERSIST_DIR,
             "error": str(e),
         }
