@@ -3,10 +3,26 @@
 诊断题目从数据库 diagnostic_questions 表中读取，教师可通过管理后台自由增删改。
 """
 
+import json
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from app.models.admin import SystemSettings
 from app.models.diagnostic import UserDiagnostic
 from app.models.diagnostic_question import DiagnosticQuestion
+
+
+# 诊断评分规则在系统设置表（system_settings）中的键名
+DIAGNOSTIC_SCORING_RULES_KEY = "diagnostic_scoring_rules"
+
+# 默认评分规则（首次部署时写入系统设置；之后教师可在管理后台修改）
+# 按 min_score/max_score 分段，将得分映射到能力等级、推荐起点与提示语
+DEFAULT_SCORING_RULES = [
+    {"min_score": 0, "max_score": 30, "skill_level": "beginner", "recommended_start": "python-01-hello-world", "message": "看起来你刚开始接触编程，没关系！我们从最基础的开始，慢慢来。"},
+    {"min_score": 31, "max_score": 60, "skill_level": "beginner", "recommended_start": "python-03-variables", "message": "你已经有一些基础了，但还需要巩固。建议跳过最基础的 Hello World 和变量，从条件判断开始。"},
+    {"min_score": 61, "max_score": 80, "skill_level": "intermediate", "recommended_start": "python-08-loops", "message": "基础掌握得不错！建议直接进入循环和函数的学习。"},
+    {"min_score": 81, "max_score": 100, "skill_level": "advanced", "recommended_start": "python-15-functions", "message": "你的基础很扎实！建议挑战更高级的内容，也可以尝试其他编程语言。"},
+]
 
 
 async def get_diagnostic_questions(db: AsyncSession) -> list[dict]:
@@ -32,6 +48,26 @@ async def get_diagnostic_questions(db: AsyncSession) -> list[dict]:
         }
         for q in questions
     ]
+
+
+async def get_scoring_rules(db: AsyncSession) -> list[dict]:
+    """从系统设置读取诊断评分规则，缺失或非法时回退到默认规则。
+
+    Returns:
+        评分规则列表，每项包含 min_score/max_score/skill_level/recommended_start/message
+    """
+    result = await db.execute(
+        select(SystemSettings).where(SystemSettings.key == DIAGNOSTIC_SCORING_RULES_KEY)
+    )
+    row = result.scalars().first()
+    if row and row.value:
+        try:
+            rules = json.loads(row.value)
+            if isinstance(rules, list) and rules:
+                return rules
+        except (json.JSONDecodeError, TypeError, ValueError):
+            pass
+    return DEFAULT_SCORING_RULES
 
 
 async def calculate_diagnostic_result(answers: list[dict], db: AsyncSession) -> dict:
@@ -79,23 +115,17 @@ async def calculate_diagnostic_result(answers: list[dict], db: AsyncSession) -> 
 
     score = int((correct_count / total) * 100)
 
-    # 根据分数判断能力等级并推荐学习起点
-    if score <= 30:
-        skill_level = "beginner"
-        recommended_start = "python-01-hello-world"
-        message = "看起来你刚开始接触编程，没关系！我们从最基础的开始，慢慢来。"
-    elif score <= 60:
-        skill_level = "beginner"
-        recommended_start = "python-03-variables"
-        message = "你已经有一些基础了，但还需要巩固。建议跳过最基础的 Hello World 和变量，从条件判断开始。"
-    elif score <= 80:
-        skill_level = "intermediate"
-        recommended_start = "python-08-loops"
-        message = "基础掌握得不错！建议直接进入循环和函数的学习。"
-    else:
-        skill_level = "advanced"
-        recommended_start = "python-15-functions"
-        message = "你的基础很扎实！建议挑战更高级的内容，也可以尝试其他编程语言。"
+    # 从系统设置读取评分规则，将得分映射到能力等级与推荐起点
+    rules = await get_scoring_rules(db)
+    skill_level = "beginner"
+    recommended_start = "python-01-hello-world"
+    message = "已完成诊断，从基础开始学习吧。"
+    for rule in rules:
+        if rule.get("min_score", 0) <= score <= rule.get("max_score", 100):
+            skill_level = rule.get("skill_level", "beginner")
+            recommended_start = rule.get("recommended_start", "python-01-hello-world")
+            message = rule.get("message", message)
+            break
 
     return {
         "score": score,

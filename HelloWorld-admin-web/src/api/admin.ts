@@ -365,6 +365,47 @@ export async function toggleDiagnosticQuestion(id: number) {
   return data
 }
 
+// ==================== 诊断评分规则接口 ====================
+
+/** 诊断评分规则单条 */
+export interface ScoringRule {
+  min_score: number
+  max_score: number
+  skill_level: 'beginner' | 'intermediate' | 'advanced'
+  recommended_start: string
+  message: string
+}
+
+/** 默认评分规则（后端未配置或配置异常时的兜底展示值，与后端 seed 保持一致） */
+export const DEFAULT_SCORING_RULES: ScoringRule[] = [
+  { min_score: 0, max_score: 30, skill_level: 'beginner', recommended_start: 'python-01-hello-world', message: '看起来你刚开始接触编程，没关系！我们从最基础的开始，慢慢来。' },
+  { min_score: 31, max_score: 60, skill_level: 'beginner', recommended_start: 'python-03-variables', message: '你已经有一些基础了，但还需要巩固。建议跳过最基础的 Hello World 和变量，从条件判断开始。' },
+  { min_score: 61, max_score: 80, skill_level: 'intermediate', recommended_start: 'python-08-loops', message: '基础掌握得不错！建议直接进入循环和函数的学习。' },
+  { min_score: 81, max_score: 100, skill_level: 'advanced', recommended_start: 'python-15-functions', message: '你的基础很扎实！建议挑战更高级的内容，也可以尝试其他编程语言。' },
+]
+
+/** 获取诊断评分规则（从系统设置读取并解析 JSON） */
+export async function getDiagnosticScoringRules(): Promise<ScoringRule[]> {
+  const data = await getSettings()
+  const items = data?.items ?? data
+  const entry = Array.isArray(items)
+    ? items.find((i: { key?: string }) => i.key === 'diagnostic_scoring_rules')
+    : items?.['diagnostic_scoring_rules']
+  const raw = entry?.value
+  if (!raw) return DEFAULT_SCORING_RULES
+  try {
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) && parsed.length ? parsed : DEFAULT_SCORING_RULES
+  } catch {
+    return DEFAULT_SCORING_RULES
+  }
+}
+
+/** 保存诊断评分规则（JSON 序列化后写入系统设置） */
+export async function saveDiagnosticScoringRules(rules: ScoringRule[]) {
+  return updateSetting('diagnostic_scoring_rules', JSON.stringify(rules))
+}
+
 // ==================== 文件导入解析接口 ====================
 
 /** 解析 Word 文档（.docx）为 Markdown — 返回 { markdown, images } */

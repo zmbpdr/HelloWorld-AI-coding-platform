@@ -14,11 +14,12 @@ from app.database import async_session
 from app.models.course import Language
 from app.models.lesson import Lesson
 from app.models.achievement import Achievement
-from app.models.admin import AdminUser
+from app.models.admin import AdminUser, SystemSettings
 from app.models.agent import NeuronNode
 from app.models.diagnostic_question import DiagnosticQuestion
 from app.core.security import get_password_hash
 from app.config import settings
+from app.services.diagnostic_service import DIAGNOSTIC_SCORING_RULES_KEY, DEFAULT_SCORING_RULES
 
 
 def _resolve_lessons_dir():
@@ -189,6 +190,20 @@ async def seed_database():
         if not exist_diag:
             for dq_data in DIAGNOSTIC_QUESTIONS_SEED:
                 session.add(DiagnosticQuestion(**dq_data))
+
+        # ---- 初始化诊断评分规则 ----
+        # 首次部署时写入默认评分规则，之后教师可通过管理后台修改（不覆盖已有配置）
+        exist_scoring = (
+            await session.execute(
+                select(SystemSettings).where(SystemSettings.key == DIAGNOSTIC_SCORING_RULES_KEY)
+            )
+        ).scalars().first() is not None
+        if not exist_scoring:
+            session.add(SystemSettings(
+                key=DIAGNOSTIC_SCORING_RULES_KEY,
+                value=json.dumps(DEFAULT_SCORING_RULES, ensure_ascii=False),
+                description="入门诊断评分规则（JSON 数组：按 min_score/max_score 分段映射 skill_level/recommended_start/message）",
+            ))
 
         # ---- 创建管理员 ----
         admin_result = await session.execute(select(AdminUser).where(AdminUser.username == "admin"))

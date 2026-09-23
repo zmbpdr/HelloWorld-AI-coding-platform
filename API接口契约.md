@@ -156,7 +156,7 @@
 
 **skill_level 取值：** `beginner` / `intermediate` / `advanced`
 
-**评分规则：** 逐条比对答案字母，正确数 ÷ 总题数 × 100 = 得分。0-30 分 beginner，31-60 beginner（可跳过基础），61-80 intermediate，81-100 advanced。
+**评分规则：** 逐条比对答案字母，正确数 ÷ 总题数 × 100 = 得分。默认 0-30 分 beginner，31-60 beginner（可跳过基础），61-80 intermediate，81-100 advanced。分档、能力等级与推荐起点可在管理后台「诊断题管理 → 评分规则」中配置（存于 `system_settings` 表的 `diagnostic_scoring_rules` 键），保存后即时生效。
 
 ---
 

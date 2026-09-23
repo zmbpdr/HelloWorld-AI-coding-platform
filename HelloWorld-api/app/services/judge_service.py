@@ -377,9 +377,9 @@ class JudgeService:
             return True
         if actual.lower() == expected.lower():
             return True
-        if expected in actual or actual in expected:
+        if actual and expected and (expected in actual or actual in expected):
             return True
-        if expected_clean in actual_clean or actual_clean in expected_clean:
+        if actual_clean and expected_clean and (expected_clean in actual_clean or actual_clean in expected_clean):
             return True
         try:
             af = float(actual_clean)

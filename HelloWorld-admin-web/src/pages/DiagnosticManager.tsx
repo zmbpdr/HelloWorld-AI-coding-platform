@@ -21,6 +21,7 @@ import {
   updateDiagnosticQuestion, deleteDiagnosticQuestion, toggleDiagnosticQuestion,
 } from '../api/admin'
 import type { DiagnosticQuestionItem } from '../api/admin'
+import ScoringRulesEditor from './ScoringRulesEditor'
 
 const { Title } = Typography
 const { Search } = Input
@@ -248,6 +249,7 @@ export default function DiagnosticManager() {
   ]
 
   return (
+    <>
     <Card>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
         <Title level={4} style={{ margin: 0 }}>诊断题管理</Title>
@@ -331,5 +333,8 @@ export default function DiagnosticManager() {
         </Form>
       </Modal>
     </Card>
+
+    <ScoringRulesEditor />
+    </>
   )
 }

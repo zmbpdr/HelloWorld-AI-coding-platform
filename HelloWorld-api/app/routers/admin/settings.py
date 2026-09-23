@@ -30,6 +30,12 @@ ALLOWED_SETTING_KEYS = {
     "sandbox_timeout",
     "scoring_pass_score",
     "scoring_xp_multiplier",
+    "diagnostic_scoring_rules",
+}
+
+# 允许 editor 角色直接修改的配置键（其余键仍需 admin 权限）
+EDITOR_EDITABLE_SETTING_KEYS = {
+    "diagnostic_scoring_rules",
 }
 
 
@@ -47,12 +53,17 @@ async def get_settings(
 async def update_setting(
     key: str,
     data: SystemSettingUpdate,
-    current_admin: AdminUser = Depends(require_role("admin")),
+    current_admin: AdminUser = Depends(require_role("editor")),
     db: AsyncSession = Depends(get_db),
 ):
     """更新系统配置（仅限白名单中的配置键）"""
     if key not in ALLOWED_SETTING_KEYS:
         raise HTTPException(status_code=400, detail=f"不允许修改配置项: {key}")
+
+    # editor 仅能修改少量非敏感配置（如诊断评分规则），其余键需 admin 权限
+    if key not in EDITOR_EDITABLE_SETTING_KEYS and current_admin.role != "admin":
+        raise HTTPException(status_code=403, detail="需要 admin 权限修改该配置项")
+
     service = AdminService(db)
     setting = await service.update_setting(key, data.value, current_admin.id)
     await db.commit()
